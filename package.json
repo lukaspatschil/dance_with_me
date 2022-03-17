@@ -1,0 +1,49 @@
+{
+  "name": "dance-with-me",
+  "version": "0.0.0",
+  "description": "Dance with me is an modern web app for event finding",
+  "private": true,
+  "workspaces": [
+    "frontend/*",
+    "backend/*",
+    "packages/*"
+  ],
+  "scripts": {},
+  "devDependencies": {
+  },
+  "engines": {
+    "npm": ">=8.0.0",
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@reset.inso.tuwien.ac.at:2222/2022ss-ase-pr-group/22ss-ase-pr-inso-02.git"
+  },
+  "packageManager": "npm@8.5.2",
+  "contributors": [
+    {
+      "name": "Hofbauer Simon",
+      "email": "simon.hofbauer@tuwien.ac.at"
+    },
+    {
+      "name": "Panzenböck Toni",
+      "email": "e1527068@student.tuwien.ac.at"
+    },
+    {
+      "name": "Pecirep Tin",
+      "email": "tin.pecirep@tuwien.ac.at"
+    },
+    {
+      "name": "Prilop Meiko",
+      "email": "e12123556@student.tuwien.ac.at"
+    },
+    {
+      "name": "Schwabenbauer Alicia",
+      "email": "alicia.schwabenbauer@tuwien.ac.at"
+    },
+    {
+      "name": "Spatschil Lukas",
+      "email": "lukas.spatschil@student.tuwien.ac.at"
+    }
+  ]
+}
