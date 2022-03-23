@@ -1,0 +1,20 @@
+openapi: 3.0.0
+info:
+  title: DanceWithMe
+  description: API for the DanceWithMe backend
+  version: 1.0.0
+#servers:
+#  - url: http://api.example.com/v1
+#    description: Optional server description, e.g. Main (production) server
+#  - url: http://staging-api.example.com
+#    description: Optional server description, e.g. Internal staging server for testing
+tags:
+  - name: event
+    description: All methods corresponding to events
+paths:
+  /event:
+    $ref: 'docs/contracts/v1/events.yaml#/eventOperations'
+
+  /event/{eventid}:
+    $ref: 'docs/contracts/v1/events.yaml#/eventIdOperations'
+
