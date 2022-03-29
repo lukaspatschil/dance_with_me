@@ -1,6 +1,6 @@
 recommendationOperation:
   get:
-    summary: Returns a list of for  the specific user recommendated events
+    summary: Returns a list of specific user recommendated events
     parameters:
       - in: query
         name: skip
@@ -34,3 +34,9 @@ recommendationOperation:
           application/json:
             schema:
               $ref: './datatypes/errors/Error401.yaml'
+      '400':
+        description: Bad request.
+        content:
+          application/json:
+            schema:
+              $ref: './datatypes/errors/Error400.yaml'
