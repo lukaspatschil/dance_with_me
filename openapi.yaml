@@ -11,10 +11,14 @@ info:
 tags:
   - name: event
     description: All methods corresponding to events
+  - name: recommendation
 paths:
   /event:
     $ref: 'docs/contracts/v1/events.yaml#/eventOperations'
 
   /event/{eventid}:
     $ref: 'docs/contracts/v1/events.yaml#/eventIdOperations'
+
+  /recommendation?skip=100&take=50:
+    $ref: 'docs/contracts/v1/recommendation.yaml#/recommendationOperation'
 
