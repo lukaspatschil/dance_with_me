@@ -17,7 +17,7 @@ properties:
     example: 1
   addition:
     type: String
-    example: "Houes 2 Stair 3 Top 4"
+    example: "House 2 Stair 3 Top 4"
 required:
   - country
   - city
