@@ -1,0 +1,26 @@
+type: object
+properties:
+  country:
+    type: string
+    example: "Austria"
+  city:
+    type: string
+    example: "Vienna"
+  postalcode:
+    type: number
+    example: 1010
+  street:
+    type: string
+    example: "Wipplingerstraße"
+  housenumber:
+    type: number
+    example: 1
+  addition:
+    type: String
+    example: "Houes 2 Stair 3 Top 4"
+required:
+  - country
+  - city
+  - postalcode
+  - street
+  - housenumber
