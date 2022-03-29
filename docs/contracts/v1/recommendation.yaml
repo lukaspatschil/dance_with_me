@@ -1,0 +1,36 @@
+recommendationOperation:
+  get:
+    summary: Returns a list of for  the specific user recommendated events
+    parameters:
+      - in: query
+        name: skip
+        schema:
+          type: integer
+        description: The number of items to skip before starting to collect the result set
+      - in: query
+        name: take
+        schema:
+          type: integer
+        description: The number of items to fetch from the result set
+    tags:
+      - recommendation
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: './datatypes/Geolocation.yaml'
+    responses:
+      '200':
+        description: A JSON array of events
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: './datatypes/EventDTO.yaml'
+      '401':
+        description: Not authorizated.
+        content:
+          application/json:
+            schema:
+              $ref: './datatypes/errors/Error401.yaml'
