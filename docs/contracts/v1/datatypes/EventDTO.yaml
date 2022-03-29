@@ -10,7 +10,9 @@ properties:
     type: string
     example: We would like to welcome you at the danube island festival dance event! We are going to do a lot of dances...
   location:
-    $ref: './Geolocation.yaml'
+    allOf:
+      - $ref: './Geolocation.yaml'
+      - $ref: './Address.yaml'
   price:
     type: number
     example: 12.50
