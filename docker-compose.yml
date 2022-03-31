@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  server:
+    build:
+      context: .
+      target: production
+      dockerfile: ./backend/Dockerfile
+    hostname: server
+    volumes:
+      - /usr/src/app/node_modules
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge

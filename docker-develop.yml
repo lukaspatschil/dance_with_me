@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  dev-server:
+    build:
+      context: .
+      target: development
+      dockerfile: ./backend/Dockerfile
+    hostname: server
+    volumes:
+      - ./backend:/usr/src/app/backend
+      - /usr/src/app/node_modules
+    ports:
+      - 3000:3000
+    env_file:
+      ./develop.env
+    networks:
+      - dev-internal
+
+networks:
+  dev-internal:
+    driver: bridge
