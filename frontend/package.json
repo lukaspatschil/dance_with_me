@@ -7,6 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "jest",
+    "test:cov": "jest --coverage",
     "lint": "ng lint",
     "dev:ssr": "ng run dance-with-me-web-client:serve-ssr",
     "serve:ssr": "node dist/dance-with-me-web-client/server/main.js",

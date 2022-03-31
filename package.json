@@ -10,6 +10,7 @@
   ],
   "scripts": {},
   "devDependencies": {
+    "eslint": "^8.12.0"
   },
   "engines": {
     "npm": ">=8.0.0",
