@@ -11,6 +11,18 @@ services:
     networks:
       - internal
 
+  webclient:
+    build:
+      context: .
+      target: production
+      dockerfile: ./frontend/Dockerfile
+    volumes:
+      - /usr/src/app/node_modules
+    ports:
+      - 8080:4000
+    networks:
+      - internal
+
 networks:
   internal:
     driver: bridge

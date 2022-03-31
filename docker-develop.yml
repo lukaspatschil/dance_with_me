@@ -16,6 +16,19 @@ services:
     networks:
       - dev-internal
 
+  dev-webclient:
+    build:
+      context: .
+      target: development
+      dockerfile: ./frontend/Dockerfile
+    volumes:
+      - ./frontend:/usr/src/app/frontend
+      - /usr/src/app/node_modules
+    ports:
+      - 8080:4200
+    networks:
+      - dev-internal
+
 networks:
   dev-internal:
     driver: bridge
