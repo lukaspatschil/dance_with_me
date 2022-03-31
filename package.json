@@ -8,7 +8,18 @@
     "backend",
     "packages/*"
   ],
-  "scripts": {},
+  "scripts": {
+    "start:server": "npm run start:dev -w backend",
+    "start:client": "npm run start -w frontend",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "cy:open": "start-test start:server 3000 start:client 4200 cypress:open",
+    "cy:run": "start-test start:server 3000 start:client 4200 cypress:run"
+  },
+  "devDependencies": {
+    "cypress": "^9.5.3",
+    "start-server-and-test": "^1.14.0"
+  },
   "engines": {
     "npm": ">=8.0.0",
     "node": ">=16.0.0"

@@ -25,32 +25,45 @@ lint-backend:
     - npm run lint -w backend
 
 test-frontend:
+  needs: ["lint-frontend"]
   stage: test
   script:
     - npm run test -w frontend
 
 test-backend:
+  needs: ["lint-backend"]
   stage: test
   script:
     - npm run test -w backend
 
+integration-test:
+  image: cypress/base:16.13.0
+  needs: ["lint-backend", "lint-frontend"]
+  stage: test
+  script:
+    - npm run cy:run
+
 build-frontend:
+  needs: ["test-frontend", "lint-frontend"]
   stage: build
   script:
     - npm run build -w frontend
 
 build-backend:
+  needs: ["test-backend", "lint-backend"]
   stage: build
   script:
     - npm run build -w backend
 
 coverage-frontend:
+  needs: ["test-frontend"]
   stage: coverage
   script:
     - npm run test:cov -w frontend
   coverage: '/Statements\s+:\s(\d+.?\d+)%/'
 
 coverage-backend:
+  needs: ["test-backend"]
   stage: coverage
   script:
     - npm run test:cov -w backend
