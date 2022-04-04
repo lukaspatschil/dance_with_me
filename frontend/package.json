@@ -10,6 +10,7 @@
     "test": "jest",
     "test:cov": "jest --coverage",
     "lint": "ng lint",
+    "lint:fix": "ng lint --fix",
     "dev:ssr": "ng run dance-with-me-web-client:serve-ssr",
     "serve:ssr": "node dist/dance-with-me-web-client/server/main.js",
     "build:ssr": "ng build && ng run dance-with-me-web-client:server",
