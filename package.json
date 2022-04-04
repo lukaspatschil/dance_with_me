@@ -11,7 +11,7 @@
   "scripts": {
     "lint": "npm run lint -w frontend && npm run lint -w backend",
     "lint:fix": "npm run lint:fix -w frontend && npm run lint:fix -w backend",
-    "test": "npm run test -w frontend && npm run test -w backend && npm run test:e2e -w backend",
+    "test": "npm run test -w frontend && npm run test -w backend && npm run test:e2e -w backend && npm run test:mutation -w backend",
     "checkProject": "npm run lint && npm run test && npm run cy:run",
     "start:server": "npm run start:dev -w backend",
     "start:client": "npm run start -w frontend",
