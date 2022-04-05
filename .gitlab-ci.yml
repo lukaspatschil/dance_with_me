@@ -42,12 +42,12 @@ e2e test-backend:
   script:
     - npm run test:e2e -w backend
 
-integration-test:
-  image: cypress/base:16.13.0
-  needs: ["lint-backend", "lint-frontend"]
-  stage: test
-  script:
-    - npm run cy:run
+# integration-test:
+#   image: cypress/base:16.13.0
+#   needs: ["lint-backend", "lint-frontend"]
+#   stage: test
+#   script:
+#     - npm run cy:run
 
 build-frontend:
   needs: ["test-frontend", "lint-frontend"]
