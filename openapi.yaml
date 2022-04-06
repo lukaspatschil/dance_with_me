@@ -22,3 +22,36 @@ paths:
   /recommendation?skip=100&take=50:
     $ref: 'docs/contracts/v1/recommendation.yaml#/recommendationOperation'
 
+  /auth/login_redirect/{provider}:
+    $ref: 'docs/contracts/v1/auth.yaml#/authProviderRedirect'
+
+  /auth/authorization_code/{provider}:
+    $ref: 'docs/contracts/v1/auth.yaml#/submitAuthorizationCode'
+
+  /auth/refresh_token:
+    $ref: 'docs/contracts/v1/auth.yaml#/refreshAuth'
+
+  /auth/revoke:
+    $ref: 'docs/contracts/v1/auth.yaml#/revokeRefreshToken'
+
+  /auth/force_logout:
+    $ref: 'docs/contracts/v1/auth.yaml#/forceLogout'
+
+components:
+  securitySchemes:
+    tokenAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: PASETO
+    refreshAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: string
+    fingerprint:
+      type: apiKey
+      in: cookie
+      name: __Secure-fingerprint
+
+security:
+  - tokenAuth: []
+    fingerprint: []

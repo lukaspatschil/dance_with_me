@@ -1,0 +1,191 @@
+authProviderRedirect:
+  get:
+    tags:
+      - authentication
+    summary: Redirect browser to authentication prompt.
+    description: >
+      Generates a URL to redirect the user to the authentication prompt of the provider,
+      get an authorization code and return back to the UI.
+    security: []
+    parameters:
+      - name: provider
+        in: path
+        required: true
+        description: Authentication provider used for login.
+        schema:
+          type : string
+          enum:
+            - google
+            - facebook
+          example: google
+      - name: state
+        in: query
+        required: true
+        description: State parameter for OAuth2 flow.
+        schema:
+          type : string
+          format: base64
+          example: state
+    responses:
+      '302':
+        description: Redirect to the authentication provider.
+        headers:
+          Location:
+            schema:
+              type: string
+              example: https://accounts.google.com/o/oauth2/v2/auth?client_id=...&redirect_uri=...&response_type=code&scope=email%20openid&state=...
+
+submitAuthorizationCode:
+  post:
+    tags:
+      - authentication
+    summary: Submit authorization code.
+    description: Exchange authorization code for access and refresh tokens.
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Authorization code received by the authentication provider.
+            required:
+              - code
+    responses:
+      '200':
+        $ref: '#/authorizationSuccessResponse'
+      '400':
+        $ref: '#/authorizationCodeErrorResponse'
+
+refreshAuth:
+  post:
+    tags:
+      - authentication
+    summary: Refresh authentication.
+    description: Given a valid refresh token and fingerprint, returns new access and refresh tokens.
+    security:
+      - refreshAuth: []
+        fingerprint: []
+    responses:
+      '200':
+        $ref: '#/authorizationSuccessResponse'
+      '401':
+        $ref: '#/refreshTokenInvalidResponse'
+
+revokeRefreshToken:
+  post:
+    tags:
+      - authentication
+    summary: Revoke refresh token.
+    description: >
+      Invalidate a refresh token so it cannot be used anymore.
+      Always returns "No Content" as even if the token is invalid, it is revoked.
+    security:
+      - refreshAuth: []
+        fingerprint: []
+    responses:
+      '204':
+        $ref: '#/deleteFingerPrintResponse'
+
+forceLogout:
+  post:
+    tags:
+      - authentication
+    summary: Force logout from all sessions.
+    description: Provided a valid access token, invalidate all of a user's refresh tokens
+    security:
+      - tokenAuth: []
+        fingerprint: []
+    responses:
+      '204':
+        $ref: '#/deleteFingerPrintResponse'
+      '401':
+        $ref: '#/accessTokenInvalidResponse'
+
+authorizationSuccessResponse:
+  description: Response with access token, refresh token and fingerprint header used for authorization.
+  headers:
+    Set-Cookie:
+      schema:
+        type: string
+        example: >
+          __Secure-fingerprint=yl8vwn4xlv2zo5et4cq0n7e; expires=Fri, 01 Apr 2022 01:23:45 GMT;
+          Path=/api/; HttpOnly; Secure; SameSite=Strict
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          accessToken:
+            type: string
+            description: access token in PASETO format, usually valid for 15 minutes.
+          refreshToken:
+            type: string
+            description: opaque refresh token, usually valid for 60 days.
+          expiresAt:
+            type: integer
+            description: Unix timestamp of when the refresh token expires.
+        required:
+          - accessToken
+          - refreshToken
+          - expiresAt
+
+authorizationCodeErrorResponse:
+  description: Response when authorization code is invalid.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          error:
+            type: string
+            enum:
+              - authorization_code_invalid
+              - authorization_code_expired
+              - authorization_code_used
+        required:
+          - error
+
+deleteFingerPrintResponse:
+  description: Deletes the fingerprint by setting the cookie to expire.
+  headers:
+    Set-Cookie:
+      schema:
+        type: string
+        enum:
+          - fingerprint=; expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=0; Path=/api/; HttpOnly
+
+accessTokenInvalidResponse:
+  description: >
+    Access token is invalid (because it is missing, expired, the signature can't be verified,
+    some claims don't match, or the fingerprint is missing or doesn't match).
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          error:
+            type: string
+            enum:
+              - access_token_invalid
+        required:
+          - error
+
+refreshTokenInvalidResponse:
+  description: >
+    Refresh token is invalid (because it is missing, expired, has already been used
+    or the fingerprint is missing or doesn't match).
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          error:
+            type: string
+            enum:
+              - refresh_token_invalid
+        required:
+          - error
