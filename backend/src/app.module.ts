@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { PaymentModule } from './payment/payment.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { WinstonModule } from 'nest-winston';
-import winston from 'winston';
+import * as winston from 'winston';
 import 'winston-daily-rotate-file';
 
 @Module({

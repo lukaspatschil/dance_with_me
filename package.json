@@ -9,16 +9,19 @@
     "packages/*"
   ],
   "scripts": {
+    "checkProject": "npm run lint && npm run test && npm run build && npm run coverage && npm run cy:run",
     "lint": "npm run lint -w frontend && npm run lint -w backend",
     "lint:fix": "npm run lint:fix -w frontend && npm run lint:fix -w backend",
-    "test": "npm run test -w frontend && npm run test -w backend && npm run test:e2e -w backend && npm run test:mutation -w backend",
-    "checkProject": "npm run lint && npm run test && npm run cy:run",
+    "test": "npm run test -w frontend && npm run test -w backend && npm run test:e2e -w backend",
+    "build": "npm run build -w frontend && npm run build -w backend",
+    "coverage": "npm run test:cov -w frontend && npm run test:cov -w backend && npm run test:mutation -w backend",
     "start:server": "npm run start:dev -w backend",
     "start:client": "npm run start -w frontend",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "cy:open": "start-test start:server 3000 start:client 4200 cypress:open",
-    "cy:run": "start-test start:server 3000 start:client 4200 cypress:run"
+    "docker:start": "docker-compose up --build",
+    "cy:open": "start-test docker:start 8080 cypress:open",
+    "cy:run": "start-test docker:start 8080 cypress:run"
   },
   "devDependencies": {
     "cypress": "^9.5.3",
