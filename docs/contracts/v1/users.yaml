@@ -1,0 +1,111 @@
+userIdOperations:
+    get:
+      summary: Get a user by id
+      tags:
+        - user
+      parameters:
+        - name: userid
+          in: path
+          required: true
+          description: id of the user
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON object of UserDTO
+          content:
+            application/json:
+              schema:
+                $ref: './datatypes/UserDetailDTO.yaml'
+        '401':
+          description: Not authorizated.
+          content:
+            application/json:
+              schema:
+                $ref: './datatypes/errors/Error401.yaml'
+        '403':
+          description: User requesting not his own client
+          content:
+            application/json:
+              schema:
+                $ref: './datatypes/errors/Error403.yaml'
+
+    put:
+      summary: Update a user
+      tags:
+        - user
+      parameters:
+        - name: userid
+          in: path
+          required: true
+          description: id of the user
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './datatypes/UserDTO.yaml'
+      responses:
+        '200':
+          description: A JSON object of UserDTO
+          content:
+            application/json:
+              schema:
+                $ref: './datatypes/UserDetailDTO.yaml'
+        '400':
+          description: The specified user id is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: './datatypes/errors/Error400.yaml'
+        '401':
+          description: Not authorizated.
+          content:
+            application/json:
+              schema:
+                $ref: './datatypes/errors/Error401.yaml'
+        '403':
+          description: User requesting not his own client
+          content:
+            application/json:
+              schema:
+                $ref: './datatypes/errors/Error403.yaml'
+        '404':
+          description: The user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: './datatypes/errors/Error404.yaml'
+    delete:
+      summary: Delete a user by id
+      tags:
+        - user
+      parameters:
+        - name: userid
+          in: path
+          required: true
+          description: id of the user to delete
+          schema:
+            type: string
+      responses:
+        '204':
+          description: The resource was deleted successfully
+        '401':
+          description: Not authorizated.
+          content:
+            application/json:
+              schema:
+                $ref: './datatypes/errors/Error401.yaml'
+        '403':
+          description: User requesting not his own client
+          content:
+            application/json:
+              schema:
+                $ref: './datatypes/errors/Error403.yaml'
+        '404':
+          description: The user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: './datatypes/errors/Error404.yaml'

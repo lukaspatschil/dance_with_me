@@ -12,6 +12,7 @@ tags:
   - name: event
     description: All methods corresponding to events
   - name: recommendation
+  - name: user
 paths:
   /event:
     $ref: 'docs/contracts/v1/events.yaml#/eventOperations'
@@ -21,6 +22,9 @@ paths:
 
   /recommendation?skip=100&take=50:
     $ref: 'docs/contracts/v1/recommendation.yaml#/recommendationOperation'
+
+  /user/{userid}:
+    $ref: 'docs/contracts/v1/users.yaml#/userIdOperations'
 
   /auth/login_redirect/{provider}:
     $ref: 'docs/contracts/v1/auth.yaml#/authProviderRedirect'

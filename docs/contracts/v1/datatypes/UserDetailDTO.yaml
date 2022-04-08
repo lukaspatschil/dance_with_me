@@ -1,0 +1,15 @@
+type: object
+properties:
+  id:
+    type: string
+    example: 1
+  firstName:
+    type: string
+    example: Mark
+  lastName:
+    type: string
+    example: Mayer
+  email:
+    type: string
+    example: testo@test.com
+
