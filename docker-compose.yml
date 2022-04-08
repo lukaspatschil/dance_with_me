@@ -10,6 +10,8 @@ services:
       - /usr/src/app/node_modules
     networks:
       - internal
+    env_file:
+      ./develop.env
 
   webclient:
     build:

@@ -11,6 +11,8 @@ services:
       - /usr/src/app/node_modules
     ports:
       - 3000:3000
+    depends_on:
+      - "dev-database"
     env_file:
       ./develop.env
     networks:
@@ -28,6 +30,21 @@ services:
       - 8080:4200
     networks:
       - dev-internal
+
+  dev-database:
+    image: mongo:5.0.4
+    environment:
+      MONGO_INITDB_DATABASE: danceWithMe
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+    networks:
+      - dev-internal
+
+volumes:
+  mongodb_data_container:
+
 
 networks:
   dev-internal:

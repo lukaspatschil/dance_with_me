@@ -1,18 +1,26 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import { NestApplicationBuilder } from '@jbiskur/nestjs-test-utilities';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
-  beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
+  let testDatabaseStub: MongoMemoryServer;
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
+  beforeEach(async () => {
+    testDatabaseStub = await MongoMemoryServer.create();
+    process.env['MONGODB_URI'] = testDatabaseStub.getUri();
+
+    app = await new NestApplicationBuilder()
+      .withTestModule((builder) => builder.withModule(AppModule))
+      .build();
+  });
+
+  afterEach(async () => {
+    await testDatabaseStub.stop();
+    await app.close();
   });
 
   it('/ (GET)', () => {
