@@ -6,6 +6,7 @@ import { PaymentModule } from './payment/payment.module';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './core/database/database.module';
 import { LoggerModule } from './core/logger/logger.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { LoggerModule } from './core/logger/logger.module';
     LoggerModule,
     PaymentModule,
     EventModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService, Logger, ConfigModule],
