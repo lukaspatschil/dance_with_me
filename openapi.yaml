@@ -14,8 +14,14 @@ tags:
   - name: recommendation
   - name: user
 paths:
-  /event:
-    $ref: 'docs/contracts/v1/events.yaml#/eventOperations'
+  /event?skip=100&take=50:
+    $ref: 'docs/contracts/v1/events.yaml#/eventGetOperation'
+
+  /event/:
+    $ref: 'docs/contracts/v1/events.yaml#/eventPostOperation'
+
+  /eventsbylocation?skip=100&take=50:
+    $ref: 'docs/contracts/v1/events.yaml#/eventByLocationOperations'
 
   /event/{eventid}:
     $ref: 'docs/contracts/v1/events.yaml#/eventIdOperations'

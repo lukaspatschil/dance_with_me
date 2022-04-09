@@ -1,9 +1,22 @@
 
-eventOperations:
+eventGetOperation:
   get:
-    summary: Returns all events
+    summary: Returns all events with the possibility to skip and take a number of events. The events are sorted by their start date first and secondly by their name.
     tags:
       - event
+    parameters:
+      - in: query
+        name: skip
+        optional: true
+        schema:
+          type: integer
+        description: The numbers of items to return
+      - in: query
+        name: take
+        optional: true
+        schema:
+          type: integer
+        description: The number of items to skip before starting to collect the result set
     responses:
       '200': # status code
         description: A JSON array of events
@@ -20,6 +33,7 @@ eventOperations:
             schema:
               $ref: './datatypes/errors/Error401.yaml'
 
+eventPostOperation:
   post:
     summary: Adds an event
     tags:
@@ -184,3 +198,47 @@ eventIdOperations:
             schema:
               $ref: './datatypes/errors/Error404.yaml'
 
+eventByLocationOperations:
+  get:
+    summary: Returns all events from a location ordered by their distance, their start date and their name.
+    tags:
+      - event
+    parameters:
+      - in: query
+        name: skip
+        optional: true
+        schema:
+          type: integer
+        description: The numbers of items to return
+      - in: query
+        name: take
+        optional: true
+        schema:
+          type: integer
+        description: The number of items to skip before starting to collect the result set
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: './datatypes/Geolocation.yaml'
+    responses:
+      '200':
+        description: A JSON array of events
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: './datatypes/EventDTO.yaml'
+      '400':
+        description: Bad request.
+        content:
+          application/json:
+            schema:
+              $ref: './datatypes/errors/Error400.yaml'
+      '401':
+        description: Not authorizated.
+        content:
+          application/json:
+            schema:
+              $ref: './datatypes/errors/Error401.yaml'
