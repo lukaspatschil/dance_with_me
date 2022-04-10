@@ -26,10 +26,14 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('dance-with-me-web-client');
   });
 
-  it('should render title', () => {
+  it('#toggleNavbar() should toggle #navbarOpened', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('dance-with-me-web-client app is running!');
-  });
+    const comp = fixture.componentInstance;
+    expect(comp.navbarOpened).toBe(false);
+    comp.toggleNavbar();
+    expect(comp.navbarOpened).toBe(true);
+    comp.toggleNavbar();
+    expect(comp.navbarOpened).toBe(false);
+  })
+
 });
