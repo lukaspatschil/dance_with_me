@@ -1,28 +1,56 @@
-<nav class="flex items-center justify-between flex-wrap bg-white p-6 font-poppins">
+<header>
+  <nav class="flex items-center justify-between flex-wrap bg-white p-6 font-poppins">
 
     <div class="flex items-center flex-shrink-0 text-red-900 mr-6">
       <span class="text-xl tracking-tight" [routerLink]="'.'">dance with me</span>
     </div>
-      <button class="absolute right-0 items-center h-9 pl-2 pr-3 py-2 rounded-md text-slate-300" type="button" (click)="toggleNavbar()" >
-        <button class="flex items-center px-3 py-2 rounded text-red-900 hover:text-white hover:border-white">
-          <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
-        </button>
+    <button class="absolute right-0 items-center h-9 pl-2 pr-3 py-2 rounded-md text-slate-300" type="button" (click)="toggleNavbar()" >
+      <button class="flex items-center px-3 py-2 rounded text-red-900 hover:text-white hover:border-white">
+        <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
       </button>
+    </button>
+  </nav>
 
-</nav>
+  <div fxFlex class="top-navbar">
+    <ul class="align-content-center leading-10 font-poppins text-red-900">
+      <li class="text-center">
+        <a class="nav-link" [routerLink]="'/about'" (click)="toggleNavbar()">About</a>
+      </li>
+      <li class="text-center">
+        <a class="nav-link" [routerLink]="'/legal'" (click)="toggleNavbar()">Legal</a>
+      </li>
+      <li class="text-center">
+        <a class="nav-link" [routerLink]="'/privacy'" (click)="toggleNavbar()" >Privacy</a>
+      </li>
+    </ul>
+  </div>
+</header>
 
-<div fxFlex class="top-navbar">
-  <ul class="align-content-center leading-10 font-poppins text-red-900">
-    <li class="text-center">
-      <a class="nav-link" [routerLink]="'/about'" (click)="toggleNavbar()">About</a>
-    </li>
-    <li class="text-center">
-      <a class="nav-link" [routerLink]="'/legal'" (click)="toggleNavbar()">Legal</a>
-    </li>
-    <li class="text-center">
-      <a class="nav-link" [routerLink]="'/privacy'" (click)="toggleNavbar()" >Privacy</a>
-    </li>
-  </ul>
+<div class="container">
+  <app-legal-page *ngIf="title === 'legal-page'"></app-legal-page>
+  <app-privacy-page *ngIf="title === 'privacy-page'"></app-privacy-page>
+  <app-about-page *ngIf="title === 'about-page'"></app-about-page>
+  <router-outlet></router-outlet>
 </div>
 
-<router-outlet></router-outlet>
+<footer class="bottom-0 text-center bg-gray-900 text-white font-poppins">
+  <div class="p-6 flex items-center flex-shrink-0 mr-6">
+    <span class="text-xl tracking-tight" [routerLink]="'.'">dance with me</span>
+  </div>
+  <div class="px-6 container text-gray-400 text-sm">
+    <div class="flex mb-6 space-x-6">
+      <a class="nav-link" [routerLink]="'/about'">About</a>
+      <a class="nav-link" [routerLink]="'/legal'">Legal</a>
+      <a class="nav-link" [routerLink]="'/privacy'" >Privacy</a>
+    </div>
+  </div>
+
+  <div class="text-sm p-4 text-gray-700 bg-gray-900">
+    © 2021 Copyright:
+    <a class="text-gray-700">Dance with me</a>
+  </div>
+</footer>
+
+
+
+
