@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EventService } from './event.service';
-import { getConnectionToken } from '@nestjs/mongoose';
+import { getModelToken } from '@nestjs/mongoose';
+import { EventDocument } from '../core/schema/event.schema';
 
 describe('EventService', () => {
   let sut: EventService;
@@ -10,7 +11,7 @@ describe('EventService', () => {
       providers: [
         EventService,
         {
-          provide: getConnectionToken('Database'),
+          provide: getModelToken(EventDocument.name),
           useValue: {},
         },
       ],

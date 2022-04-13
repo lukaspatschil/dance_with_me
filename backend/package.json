@@ -29,6 +29,8 @@
     "@nestjs/mongoose": "^9.0.3",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/schedule": "^1.1.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.13.2",
     "mongoose": "^6.2.10",
     "nest-winston": "^1.6.2",
     "reflect-metadata": "^0.1.13",
@@ -80,6 +82,7 @@
       "!**/main.ts",
       "!**/*.module.ts"
     ],
+    "coveragePathIgnorePatterns": ["core/dtos"],
     "coverageReporters": [
       "text-summary",
       "html"
