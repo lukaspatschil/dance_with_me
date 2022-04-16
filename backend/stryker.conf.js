@@ -12,7 +12,7 @@ module.exports = {
   thresholds: {
     high: 100,
     low: 80,
-    break: 80,
+    break: 0,
   },
   mutator: { plugins: [], excludedMutations: ['StringLiteral'] },
 };

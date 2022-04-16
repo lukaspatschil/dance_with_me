@@ -88,4 +88,28 @@ describe('decorator with inline validation', () => {
       });
     });
   });
+
+  describe('wrong data types', () => {
+    class MyClass {
+      @IsBefore('laterDate', {
+        message: '$property must be before $constraint1',
+      })
+      firstDate!: number;
+      laterDate!: number;
+    }
+
+    it('should fail because both dates are numbers', () => {
+      const model = new MyClass();
+      model.firstDate = 1;
+      model.laterDate = 2;
+      return validator.validate(model).then((errors) => {
+        expect(errors).toHaveLength(1);
+        if (errors[0] != undefined) {
+          expect(errors[0].constraints).toEqual({
+            IsBefore: 'firstDate must be before laterDate',
+          });
+        }
+      });
+    });
+  });
 });

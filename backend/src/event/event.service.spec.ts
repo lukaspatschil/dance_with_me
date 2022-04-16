@@ -7,6 +7,8 @@ import { EventModelMock } from '../../test/stubs/event.model.mock';
 import { EventEntity } from '../core/entity/event.entity';
 import { GeolocationEnum } from '../core/schema/enum/geolocation.enum';
 import { LocationEntity } from '../core/entity/location.entity';
+import { NotFoundError } from 'rxjs';
+import { InternalServerErrorException } from '@nestjs/common';
 
 describe('EventService', () => {
   let sut: EventService;
@@ -34,20 +36,10 @@ describe('EventService', () => {
     expect(sut).toBeDefined();
   });
 
-  describe('getEvents', () => {
-    it('should return "Hello World"', () => {
-      // When
-      const result = sut.getEvents();
-
-      // Then
-      expect(result).toEqual('Hello Event');
-    });
-  });
-
   describe('createEvent', () => {
-    it('should call the database', async () => {
+    it('should call the database and create a new element in the database', async () => {
       // Given
-      const eventEntity = getEventEntity();
+      const eventEntity = createEventEntity();
 
       // When
       await sut.createEvent(eventEntity);
@@ -56,37 +48,150 @@ describe('EventService', () => {
       expect(eventDocument.create).toHaveBeenCalled();
     });
 
-    it('should call the database and create a new element in the database', async () => {
+    it('should call the database and throw a DB Error', async () => {
       // Given
-      const eventEntity = getEventEntity();
+      const eventEntity = createEventEntity();
+      eventEntity.id = '-2';
 
       // When
-      const data = await sut.createEvent(eventEntity);
+      const result = async () => await sut.createEvent(eventEntity);
 
       // Then
-      expect(data).toEqual(getEventEntity());
+      expect(result).rejects.toThrow(InternalServerErrorException);
     });
   });
 
-  function getEventEntity(): EventEntity {
+  describe('getEventById', () => {
+    it('should call the database and find a element in the database', async () => {
+      // Given
+      const param = '1';
+
+      // When
+      await sut.getEventById(param);
+
+      // Then
+      expect(eventDocument.findById).toHaveBeenCalled();
+    });
+
+    it('should call getEventById and throw an error', async () => {
+      // Given
+      const param = '-1';
+
+      // When
+      const result = async () => await sut.getEventById(param);
+
+      // Then
+      await expect(result).rejects.toThrow(NotFoundError);
+    });
+
+    it('should call getEventById and throw an DB Error', async () => {
+      // Given
+      const param = '-2';
+
+      // When
+      const result = async () => await sut.getEventById(param);
+
+      // Then
+      await expect(result).rejects.toThrow(InternalServerErrorException);
+    });
+  });
+
+  describe('getEvents', () => {
+    it('should call the database and find all elements in the database', async () => {
+      // Given
+      const param = {};
+
+      // When
+      await sut.getEventsQueryDto(param);
+
+      // Then
+      expect(eventDocument.aggregate).toHaveBeenCalled();
+    });
+
+    it('should call the database using the take: 1 parameter and find 1 element in the database', async () => {
+      // Given
+      const param = { take: 1 };
+
+      // When
+      const result = await sut.getEventsQueryDto(param);
+
+      // Then
+      expect(result).toEqual([createEventEntity()]);
+    });
+
+    it('should call the database using the skip: 2 parameter and find 3 elements in the database', async () => {
+      // Given
+      const param = { skip: 2 };
+
+      // When
+      const result = await sut.getEventsQueryDto(param);
+
+      // Then
+      const item1 = createEventEntity();
+      item1.id = '3';
+      const item2 = createEventEntity();
+      item2.id = '4';
+      const item3 = createEventEntity();
+      item3.id = '5';
+      const expectedValue = [item1, item2, item3];
+
+      expect(result).toEqual(expectedValue);
+    });
+
+    it('should call the database using the skip: 2 parameter take 2 parameter and should throw an DB Error', async () => {
+      // Given
+      const param = { skip: 2, take: 2 };
+
+      // When
+      const result = async () => await sut.getEventsQueryDto(param);
+
+      // Then
+      await expect(result).rejects.toThrow(InternalServerErrorException);
+    });
+  });
+
+  describe('getEventsByLocation', () => {
+    it('should call the database and find all elements in the database', async () => {
+      // Given
+      const query = { latitude: 1, longitude: 2 };
+
+      // When
+      await sut.getEventsQueryDto(query);
+
+      // Then
+      expect(eventDocument.aggregate).toHaveBeenCalled();
+    });
+
+    it('should call the database and find all elements in the database in a certain radius', async () => {
+      // Given
+      const query = { latitude: 1, longitude: 2, radius: 10 };
+
+      // When
+      await sut.getEventsQueryDto(query);
+
+      // Then
+      expect(eventDocument.aggregate).toHaveBeenCalled();
+    });
+  });
+
+  function createEventEntity(): EventEntity {
     const location = new LocationEntity();
     location.type = GeolocationEnum.POINT;
     location.coordinates = [-171.23794, 8.54529];
 
-    const eventEntity: EventEntity = {
-      id: '1',
-      name: 'Test name',
-      description: 'Test description',
-      date: new Date('2020-01-01'),
-      startTime: new Date('2020-01-01 00:10:00'),
-      endTime: new Date('2020-01-01 00:12:00'),
-      location,
-      price: 12.5,
-      isPublic: true,
-      imageId: '1',
-      organizerId: '1',
-      category: 'Jazz',
-    };
+    const eventEntity = new EventEntity();
+    eventEntity.id = '1';
+    eventEntity.name = 'Test name';
+    eventEntity.description = 'Test description';
+    eventEntity.date = new Date('2020-01-01');
+    eventEntity.startTime = new Date('2020-01-01 00:10:00');
+    eventEntity.endTime = new Date('2020-01-01 00:12:00');
+    eventEntity.location = location;
+    eventEntity.price = 12.5;
+    eventEntity.isPublic = true;
+    eventEntity.imageId = '1';
+    eventEntity.organizerId = '1';
+    eventEntity.category = 'Jazz';
 
     return eventEntity;
   }

@@ -88,4 +88,28 @@ describe('decorator with inline validation', () => {
       });
     });
   });
+
+  describe('wrong data types', () => {
+    class MyClass {
+      firstDate!: number;
+      @IsAfter('firstDate', {
+        message: '$property must be after $constraint1',
+      })
+      laterDate!: number;
+    }
+
+    it('should fail because both dates are numbers', () => {
+      const model = new MyClass();
+      model.firstDate = 1;
+      model.laterDate = 2;
+      return validator.validate(model).then((errors) => {
+        expect(errors).toHaveLength(1);
+        if (errors[0] != undefined) {
+          expect(errors[0].constraints).toEqual({
+            IsAfter: 'laterDate must be after firstDate',
+          });
+        }
+      });
+    });
+  });
 });

@@ -87,6 +87,7 @@
       "!core/dto/*.ts"
     ],
     "coverageReporters": [
+      "lcov",
       "text-summary",
       "html"
     ],

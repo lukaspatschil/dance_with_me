@@ -15,11 +15,9 @@ export class EventDto {
   id!: string;
 
   @IsNotEmpty()
-  @IsDate()
   name!: string;
 
   @IsNotEmpty()
-  @IsDate()
   description!: string;
 
   @IsNotEmpty()

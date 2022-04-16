@@ -23,9 +23,6 @@ paths:
   /event:
     $ref: 'docs/contracts/v1/events.yaml#/eventOperations'
 
-  /eventsbylocation:
-    $ref: 'docs/contracts/v1/events.yaml#/eventByLocationOperations'
-
   /event/{eventid}:
     $ref: 'docs/contracts/v1/events.yaml#/eventIdOperations'
 

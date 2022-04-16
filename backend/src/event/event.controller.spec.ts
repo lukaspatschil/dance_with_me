@@ -2,11 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { EventController } from './event.controller';
 import { EventService } from './event.service';
 import { CreateEventDto } from '../core/dto/createEvent.dto';
-import { EventDto } from '../core/dto/event.dto';
-import { LocationDto } from '../core/dto/location.dto';
 import { EventEntity } from '../core/entity/event.entity';
 import { LocationEntity } from '../core/entity/location.entity';
 import { GeolocationEnum } from '../core/schema/enum/geolocation.enum';
+import { EventDto } from '../core/dto/event.dto';
+import { LocationDto } from '../core/dto/location.dto';
+import { EventServiceMock } from '../../test/stubs/event.service.mock';
+import { NotFoundException } from '@nestjs/common';
 
 describe('EventController', () => {
   let sut: EventController;
@@ -17,11 +19,7 @@ describe('EventController', () => {
       providers: [
         {
           provide: EventService,
-          useValue: {
-            createEvent: jest.fn(() => {
-              return getEventEntity();
-            }),
-          },
+          useClass: EventServiceMock,
         },
       ],
       controllers: [EventController],
@@ -35,13 +33,63 @@ describe('EventController', () => {
     expect(sut).toBeDefined();
   });
 
-  describe('getEvents', () => {
-    it('should return `Hello Event`', () => {
+  describe('getEventById', () => {
+    it('should call getEventById and return event', () => {
+      // Given
+      const params = { id: '1' };
+
       // When
-      const response = sut.getEvents();
+      sut.getEventById(params);
 
       // Then
-      expect(response).toEqual('Hello Event');
+      expect(eventService.getEventById).toHaveBeenCalled();
+    });
+
+    it('should call getEventById and throw an NotFoundError', async () => {
+      // Given
+      const params = { id: '-1' };
+
+      // When
+      const result = async () => await sut.getEventById(params);
+
+      // Then
+      await expect(result).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('getEvents', () => {
+    it('should call getEvents`', () => {
+      // Given
+      const query = { take: 1, skip: 0 };
+
+      // When
+      sut.getEvents(query);
+
+      // Then
+      expect(eventService.getEventsQueryDto).toBeCalledWith(query);
+    });
+
+    it('should call getEventsByLocation`', () => {
+      // Given
+      const query = { take: 1, skip: 0, longitude: 1, latitude: 2 };
+      // When
+      sut.getEvents(query);
+
+      // Then
+      expect(eventService.getEventsQueryDto).toBeCalledWith(query);
+    });
+
+    it('should return a array of eventDtos', async () => {
+      // Given
+      const query = {};
+      // When
+      const data = await sut.getEvents(query);
+
+      const item1 = getEventDTO();
+      item1.id = '1';
+
+      // Then
+      expect(data).toEqual([item1, item1, item1]);
     });
   });
 
