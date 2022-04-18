@@ -1,39 +1,105 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from '../app/app.component';
+import { TranslateModule } from "@ngx-translate/core";
+import {MockBuilder, MockModule, MockRender} from "ng-mocks";
 
 describe('AppComponent', () => {
+
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
-      ],
-    }).compileComponents();
+    return MockBuilder(AppComponent)
+      .mock(RouterTestingModule)
+      .mock(TranslateModule.forRoot());
   });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+    const fixture = MockRender(AppComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
 
   it(`should have as title 'dance-with-me-web-client'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
+    const fixture = MockRender(AppComponent);
     const app = fixture.componentInstance;
     expect(app.title).toEqual('dance-with-me-web-client');
   });
 
-  it('#toggleNavbar() should toggle #navbarOpened', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const comp = fixture.componentInstance;
-    expect(comp.navbarOpened).toBe(false);
-    comp.toggleNavbar();
-    expect(comp.navbarOpened).toBe(true);
-    comp.toggleNavbar();
-    expect(comp.navbarOpened).toBe(false);
+  describe('toggleNavbar', () => {
+    it('should be closed', () => {
+      // Given
+      const fixture = MockRender(AppComponent);
+      const comp = fixture.componentInstance;
+
+      // Then
+      expect(comp.navbarOpened).toBe(false);
+    });
+
+    it('should open when toggled', () => {
+      // Given
+      const fixture = MockRender(AppComponent);
+      const comp = fixture.componentInstance;
+
+      // When
+      comp.toggleNavbar();
+
+      // Then
+      expect(comp.navbarOpened).toBe(true);
+    });
+
+    it('should close after being opened', () => {
+      // Given
+      const fixture = MockRender(AppComponent);
+      const comp = fixture.componentInstance;
+
+      // When
+      // toggle open
+      comp.toggleNavbar();
+      // close it again
+      comp.toggleNavbar();
+
+      // Then
+      expect(comp.navbarOpened).toBe(false);
+    });
+  })
+
+
+  describe('toggleLanguage', () => {
+    it('should be set to "de"', () => {
+      // Given
+      const fixture = MockRender(AppComponent);
+      const comp = fixture.componentInstance;
+
+      // THen
+      expect(comp.language).toBe('de');
+    });
+
+    it('should set language to "en"', () => {
+      // Given
+      const fixture = MockRender(AppComponent);
+      const comp = fixture.componentInstance;
+
+      // When
+      comp.toggleLanguage();
+
+      // Then
+      expect(comp.language).toBe('en');
+    });
+
+
+    it('should switch language to "de" after being set to "en"', () => {
+      // Given
+      const fixture = MockRender(AppComponent);
+      const comp = fixture.componentInstance;
+
+      // When
+      // toggle language to 'en'
+      comp.toggleLanguage();
+      // toggle language to 'de'
+      comp.toggleLanguage();
+
+      // Then
+      expect(comp.language).toBe('de');
+    });
   })
 
 });

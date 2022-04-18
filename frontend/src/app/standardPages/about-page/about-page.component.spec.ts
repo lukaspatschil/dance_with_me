@@ -1,21 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AboutPageComponent } from './about-page.component';
-import {RouterTestingModule} from "@angular/router/testing";
+import {MockBuilder, MockRender} from "ng-mocks";
+import {TranslateModule} from "@ngx-translate/core";
 
 describe('AboutPageComponent', () => {
   let component: AboutPageComponent;
   let fixture: ComponentFixture<AboutPageComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ AboutPageComponent ]
-    })
-    .compileComponents();
+    return MockBuilder(AboutPageComponent)
+      .mock(TranslateModule.forRoot());
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AboutPageComponent);
+    fixture = MockRender(AboutPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
