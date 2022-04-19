@@ -1,6 +1,6 @@
 {
   "name": "dance-with-me-server",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "",
   "author": "",
   "private": true,
@@ -83,9 +83,9 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s",
       "!**/main.ts",
-      "!**/*.module.ts"
+      "!**/*.module.ts",
+      "!core/dto/*.ts"
     ],
-    "coveragePathIgnorePatterns": ["core/dtos"],
     "coverageReporters": [
       "text-summary",
       "html"

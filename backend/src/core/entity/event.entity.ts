@@ -1,11 +1,13 @@
-export class EventDTO {
+import { LocationEntity } from './location.entity';
+
+export class EventEntity {
+  id?: string;
   name!: string;
   description!: string;
   date!: Date;
   startTime!: Date;
   endTime!: Date;
-  longitude!: string;
-  latitude!: string;
+  location!: LocationEntity;
   price!: number;
   isPublic!: boolean;
   imageId!: string;

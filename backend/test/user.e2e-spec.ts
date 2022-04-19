@@ -1,8 +1,8 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { NestApplicationBuilder } from '@jbiskur/nestjs-test-utilities';
+import { Test } from '@nestjs/testing';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
@@ -13,9 +13,15 @@ describe('UserController (e2e)', () => {
     testDatabaseStub = await MongoMemoryServer.create();
     process.env['MONGODB_URI'] = testDatabaseStub.getUri();
 
-    app = await new NestApplicationBuilder()
-      .withTestModule((builder) => builder.withModule(AppModule))
-      .build();
+    const moduleRef = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+
+    app = moduleRef.createNestApplication();
+
+    app.useGlobalPipes(new ValidationPipe());
+
+    await app.init();
   });
 
   afterEach(async () => {

@@ -10,8 +10,9 @@ module.exports = {
   coverageAnalysis: 'perTest',
   ignorePatterns: ['main.ts'],
   thresholds: {
-    "high": 100,
-    "low": 80,
-    "break": 80
-  }
+    high: 100,
+    low: 80,
+    break: 80,
+  },
+  mutator: { plugins: [], excludedMutations: ['StringLiteral'] },
 };

@@ -1,6 +1,8 @@
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { LocationDocument } from './location.schema';
 
+@Schema()
 export class EventDocument extends Document {
   @Prop({ required: true })
   name!: string;
@@ -17,11 +19,8 @@ export class EventDocument extends Document {
   @Prop({ required: true })
   endTime!: Date;
 
-  @Prop({ required: true })
-  longitude!: string;
-
-  @Prop({ required: true })
-  latitude!: string;
+  @Prop(LocationDocument)
+  location!: LocationDocument;
 
   @Prop({ required: true })
   price!: number;
