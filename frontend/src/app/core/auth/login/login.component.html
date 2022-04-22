@@ -1,0 +1,12 @@
+<div class="flex flex-col items-center justify-center min-h-screen">
+  <h1 translate class="font-medium leading-tight text-5xl mt-0 mb-2 text-red-900">login.welcome</h1>
+  <h2 translate class="mb-10">login.description</h2>
+  <button class="flex items-center justify-center rounded bg-white shadow-md hover:shadow-lg transition h-12 w-56" (click)="loginGoogle()">
+    <app-google></app-google>
+    <div translate class="mr-3 font-semibold">login.google</div>
+  </button>
+  <button class="facebook-button flex items-center justify-center rounded shadow-md bg-white hover:shadow-lg transition h-12 w-56 mt-4" (click)="loginFacebook()">
+    <app-facebook class="mr-3"></app-facebook>
+    <div translate class="text-white font-semibold">login.facebook</div>
+  </button>
+</div>

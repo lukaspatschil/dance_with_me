@@ -3,5 +3,11 @@
   "AboutText": "Wir von \"Dance with me\" haben das Ziel, Menschen beim Tanzen zu vereinen. Unsere App soll Tanzbegeisterten helfen, ihre Veranstaltungen schnell und einfach zu finden und so ihre Leidenschaft auszuleben.",
   "Legal": "Rechtliches",
   "Privacy": "Privatsphäre",
-  "About": "Über uns"
+  "About": "Über uns",
+  "login": {
+    "welcome": "Willkommen",
+    "description": "Anmelden und tanzen!",
+    "google": "Weiter mit Google",
+    "facebook": "Weiter mit Facebook"
+  }
 }

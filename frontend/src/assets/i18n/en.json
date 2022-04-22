@@ -3,5 +3,11 @@
   "AboutText": "We at \"Dance with me\" have the goal to unite people in dancing. Our app is designed to help dance enthusiasts find their events quickly and easily and thus live out their passion.",
   "Legal": "Legal",
   "Privacy": "Privacy",
-  "About": "About"
+  "About": "About",
+  "login": {
+    "welcome": "Welcome",
+    "description": "Sign in and start dancing!",
+    "google": "Log in with Google",
+    "facebook": "Log in with Facebook"
+  }
 }

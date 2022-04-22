@@ -13,14 +13,16 @@ import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { AboutPageComponent } from './standardPages/about-page/about-page.component';
 import { LegalPageComponent } from './standardPages/legal-page/legal-page.component';
 import { PrivacyPageComponent } from './standardPages/privacy-page/privacy-page.component';
+import {AuthModule} from "./core/auth/auth.module";
+import {LandingComponent} from "./standardPages/landing/landing.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     AboutPageComponent,
     LegalPageComponent,
-    PrivacyPageComponent
-
+    PrivacyPageComponent,
+    LandingComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -32,7 +34,8 @@ import { PrivacyPageComponent } from './standardPages/privacy-page/privacy-page.
         useFactory: httpTranslateLoader,
         deps: [HttpClient]
       }
-    })
+    }),
+    AuthModule
   ],
   providers: [],
   bootstrap: [AppComponent]

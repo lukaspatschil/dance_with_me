@@ -1,4 +1,4 @@
-const { pathsToModuleNameMapper } = require('ts-jest/utils');
+const { pathsToModuleNameMapper } = require('ts-jest');
 const { compilerOptions } = require('./tsconfig');
 
 module.exports = {
@@ -6,8 +6,9 @@ module.exports = {
   roots: ['<rootDir>/src/'],
   testMatch: ['**/+(*.)+(spec).+(ts)'],
   setupFilesAfterEnv: ['<rootDir>/src/test.ts'],
-  coverageReporters: ['text-summary'],
-  coverageDirectory: 'coverage/my-app',
+  coverageReporters: ['text-summary', 'html'],
+  coverageDirectory: 'coverage',
+  "coveragePathIgnorePatterns": ["test/mock"],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths || {}, {
     prefix: '<rootDir>/'
   }),
@@ -18,5 +19,6 @@ module.exports = {
       lines: 80,
       statements: 80
     }
-  }
+  },
+  testSequencer: "<rootDir>/src/test/alphabeticTestSequencer.js"
 };
