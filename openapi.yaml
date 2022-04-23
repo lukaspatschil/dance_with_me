@@ -13,6 +13,7 @@ tags:
     description: All methods corresponding to events
   - name: recommendation
   - name: user
+  - name: image
 paths:
   /event?skip=100&take=50:
     $ref: 'docs/contracts/v1/events.yaml#/eventGetOperation'
@@ -31,6 +32,12 @@ paths:
 
   /user/{userid}:
     $ref: 'docs/contracts/v1/users.yaml#/userIdOperations'
+
+  /image:
+    $ref: 'docs/contracts/v1/images.yaml#/uploadImage'
+
+  /image/{imageid}:
+    $ref: 'docs/contracts/v1/images.yaml#/getImage'
 
   /auth/login_redirect/{provider}:
     $ref: 'docs/contracts/v1/auth.yaml#/authProviderRedirect'
