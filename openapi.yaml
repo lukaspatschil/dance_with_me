@@ -3,7 +3,12 @@ info:
   title: DanceWithMe
   description: API for the DanceWithMe backend
   version: 1.0.0
-#servers:
+servers:
+  - url: http://localhost:{port}
+    description: local development server
+    variables:
+      port:
+        default: '3000'
 #  - url: http://api.example.com/v1
 #    description: Optional server description, e.g. Main (production) server
 #  - url: http://staging-api.example.com
@@ -15,19 +20,16 @@ tags:
   - name: user
   - name: image
 paths:
-  /event?skip=100&take=50:
-    $ref: 'docs/contracts/v1/events.yaml#/eventGetOperation'
+  /event:
+    $ref: 'docs/contracts/v1/events.yaml#/eventOperations'
 
-  /event/:
-    $ref: 'docs/contracts/v1/events.yaml#/eventPostOperation'
-
-  /eventsbylocation?skip=100&take=50:
+  /eventsbylocation:
     $ref: 'docs/contracts/v1/events.yaml#/eventByLocationOperations'
 
   /event/{eventid}:
     $ref: 'docs/contracts/v1/events.yaml#/eventIdOperations'
 
-  /recommendation?skip=100&take=50:
+  /recommendation:
     $ref: 'docs/contracts/v1/recommendation.yaml#/recommendationOperation'
 
   /user/{userid}:

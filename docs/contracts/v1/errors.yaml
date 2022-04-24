@@ -1,0 +1,28 @@
+unauthorizedResponse:
+  description: The user is not authorized to access the resource.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          error:
+            type: string
+            enum:
+              - unauthorized
+        required:
+          - error
+
+invalidFieldsSchema:
+  type: object
+  properties:
+    error:
+      type: string
+      enum:
+        - invalid_fields
+    fields:
+      type: array
+      items:
+        type: string
+  required:
+    - error
+    - fields

@@ -1,24 +1,23 @@
-
-eventGetOperation:
+eventOperations:
   get:
-    summary: Returns all events with the possibility to skip and take a number of events. The events are sorted by their start date first and secondly by their name.
+    description: Returns all events with the possibility to skip and take a number of events. The events are sorted by their start date first and secondly by their name.
     tags:
       - event
     parameters:
       - in: query
         name: skip
-        optional: true
         schema:
           type: integer
-        description: The numbers of items to return
+          default: 100
+        description: The number of items to skip before starting to collect the result set
       - in: query
         name: take
-        optional: true
         schema:
           type: integer
-        description: The number of items to skip before starting to collect the result set
+          default: 50
+        description: The number of items to fetch from the result set
     responses:
-      '200': # status code
+      '200':
         description: A JSON array of events
         content:
           application/json:
@@ -27,13 +26,8 @@ eventGetOperation:
               items:
                 $ref: './datatypes/EventDTO.yaml'
       '401':
-        description: Not authorizated.
-        content:
-          application/json:
-            schema:
-              $ref: './datatypes/errors/Error401.yaml'
+        $ref: './errors.yaml#/unauthorizedResponse'
 
-eventPostOperation:
   post:
     summary: Adds an event
     tags:
@@ -55,19 +49,12 @@ eventPostOperation:
         content:
           application/json:
             schema:
-              $ref: './datatypes/errors/Error400.yaml'
+              oneOf:
+                - $ref: '#/invalidFieldsSchema'
       '401':
-        description: Not authorizated.
-        content:
-          application/json:
-            schema:
-              $ref: './datatypes/errors/Error401.yaml'
+        $ref: './errors.yaml#/unauthorizedResponse'
       '403':
-        description: User doen't have the needed rights
-        content:
-          application/json:
-            schema:
-              $ref: './datatypes/errors/Error403.yaml'
+        $ref: '#/forbiddenResponse'
 
 eventIdOperations:
   get:
@@ -88,27 +75,15 @@ eventIdOperations:
           application/json:
             schema:
               $ref: './datatypes/EventDTO.yaml'
-      '400':
-        description: The specified event id is invalid.
-        content:
-          application/json:
-            schema:
-              $ref: './datatypes/errors/Error400.yaml'
       '401':
-        description: Not authorizated.
-        content:
-          application/json:
-            schema:
-              $ref: './datatypes/errors/Error401.yaml'
+        $ref: './errors.yaml#/unauthorizedResponse'
       '403':
-        description: User doen't have the needed rights
-        content:
-          application/json:
-            schema:
-              $ref: './datatypes/errors/Error403.yaml'
+        $ref: '#/forbiddenResponse'
+      '404':
+        $ref: '#/eventNotFoundResponse'
 
   put:
-    summary: Updates an event
+    summary: Replace an event
     tags:
       - event
     parameters:
@@ -131,29 +106,18 @@ eventIdOperations:
             schema:
               $ref: './datatypes/EventDTO.yaml'
       '400':
-        description: The specified event id is invalid.
+        description: Bad request.
         content:
           application/json:
             schema:
-              $ref: './datatypes/errors/Error400.yaml'
+              oneOf:
+                - $ref: './errors.yaml#/invalidFieldsSchema'
       '401':
-        description: Not authorizated.
-        content:
-          application/json:
-            schema:
-              $ref: './datatypes/errors/Error401.yaml'
+        $ref: './errors.yaml#/unauthorizedResponse'
       '403':
-        description: User doen't have the needed rights
-        content:
-          application/json:
-            schema:
-              $ref: './datatypes/errors/Error403.yaml'
+        $ref: '#/forbiddenResponse'
       '404':
-        description: A event with the specified ID was not found.
-        content:
-          application/json:
-            schema:
-              $ref: './datatypes/errors/Error404.yaml'
+        $ref: '#/eventNotFoundResponse'
 
   delete:
     summary: Deletes an event
@@ -173,54 +137,54 @@ eventIdOperations:
           application/json:
             schema:
               type: string
-      '400':
-        description: The specified event id is invalid.
-        content:
-          application/json:
-            schema:
-              $ref: './datatypes/errors/Error400.yaml'
       '401':
-        description: Not authorizated.
-        content:
-          application/json:
-            schema:
-              $ref: './datatypes/errors/Error401.yaml'
+        $ref: './errors.yaml#/unauthorizedResponse'
       '403':
-        description: User doen't have the needed rights
-        content:
-          application/json:
-            schema:
-              $ref: './datatypes/errors/Error403.yaml'
+        $ref: '#/forbiddenResponse'
       '404':
-        description: A event with the specified ID was not found.
-        content:
-          application/json:
-            schema:
-              $ref: './datatypes/errors/Error404.yaml'
+        $ref: '#/eventNotFoundResponse'
 
 eventByLocationOperations:
   get:
-    summary: Returns all events from a location ordered by their distance, their start date and their name.
+    description: Returns all events from a location ordered by their distance, their start date and their name.
     tags:
       - event
     parameters:
       - in: query
         name: skip
-        optional: true
         schema:
           type: integer
-        description: The numbers of items to return
+          default: 100
+        description: The number of items to skip before starting to collect the result set
       - in: query
         name: take
-        optional: true
         schema:
           type: integer
-        description: The number of items to skip before starting to collect the result set
-    requestBody:
-      content:
-        application/json:
-          schema:
-            $ref: './datatypes/Geolocation.yaml'
+          default: 50
+        description: The number of items to fetch from the result set
+      - in: query
+        name: latitude
+        schema:
+          type: number
+          example: 48.210033
+          minimum: -90
+          maximum: 90
+        required: true
+      - in: query
+        name: longitude
+        schema:
+          type: number
+          example: 16.363449
+          minimum: -180
+          maximum: 180
+        required: true
+      - in: query
+        name: radius
+        schema:
+          type: number
+          example: 500
+          minimum: 0
+        required: true
     responses:
       '200':
         description: A JSON array of events
@@ -235,10 +199,43 @@ eventByLocationOperations:
         content:
           application/json:
             schema:
-              $ref: './datatypes/errors/Error400.yaml'
+              type: object
+              properties:
+                error:
+                  type: string
+                  enum:
+                    - invalid_longitude
+                    - invalid_latitude
+                    - invalid_radius
+              required:
+                - error
       '401':
-        description: Not authorizated.
-        content:
-          application/json:
-            schema:
-              $ref: './datatypes/errors/Error401.yaml'
+        $ref: './errors.yaml#/unauthorizedResponse'
+
+eventNotFoundResponse:
+  description: The event with the specified ID was not found.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          error:
+            type: string
+            enum:
+              - not_found
+        required:
+          - error
+
+forbiddenResponse:
+  description: Missing permission to access/change/delete this event.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          error:
+            type: string
+            enum:
+              - missing_permission
+        required:
+          - error
