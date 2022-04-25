@@ -50,7 +50,7 @@ eventOperations:
           application/json:
             schema:
               oneOf:
-                - $ref: '#/invalidFieldsSchema'
+                - $ref: './errors.yaml#/invalidFieldsSchema'
       '401':
         $ref: './errors.yaml#/unauthorizedResponse'
       '403':
