@@ -1,15 +1,34 @@
-type: object
-properties:
-  id:
-    type: string
-    example: 1
-  firstName:
-    type: string
-    example: Mark
-  lastName:
-    type: string
-    example: Mayer
-  email:
-    type: string
-    example: testo@test.com
+UserDetailProperties:
+  type: object
+  properties:
+    id:
+      type: string
+      example: 1
+    firstName:
+      type: string
+      example: Mark
+    lastName:
+      type: string
+      example: Mayer
+    displayName:
+      type: string
+      example: Testo1
+    role:
+      type: string
+      enum: [ User, Organiser, Admin ]
+      example: User
+    pictureUrl:
+      type: string
+      example: http://example.com/pretty.png
 
+UserDetailDTO:
+  allOf:
+    - type: object
+    - $ref: './UserDetailDTO.yaml#/UserDetailProperties'
+  required:
+    - id
+    - firstName
+    - lastName
+    - displayName
+    - role
+    - pictureUrl

@@ -1,0 +1,40 @@
+import mongoose from 'mongoose';
+import { RoleEnum } from '../../src/core/schema/enum/role.enum';
+import { UserEntity } from '../../src/core/entity/user.entity';
+import { UserDto } from '../../src/core/dto/user.dto';
+
+export const validObjectId = new mongoose.Types.ObjectId();
+export const nonExistingObjectId = new mongoose.Types.ObjectId();
+export const invalidObjectId = 'xxxxxxxxxxxxxxxxxxx';
+
+export const validUserDocument = {
+  _id: '',
+  role: RoleEnum.USER,
+  displayName: 'Testo1',
+  firstName: 'Tester',
+  lastName: 'Tester',
+  email: 'test@test.com',
+  emailVerified: false,
+  pictureUrl: 'http://test.com/image.png',
+};
+
+export const validUserEntity: UserEntity = {
+  id: '',
+  role: RoleEnum.USER,
+  displayName: 'Testo1',
+  firstName: 'Tester',
+  lastName: 'Tester',
+  email: 'test@test.com',
+  emailVerified: false,
+  pictureUrl: 'http://test.com/image.png',
+};
+
+export const validUserDto: UserDto = {
+  id: '',
+  firstName: 'Tester',
+  lastName: 'Tester',
+  email: 'test@test.com',
+  displayName: 'Testo1',
+  role: RoleEnum.USER,
+  pictureUrl: 'http://test.com/image.png',
+};

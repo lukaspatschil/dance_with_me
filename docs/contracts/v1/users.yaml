@@ -24,8 +24,8 @@ userIdOperations:
       '404':
         $ref: '#/userNotFoundResponse'
 
-  put:
-    summary: Replace a user
+  patch:
+    summary: Update a user
     tags:
       - user
     parameters:
@@ -39,14 +39,14 @@ userIdOperations:
       content:
         application/json:
           schema:
-            $ref: './datatypes/UserDTO.yaml'
+            $ref: './datatypes/UserDetailDTO.yaml#/UserDetailProperties'
     responses:
       '200':
         description: A JSON object of UserDTO
         content:
           application/json:
             schema:
-              $ref: './datatypes/UserDetailDTO.yaml'
+              $ref: './datatypes/UserDetailDTO.yaml#/UserDetailDTO'
       '400':
         description: Bad request.
         content:
@@ -54,12 +54,12 @@ userIdOperations:
             schema:
               oneOf:
                 - $ref: './errors.yaml#/invalidFieldsSchema'
-      '401':
-        $ref: './errors.yaml#/unauthorizedResponse'
-      '403':
-        $ref: '#/forbiddenResponse'
-      '404':
-        $ref: '#/userNotFoundResponse'
+    '401':
+      $ref: './errors.yaml#/unauthorizedResponse'
+    '403':
+      $ref: '#/forbiddenResponse'
+    '404':
+      $ref: '#/userNotFoundResponse'
 
   delete:
     summary: Delete a user by id

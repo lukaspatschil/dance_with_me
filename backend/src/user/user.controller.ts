@@ -1,4 +1,11 @@
-import { Controller, Get, Logger } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  HttpCode,
+  Logger,
+  NotFoundException,
+  Param,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -7,8 +14,13 @@ export class UserController {
 
   constructor(private readonly userService: UserService) {}
 
-  @Get()
-  getHello(): string {
-    return 'Hello User!';
+  @Delete(':id')
+  @HttpCode(204)
+  async deleteUser(@Param('id') id: string) {
+    this.logger.log(`Delete user with id: ${id}`);
+    if ((await this.userService.deleteUser(id)) === null) {
+      throw new NotFoundException();
+    }
+    this.logger.log(`User with id: ${id} was deleted`);
   }
 }

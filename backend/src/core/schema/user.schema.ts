@@ -4,8 +4,8 @@ import { RoleEnum } from './enum/role.enum';
 
 @Schema()
 export class UserDocument extends Document {
-  @Prop({ required: true, unique: true })
-  authUserId!: string;
+  @Prop({ required: true })
+  override _id!: string;
 
   @Prop({ required: true })
   role!: RoleEnum;
@@ -14,7 +14,7 @@ export class UserDocument extends Document {
   displayName!: string;
 
   @Prop()
-  firstName!: number;
+  firstName!: string;
 
   @Prop()
   lastName!: string;
