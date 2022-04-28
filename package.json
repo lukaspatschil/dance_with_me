@@ -21,10 +21,12 @@
     "cypress:run": "cypress run",
     "docker:start": "docker-compose up --build",
     "cy:open": "start-test docker:start 8080 cypress:open",
-    "cy:run": "start-test docker:start 8080 cypress:run"
+    "cy:run": "start-test docker:start 8080 cypress:run",
+    "withLocalEnv": "env-cmd -f local.env env-cmd -f secrets.env --silent npm run"
   },
   "devDependencies": {
     "cypress": "^9.5.3",
+    "env-cmd": "^10.1.0",
     "start-server-and-test": "^1.14.0"
   },
   "engines": {

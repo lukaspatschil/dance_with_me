@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  local-database:
+    image: mongo:5.0.4
+    environment:
+      MONGO_INITDB_DATABASE: danceWithMe
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb-data-container-local:/data/db
+
+  local-minio-server:
+    image: minio/minio:RELEASE.2021-04-22T15-44-28Z.hotfix.e16e75ce3
+    ports:
+      - 9000:9000
+    volumes:
+      - minio-data-local:/data
+    env_file:
+      - ./local.env
+    command: server /data
+    labels:
+      - "traefik.enable=false"
+    restart: always
+
+volumes:
+  mongodb-data-container-local:
+  minio-data-local:
