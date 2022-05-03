@@ -13,8 +13,8 @@ import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { AboutPageComponent } from './standardPages/about-page/about-page.component';
 import { LegalPageComponent } from './standardPages/legal-page/legal-page.component';
 import { PrivacyPageComponent } from './standardPages/privacy-page/privacy-page.component';
-import {AuthModule} from "./core/auth/auth.module";
 import {LandingComponent} from "./standardPages/landing/landing.component";
+import { CoreModule } from "./core/core.module";
 
 @NgModule({
   declarations: [
@@ -35,7 +35,7 @@ import {LandingComponent} from "./standardPages/landing/landing.component";
         deps: [HttpClient]
       }
     }),
-    AuthModule
+    CoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]
