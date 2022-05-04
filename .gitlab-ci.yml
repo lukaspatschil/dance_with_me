@@ -5,6 +5,16 @@ cache:
   paths:
     - .npm/
 
+default:
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+      - scheduler_failure
+      - runner_unsupported
+      - archived_failure
+      - unmet_prerequisites
+
 stages:
   - lint
   - test
