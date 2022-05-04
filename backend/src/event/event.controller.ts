@@ -8,12 +8,14 @@ import {
   Logger,
   NotFoundException,
   Param,
+  Patch,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from '../core/dto/createEvent.dto';
-import { EventDto } from '../core/dto/event.dto';
+import { EventDto, UpdateEventDto } from '../core/dto/event.dto';
 import { EventMapper } from '../core/mapper/event.mapper';
 import { EventEntity } from '../core/entity/event.entity';
 import { QueryDto } from '../core/dto/query.dto';
@@ -112,5 +114,21 @@ export class EventController {
       user.id,
     );
     await this.eventService.deleteParticipation(eventId, user);
+  }
+
+  @Patch(':id')
+  @HttpCode(200)
+  async updateEvent(
+    @Param('id') id: string,
+    @Body() updateEventDto: UpdateEventDto,
+  ) {
+    this.logger.log(`Updating event with id ${id}`);
+
+    return EventMapper.mapEntityToDto(
+      await this.eventService.updateEvent(
+        id,
+        EventMapper.mapDtoToEntityUpdate(updateEventDto),
+      ),
+    );
   }
 }

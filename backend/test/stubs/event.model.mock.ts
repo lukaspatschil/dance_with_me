@@ -5,6 +5,8 @@ import {
   invalidObjectId,
   nonExistingObjectId,
 } from '../test_data/event.testData';
+import { QueryOptions } from 'mongoose';
+import { LocationEntity } from '../../src/core/entity/location.entity';
 import { validAddress } from '../test_data/openStreetMapApi.testData';
 
 /* eslint @typescript-eslint/no-magic-numbers: 0 */
@@ -44,6 +46,62 @@ export class EventModelMock {
     };
     return Promise.resolve(eventDocument);
   });
+
+  findByIdAndUpdate = jest.fn(
+    (id: string, dict: Dictionary<any>, opt: QueryOptions) => {
+      if (opt.new === false) {
+        const event = validEventDocument();
+        event._id = id;
+        return Promise.resolve(event);
+      } else {
+        if (id === validEventId1.toString()) {
+          const event = validEventDocument();
+
+          if (dict.hasOwnProperty('id')) {
+            event._id = dict['id'] as string;
+          } else {
+            event._id = validEventId1.toString();
+          }
+          if (dict.hasOwnProperty('name')) {
+            event.name = dict['name'] as string;
+          }
+          if (dict.hasOwnProperty('description')) {
+            event.description = dict['description'] as string;
+          }
+          if (dict.hasOwnProperty('date')) {
+            event.date = dict['date'] as Date;
+          }
+          if (dict.hasOwnProperty('startTime')) {
+            event.startTime = dict['startTime'] as Date;
+          }
+          if (dict.hasOwnProperty('endTime')) {
+            event.endTime = dict['endTime'] as Date;
+          }
+          if (dict.hasOwnProperty('location')) {
+            event.location = dict['location'] as LocationEntity;
+          }
+          if (dict.hasOwnProperty('price')) {
+            event.price = dict['price'] as number;
+          }
+          if (dict.hasOwnProperty('isPublic')) {
+            event.isPublic = dict['isPublic'] as boolean;
+          }
+          if (dict.hasOwnProperty('imageId')) {
+            event.imageId = dict['imageId'] as string;
+          }
+          if (dict.hasOwnProperty('organizerId')) {
+            event.organizerId = dict['organizerId'] as string;
+          }
+          if (dict.hasOwnProperty('category')) {
+            event.category = dict['category'] as string;
+          }
+          return Promise.resolve(event);
+        } else {
+          return Promise.resolve(null);
+        }
+      }
+    },
+  );
 
   findById = jest.fn((id) => {
     if (id === '-1') {

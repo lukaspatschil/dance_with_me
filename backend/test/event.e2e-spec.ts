@@ -13,6 +13,8 @@ import {
   validObjectId1,
   validObjectId2,
   validObjectId3,
+  validEventEntity,
+  invalidObjectId,
 } from './test_data/event.testData';
 import { deleteResponse } from './test_data/httpResponse.testData';
 import {
@@ -1719,6 +1721,41 @@ describe('EventController (e2e)', () => {
       });
 
     //TODO: Why is this working?
+  });
+
+  describe('/event (PATCH)', () => {
+    it('should return 200 (change name of event)', async () => {
+      // Give
+      const validEvent = validEventDocument();
+      const event = new Event(validEvent);
+      await event.save();
+
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.name = 'EventNameNeu';
+
+      const resp = await request(app.getHttpServer())
+        .get(`/event/${validEventId.toString()}`)
+        .send();
+
+      return request(app.getHttpServer())
+        .patch(`/event/${validEventId.toString()}`)
+        .send(eventUpdateDto)
+        .expect(200)
+        .expect((res) => {
+          const expectedValue = validEventDto();
+          expectedValue.id = res.body.id;
+          expectedValue.name = 'EventNameNeu';
+          expect(res.body).toEqual(expectedValue);
+        });
+    });
+
+    it('should return 404', async () => {
+      return request(app.getHttpServer())
+        .patch(`/event/${nonExistingEventId.toString()}`)
+        .send()
+        .expect(404)
+        .expect(notFoundResponse);
+    });
   });
 
   function getDefaultEventDTO() {
