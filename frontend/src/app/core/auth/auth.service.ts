@@ -15,7 +15,7 @@ const httpOptions = {
 })
 export class AuthService {
   private _accessToken: string | null = null;
-  private refreshTimeout: number | null = null;
+  private refreshTimeout: any = null;
 
   constructor(
     private readonly http: HttpClient,

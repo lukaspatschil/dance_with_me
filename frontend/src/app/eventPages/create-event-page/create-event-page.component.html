@@ -1,0 +1,324 @@
+<div class="p-5 space-y-4 font-poppins justify-center items-center">
+  <form [formGroup]="createEventForm" (ngSubmit)="onSubmit()" class="form font-poppins justify-center items-center" id="createForm">
+    <p translate class="text-l mb-8">create.create_event</p>
+    <div class="flex flex-wrap -mx-3 mb-6">
+      <div class="form-group w-full md:w-1/2 px-3 mb-6 md:mb-0">
+        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="event-name">
+          {{'create.event_name' | translate}} *
+        </label>
+        <input type="text"
+               formControlName="name"
+               class="form-control appearance-none block w-full text-gray-700 border border-gray-300 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-red-900" id="event-name" type="text" placeholder="Name">
+        <div translate
+             *ngIf="(name?.touched)">
+          <label translate
+                 *ngIf="name?.hasError('required')"
+                 class="block uppercase text-red-600 text-xs font-bold mb-2">
+            create.event_name_error
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!--- Date/Time Block -->
+    <div class="flex flex-wrap -mx-3 mb-6">
+      <div class="w-full sm:w-full md:w-1/3 px-3 mb-6 md:mb-0">
+        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="date">
+          {{'create.date' | translate}} *
+        </label>
+        <input
+          formControlName="date"
+          name="date"
+          min="{{todayDate | date: 'yyyy-MM-dd'}}"
+          class="appearance-none block w-full text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-red-900" type="date" id="date" name="date">
+        <div translate
+             *ngIf="(date?.touched)">
+          <label translate
+                 *ngIf="date?.hasError('required')"
+                 class="block uppercase text-red-600 text-xs font-bold mb-2">
+            create.date_error
+          </label>
+        </div>
+      </div>
+      <div class="sm:w-1/2 md:w-1/3 px-3 mb-6 md:mb-0">
+        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="startTime">
+          {{'create.starttime' | translate}} *
+        </label>
+        <input
+          formControlName="startTime"
+          name="startTime"
+          class="appearance-none block w-full text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-red-900" type="time" id="startTime" name="time">
+        <div translate
+             *ngIf="(startTime?.touched)">
+          <label translate
+                 *ngIf="startTime?.hasError('required')"
+                 class="block uppercase text-red-600 text-xs font-bold mb-2">
+            create.starttime_error
+          </label>
+          <label translate
+                 *ngIf="createEventForm?.hasError('wrongTime') && (createEventForm.touched || createEventForm.dirty)"
+                 class="block uppercase text-red-600 text-xs font-bold mb-2">
+            create.wrong_time_error
+          </label>
+        </div>
+      </div>
+      <div class="sm:w-1/2 md:w-1/3 px-3 mb-6 md:mb-0">
+        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="endTime">
+          {{'create.endtime' | translate}} *
+        </label>
+        <input
+          formControlName="endTime"
+          name="endTime"
+          class="appearance-none block w-full text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-red-900" type="time" id="endTime" name="time">
+        <div translate
+             *ngIf="(endTime?.touched)">
+          <label translate
+                 *ngIf="endTime?.hasError('required')"
+                 class="block uppercase text-red-600 text-xs font-bold mb-2">
+            create.event_name_error
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!--- Address Block -->
+    <div
+      formGroupName="address"
+      class="form-control flex flex-wrap -mx-3 mb-6">
+      <div class="w-full sm:w-3/4 md:w-2/3 px-3 mb-6 md:mb-0">
+        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="address">
+          {{'create.street' | translate}} *
+        </label>
+        <input
+          type="text" required
+          formControlName="street"
+          name="street"
+          class="form-control appearance-none block w-full text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-red-900" id="street" type="text" placeholder="{{'create.street_placeholder' | translate }}">
+        <div translate
+             *ngIf="(street?.touched)">
+          <label translate
+                 *ngIf="street?.hasError('required')"
+                 class="block uppercase text-red-600 text-xs font-bold mb-2">
+            create.street_error
+          </label>
+        </div>
+      </div>
+      <div class="w-full sm:w-1/4 md:w-1/3 px-3 mb-6 md:mb-3">
+        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="city">
+          {{'create.housenumber' | translate}} *
+        </label>
+        <input
+          type="number" required
+          formControlName="housenumber"
+          name="housenumber"
+          class="appearance-none block w-full text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-red-900" id="housenumber" type="text" placeholder="H.Nr.">
+        <div translate
+             class="form-control-feedback"
+             *ngIf="(housenumber?.touched || housenumber?.dirty)">
+          <label translate
+                 *ngIf="housenumber?.hasError('required')"
+                 class="block uppercase text-red-600 text-xs font-bold mb-2">
+            create.housenumber_error
+          </label>
+          <label translate
+                 *ngIf="housenumber?.hasError('pattern')"
+                 class="block uppercase text-red-600 text-xs font-bold mb-2">
+            create.number_error
+          </label>
+        </div>
+      </div>
+      <div class="w-full sm:w-1/4 px-3 mb-6 md:mb-0">
+        <label translate class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="zip">
+          create.addition
+        </label>
+        <input
+          type="text"
+          formControlName="addition"
+          name="addition"
+          class="appearance-none block w-full text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-red-900" id="addition" type="text" placeholder="">
+      </div>
+      <div class="w-full sm:w-1/4 px-3 mb-6 md:mb-0">
+        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="zip">
+          {{'create.zip' | translate}} *
+        </label>
+        <input
+          type="number" required
+          formControlName="postalcode"
+          name="postalcode"
+          class="appearance-none block w-full text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-red-900" id="zip" type="text" placeholder="{{'create.zip_placeholder' | translate }}">
+        <div translate
+             *ngIf="(postalcode?.touched)">
+          <label translate
+                 *ngIf="postalcode?.hasError('required')"
+                 class="block uppercase text-red-600 text-xs font-bold mb-2">
+            create.zip_error
+          </label>
+          <label translate
+                 *ngIf="postalcode?.hasError('pattern')"
+                 class="block uppercase text-red-600 text-xs font-bold mb-2">
+            create.number_error
+          </label>
+        </div>
+      </div>
+      <div class="w-full sm:w-1/4 px-3 mb-6 md:mb-0">
+        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="city">
+          {{'create.city' | translate}} *
+        </label>
+        <input
+          type="text" required
+          formControlName="city"
+          name="city"
+          class="appearance-none block w-full text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-red-900" id="city" type="text" placeholder="{{'create.city_placeholder' | translate }}">
+        <div translate
+             *ngIf="(city?.touched)">
+          <label translate
+                 *ngIf="city?.hasError('required')"
+                 class="block uppercase text-red-600 text-xs font-bold mb-2">
+            create.city_error
+          </label>
+        </div>
+      </div>
+      <div class="w-full sm:w-1/4 px-3 mb-6 md:mb-0">
+        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="city">
+          {{'create.country' | translate}} *
+        </label>
+        <input
+          type="text" required
+          formControlName="country"
+          name="city"
+          class="appearance-none block w-full text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-red-900" id="country" type="text" placeholder="{{'create.country_placeholder' | translate }}">
+        <div translate
+             *ngIf="(country?.touched)">
+          <label translate
+                 *ngIf="country?.hasError('required')"
+                 class="block uppercase text-red-600 text-xs font-bold mb-2">
+            create.country_error
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap -mx-3 mb-6">
+      <div class="w-full px-3 mb-6 md:mb-0">
+        <label for="price" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+          {{'create.price' | translate}} *
+        </label>
+        <input
+          formControlName="price"
+          name="price"
+          min="0"
+          type="number"
+          class="appearance-none block w-full text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-red-900" id="price" type="text"
+          placeholder="{{'create.price' | translate }}"
+        />
+        <div translate
+             *ngIf="(price?.touched || price?.dirty)">
+          <label translate
+                 *ngIf="price?.hasError('min')"
+                 class="block uppercase text-red-600 text-xs font-bold mb-2">
+            create.price_error
+          </label>
+          <label translate
+                 *ngIf="price?.hasError('pattern')"
+                 class="block uppercase text-red-600 text-xs font-bold mb-2">
+            create.number_error
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!--- Description Block -->
+    <div class="flex flex-wrap -mx-3 mb-5">
+      <div class="w-full px-3 mb-6 md:mb-0">
+        <label translate for="description" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+          create.description
+        </label>
+        <textarea required
+                  formControlName="description"
+                  name="description"
+                  class="form-control block w-full px-3 text-gray-700 bg-white border border-solid border-gray-300 rounded  transition ease-in-out
+        focus:text-gray-700 focus:bg-white focus:border-red-900 focus:outline-none " id="description" rows="3" placeholder="">
+      </textarea>
+        <div translate
+             *ngIf="(description?.touched)">
+          <label translate
+                 *ngIf="description?.hasError('required')"
+                 class="block uppercase text-red-600 text-xs font-bold mb-2">
+            create.event_name_error
+          </label>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="flex space-x-6 mb-6">
+      <label for="description" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+        {{'create.public' | translate}} *
+      </label>
+      <div class="flex mb-12">
+        <label for="public" class="flex items-center cursor-pointer">
+          <div class="relative">
+            <input type="checkbox"
+                   name="public"
+                   formControlName="public"
+                   id="public" class="sr-only"
+                   checked={public}>
+            <div class="block bg-gray-300 w-10 h-6 rounded-full"></div>
+            <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition"></div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap -mx-3 mb-6">
+      <div class="w-full px-3 mb-6 md:mb-0">
+        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+          {{'create.category' | translate}} *
+        </label>
+
+        <select formControlName="category" id="category">
+          <option *ngFor="let category of categories; let i = index" [value]="category">
+            {{category}}
+          </option>
+        </select>
+        <div translate
+             *ngIf="category?.touched">
+          <label translate
+                 *ngIf="category?.hasError('required')"
+                 class="block uppercase text-red-600 text-xs font-bold mb-2">
+            create.category_error
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!--Buttons-->
+    <div translate *ngIf="(error)">
+      <label translate
+             class="block uppercase text-red-600 text-xs font-bold mb-2">
+        create.validation_error
+      </label>
+    </div>
+
+    <div class="flex flex-row-reverse space-x-4 space-x-reverse">
+      <button translate [disabled]="createEventForm?.invalid"
+              class="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 border border-emerald-500 rounded"
+              id="create_button"
+              (click)="onSubmit()">
+        create.create_button
+      </button>
+      <div *ngIf="loading">
+        <svg role="status" class="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+          <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+        </svg>
+      </div>
+
+      <button translate
+              [routerLink]="''"
+              class="bg-transparent border-white hover:bg-red-900 text-red-900 font-semibold hover:text-white py-2 px-4 border hover:border-transparent rounded">
+        create.cancel
+      </button>
+    </div>
+  </form>
+</div>

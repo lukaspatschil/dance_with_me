@@ -9,6 +9,7 @@ import {LoginComponent} from "./core/auth/login/login.component";
 import {LoginGuard} from "./core/auth/login.guard";
 import {AuthGuard} from "./core/auth/auth.guard";
 import {LandingComponent} from "./standardPages/landing/landing.component";
+import {CreateEventPageComponent} from "./eventPages/create-event-page/create-event-page.component";
 
 const routes: Routes = [
   {path: '', component: LandingComponent},
@@ -16,6 +17,7 @@ const routes: Routes = [
   {path: 'about', component: AboutPageComponent},
   {path: 'legal', component: LegalPageComponent},
   {path: 'privacy', component: PrivacyPageComponent},
+  {path: 'create', component: CreateEventPageComponent},
   {path: 'loginSite', component: LoginComponent},
   {path: environment.loginCallback, component: LandingComponent, canActivate: [LoginGuard]},
 ];

@@ -17,18 +17,19 @@
       <button class="bg-white px-3 text-sm text-gray-200" (click)="toggleLanguage()">{{language}}</button>
 
     </div>
+
   </nav>
 
   <div fxFlex class="top-navbar">
   <ul class="align-content-center leading-10 font-poppins text-red-900">
     <li class="text-center">
-      <a class="nav-link" [routerLink]="'/about'" (click)="toggleNavbar()">{{'About' | translate}}</a>
+      <a class="nav-link" [routerLink]="'/create'" (click)="toggleNavbar()">{{'create.create_event' | translate}}</a>
     </li>
     <li class="text-center">
-      <a class="nav-link" [routerLink]="'/legal'" (click)="toggleNavbar()">{{'Legal' | translate}}</a>
+      <a class="nav-link" [routerLink]="'/legal'" (click)="toggleNavbar()">{{'legal_link' | translate}}</a>
     </li>
     <li class="text-center">
-      <a class="nav-link" [routerLink]="'/privacy'" (click)="toggleNavbar()" >{{'Privacy' | translate}}</a>
+      <a class="nav-link" [routerLink]="'/privacy'" (click)="toggleNavbar()" >{{'privacy_link' | translate}}</a>
     </li>
   </ul>
   </div>
@@ -39,6 +40,7 @@
   <app-legal-page *ngIf="title === 'legal-page'"></app-legal-page>
   <app-privacy-page *ngIf="title === 'privacy-page'"></app-privacy-page>
   <app-about-page *ngIf="title === 'about-page'"></app-about-page>
+  <app-create-event-page *ngIf="title === 'create-event-page'"></app-create-event-page>
   <router-outlet></router-outlet>
 </main>
 
@@ -49,9 +51,9 @@
   </div>
   <div class="px-6 container text-gray-400 text-sm">
     <div class="flex mb-6 space-x-5">
-      <a class="nav-link" [routerLink]="'/about'">{{'About' | translate}}</a>
-      <a class="nav-link" [routerLink]="'/legal'">{{'Legal' | translate}}</a>
-      <a class="nav-link" [routerLink]="'/privacy'" >{{'Privacy' | translate}}</a>
+      <a class="nav-link" [routerLink]="'/about'">{{'about.about_link' | translate}}</a>
+      <a class="nav-link" [routerLink]="'/legal'">{{'legal_link' | translate}}</a>
+      <a class="nav-link" [routerLink]="'/privacy'" >{{'privacy_link' | translate}}</a>
     </div>
   </div>
 
