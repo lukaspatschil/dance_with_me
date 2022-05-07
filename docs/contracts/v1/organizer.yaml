@@ -1,0 +1,247 @@
+ValidationRequestOperations:
+  post:
+    tags:
+      - validation
+    summary: Request validation for organizer role.
+    description: Users can request validation from admins to become organizers.
+    requestBody:
+      content:
+        image/png:
+          schema:
+            type: string
+            format: binary
+        image/jpeg:
+          schema:
+            type: string
+            format: binary
+    responses:
+      '201':
+        description: Image uploaded successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: The id of the validation request
+      '401':
+        $ref: './auth.yaml#/accessTokenInvalidResponse'
+      '400':
+        description: >
+          Image missing from request or format invalid
+        content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                enum:
+                  - image_required
+                  - image_format_invalid
+            required:
+              - error
+      '409':
+        description: >
+          User already has a pending validation request.
+        content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                enum:
+                  - validation_request_already_exists
+            required:
+              - error
+  get:
+    tags:
+      - validation
+    summary: List all validation requests.
+    description: >
+      Admins can list all validation requests and query them by status (pending by default).
+      Regular users will only see their own validation requests.
+    parameters:
+      - in: query
+        name: status
+        style: form
+        explode: false
+        schema:
+          type: string
+          enum:
+            - pending
+            - approved
+            - rejected
+          default: pending
+          example: pending,rejected
+        description: Filter requests by status
+    responses:
+      '200':
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: './datatypes/ValidationRequest.yaml#/validationRequestSchema'
+      '401':
+        $ref: './auth.yaml#/accessTokenInvalidResponse'
+
+ValidationRequestPhotoOperations:
+  get:
+    tags:
+      - validation
+    summary: Fetch a validation request.
+    description: >
+      Admins can fetch a validation request's photo.
+    parameters:
+      - in: path
+        name: validationRequestId
+        schema:
+          type: string
+          format: uuid
+        required: true
+        description: The id of the validation request
+    responses:
+      '200':
+        content:
+          image/jpg:
+            schema:
+              type: string
+              format: binary
+          image/png:
+            schema:
+              type: string
+              format: binary
+      '404':
+        $ref: '#/notFoundResponse'
+      '401':
+        $ref: './auth.yaml#/accessTokenInvalidResponse'
+      '403':
+        $ref: '#/forbiddenResponse'
+
+ValidationRequestIdOperations:
+  patch:
+    tags:
+      - validation
+    summary: Respond to a validation request.
+    description: >
+      Admins can approve or reject a validation request.
+    parameters:
+      - in: path
+        name: validationRequestId
+        schema:
+          type: string
+          format: uuid
+        required: true
+        description: The id of the validation request
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                enum:
+                  - approved
+                  - rejected
+                  - pending
+                example: approved
+              comment:
+                type: string
+                example: "This is a comment"
+                description: Optional comment, allows admins to communicate reason for rejection (to each other)
+            required:
+              - status
+    responses:
+      '200':
+        content:
+          application/json:
+            schema:
+              $ref: './datatypes/ValidationRequest.yaml#/validationRequestSchema'
+      '404':
+        $ref: '#/notFoundResponse'
+      '400':
+        description: Invalid request
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  enum:
+                    - invalid_status
+              required:
+                - error
+      '409':
+        summary: Validation request already responded
+        description: Occurs when an admin tries to approve a validation request that has already been approved or rejected.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  enum:
+                    - validation_request_already_responded
+              required:
+                - error
+      '401':
+        $ref: './auth.yaml#/accessTokenInvalidResponse'
+      '403':
+        $ref: '#/forbiddenResponse'
+  delete:
+    tags:
+      - validation
+    summary: Delete a validation request.
+    description: >
+      Admins can delete a validation request (and its photo), allowing a user to request validation again (!).
+    parameters:
+      - in: path
+        name: validationRequestId
+        schema:
+          type: string
+          format: uuid
+        required: true
+        description: The id of the validation request
+    responses:
+      '204':
+        description: Validation request deleted
+      '404':
+        $ref: '#/notFoundResponse'
+      '401':
+        $ref: './auth.yaml#/accessTokenInvalidResponse'
+      '403':
+        $ref: '#/forbiddenResponse'
+
+forbiddenResponse:
+  description: Missing permission to access/change/delete validation requests.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          error:
+            type: string
+            enum:
+              - missing_permission
+        required:
+          - error
+
+notFoundResponse:
+  description: Validation request not found
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          error:
+            type: string
+            enum:
+              - validation_request_not_found
+        required:
+          - error

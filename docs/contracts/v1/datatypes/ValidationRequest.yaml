@@ -1,0 +1,39 @@
+validationRequestSchema:
+  type: object
+  properties:
+    id:
+      type: string
+      description: The id of the validation request
+    userId:
+      type: string
+      description: The id of the user who requested validation
+    email:
+      type: string
+      description: The email of the user who requested validation
+    displayName:
+      type: string
+      description: The display name of the user who requested validation
+    firstName:
+      type: string
+      description: The first name of the user who requested validation
+    lastName:
+      type: string
+      description: The last name of the user who requested validation
+    status:
+      type: enum
+      enum:
+        - pending
+        - approved
+        - rejected
+    comment:
+      type: string
+      example: "This is a comment"
+      description: Optional comment, allows admins to communicate reason for rejection (to each other)
+  required:
+    - id
+    - userId
+    - email
+    - displayName
+    - firstName
+    - lastName
+    - status

@@ -38,6 +38,15 @@ paths:
   /image/{imageid}:
     $ref: 'docs/contracts/v1/images.yaml#/getImage'
 
+  /validationrequest:
+    $ref: 'docs/contracts/v1/organizer.yaml#/ValidationRequestOperations'
+
+  /validationrequest/{validationRequestId}:
+    $ref: 'docs/contracts/v1/organizer.yaml#/ValidationRequestIdOperations'
+
+  /validationrequest/{validationRequestId}/image:
+    $ref: 'docs/contracts/v1/organizer.yaml#/ValidationRequestPhotoOperations'
+
   /auth/login_redirect/{provider}:
     $ref: 'docs/contracts/v1/auth.yaml#/authProviderRedirect'
 
