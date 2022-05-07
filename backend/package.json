@@ -89,7 +89,8 @@
     "coverageReporters": [
       "lcov",
       "text-summary",
-      "html"
+      "html",
+      "lcov"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",

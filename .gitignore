@@ -23,8 +23,9 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
-# secrets
-secrets.env
 
 # ide
 workspace.xml
+
+#sonarqube
+.scannerwork

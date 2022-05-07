@@ -6,7 +6,7 @@ module.exports = {
   roots: ['<rootDir>/src/'],
   testMatch: ['**/+(*.)+(spec).+(ts)'],
   setupFilesAfterEnv: ['<rootDir>/src/test.ts'],
-  coverageReporters: ['text-summary', 'html'],
+  coverageReporters: ['text-summary', 'html', 'lcov'],
   coverageDirectory: 'coverage',
   "coveragePathIgnorePatterns": ["test/mock"],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths || {}, {

@@ -63,11 +63,6 @@ export class AuthService {
       this.tokenStorage.clearRefreshToken();
       this.accessToken = null;
 
-      if (this.refreshTimeout) {
-        clearTimeout(this.refreshTimeout);
-        this.refreshTimeout = null;
-      }
-
       this.router.parseUrl(environment.loginUrl);
     });
   }
