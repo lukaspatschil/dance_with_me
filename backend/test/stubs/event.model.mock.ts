@@ -50,49 +50,58 @@ export class EventModelMock {
   findByIdAndUpdate = jest.fn(
     (id: string, dict: Dictionary<any>, opt: QueryOptions) => {
       if (opt.new === false) {
-        const event = validEventDocument();
+        const event = validEventDocument;
         event._id = id;
         return Promise.resolve(event);
       } else {
-        if (id === validEventId1.toString()) {
-          const event = validEventDocument();
+        if (id === validObjectId1.toString()) {
+          const event = validEventDocument;
 
-          if (dict.hasOwnProperty('id')) {
+          if (dict.hasOwnProperty('id') && dict['id'] != null) {
             event._id = dict['id'] as string;
           } else {
-            event._id = validEventId1.toString();
+            event._id = validObjectId1.toString();
           }
-          if (dict.hasOwnProperty('name')) {
+          if (dict.hasOwnProperty('name') && dict['name'] != null) {
             event.name = dict['name'] as string;
           }
-          if (dict.hasOwnProperty('description')) {
+          if (
+            dict.hasOwnProperty('description') &&
+            dict['description'] != null
+          ) {
             event.description = dict['description'] as string;
           }
-          if (dict.hasOwnProperty('date')) {
+          if (dict.hasOwnProperty('date') && dict['date'] != null) {
             event.date = dict['date'] as Date;
           }
-          if (dict.hasOwnProperty('startTime')) {
+          if (dict.hasOwnProperty('startTime') && dict['startTime'] != null) {
             event.startTime = dict['startTime'] as Date;
           }
-          if (dict.hasOwnProperty('endTime')) {
+          if (dict.hasOwnProperty('endTime') && dict['endTime'] != null) {
             event.endTime = dict['endTime'] as Date;
           }
-          if (dict.hasOwnProperty('location')) {
+          if (
+            dict.hasOwnProperty('location').hasOwnProperty('coordinates') &&
+            dict['location']['coordinates'] != null
+          ) {
             event.location = dict['location'] as LocationEntity;
           }
-          if (dict.hasOwnProperty('price')) {
+          if (dict.hasOwnProperty('price') && dict['price'] != null) {
             event.price = dict['price'] as number;
           }
-          if (dict.hasOwnProperty('isPublic')) {
+          if (dict.hasOwnProperty('isPublic') && dict['isPublic'] != null) {
             event.isPublic = dict['isPublic'] as boolean;
           }
-          if (dict.hasOwnProperty('imageId')) {
+          if (dict.hasOwnProperty('imageId') && dict['imageId'] != null) {
             event.imageId = dict['imageId'] as string;
           }
-          if (dict.hasOwnProperty('organizerId')) {
+          if (
+            dict.hasOwnProperty('organizerId') &&
+            dict['organizerId'] != null
+          ) {
             event.organizerId = dict['organizerId'] as string;
           }
-          if (dict.hasOwnProperty('category')) {
+          if (dict.hasOwnProperty('category') && dict['category'] != null) {
             event.category = dict['category'] as string;
           }
           return Promise.resolve(event);

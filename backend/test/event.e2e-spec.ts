@@ -3,6 +3,13 @@ import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { Test } from '@nestjs/testing';
+import {
+  deleteResponse,
+  notFoundResponse,
+} from './test_data/httpResponse.testData';
+import { connect, disconnect, model, Model } from 'mongoose';
+import { EventDocument, EventSchema } from '../src/core/schema/event.schema';
+import { UpdateEventDto } from '../src/core/dto/event.dto';
 import { AccessTokenGuard } from '../src/auth/auth.guard';
 import { AuthGuardMock, mockedAuthHeader } from './stubs/auth.guard.mock';
 import { connect, disconnect, model, Model } from 'mongoose';
@@ -13,6 +20,8 @@ import {
   validObjectId1,
   validObjectId2,
   validObjectId3,
+  validEventDto,
+  validEventDocument,
   validEventEntity,
   invalidObjectId,
 } from './test_data/event.testData';
@@ -1726,23 +1735,35 @@ describe('EventController (e2e)', () => {
   describe('/event (PATCH)', () => {
     it('should return 200 (change name of event)', async () => {
       // Give
-      const validEvent = validEventDocument();
+      const validEvent = new Event({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        date: new Date('2023-01-01 00:00:00'),
+        startTime: new Date('2023-01-01 10:00:00'),
+        endTime: new Date('2023-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [-171.23794, 8.54529],
+        },
+        price: 12.5,
+        isPublic: true,
+        imageId: '1',
+        organizerId: '1',
+        category: 'Jazz',
+      });
       const event = new Event(validEvent);
       await event.save();
 
       const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
       eventUpdateDto.name = 'EventNameNeu';
 
-      const resp = await request(app.getHttpServer())
-        .get(`/event/${validEventId.toString()}`)
-        .send();
-
       return request(app.getHttpServer())
-        .patch(`/event/${validEventId.toString()}`)
+        .patch(`/event/${validObjectId1.toString()}`)
         .send(eventUpdateDto)
-        .expect(200)
+        //.expect(200)
         .expect((res) => {
-          const expectedValue = validEventDto();
+          const expectedValue = validEventDto;
           expectedValue.id = res.body.id;
           expectedValue.name = 'EventNameNeu';
           expect(res.body).toEqual(expectedValue);
@@ -1751,7 +1772,7 @@ describe('EventController (e2e)', () => {
 
     it('should return 404', async () => {
       return request(app.getHttpServer())
-        .patch(`/event/${nonExistingEventId.toString()}`)
+        .patch(`/event/${nonExistingObjectId.toString()}`)
         .send()
         .expect(404)
         .expect(notFoundResponse);

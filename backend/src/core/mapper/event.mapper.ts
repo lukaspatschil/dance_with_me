@@ -1,10 +1,10 @@
 import { EventDocument } from '../schema/event.schema';
-import { EventEntity } from '../entity/event.entity';
+import { EventEntity, UpdateEventEntity } from '../entity/event.entity';
 import { CreateEventDto } from '../dto/createEvent.dto';
 import { GeolocationEnum } from '../schema/enum/geolocation.enum';
 import { LocationEntity } from '../entity/location.entity';
-import { EventDto } from '../dto/event.dto';
-import { LocationDto } from '../dto/location.dto';
+import { EventDto, UpdateEventDto } from '../dto/event.dto';
+import { LocationDto, UpdateLocationDto } from '../dto/location.dto';
 import { AddressEntity } from '../entity/address.entity';
 import { AddressDto } from '../dto/address.dto';
 
@@ -91,6 +91,33 @@ export class EventMapper {
     return newEvent;
   }
 
+  static mapDtoToEntityUpdate(event: UpdateEventDto): UpdateEventEntity {
+    const newEvent = new UpdateEventEntity();
+    newEvent.id = event.id;
+    newEvent.name = event.name;
+    newEvent.description = event.description;
+    newEvent.date = event.date;
+    newEvent.startTime = event.startTime;
+    newEvent.endTime = event.endTime;
+    newEvent.location = new LocationEntity();
+    newEvent.location.type = GeolocationEnum.POINT;
+    if (event.location && event.location.longitude && event.location.latitude) {
+      newEvent.location.coordinates = [
+        event.location.longitude,
+        event.location.latitude,
+      ];
+    } else {
+      newEvent.location.coordinates = undefined;
+    }
+    newEvent.price = event.price;
+    newEvent.isPublic = event.isPublic;
+    newEvent.imageId = event.imageId;
+    newEvent.organizerId = event.organizerId;
+    newEvent.category = event.category;
+
+    return newEvent;
+  }
+
   static mapEntityToDto(
     event: Required<EventEntity>,
     userid: string,
@@ -122,6 +149,34 @@ export class EventMapper {
     newEvent.category = event.category;
     newEvent.participants = event.participants.length;
     newEvent.userParticipates = event.participants.includes(userid);
+
+    return newEvent;
+  }
+
+  static mapEntityToDtoUpdate(
+    event: Required<UpdateEventEntity>,
+  ): UpdateEventDto {
+    const newEvent = new UpdateEventDto();
+    newEvent.id = event.id;
+    newEvent.name = event.name;
+    newEvent.description = event.description;
+    newEvent.date = event.date;
+    newEvent.startTime = event.startTime;
+    newEvent.endTime = event.endTime;
+    newEvent.location = new UpdateLocationDto();
+    if (event.location != null) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore currently not using the correct type
+      newEvent.location.latitude = event.location.coordinates[0];
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore currently not using the correct type
+      newEvent.location.longitude = event.location.coordinates[1];
+    }
+    newEvent.price = event.price;
+    newEvent.isPublic = event.isPublic;
+    newEvent.imageId = event.imageId;
+    newEvent.organizerId = event.organizerId;
+    newEvent.category = event.category;
 
     return newEvent;
   }

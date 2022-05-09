@@ -28,18 +28,22 @@ import {
   validLongitude,
 } from '../../test/test_data/openStreetMapApi.testData';
 import {
+  nonExistingObjectId,
+  validEventDocument,
+  validEventDto,
+  validObjectId1,
+  validEventEntity,
+  updateOptions,
+  validEventUpdateEntity,
+  invalidObjectId,
+} from '../../test/test_data/event.testData';
+import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { NotFoundError } from '../core/error/notFound.error';
 import { LocationEntity } from '../core/entity//location.entity';
 import { CategoryEnum } from '../core/schema/enum/category.enum';
-import {
-  invalidObjectId,
-  nonExistingObjectId,
-  validEventDocument,
-  validObjectId1,
-} from '../../test/test_data/event.testData';
 import { UserEntity } from '../core/entity/user.entity';
 import { RoleEnum } from '../core/schema/enum/role.enum';
 import { AlreadyParticipatedConflictError } from '../core/error/alreadyParticipatedConflict.error';
@@ -274,6 +278,66 @@ describe('EventService', () => {
 
       // Then
       expect(eventDocumentMock.aggregate).toHaveBeenCalled();
+    });
+  });
+
+  describe('updateEvent', () => {
+    it('should call the database', async () => {
+      // When
+      await sut.updateEvent(validObjectId1.toString(), validEventUpdateEntity);
+
+      // Then
+      expect(eventDocumentMock.findByIdAndUpdate).toHaveBeenCalledWith(
+        validObjectId1.toString(),
+        validEventUpdateEntity,
+        updateOptions,
+      );
+    });
+
+    it('should call the service and update an event', async () => {
+      // Given
+      const expectedUpdatedEvent = validEventEntity;
+      expectedUpdatedEvent.id = validObjectId1.toString();
+      const updateEvent = validEventUpdateEntity;
+      if (updateEvent.name) {
+        expectedUpdatedEvent.name = updateEvent.name;
+      }
+      if (updateEvent.description) {
+        expectedUpdatedEvent.description = updateEvent.description;
+      }
+      if (updateEvent.price) {
+        expectedUpdatedEvent.price = updateEvent.price;
+      }
+      if (updateEvent.imageId) {
+        expectedUpdatedEvent.imageId = updateEvent.imageId;
+      }
+      if (updateEvent.organizerId) {
+        expectedUpdatedEvent.organizerId = updateEvent.organizerId;
+      }
+      if (updateEvent.category) {
+        expectedUpdatedEvent.category = updateEvent.category;
+      }
+
+      // When
+      const response = await sut.updateEvent(
+        validObjectId1.toString(),
+        validEventUpdateEntity,
+      );
+      // Then
+      expect(response).toEqual(expectedUpdatedEvent);
+      expect(eventDocumentMock.aggregate).toHaveBeenCalled();
+    });
+
+    it('should throw a NotFoundException when updating a non existing event', async () => {
+      // When
+      const response = async () =>
+        await sut.updateEvent(
+          nonExistingObjectId.toString(),
+          validEventUpdateEntity,
+        );
+
+      // Then
+      await expect(response).rejects.toThrow(new NotFoundException());
     });
   });
 

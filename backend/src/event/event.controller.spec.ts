@@ -10,18 +10,23 @@ import {
   USER_PARTICIPATES_IN_EVENT_EVENT_ID,
   USER_PARTICIPATES_IN_EVENT_USER_ID,
 } from '../../test/stubs/event.service.mock';
+import {
+  nonExistingObjectId,
+  validEventUpdateDto,
+  validEventUpdateEntity,
+  updateOptions,
+  validEventDto,
+  validObjectId1,
+} from '../../test/test_data/event.testData';
 import { NotFoundException } from '@nestjs/common';
 import { UserEntity } from '../core/entity/user.entity';
 import { RoleEnum } from '../core/schema/enum/role.enum';
 import { CategoryEnum } from '../core/schema/enum/category.enum';
-import {
-  nonExistingObjectId,
-  validObjectId1,
-} from '../../test/test_data/event.testData';
+import { LocationDto } from '../core/dto/location.dto';
 
 describe('EventController', () => {
   let sut: EventController;
-  let eventService: EventService;
+  let eventServiceMock: EventService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -35,7 +40,7 @@ describe('EventController', () => {
     }).compile();
 
     sut = module.get<EventController>(EventController);
-    eventService = module.get<EventService>(EventService);
+    eventServiceMock = module.get<EventService>(EventService);
   });
 
   it('should be defined', () => {
@@ -51,7 +56,7 @@ describe('EventController', () => {
       await sut.getEventById(params, getDefaultUser());
 
       // Then
-      expect(eventService.getEventById).toHaveBeenCalled();
+      expect(eventServiceMock.getEventById).toHaveBeenCalled();
     });
 
     it('should call getEventById and throw an NotFoundError', async () => {
@@ -94,7 +99,7 @@ describe('EventController', () => {
       await sut.getEvents(query, getDefaultUser());
 
       // Then
-      expect(eventService.getEventsQueryDto).toBeCalledWith(query);
+      expect(eventServiceMock.getEventsQueryDto).toBeCalledWith(query);
     });
 
     it('should call getEventsByLocation`', async () => {
@@ -104,7 +109,7 @@ describe('EventController', () => {
       await sut.getEvents(query, getDefaultUser());
 
       // Then
-      expect(eventService.getEventsQueryDto).toBeCalledWith(query);
+      expect(eventServiceMock.getEventsQueryDto).toBeCalledWith(query);
     });
 
     it('should return a array of eventDtos', async () => {
@@ -129,7 +134,9 @@ describe('EventController', () => {
       await sut.createEvent(createEventDto, getDefaultUser());
 
       //Then
-      expect(eventService.createEvent).toHaveBeenCalledWith(getEventEntity());
+      expect(eventServiceMock.createEvent).toHaveBeenCalledWith(
+        getEventEntity(),
+      );
     });
 
     it('should return correct EventEntity', async () => {
@@ -220,8 +227,58 @@ describe('EventController', () => {
     });
   });
 
-  function getCreateEventDTO(): CreateEventDto {
-    return {
+  describe('updateEvent', () => {
+    it('should call updateEvent', async () => {
+      //When
+      await sut.updateEvent(validObjectId1.toString(), validEventUpdateDto);
+
+      //Then
+      expect(eventServiceMock.updateEvent).toHaveBeenCalledWith(
+        validObjectId1.toString(),
+        validEventUpdateEntity,
+      );
+    });
+
+    it('should call the service and return updated event', async () => {
+      // Given
+      const expectedUpdatedEventDto = validEventDto;
+      expectedUpdatedEventDto.id = validObjectId1.toString();
+      const updateEvent = validEventUpdateEntity;
+      if (updateEvent.name) {
+        expectedUpdatedEventDto.name = updateEvent.name;
+      }
+      if (updateEvent.description) {
+        expectedUpdatedEventDto.description = updateEvent.description;
+      }
+      if (updateEvent.price) {
+        expectedUpdatedEventDto.price = updateEvent.price;
+      }
+      if (updateEvent.imageId) {
+        expectedUpdatedEventDto.imageId = updateEvent.imageId;
+      }
+      if (updateEvent.organizerId) {
+        expectedUpdatedEventDto.organizerId = updateEvent.organizerId;
+      }
+      if (updateEvent.category) {
+        expectedUpdatedEventDto.category = updateEvent.category;
+      }
+      // When
+      const response = await sut.updateEvent(
+        validObjectId1.toString(),
+        validEventUpdateDto,
+      );
+
+      //Then
+      expect(response).toEqual(expectedUpdatedEventDto);
+    });
+  });
+
+  function getCreateEventDTO() {
+    const location = new LocationDto();
+    location.longitude = -171.23794;
+    location.latitude = 8.54529;
+
+    const createEventDto: CreateEventDto = {
       name: 'Test name',
       description: 'Test description',
       startDateTime: new Date('2020-01-01 00:10:00'),
