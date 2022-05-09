@@ -1,4 +1,5 @@
 import {
+  IsDate,
   IsInt,
   IsLatitude,
   IsLongitude,
@@ -21,6 +22,13 @@ export class QueryDto {
   @IsInt()
   @IsNumber()
   take?: number;
+
+  @IsOptional()
+  @Transform((value) => {
+    return new Date(value.value);
+  })
+  @IsDate()
+  startDate?: Date;
 
   @IsOptional()
   @Transform((value) => Number(value.value))

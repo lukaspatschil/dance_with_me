@@ -887,6 +887,137 @@ describe('EventController (e2e)', () => {
         });
     });
 
+    it('should return one element because two elements are in the database and one is in the past and one is in the future', async () => {
+      const event1 = new Event({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        date: new Date('2023-01-01 00:00:00'),
+        startTime: new Date('2023-01-01 10:00:00'),
+        endTime: new Date('2023-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        isPublic: true,
+        imageId: '1',
+        organizerId: '1',
+        category: 'Jazz',
+      });
+      await event1.save();
+      const event1Dto = {
+        id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        date: new Date('2023-01-01 00:00:00').toISOString(),
+        startTime: new Date('2023-01-01 10:00:00').toISOString(),
+        endTime: new Date('2023-01-01 12:00:00').toISOString(),
+        location: {
+          longitude: 0,
+          latitude: 0,
+        },
+        price: 12.5,
+        isPublic: true,
+        imageId: '1',
+        organizerId: '1',
+        category: 'Jazz',
+      };
+
+      const event2 = new Event({
+        _id: validObjectId2.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        date: new Date('2021-01-01 00:00:00'),
+        startTime: new Date('2021-01-01 10:00:00'),
+        endTime: new Date('2021-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        isPublic: true,
+        imageId: '1',
+        organizerId: '1',
+        category: 'Jazz',
+      });
+      await event2.save();
+
+      return request(app.getHttpServer())
+        .get('/event')
+        .expect(HttpStatus.OK)
+        .expect((res) => {
+          expect(res.body.length).toEqual(1);
+          expect(res.body[0]).toEqual(event1Dto);
+        });
+    });
+
+    it('should return one element because two elements are in the database and one is in the past and one is in the future given a timestamp', async () => {
+      const event1 = new Event({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        date: new Date('2024-02-01 00:00:00'),
+        startTime: new Date('2024-02-01 10:00:00'),
+        endTime: new Date('2024-02-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        isPublic: true,
+        imageId: '1',
+        organizerId: '1',
+        category: 'Jazz',
+      });
+      await event1.save();
+      const event1Dto = {
+        id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        date: new Date('2024-02-01 00:00:00').toISOString(),
+        startTime: new Date('2024-02-01 10:00:00').toISOString(),
+        endTime: new Date('2024-02-01 12:00:00').toISOString(),
+        location: {
+          longitude: 0,
+          latitude: 0,
+        },
+        price: 12.5,
+        isPublic: true,
+        imageId: '1',
+        organizerId: '1',
+        category: 'Jazz',
+      };
+
+      const event2 = new Event({
+        _id: validObjectId2.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        date: new Date('2023-01-01 00:00:00'),
+        startTime: new Date('2023-01-01 10:00:00'),
+        endTime: new Date('2023-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        isPublic: true,
+        imageId: '1',
+        organizerId: '1',
+        category: 'Jazz',
+      });
+      await event2.save();
+
+      return request(app.getHttpServer())
+        .get('/event')
+        .query({ startDate: new Date('2024-01-01 00:00:00').toISOString() })
+        .expect(HttpStatus.OK)
+        .expect((res) => {
+          expect(res.body.length).toEqual(1);
+          expect(res.body[0]).toEqual(event1Dto);
+        });
+    });
+
     describe('find by location', () => {
       it('should return one elements because one element is in the database', async () => {
         const event1 = new Event({

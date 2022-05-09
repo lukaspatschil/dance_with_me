@@ -37,6 +37,13 @@ eventOperations:
           default: 100
         description: distance from the current location in which is searched
         required: false
+      - in: startDate
+        name: startDate
+        schema: 
+          type: string
+          default: current timestamp
+        description: timestamps of the events after which they should take place
+        required: false
     responses:
       '200':
         description: A JSON array of events

@@ -40,10 +40,11 @@ export class EventModelMock {
   });
 
   aggregate = jest.fn((pipeline) => {
+    const dateQuery = pipeline[pipeline.length - 4].$match;
     const sort = pipeline[pipeline.length - 3].$sort;
     const skip = pipeline[pipeline.length - 2].$skip;
     const limit = pipeline[pipeline.length - 1].$limit;
-    if (pipeline.length === 4) {
+    if (pipeline.length === 5) {
       const near = pipeline[0].$geoNear;
       if (
         Object.keys(near).length === 0 ||
@@ -53,6 +54,18 @@ export class EventModelMock {
       ) {
         throw new Error('Invalid pipeline');
       }
+    }
+
+    if (
+      dateQuery === undefined ||
+      dateQuery.$and === undefined ||
+      dateQuery.$and.length !== 2 ||
+      dateQuery.$and[0].date === undefined ||
+      dateQuery.$and[1].startTime === undefined ||
+      Object.keys(dateQuery.$and[0].date).length === 0 ||
+      Object.keys(dateQuery.$and[1].startTime).length === 0
+    ) {
+      throw new Error('Invalid pipeline');
     }
 
     if (skip === 2 && limit === 2) {

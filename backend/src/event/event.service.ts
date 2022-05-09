@@ -25,6 +25,23 @@ export class EventService {
     const take = Number.isFinite(query.take) ? (query.take as number) : 50;
     const skip = Number.isFinite(query.skip) ? (query.skip as number) : 0;
     const radius = Number.isFinite(query.radius) ? query.radius : 100;
+    const startDate: Date = query.startDate ? query.startDate : new Date();
+    const dateQuery: PipelineStage.Match = {
+      $match: {
+        $and: [
+          {
+            date: {
+              $gte: startDate,
+            },
+          },
+          {
+            startTime: {
+              $gte: startDate,
+            },
+          },
+        ],
+      },
+    };
     const skipStage: PipelineStage.Skip = { $skip: skip };
     const takeStage: PipelineStage.Limit = { $limit: take };
 
@@ -64,7 +81,7 @@ export class EventService {
       };
     }
 
-    aggregatePipe.push(sort, skipStage, takeStage);
+    aggregatePipe.push(dateQuery, sort, skipStage, takeStage);
 
     let result;
     try {
