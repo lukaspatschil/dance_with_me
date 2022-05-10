@@ -25,3 +25,7 @@ export function axiosResponse401(url: string) {
   } as AxiosResponse;
   return resp;
 }
+export const internalErrorResponse = {
+  statusCode: 500,
+  message: 'Internal Server Error',
+};

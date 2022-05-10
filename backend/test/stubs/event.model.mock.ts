@@ -2,12 +2,14 @@ import { GeolocationEnum } from '../../src/core/schema/enum/geolocation.enum';
 import { EventEntity } from '../../src/core/entity/event.entity';
 import {
   validEventDocument,
+  validObjectId1,
   invalidObjectId,
   nonExistingObjectId,
 } from '../test_data/event.testData';
 import { QueryOptions } from 'mongoose';
 import { LocationEntity } from '../../src/core/entity/location.entity';
 import { validAddress } from '../test_data/openStreetMapApi.testData';
+import { internalErrorResponse } from '../test_data/httpResponse.testData';
 
 /* eslint @typescript-eslint/no-magic-numbers: 0 */
 /* eslint @typescript-eslint/naming-convention: 0 */
@@ -105,6 +107,8 @@ export class EventModelMock {
             event.category = dict['category'] as string;
           }
           return Promise.resolve(event);
+        } else if (id === invalidObjectId.toString()) {
+          return Promise.resolve(internalErrorResponse);
         } else {
           return Promise.resolve(null);
         }

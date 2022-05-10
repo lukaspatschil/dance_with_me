@@ -339,6 +339,18 @@ describe('EventService', () => {
       // Then
       await expect(response).rejects.toThrow(new NotFoundException());
     });
+
+    it('should return an internal error when requesting a malformed id', async () => {
+      // When
+      const response = async () =>
+        await sut.updateEvent(
+          nonExistingObjectId.toString(),
+          validEventUpdateEntity,
+        );
+
+      // Then
+      await expect(response).rejects.toThrow(new NotFoundException());
+    });
   });
 
   describe('deleteEvent', () => {

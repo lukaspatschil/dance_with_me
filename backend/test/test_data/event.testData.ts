@@ -1,9 +1,8 @@
 import mongoose, { QueryOptions } from 'mongoose';
-import {
-  EventEntity,
-  UpdateEventEntity,
-} from '../../src/core/entity/event.entity';
-import { EventDto, UpdateEventDto } from '../../src/core/dto/event.dto';
+import { EventEntity } from '../../src/core/entity/event.entity';
+import { UpdateEventEntity } from '../../src/core/entity/updateEvent.entity';
+import { EventDto } from '../../src/core/dto/event.dto';
+import { UpdateEventDto } from '../../src/core/dto/updateEvent.dto';
 import { GeolocationEnum } from '../../src/core/schema/enum/geolocation.enum';
 import { CategoryEnum } from '../../src/core/schema/enum/category.enum';
 
@@ -77,10 +76,7 @@ export const validEventUpdateEntity: UpdateEventEntity = {
   date: undefined,
   startTime: undefined,
   endTime: undefined,
-  location: {
-    type: GeolocationEnum.POINT,
-    coordinates: undefined,
-  },
+  location: undefined,
   price: 21.5,
   isPublic: undefined,
   imageId: '2',

@@ -15,7 +15,8 @@ import {
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from '../core/dto/createEvent.dto';
-import { EventDto, UpdateEventDto } from '../core/dto/event.dto';
+import { EventDto } from '../core/dto/event.dto';
+import { UpdateEventDto } from '../core/dto/updateEvent.dto';
 import { EventMapper } from '../core/mapper/event.mapper';
 import { EventEntity } from '../core/entity/event.entity';
 import { QueryDto } from '../core/dto/query.dto';

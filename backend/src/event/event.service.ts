@@ -8,7 +8,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, PipelineStage } from 'mongoose';
 import { EventDocument } from '../core/schema/event.schema';
 import { EventMapper } from '../core/mapper/event.mapper';
-import { EventEntity, UpdateEventEntity } from '../core/entity/event.entity';
+import { EventEntity } from '../core/entity/event.entity';
+import { UpdateEventEntity } from '../core/entity/updateEvent.entity';
 import { GeolocationEnum } from '../core/schema/enum/geolocation.enum';
 import { QueryDto } from '../core/dto/query.dto';
 import { NotFoundError } from '../core/error/notFound.error';
@@ -148,8 +149,9 @@ export class EventService {
       event = await this.eventModel.findByIdAndUpdate(eventId, query, {
         new: true,
       });
-    } catch (e) {
-      throw new BadRequestException();
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException(error);
     }
     if (event === null) {
       throw new NotFoundException();

@@ -1735,7 +1735,7 @@ describe('EventController (e2e)', () => {
   describe('/event (PATCH)', () => {
     it('should return 200 (change name of event)', async () => {
       // Give
-      const validEvent = new Event({
+      const event1 = new Event({
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
@@ -1744,7 +1744,7 @@ describe('EventController (e2e)', () => {
         endTime: new Date('2023-01-01 12:00:00'),
         location: {
           type: GeolocationEnum.POINT,
-          coordinates: [-171.23794, 8.54529],
+          coordinates: [0, 0],
         },
         price: 12.5,
         isPublic: true,
@@ -1752,22 +1752,58 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: 'Jazz',
       });
-      const event = new Event(validEvent);
-      await event.save();
+      await event1.save();
+
+      const event1Dto = {
+        id: validObjectId1.toString(),
+        name: 'EventNameNeu',
+        description: 'Test Event Description',
+        date: new Date('2023-01-01 00:00:00').toISOString(),
+        startTime: new Date('2023-01-01 10:00:00').toISOString(),
+        endTime: new Date('2023-01-01 12:00:00').toISOString(),
+        location: {
+          longitude: 0,
+          latitude: 0,
+        },
+        price: 12.5,
+        isPublic: true,
+        imageId: '1',
+        organizerId: '1',
+        category: 'Jazz',
+      };
 
       const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
       eventUpdateDto.name = 'EventNameNeu';
 
       return request(app.getHttpServer())
+        .patch(`/event/${event1._id}`)
+        .send(eventUpdateDto)
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual(event1Dto);
+        });
+    });
+
+    it('should return 400, malformed price', async () => {
+      // Give
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.price = -12345;
+
+      return request(app.getHttpServer())
         .patch(`/event/${validObjectId1.toString()}`)
         .send(eventUpdateDto)
-        //.expect(200)
-        .expect((res) => {
-          const expectedValue = validEventDto;
-          expectedValue.id = res.body.id;
-          expectedValue.name = 'EventNameNeu';
-          expect(res.body).toEqual(expectedValue);
-        });
+        .expect(400);
+    });
+
+    it('should return 400, empty name', async () => {
+      // Give
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.name = '';
+
+      return request(app.getHttpServer())
+        .patch(`/event/${validObjectId1.toString()}`)
+        .send(eventUpdateDto)
+        .expect(400);
     });
 
     it('should return 404', async () => {

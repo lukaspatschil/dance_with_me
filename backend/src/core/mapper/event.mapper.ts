@@ -1,9 +1,11 @@
 import { EventDocument } from '../schema/event.schema';
-import { EventEntity, UpdateEventEntity } from '../entity/event.entity';
+import { EventEntity } from '../entity/event.entity';
+import { UpdateEventEntity } from '../entity/updateEvent.entity';
 import { CreateEventDto } from '../dto/createEvent.dto';
 import { GeolocationEnum } from '../schema/enum/geolocation.enum';
 import { LocationEntity } from '../entity/location.entity';
-import { EventDto, UpdateEventDto } from '../dto/event.dto';
+import { EventDto } from '../dto/event.dto';
+import { UpdateEventDto } from '../dto/updateEvent.dto';
 import { LocationDto, UpdateLocationDto } from '../dto/location.dto';
 import { AddressEntity } from '../entity/address.entity';
 import { AddressDto } from '../dto/address.dto';
@@ -100,14 +102,16 @@ export class EventMapper {
     newEvent.startTime = event.startTime;
     newEvent.endTime = event.endTime;
     newEvent.location = new LocationEntity();
-    newEvent.location.type = GeolocationEnum.POINT;
     if (event.location && event.location.longitude && event.location.latitude) {
+      newEvent.location.type = GeolocationEnum.POINT;
       newEvent.location.coordinates = [
         event.location.longitude,
         event.location.latitude,
       ];
     } else {
-      newEvent.location.coordinates = undefined;
+      //newEvent.location.type = undefined;
+      //newEvent.location.coordinates = undefined;
+      newEvent.location = undefined;
     }
     newEvent.price = event.price;
     newEvent.isPublic = event.isPublic;

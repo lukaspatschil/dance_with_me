@@ -1,7 +1,5 @@
-import {
-  EventEntity,
-  UpdateEventEntity,
-} from '../../src/core/entity/event.entity';
+import { EventEntity } from '../../src/core/entity/event.entity';
+import { UpdateEventEntity } from '../../src/core/entity/updateEvent.entity';
 import { LocationEntity } from '../../src/core/entity/location.entity';
 import { GeolocationEnum } from '../../src/core/schema/enum/geolocation.enum';
 import { validAddress } from '../../test/test_data/openStreetMapApi.testData';
