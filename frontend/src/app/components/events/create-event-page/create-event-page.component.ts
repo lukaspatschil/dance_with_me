@@ -1,10 +1,11 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import * as EventModel from '../../models/event';
+import * as EventModel from '../../../dto/event.dto';
 import { FormGroup, Validators, FormBuilder, AbstractControl, FormArray, FormControl } from '@angular/forms';
-import { EventService } from "../../services/event.service";
-import { requiredTimeValidator } from "../../validators/requiredTime";
-import { Category } from "../../enums/category";
+import { EventService } from "../../../services/event.service";
+import { requiredTimeValidator } from "../../../validators/requiredTime";
+import { Category } from "../../../enums/category";
 import {Router} from "@angular/router";
+import {AddressDto} from "../../../dto/address.dto";
 
 @Component({
   selector: 'app-create-event-page',
@@ -106,10 +107,10 @@ export class CreateEventPageComponent implements OnInit {
   }
 
   createEvent(){
-    const event = new EventModel.Event();
+    const event = new EventModel.EventDto();
     event.name = this.createEventForm.value['name'];
     event.description = this.createEventForm.value['description'];
-    event.location = this.createEventForm.value['address'];
+    event.address = this.createEventForm.value['address'];
     event.price = this.createEventForm.value['price'];
     event.public = this.createEventForm.value['public'];
     event.date = this.createEventForm.value['date'];

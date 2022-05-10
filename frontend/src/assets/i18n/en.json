@@ -13,6 +13,7 @@
     "category_error": "Category is required.",
     "public": "Public",
     "description": "Description",
+    "description_error": "Description is required.",
     "price": "Price",
     "price_error": "Price must not be negative.",
     "street": "Street",
@@ -46,5 +47,8 @@
     "description": "Sign in and start dancing!",
     "google": "Log in with Google",
     "facebook": "Log in with Facebook"
+  },
+  "events": {
+    "events": "Events"
   }
 }

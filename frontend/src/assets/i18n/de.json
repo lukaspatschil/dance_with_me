@@ -13,6 +13,7 @@
     "category_error": "Veranstalltungskategorie wird benötigt.",
     "public": "Öffentlich",
     "description": "Beschreibung",
+    "description_error": "Beschreibung wird benötigt",
     "price": "Preis",
     "price_error": "Preis darf nicht negativ sein.",
     "street": "Straße",
@@ -46,5 +47,8 @@
     "description": "Anmelden und tanzen!",
     "google": "Weiter mit Google",
     "facebook": "Weiter mit Facebook"
+  },
+  "events": {
+    "events": "Veranstalltungen"
   }
 }

@@ -10,13 +10,14 @@ import { TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 
 // components
-import { AboutPageComponent } from './standardPages/about-page/about-page.component';
-import { LegalPageComponent } from './standardPages/legal-page/legal-page.component';
-import { PrivacyPageComponent } from './standardPages/privacy-page/privacy-page.component';
-import { LandingComponent } from "./standardPages/landing/landing.component";
-import { CreateEventPageComponent} from "./eventPages/create-event-page/create-event-page.component";
-import { CoreModule } from "./core/core.module";
+import { AboutPageComponent } from './components/about-page/about-page.component';
+import { LegalPageComponent } from './components/legal-page/legal-page.component';
+import { PrivacyPageComponent } from './components/privacy-page/privacy-page.component';
 import {AuthModule} from "./core/auth/auth.module";
+import {LandingComponent} from "./components/landing/landing.component";
+import { EventOverviewComponent } from './components/events/event-overview/event-overview.component';
+import { CreateEventPageComponent} from "./components/events/create-event-page/create-event-page.component";
+import { CoreModule } from "./core/core.module";
 
 @NgModule({
   declarations: [
@@ -25,11 +26,12 @@ import {AuthModule} from "./core/auth/auth.module";
     LegalPageComponent,
     PrivacyPageComponent,
     CreateEventPageComponent,
-    LandingComponent
+    LandingComponent,
+    EventOverviewComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {

@@ -1,0 +1,38 @@
+<div class="m-0 fixed justify-center flex space-x-2 bg-white w-full">
+  <span class="material-icons-outlined icon-big">filter_list</span>
+  <span class="material-icons-outlined icon-big ">map</span>
+</div>
+
+<div class="font-poppins w-full mt-5">
+  <ul class="text-gray-900">
+    <li class="py-5 border-b border-gray-200" *ngFor="let event of events">
+      <div [routerLink]="'/about'" class="flex items-center space-x-4">
+
+        <div class="ml-5 flex flex-col space-y-0.5 ">
+          <p class="text-m mb-2 font-medium text-gray-900 truncate">
+            {{event.name}}
+          </p>
+          <div class="flex mt-4 space-x-2 ">
+            <span class="small material-icons-outlined">location_on</span>
+            <p class="inline-flex text-sm text-gray-500 truncate dark:text-gray-400">
+              {{event.address?.street}} {{event.address?.housenumber}}, {{event.address?.postalcode}} {{event.address?.city}}
+            </p>
+          </div>
+
+          <div class="flex mt-4 space-x-2 ">
+            <span class="material-icons-outlined">schedule</span>
+            <p class="inline-flex text-sm text-gray-500 truncate dark:text-gray-400">
+              {{event.date}} {{event.startTime}}
+            </p>
+          </div>
+
+          <span
+            class="px-2 py-1 rounded-full border border-gray-300 text-gray-500 text-sm align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease">
+              {{event.category}}
+          </span>
+
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>

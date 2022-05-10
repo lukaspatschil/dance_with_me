@@ -17,7 +17,6 @@
       <button class="bg-white px-3 text-sm text-gray-200" (click)="toggleLanguage()">{{language}}</button>
 
     </div>
-
   </nav>
 
   <div fxFlex class="top-navbar">
@@ -26,7 +25,7 @@
       <a class="nav-link" [routerLink]="'/create'" (click)="toggleNavbar()">{{'create.create_event' | translate}}</a>
     </li>
     <li class="text-center">
-      <a class="nav-link" [routerLink]="'/legal'" (click)="toggleNavbar()">{{'legal_link' | translate}}</a>
+      <a class="nav-link" [routerLink]="'/events'" (click)="toggleNavbar()">{{'events.events' | translate}}</a>
     </li>
     <li class="text-center">
       <a class="nav-link" [routerLink]="'/privacy'" (click)="toggleNavbar()" >{{'privacy_link' | translate}}</a>
@@ -36,7 +35,7 @@
 </header>
 
 
-<main class="flex-1 overflow-y-scroll">
+<main class="flex-1">
   <app-legal-page *ngIf="title === 'legal-page'"></app-legal-page>
   <app-privacy-page *ngIf="title === 'privacy-page'"></app-privacy-page>
   <app-about-page *ngIf="title === 'about-page'"></app-about-page>

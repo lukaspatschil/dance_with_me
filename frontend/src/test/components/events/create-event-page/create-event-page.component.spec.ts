@@ -1,14 +1,14 @@
 import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 
-import {CreateEventPageComponent} from '../create-event-page/create-event-page.component';
+import {CreateEventPageComponent} from '../../../../app/components/events/create-event-page/create-event-page.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {RouterTestingModule} from "@angular/router/testing";
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {EventService} from "../../../app/services/event.service";
-import * as EventModel from "../../../app/models/event";
-import {EventServiceMock} from "../../services/event.service.mock";
+import {EventService} from "../../../../app/services/event.service";
+import * as EventModel from "../../../../app/dto/event.dto";
+import {EventServiceMock} from "../../../mock/event.service.mock";
 import {TranslateModule} from "@ngx-translate/core";
-import {Category} from "../../enums/category";
+import {Category} from "../../../../app/enums/category";
 import {formatDate} from "@angular/common";
 
 describe('CreateEventPageComponent',
@@ -168,15 +168,15 @@ describe('CreateEventPageComponent',
     describe('createEvent', () => {
       it('should create-event-page a new event', () => {
         // When
-        const newEvent: EventModel.Event = {
+        const newEvent: EventModel.EventDto = {
           name: 'name',
           description: 'description',
-          location: {
+          address: {
             country: 'country',
             street: 'street',
             city: 'city',
-            housenumber: 10,
-            postalcode: 1020,
+            housenumber: '10',
+            postalcode: '1020',
             addition: 'addition'
           },
           price: 1,
@@ -200,15 +200,15 @@ describe('CreateEventPageComponent',
     describe('onSubmit', () => {
       it('should send a new event to API ', () => {
         // When
-        const newEvent: EventModel.Event =  {
+        const newEvent: EventModel.EventDto =  {
           name: 'name',
           description: 'description',
-          location: {
+          address: {
             country: 'country',
             street: 'street',
             city: 'city',
-            housenumber: 10,
-            postalcode: 1020,
+            housenumber: '10',
+            postalcode: '1020',
             addition: 'addition'
           },
           price: 1,

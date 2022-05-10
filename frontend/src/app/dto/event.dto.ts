@@ -1,10 +1,12 @@
 import { Category } from "../enums/category";
-import { Address } from "./address";
+import { AddressDto } from "./address.dto";
+import {LocationDto} from "./location.dto";
 
-export class Event {
+export class EventDto {
   name?: string;
   description?: string;
-  location?: Address;
+  location?: LocationDto;
+  address?: AddressDto;
   price?: number;
   public?: boolean;
   date?: string;
