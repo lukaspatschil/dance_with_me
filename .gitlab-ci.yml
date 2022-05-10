@@ -115,4 +115,3 @@ sonar-scanner:
   allow_failure: true
   only:
     - master
-
