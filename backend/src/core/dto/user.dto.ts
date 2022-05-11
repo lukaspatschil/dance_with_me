@@ -6,10 +6,10 @@ export class UserDto {
   id!: string;
 
   @IsNotEmpty()
-  firstName!: string;
+  firstName?: string;
 
   @IsNotEmpty()
-  lastName!: string;
+  lastName?: string;
 
   @IsNotEmpty()
   @IsEmail()
@@ -24,5 +24,5 @@ export class UserDto {
 
   @IsNotEmpty()
   @IsUrl()
-  pictureUrl!: string;
+  pictureUrl?: string;
 }

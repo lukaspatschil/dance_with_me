@@ -10,4 +10,21 @@ export class UserModelMock {
       return Promise.resolve(null);
     }
   });
+
+  findByIdAndUpdate = jest.fn((id: string, { $set }) => {
+    if (id === validObjectId.toString()) {
+      const user = {
+        ...validUserDocument,
+        ...$set,
+        _id: id,
+      };
+      return Promise.resolve(user);
+    } else {
+      return Promise.resolve(null);
+    }
+  });
+
+  create = jest.fn((user: any) => {
+    return Promise.resolve(user);
+  });
 }

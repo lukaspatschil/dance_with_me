@@ -7,7 +7,8 @@ import {PasetoService, PasetoToken} from "./paseto.service";
 
 const AUTH_API = `${environment.baseUrl}/auth`;
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  withCredentials: true
 };
 
 @Injectable({
@@ -25,10 +26,10 @@ export class AuthService {
   ) {}
 
   private async getTimeoutTime(accessToken: PasetoToken): Promise<number> {
-    let timeout = 14 * 60 * 1000;
+    let timeout = 15 * 60 * 1000;
     const decoded = await this.paseto.decodeToken(accessToken);
     if (decoded.payload['exp']) {
-      timeout = new Date(decoded.payload['exp']).getTime() - new Date().getTime() - 60 * 1000;
+      timeout = new Date(decoded.payload['exp']).getTime() - new Date().getTime();
     }
     return timeout;
   }
@@ -55,7 +56,7 @@ export class AuthService {
     }
 
     const timeoutTime = await this.getTimeoutTime(accessToken);
-    this.refreshTimeout = setTimeout(this.refreshAccessToken, timeoutTime);
+    this.refreshTimeout = setTimeout(() => this.refreshAccessToken(), timeoutTime);
   }
 
   logout() {

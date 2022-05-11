@@ -24,7 +24,7 @@ authProviderRedirect:
         description: State parameter for OAuth2 flow.
         schema:
           type : string
-          format: base64
+          pattern: '^[a-zA-Z0-9-_]+$'
           example: state
     responses:
       '302':
@@ -67,8 +67,9 @@ refreshAuth:
     summary: Refresh authentication.
     description: Given a valid refresh token and fingerprint, returns new access and refresh tokens.
     security:
-      - refreshAuth: []
-        fingerprint: []
+      - fingerprint: []
+    body:
+      $ref: '#/refreshTokenBody'
     responses:
       '200':
         $ref: '#/authorizationSuccessResponse'
@@ -82,13 +83,15 @@ revokeRefreshToken:
     summary: Revoke refresh token.
     description: >
       Invalidate a refresh token so it cannot be used anymore.
-      Always returns "No Content" as even if the token is invalid, it is revoked.
     security:
-      - refreshAuth: []
-        fingerprint: []
+      - fingerprint: []
+    body:
+      $ref: '#/refreshTokenBody'
     responses:
       '204':
         $ref: '#/deleteFingerPrintResponse'
+      '401':
+        $ref: '#/refreshTokenInvalidResponse'
 
 forceLogout:
   post:
@@ -189,3 +192,14 @@ refreshTokenInvalidResponse:
               - refresh_token_invalid
         required:
           - error
+
+refreshTokenBody:
+  application/json:
+    schema:
+      type: object
+      properties:
+        refreshToken:
+          type: string
+          description: opaque refresh token, usually valid for 6 months.
+      required:
+        - refreshToken

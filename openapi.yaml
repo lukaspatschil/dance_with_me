@@ -68,10 +68,6 @@ components:
       type: http
       scheme: bearer
       bearerFormat: PASETO
-    refreshAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: string
     fingerprint:
       type: apiKey
       in: cookie

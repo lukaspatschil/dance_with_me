@@ -3,6 +3,8 @@ import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { Test } from '@nestjs/testing';
+import { AccessTokenGuard } from '../src/auth/auth.guard';
+import { AuthGuardMock } from './stubs/auth.guard.mock';
 import { connect, disconnect, model, Model } from 'mongoose';
 import { EventDocument, EventSchema } from '../src/core/schema/event.schema';
 import { GeolocationEnum } from '../src/core/schema/enum/geolocation.enum';
@@ -29,7 +31,10 @@ describe('EventController (e2e)', () => {
 
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(AccessTokenGuard)
+      .useClass(AuthGuardMock)
+      .compile();
 
     app = moduleRef.createNestApplication();
 

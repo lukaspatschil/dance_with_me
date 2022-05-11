@@ -103,7 +103,23 @@ describe('AuthService', () => {
       await sut.setTokens(accessToken, refreshToken);
 
       // Then
-      expect(setTimeout).toHaveBeenCalledWith(sut.refreshAccessToken, 14 * 60 * 1000);
+      expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 15 * 60 * 1000);
+    });
+
+    it('should refresh tokens after 15 minutes', async () => {
+      jest.useFakeTimers('legacy');
+      // Given
+      const refreshSpy = jest.spyOn(sut, 'refreshAccessToken').mockImplementationOnce(() => {});
+      pasetoService.decodeToken = jest.fn().mockReturnValue({payload: {}});
+      const refreshToken = 'refreshToken';
+
+      // When
+      await sut.setTokens(accessToken, refreshToken);
+      jest.advanceTimersByTime(15 * 60 * 1000);
+
+      // Then
+      expect(refreshSpy).toHaveBeenCalledTimes(1);
+      jest.useRealTimers();
     });
 
     it('should decode the token with the PasetoService', async () => {

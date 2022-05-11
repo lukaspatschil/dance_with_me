@@ -8,6 +8,7 @@ import {
   nonExistingObjectId,
   validObjectId,
   validUserDocument,
+  validUserEntity,
 } from '../../test/test_data/user.testData';
 
 describe('UserService', () => {
@@ -67,6 +68,49 @@ describe('UserService', () => {
 
       // Then
       expect(response).toBeNull();
+    });
+  });
+
+  describe('findAndUpdateOrCreate', () => {
+    it('returns user with updated attributes if it exists', async () => {
+      // Given
+      validUserEntity.id = validObjectId.toString();
+      validUserEntity.pictureUrl = 'https://example.com/newPictureUrl';
+      const { id: _, ...userEntity } = validUserEntity;
+
+      // When
+      const response = await sut.findAndUpdateOrCreate(validUserEntity);
+
+      // Then
+      expect(response).toEqual(validUserEntity);
+      expect(userDocumentMock.findByIdAndUpdate).toHaveBeenCalledWith(
+        validObjectId.toString(),
+        {
+          $set: expect.objectContaining(userEntity),
+        },
+        expect.any(Object),
+      );
+    });
+
+    it('returns new user if it did not exist', async () => {
+      // Given
+      validUserEntity.id = nonExistingObjectId.toString();
+      validUserEntity.pictureUrl = 'https://example.com/newPictureUrl';
+      const { id: _, ...userEntity } = validUserEntity;
+
+      // When
+      const response = await sut.findAndUpdateOrCreate(validUserEntity);
+
+      // Then
+      expect(response).toEqual(validUserEntity);
+      expect(userDocumentMock.findByIdAndUpdate).toHaveBeenCalledWith(
+        nonExistingObjectId.toString(),
+        { $set: expect.objectContaining(userEntity) },
+        expect.any(Object),
+      );
+      expect(userDocumentMock.create).toHaveBeenCalledWith(
+        expect.objectContaining(userEntity),
+      );
     });
   });
 });

@@ -28,6 +28,8 @@ secrets.env
 
 # ide
 workspace.xml
+.idea/aws.xml
+.idea/git_toolbox_prj.xml
 
 #sonarqube
 .scannerwork

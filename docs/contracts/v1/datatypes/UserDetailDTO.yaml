@@ -27,8 +27,6 @@ UserDetailDTO:
     - $ref: './UserDetailDTO.yaml#/UserDetailProperties'
   required:
     - id
-    - firstName
-    - lastName
     - displayName
     - role
     - pictureUrl

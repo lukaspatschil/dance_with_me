@@ -14,7 +14,8 @@ services:
     depends_on:
       - "dev-database"
     env_file:
-      ./develop.env
+      - ./develop.env
+      - ./secrets.env
     networks:
       - dev-internal
 

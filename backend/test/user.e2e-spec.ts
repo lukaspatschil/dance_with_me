@@ -11,6 +11,8 @@ import {
   notFoundResponse,
 } from './test_data/httpResponse.testData';
 import { nonExistingObjectId, validObjectId } from './test_data/user.testData';
+import { AccessTokenGuard } from '../src/auth/auth.guard';
+import { AuthGuardMock } from './stubs/auth.guard.mock';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
@@ -28,7 +30,10 @@ describe('UserController (e2e)', () => {
 
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(AccessTokenGuard)
+      .useClass(AuthGuardMock)
+      .compile();
 
     app = moduleRef.createNestApplication();
 

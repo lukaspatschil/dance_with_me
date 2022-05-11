@@ -3,6 +3,8 @@ import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { Test } from '@nestjs/testing';
+import { AccessTokenGuard } from '../src/auth/auth.guard';
+import { AuthGuardMock } from './stubs/auth.guard.mock';
 
 describe('PaymentController (e2e)', () => {
   let app: INestApplication;
@@ -15,7 +17,10 @@ describe('PaymentController (e2e)', () => {
 
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(AccessTokenGuard)
+      .useClass(AuthGuardMock)
+      .compile();
 
     app = moduleRef.createNestApplication();
 

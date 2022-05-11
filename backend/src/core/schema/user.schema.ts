@@ -14,10 +14,10 @@ export class UserDocument extends Document {
   displayName!: string;
 
   @Prop()
-  firstName!: string;
+  firstName?: string;
 
   @Prop()
-  lastName!: string;
+  lastName?: string;
 
   @Prop({ required: true })
   email!: string;
@@ -26,7 +26,7 @@ export class UserDocument extends Document {
   emailVerified!: boolean;
 
   @Prop()
-  pictureUrl!: string;
+  pictureUrl?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserDocument);
