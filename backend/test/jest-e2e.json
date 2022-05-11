@@ -6,5 +6,6 @@
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },
-  "testSequencer": "<rootDir>/../test/alphabeticTestSequencer.js"
+  "testSequencer": "<rootDir>/../test/alphabeticTestSequencer.js",
+  "testTimeout": 60000
 }
