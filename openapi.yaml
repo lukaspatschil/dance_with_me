@@ -19,9 +19,13 @@ tags:
   - name: recommendation
   - name: user
   - name: image
+  - name: participation
 paths:
   /event:
     $ref: 'docs/contracts/v1/events.yaml#/eventOperations'
+
+  /event/{eventid}/participation:
+    $ref: 'docs/contracts/v1/events.yaml#/eventParticipateOperations'
 
   /event/{eventid}:
     $ref: 'docs/contracts/v1/events.yaml#/eventIdOperations'

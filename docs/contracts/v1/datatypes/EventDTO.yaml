@@ -34,6 +34,9 @@ properties:
     type: string
     enum: [Jazz, Pop, Rock]
     example: Jazz
+  participants:
+    type: integer
+    example: 14
 required:
   - id
   - name

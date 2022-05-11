@@ -98,6 +98,48 @@ eventOperations:
       '403':
         $ref: '#/forbiddenResponse'
 
+eventParticipateOperations:
+  post: 
+    description: participate at an event
+    tags: 
+    - participation
+    parameters:
+    - name: eventid
+      in: path
+      required: true
+      description: id of the event
+      schema:
+        type: string
+    responses:
+      '204':
+        description: No Content
+      '401':
+        $ref: './errors.yaml#/unauthorizedResponse'
+      '404':
+        $ref: '#/eventNotFoundResponse'
+      '409':
+        $ref: '#/AlreadyParticipatedResponse'
+  delete:
+    description: remove participation at an event
+    tags: 
+    - participation
+    parameters:
+    - name: eventid
+      in: path
+      required: true
+      description: id of the event
+      schema:
+        type: string
+    responses:
+      '204':
+        description: No Content
+      '401':
+        $ref: './errors.yaml#/unauthorizedResponse'
+      '404':
+        $ref: '#/eventNotFoundResponse'
+      '409':
+        $ref: '#/NotYetParticipatedResponse'
+
 eventIdOperations:
   get:
     summary: Returns a single event
@@ -211,5 +253,33 @@ forbiddenResponse:
             type: string
             enum:
               - missing_permission
+        required:
+          - error
+
+AlreadyParticipatedResponse:
+  description: Conflict at changeing the patricipation status of an event. User already declared participation to the event.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          error:
+            type: string
+            enum:
+              - already_participated
+        required:
+          - error
+
+NotYetParticipatedResponse:
+  description: Conflict at changeing the patricipation status of an event. User did not yet declare participation to the event.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          error:
+            type: string
+            enum:
+              - not_yet_participated
         required:
           - error
