@@ -6,7 +6,7 @@
 <div class="font-poppins w-full mt-5">
   <ul class="text-gray-900">
     <li class="py-5 border-b border-gray-200" *ngFor="let event of events">
-      <div [routerLink]="'/about'" class="flex items-center space-x-4">
+      <div [routerLink]="['/event', event.id]" class="flex items-center space-x-4">
 
         <div class="ml-5 flex flex-col space-y-0.5 ">
           <p class="text-m mb-2 font-medium text-gray-900 truncate">

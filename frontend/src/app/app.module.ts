@@ -18,6 +18,7 @@ import {LandingComponent} from "./components/landing/landing.component";
 import { EventOverviewComponent } from './components/events/event-overview/event-overview.component';
 import { CreateEventPageComponent} from "./components/events/create-event-page/create-event-page.component";
 import { CoreModule } from "./core/core.module";
+import { EventDetailComponent } from './components/events/event-detail/event-detail.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { CoreModule } from "./core/core.module";
     PrivacyPageComponent,
     CreateEventPageComponent,
     LandingComponent,
-    EventOverviewComponent
+    EventOverviewComponent,
+    EventDetailComponent
   ],
   imports: [
     AppRoutingModule,

@@ -1,0 +1,24 @@
+import { Component, OnInit } from '@angular/core';
+import {ActivatedRoute, ParamMap, Router} from "@angular/router";
+import {Observable, switchMap} from "rxjs";
+import {EventEntity} from "../../../entities/event.entity";
+import {EventService} from "../../../services/event.service";
+
+@Component({
+  selector: 'app-event-detail',
+  templateUrl: './event-detail.component.html',
+  styleUrls: ['./event-detail.component.scss']
+})
+export class EventDetailComponent implements OnInit {
+
+  event$!: Observable<EventEntity>;
+
+  constructor(private route: ActivatedRoute,
+              private service: EventService) { }
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id')!;
+
+    this.event$ = this.service.getEvent(id);
+  }
+}
