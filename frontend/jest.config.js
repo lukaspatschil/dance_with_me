@@ -6,6 +6,10 @@ module.exports = {
   roots: ['<rootDir>/src/'],
   testMatch: ['**/+(*.)+(spec).+(ts)'],
   setupFilesAfterEnv: ['<rootDir>/src/test.ts'],
+  reporters: [
+    "default",
+    ["jest-junit", {outputDirectory: "reports"}]
+  ],
   coverageReporters: ['text-summary', 'html', 'lcov'],
   coverageDirectory: 'coverage',
   "coveragePathIgnorePatterns": ["test/mock"],

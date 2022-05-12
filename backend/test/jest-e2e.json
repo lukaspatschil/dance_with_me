@@ -7,6 +7,10 @@
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },
+  "reporters": [
+    "default",
+    ["jest-junit", {"outputDirectory": "reports", "outputName": "junit-e2e.xml"}]
+  ],
   "testSequencer": "<rootDir>/test/alphabeticTestSequencer.js",
   "testTimeout": 60000
 }

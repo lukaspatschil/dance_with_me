@@ -1,11 +1,31 @@
-image: node:16
-
-cache:
-  key: $CI_COMMIT_REF_SLUG
+.package-cache: &package-cache
+  key:
+    files:
+      - package-lock.json
   paths:
-    - .npm/
+    - node_modules/
+    - frontend/node_modules/
+    - backend/node_modules/
+
+.cached-install: &cached-install
+   if [ ! -d ./node_modules ];
+   then npm ci;
+   fi
+
+.inso-runner-setup: &inso-runner-setup
+  tags:
+    - k8s
+  cache: *package-cache
+  before_script:
+    - *cached-install
 
 default:
+  image: node:16
+  tags:
+    - dancewithme-runner
+  cache:
+    <<: *package-cache
+    policy: pull
   retry:
     max: 2
     when:
@@ -16,22 +36,29 @@ default:
       - unmet_prerequisites
 
 stages:
+  - install
   - lint
   - test
   - build
-  - coverage
   - analyze
 
-before_script:
-  - npm ci --cache .npm --prefer-offline
+install:
+  stage: install
+  script:
+    - if [ ! -d ./node_modules ];
+      then npm ci;
+      fi
+  cache: *package-cache
 
 lint-frontend:
   stage: lint
+  needs: ["install"]
   script:
     - npm run lint -w frontend
 
 lint-backend:
   stage: lint
+  needs: ["install"]
   script:
     - npm run lint -w backend
 
@@ -39,20 +66,45 @@ test-frontend:
   needs: ["lint-frontend"]
   stage: test
   script:
-    - npm run test -w frontend
+    - npm run test:cov -w frontend
+  coverage: '/Statements\s+:\s(\d+.?\d+)%/'
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - frontend/reports/junit.xml
 
 test-backend:
   needs: ["lint-backend"]
   stage: test
   script:
-    - npm run test -w backend
+    - npm run test:cov -w backend
+  coverage: '/Statements\s+:\s(\d+.?\d+)%/'
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - backend/reports/junit.xml
 
 e2e test-backend:
+  <<: *inso-runner-setup
   needs: ["lint-backend"]
   stage: test
   script:
     - npm run test:e2e -w backend
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - backend/reports/junit-e2e.xml
 
+mutation-backend:
+  <<: *inso-runner-setup
+  needs: ["test-backend"]
+  stage: test
+  script:
+    - npm run test:mutation -w backend
+  allow_failure: true
 
 
 # integration-test:
@@ -74,27 +126,8 @@ build-backend:
   script:
     - npm run build -w backend
 
-coverage-frontend:
-  needs: ["test-frontend"]
-  stage: coverage
-  script:
-    - npm run test:cov -w frontend
-  coverage: '/Statements\s+:\s(\d+.?\d+)%/'
-
-coverage-backend:
-  needs: ["test-backend"]
-  stage: coverage
-  script:
-    - npm run test:cov -w backend
-  coverage: '/Statements\s+:\s(\d+.?\d+)%/'
-
-mutation-backend:
-  needs: ["test-backend"]
-  stage: coverage
-  script:
-    - npm run test:mutation -w backend
-
 sonar-scanner:
+  <<: *inso-runner-setup
   stage: analyze
   image:
     name: sonarsource/sonar-scanner-cli:latest
