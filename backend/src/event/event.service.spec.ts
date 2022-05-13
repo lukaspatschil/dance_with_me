@@ -6,9 +6,27 @@ import { Model } from 'mongoose';
 import { EventModelMock } from '../../test/stubs/event.model.mock';
 import { EventEntity } from '../core/entity/event.entity';
 import { GeolocationEnum } from '../core/schema/enum/geolocation.enum';
-import { LocationEntity } from '../core/entity/location.entity';
+import { OpenStreetMapApiService } from '../openStreetMapApi/openStreetMapApi.service';
+import { OpenStreetMapApiModelMock } from '../../test/stubs/openStreetMapApi.model.mock';
+import {
+  badRequestAddress,
+  getEventEntityWithoutAddress,
+  getEventEntityWithoutLocation,
+  invalidAddress,
+  invalidTokenLatitude,
+  invalidTokenLongitude,
+  noCountryLatitude,
+  noCountryLongitude,
+  validAddress,
+  validLatitude,
+  validLongitude,
+} from '../../test/test_data/openStreetMapApi.testData';
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { NotFoundError } from 'rxjs';
-import { InternalServerErrorException } from '@nestjs/common';
+import { LocationEntity } from '../core/entity//location.entity';
 
 describe('EventService', () => {
   let sut: EventService;
@@ -18,6 +36,10 @@ describe('EventService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         EventService,
+        {
+          provide: OpenStreetMapApiService,
+          useClass: OpenStreetMapApiModelMock,
+        },
         {
           provide: getModelToken(EventDocument.name),
           useClass: EventModelMock,
@@ -39,7 +61,7 @@ describe('EventService', () => {
   describe('createEvent', () => {
     it('should call the database and create a new element in the database', async () => {
       // Given
-      const eventEntity = createEventEntity();
+      const eventEntity = getEventEntity();
 
       // When
       await sut.createEvent(eventEntity);
@@ -58,6 +80,64 @@ describe('EventService', () => {
 
       // Then
       expect(result).rejects.toThrow(InternalServerErrorException);
+    });
+
+    it('should call the service and throw a NotFoundException from openStreetMap getAddress ', async () => {
+      // Given
+      const eventEntity = getEventEntityWithoutAddress();
+      if (eventEntity.location) {
+        eventEntity.location.coordinates[0] = noCountryLongitude;
+        eventEntity.location.coordinates[1] = noCountryLatitude;
+      }
+
+      // When
+      const result = async () => await sut.createEvent(eventEntity);
+
+      // Then
+      await expect(result).rejects.toThrow(new NotFoundException());
+    });
+
+    it('should call the service and throw a NotFoundException from openStreetMap getLocation', async () => {
+      // Given
+      const eventEntity = getEventEntityWithoutLocation();
+      if (eventEntity.address) {
+        eventEntity.address = invalidAddress;
+      }
+
+      // When
+      const result = async () => await sut.createEvent(eventEntity);
+
+      // Then
+      await expect(result).rejects.toThrow(new NotFoundException());
+    });
+
+    it('should call the service and throw a InternalServerErrorException from openStreetMap getAddress', async () => {
+      // Given
+      const eventEntity = getEventEntityWithoutAddress();
+      if (eventEntity.location) {
+        eventEntity.location.coordinates[0] = invalidTokenLongitude;
+        eventEntity.location.coordinates[1] = invalidTokenLatitude;
+      }
+
+      // When
+      const result = async () => await sut.createEvent(eventEntity);
+
+      // Then
+      await expect(result).rejects.toThrow(new InternalServerErrorException());
+    });
+
+    it('should call the service and throw a InternalServerErrorException from openStreetMap getLocation ', async () => {
+      // Given
+      const eventEntity = getEventEntityWithoutLocation();
+      if (eventEntity.address) {
+        eventEntity.address = badRequestAddress;
+      }
+
+      // When
+      const result = async () => await sut.createEvent(eventEntity);
+
+      // Then
+      await expect(result).rejects.toThrow(new InternalServerErrorException());
     });
   });
 
@@ -118,7 +198,6 @@ describe('EventService', () => {
       // Then
       expect(result).toEqual([createEventEntity()]);
     });
-
     it('should call the database using the skip: 2 parameter and find 3 elements in the database', async () => {
       // Given
       const param = { skip: 2 };
@@ -173,7 +252,6 @@ describe('EventService', () => {
       expect(eventDocument.aggregate).toHaveBeenCalled();
     });
   });
-
   function createEventEntity(): EventEntity {
     const location = new LocationEntity();
     location.type = GeolocationEnum.POINT;
@@ -192,6 +270,30 @@ describe('EventService', () => {
     eventEntity.imageId = '1';
     eventEntity.organizerId = '1';
     eventEntity.category = 'Jazz';
+    eventEntity.address = validAddress;
+
+    return eventEntity;
+  }
+
+  function getEventEntity(): EventEntity {
+    const eventEntity: EventEntity = {
+      id: '1',
+      name: 'Test name',
+      description: 'Test description',
+      date: new Date('2020-01-01'),
+      startTime: new Date('2020-01-01 00:10:00'),
+      endTime: new Date('2020-01-01 00:12:00'),
+      location: {
+        type: GeolocationEnum.POINT,
+        coordinates: [validLongitude, validLatitude],
+      },
+      price: 12.5,
+      isPublic: true,
+      imageId: '1',
+      organizerId: '1',
+      category: 'Jazz',
+      address: validAddress,
+    };
 
     return eventEntity;
   }

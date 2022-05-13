@@ -14,6 +14,10 @@ import {
   validObjectId2,
   validObjectId3,
 } from './test_data/event.testData';
+import {
+  validAddress,
+  validAddressDTO,
+} from './test_data/openStreetMapApi.testData';
 
 describe('EventController (e2e)', () => {
   let app: INestApplication;
@@ -295,6 +299,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddress,
         });
         await event.save();
         const eventDto = {
@@ -313,6 +318,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddressDTO,
         };
 
         return request(app.getHttpServer())
@@ -343,6 +349,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddress,
         });
         await event1.save();
         const event1Dto = {
@@ -361,6 +368,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddressDTO,
         };
 
         const event2 = new Event({
@@ -379,6 +387,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddress,
         });
         await event2.save();
 
@@ -424,6 +433,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddress,
         });
         await event1.save();
         validObjectId1.toString();
@@ -457,6 +467,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddress,
         });
         await event1.save();
 
@@ -476,6 +487,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddress,
         });
         await event2.save();
         const event2Dto = {
@@ -494,6 +506,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddressDTO,
         };
 
         return request(app.getHttpServer())
@@ -537,6 +550,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddress,
         });
         await event1.save();
 
@@ -568,6 +582,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddress,
         });
         await event1.save();
 
@@ -587,6 +602,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddress,
         });
         await event2.save();
         const event2Dto = {
@@ -605,6 +621,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddressDTO,
         };
 
         return request(app.getHttpServer())
@@ -635,6 +652,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddress,
         });
         await event1.save();
         validObjectId1.toString();
@@ -657,6 +675,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddress,
         });
         await event2.save();
         const event2Dto = {
@@ -675,6 +694,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddressDTO,
         };
 
         const event3 = new Event({
@@ -693,6 +713,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddress,
         });
         await event3.save();
         const event3Dto = {
@@ -711,6 +732,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddressDTO,
         };
 
         return request(app.getHttpServer())
@@ -742,6 +764,7 @@ describe('EventController (e2e)', () => {
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
+        address: validAddress,
       });
       await event1.save();
       const event1Dto = {
@@ -760,6 +783,7 @@ describe('EventController (e2e)', () => {
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
+        address: validAddressDTO,
       };
 
       const event2 = new Event({
@@ -778,6 +802,7 @@ describe('EventController (e2e)', () => {
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
+        address: validAddress,
       });
       await event2.save();
       const event2Dto = {
@@ -796,6 +821,7 @@ describe('EventController (e2e)', () => {
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
+        address: validAddressDTO,
       };
 
       return request(app.getHttpServer())
@@ -825,6 +851,7 @@ describe('EventController (e2e)', () => {
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
+        address: validAddress,
       });
       await event1.save();
       const event1Dto = {
@@ -843,6 +870,7 @@ describe('EventController (e2e)', () => {
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
+        address: validAddressDTO,
       };
 
       const event2 = new Event({
@@ -861,6 +889,7 @@ describe('EventController (e2e)', () => {
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
+        address: validAddress,
       });
       await event2.save();
       const event2Dto = {
@@ -879,6 +908,7 @@ describe('EventController (e2e)', () => {
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
+        address: validAddressDTO,
       };
 
       return request(app.getHttpServer())
@@ -904,6 +934,7 @@ describe('EventController (e2e)', () => {
           type: GeolocationEnum.POINT,
           coordinates: [0, 0],
         },
+        address: validAddress,
         price: 12.5,
         isPublic: true,
         imageId: '1',
@@ -922,6 +953,7 @@ describe('EventController (e2e)', () => {
           longitude: 0,
           latitude: 0,
         },
+        address: validAddressDTO,
         price: 12.5,
         isPublic: true,
         imageId: '1',
@@ -940,6 +972,7 @@ describe('EventController (e2e)', () => {
           type: GeolocationEnum.POINT,
           coordinates: [0, 0],
         },
+        address: validAddress,
         price: 12.5,
         isPublic: true,
         imageId: '1',
@@ -969,6 +1002,7 @@ describe('EventController (e2e)', () => {
           type: GeolocationEnum.POINT,
           coordinates: [0, 0],
         },
+        address: validAddress,
         price: 12.5,
         isPublic: true,
         imageId: '1',
@@ -987,6 +1021,7 @@ describe('EventController (e2e)', () => {
           longitude: 0,
           latitude: 0,
         },
+        address: validAddressDTO,
         price: 12.5,
         isPublic: true,
         imageId: '1',
@@ -1005,6 +1040,7 @@ describe('EventController (e2e)', () => {
           type: GeolocationEnum.POINT,
           coordinates: [0, 0],
         },
+        address: validAddress,
         price: 12.5,
         isPublic: true,
         imageId: '1',
@@ -1036,6 +1072,7 @@ describe('EventController (e2e)', () => {
             type: GeolocationEnum.POINT,
             coordinates: [0, 0],
           },
+          address: validAddress,
           price: 12.5,
           isPublic: true,
           imageId: '1',
@@ -1059,6 +1096,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddressDTO,
         };
 
         const body = {
@@ -1092,6 +1130,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddress,
         });
         await event1.save();
         const event1Dto = {
@@ -1110,6 +1149,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddressDTO,
         };
 
         const event2 = new Event({
@@ -1128,6 +1168,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddress,
         });
         await event2.save();
         const event2Dto = {
@@ -1146,6 +1187,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
+          address: validAddressDTO,
         };
 
         const query = {
@@ -1222,6 +1264,7 @@ describe('EventController (e2e)', () => {
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
+        address: validAddress,
       });
       await event1.save();
       const event1Dto = {
@@ -1240,6 +1283,7 @@ describe('EventController (e2e)', () => {
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
+        address: validAddressDTO,
       };
 
       return request(app.getHttpServer())
@@ -1260,14 +1304,21 @@ describe('EventController (e2e)', () => {
       startTime: new Date('2023-01-01 10:00').toISOString(),
       endTime: new Date('2023-01-01 12:00').toISOString(),
       location: {
-        longitude: -171.23794,
-        latitude: 8.54529,
+        longitude: 16.373819,
+        latitude: 48.208176,
       },
       price: 12.5,
       isPublic: true,
       imageId: '1',
       organizerId: '1',
       category: 'Jazz',
+      address: {
+        country: 'Österreich',
+        city: 'Wien',
+        postalcode: '1010',
+        street: 'Stephansplatz',
+        housenumber: '4',
+      },
     };
   }
 
@@ -1279,8 +1330,8 @@ describe('EventController (e2e)', () => {
       startTime: new Date('2023-01-01 10:00').toISOString(),
       endTime: new Date('2023-01-01 12:00').toISOString(),
       location: {
-        longitude: -171.23794,
-        latitude: 8.54529,
+        longitude: 16.373819,
+        latitude: 48.208176,
       },
       price: 12.5,
       isPublic: true,

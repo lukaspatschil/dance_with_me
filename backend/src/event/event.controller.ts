@@ -26,9 +26,7 @@ export class EventController {
     this.logger.log('Create new event: ' + JSON.stringify(createEventDto));
     const eventEntity = EventMapper.mapCreateDtoToEntity(createEventDto);
     return EventMapper.mapEntityToDto(
-      (await this.eventService.createEvent(
-        eventEntity,
-      )) as Required<EventEntity>,
+      await this.eventService.createEvent(eventEntity),
     );
   }
 

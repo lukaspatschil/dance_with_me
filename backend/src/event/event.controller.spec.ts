@@ -3,10 +3,8 @@ import { EventController } from './event.controller';
 import { EventService } from './event.service';
 import { CreateEventDto } from '../core/dto/createEvent.dto';
 import { EventEntity } from '../core/entity/event.entity';
-import { LocationEntity } from '../core/entity/location.entity';
 import { GeolocationEnum } from '../core/schema/enum/geolocation.enum';
 import { EventDto } from '../core/dto/event.dto';
-import { LocationDto } from '../core/dto/location.dto';
 import { EventServiceMock } from '../../test/stubs/event.service.mock';
 import { NotFoundException } from '@nestjs/common';
 
@@ -117,67 +115,82 @@ describe('EventController', () => {
     });
   });
 
-  function getCreateEventDTO() {
-    const location = new LocationDto();
-    location.latitude = 8.54529;
-    location.longitude = -171.23794;
-
-    const createEventDto: CreateEventDto = {
+  function getCreateEventDTO(): CreateEventDto {
+    return {
       name: 'Test name',
       description: 'Test description',
       date: new Date('2020-01-01'),
       startTime: new Date('2020-01-01 00:10:00'),
       endTime: new Date('2020-01-01 00:12:00'),
-      location: location,
+      location: {
+        longitude: -171.23794,
+        latitude: 8.54529,
+      },
       price: 12.5,
       isPublic: true,
       imageId: '1',
       organizerId: '1',
       category: 'Jazz',
+      address: {
+        country: 'Österreich',
+        city: 'Wien',
+        postalcode: '1010',
+        street: 'Stephansplatz',
+        housenumber: '4',
+      },
     };
-    return createEventDto;
   }
 
   function getEventDTO(): EventDto {
-    const location = new LocationDto();
-    location.longitude = -171.23794;
-    location.latitude = 8.54529;
-
-    const eventDto = new EventDto();
-    eventDto.id = '1';
-    eventDto.name = 'Test name';
-    eventDto.description = 'Test description';
-    eventDto.date = new Date('2020-01-01');
-    eventDto.startTime = new Date('2020-01-01 00:10:00');
-    eventDto.endTime = new Date('2020-01-01 00:12:00');
-    eventDto.location = location;
-    eventDto.price = 12.5;
-    eventDto.isPublic = true;
-    eventDto.imageId = '1';
-    eventDto.organizerId = '1';
-    eventDto.category = 'Jazz';
-
-    return eventDto;
+    return {
+      id: '1',
+      name: 'Test name',
+      description: 'Test description',
+      date: new Date('2020-01-01'),
+      startTime: new Date('2020-01-01 00:10:00'),
+      endTime: new Date('2020-01-01 00:12:00'),
+      location: {
+        longitude: -171.23794,
+        latitude: 8.54529,
+      },
+      price: 12.5,
+      isPublic: true,
+      imageId: '1',
+      organizerId: '1',
+      category: 'Jazz',
+      address: {
+        country: 'Österreich',
+        city: 'Wien',
+        postalcode: '1010',
+        street: 'Stephansplatz',
+        housenumber: '4',
+      },
+    };
   }
 
   function getEventEntity(): EventEntity {
-    const locationEntity = new LocationEntity();
-    locationEntity.type = GeolocationEnum.POINT;
-    locationEntity.coordinates = [-171.23794, 8.54529];
-
-    const eventEntity = new EventEntity();
-    eventEntity.name = 'Test name';
-    eventEntity.description = 'Test description';
-    eventEntity.date = new Date('2020-01-01');
-    eventEntity.startTime = new Date('2020-01-01 00:10:00');
-    eventEntity.endTime = new Date('2020-01-01 00:12:00');
-    eventEntity.location = locationEntity;
-    eventEntity.price = 12.5;
-    eventEntity.isPublic = true;
-    eventEntity.imageId = '1';
-    eventEntity.organizerId = '1';
-    eventEntity.category = 'Jazz';
-
-    return eventEntity;
+    return {
+      name: 'Test name',
+      description: 'Test description',
+      date: new Date('2020-01-01'),
+      startTime: new Date('2020-01-01 00:10:00'),
+      endTime: new Date('2020-01-01 00:12:00'),
+      location: {
+        type: GeolocationEnum.POINT,
+        coordinates: [-171.23794, 8.54529],
+      },
+      price: 12.5,
+      isPublic: true,
+      imageId: '1',
+      organizerId: '1',
+      category: 'Jazz',
+      address: {
+        country: 'Österreich',
+        city: 'Wien',
+        postalcode: '1010',
+        street: 'Stephansplatz',
+        housenumber: '4',
+      },
+    };
   }
 });

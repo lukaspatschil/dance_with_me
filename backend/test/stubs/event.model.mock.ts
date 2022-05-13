@@ -1,5 +1,6 @@
 import { GeolocationEnum } from '../../src/core/schema/enum/geolocation.enum';
 import { EventEntity } from '../../src/core/entity/event.entity';
+import { validAddress } from '../test_data/openStreetMapApi.testData';
 
 export class EventModelMock {
   create = jest.fn((eventEntity: EventEntity) => {
@@ -15,8 +16,8 @@ export class EventModelMock {
       location: {
         type: GeolocationEnum.POINT,
         coordinates: [
-          eventEntity.location.coordinates[0],
-          eventEntity.location.coordinates[1],
+          eventEntity.location?.coordinates[0],
+          eventEntity.location?.coordinates[1],
         ],
       },
       price: eventEntity.price,
@@ -26,6 +27,7 @@ export class EventModelMock {
       endTime: eventEntity.endTime,
       category: eventEntity.category,
       isPublic: eventEntity.isPublic,
+      address: eventEntity.address,
     };
     return Promise.resolve(eventDocument);
   });
@@ -130,5 +132,6 @@ function createEventDocument() {
     endTime: new Date('2020-01-01 00:12:00'),
     category: 'Jazz',
     isPublic: true,
+    address: validAddress,
   };
 }

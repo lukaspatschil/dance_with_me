@@ -2,8 +2,8 @@ import {
   IsBoolean,
   IsDate,
   IsNotEmpty,
-  IsNotEmptyObject,
   IsNumber,
+  IsOptional,
   Min,
   MinDate,
   ValidateNested,
@@ -12,6 +12,7 @@ import { LocationDto } from './location.dto';
 import { Transform, Type } from 'class-transformer';
 import { IsAfter } from '../validators/IsAfter';
 import { IsBefore } from '../validators/IsBefore';
+import { AddressDto } from './address.dto';
 
 export class CreateEventDto {
   @IsNotEmpty()
@@ -46,10 +47,15 @@ export class CreateEventDto {
   @IsAfter('startTime', { message: 'endTime must be past the startTime' })
   endTime!: Date;
 
-  @IsNotEmptyObject()
+  @IsOptional()
   @ValidateNested()
   @Type(() => LocationDto)
-  location!: LocationDto;
+  location?: LocationDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => AddressDto)
+  address?: AddressDto;
 
   @IsNotEmpty()
   @IsNumber()

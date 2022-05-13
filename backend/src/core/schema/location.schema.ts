@@ -8,7 +8,7 @@ export class LocationDocument extends Document {
   type!: GeolocationEnum;
 
   @Prop([Number])
-  coordinates!: number[];
+  coordinates!: [number, number];
 }
 
 export const LocationSchema = SchemaFactory.createForClass(LocationDocument);

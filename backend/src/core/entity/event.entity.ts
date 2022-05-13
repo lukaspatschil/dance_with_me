@@ -1,4 +1,5 @@
 import { LocationEntity } from './location.entity';
+import { AddressEntity } from './address.entity';
 
 export class EventEntity {
   id?: string;
@@ -7,7 +8,8 @@ export class EventEntity {
   date!: Date;
   startTime!: Date;
   endTime!: Date;
-  location!: LocationEntity;
+  location?: LocationEntity;
+  address?: AddressEntity;
   price!: number;
   isPublic!: boolean;
   imageId!: string;

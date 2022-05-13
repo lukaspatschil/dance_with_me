@@ -1,6 +1,7 @@
 import { EventEntity } from '../../src/core/entity/event.entity';
 import { LocationEntity } from '../../src/core/entity/location.entity';
 import { GeolocationEnum } from '../../src/core/schema/enum/geolocation.enum';
+import { validAddress } from '../../test/test_data/openStreetMapApi.testData';
 
 export class EventServiceMock {
   createEvent = jest.fn(() => {
@@ -42,7 +43,7 @@ export class EventServiceMock {
     eventEntity.imageId = '1';
     eventEntity.organizerId = '1';
     eventEntity.category = 'Jazz';
-
+    eventEntity.address = validAddress;
     return eventEntity;
   }
 }

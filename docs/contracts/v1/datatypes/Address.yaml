@@ -7,14 +7,14 @@ properties:
     type: string
     example: "Vienna"
   postalcode:
-    type: number
-    example: 1010
+    type: string
+    example: "1010"
   street:
     type: string
     example: "Wipplingerstraße"
   housenumber:
-    type: number
-    example: 1
+    type: string
+    example: "1"
   addition:
     type: String
     example: "House 2 Stair 3 Top 4"
@@ -23,4 +23,4 @@ required:
   - city
   - postalcode
   - street
-  - housenumber
+

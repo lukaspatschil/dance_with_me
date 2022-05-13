@@ -1,6 +1,7 @@
 import {
-  Injectable,
+  BadRequestException,
   InternalServerErrorException,
+  Injectable,
   Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -11,6 +12,7 @@ import { EventEntity } from '../core/entity/event.entity';
 import { GeolocationEnum } from '../core/schema/enum/geolocation.enum';
 import { QueryDto } from '../core/dto/query.dto';
 import { NotFoundError } from 'rxjs';
+import { OpenStreetMapApiService } from '../openStreetMapApi/openStreetMapApi.service';
 
 @Injectable()
 export class EventService {
@@ -19,6 +21,7 @@ export class EventService {
   constructor(
     @InjectModel(EventDocument.name)
     private readonly eventModel: Model<EventDocument>,
+    private readonly positionStackService: OpenStreetMapApiService,
   ) {}
 
   async getEventsQueryDto(query: QueryDto): Promise<EventEntity[]> {
@@ -95,10 +98,21 @@ export class EventService {
     return result;
   }
 
-  async createEvent(eventEntity: EventEntity): Promise<EventEntity> {
+  async createEvent(eventEntity: EventEntity): Promise<Required<EventEntity>> {
+    this.logger.log('Create new event: ' + JSON.stringify(eventEntity));
     let result;
+    if (eventEntity.location?.coordinates?.length === 2) {
+      eventEntity.address = await this.positionStackService.getAddress(
+        ...eventEntity.location.coordinates,
+      );
+    } else if (eventEntity.address) {
+      eventEntity.location = await this.positionStackService.getLocationPoint(
+        eventEntity.address,
+      );
+    } else {
+      throw new BadRequestException();
+    }
     try {
-      this.logger.log('Create new Event: ' + JSON.stringify(eventEntity));
       const createdEvent = await this.eventModel.create(eventEntity);
       result = EventMapper.mapDocumentToEntity(createdEvent);
     } catch (error) {

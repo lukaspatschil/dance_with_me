@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { LocationDocument } from './location.schema';
+import { AddressDocument } from './address.schema';
 
 @Schema()
 export class EventDocument extends Document {
@@ -21,6 +22,9 @@ export class EventDocument extends Document {
 
   @Prop(LocationDocument)
   location!: LocationDocument;
+
+  @Prop(AddressDocument)
+  address!: AddressDocument;
 
   @Prop({ required: true })
   price!: number;

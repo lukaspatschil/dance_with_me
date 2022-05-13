@@ -8,8 +8,9 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { LocationDto } from './location.dto';
-import { Transform, Type } from 'class-transformer';
+import { Transform } from 'class-transformer';
 import { IsBefore } from '../validators/IsBefore';
+import { AddressDto } from './address.dto';
 
 export class EventDto {
   id!: string;
@@ -49,8 +50,11 @@ export class EventDto {
 
   @IsNotEmptyObject()
   @ValidateNested()
-  @Type(() => LocationDto)
-  location!: LocationDto;
+  location?: LocationDto;
+
+  @IsNotEmptyObject()
+  @ValidateNested()
+  address?: AddressDto;
 
   @IsNotEmpty()
   @IsNumber()
