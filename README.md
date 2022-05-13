@@ -1,5 +1,9 @@
 # Dance with me
 
+![release](https://reset.inso.tuwien.ac.at/repo/2022ss-ase-pr-group/22ss-ase-pr-inso-02/-/badges/release.svg)
+![pipeline status](https://reset.inso.tuwien.ac.at/repo/2022ss-ase-pr-group/22ss-ase-pr-inso-02/badges/master/pipeline.svg?ignore_skipped=true)
+![frontend coverage](https://reset.inso.tuwien.ac.at/repo/2022ss-ase-pr-group/22ss-ase-pr-inso-02/badges/master/coverage.svg)
+
 ## Installation
 
 ```bash
