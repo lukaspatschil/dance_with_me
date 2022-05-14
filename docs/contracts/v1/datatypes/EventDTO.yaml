@@ -27,9 +27,12 @@ properties:
     type: string
     example: 2022-05-14T14:00:00.000Z
   category:
-    type: string
-    enum: [Jazz, Pop, Rock]
-    example: Jazz
+    type: array
+    items:
+      type: string
+    minItems: 1
+    enum: [Salsa, Bachata, Zouk, Reggeaton, Merengue]
+    example: [Salsa, Zouk]
   participants:
     type: integer
     example: 14

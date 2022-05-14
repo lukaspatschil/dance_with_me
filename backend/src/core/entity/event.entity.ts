@@ -1,5 +1,6 @@
 import { LocationEntity } from './location.entity';
 import { AddressEntity } from './address.entity';
+import { CategoryEnum } from '../schema/enum/category.enum';
 
 export class EventEntity {
   id?: string;
@@ -13,5 +14,5 @@ export class EventEntity {
   public!: boolean;
   imageId?: string;
   organizerId!: string;
-  category!: string;
+  category!: CategoryEnum[];
 }

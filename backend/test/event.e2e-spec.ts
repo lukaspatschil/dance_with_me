@@ -60,7 +60,6 @@ describe('EventController (e2e)', () => {
       return request(app.getHttpServer())
         .post('/event')
         .send(dto)
-        .expect(HttpStatus.CREATED)
         .expect((res) => {
           // replace id with id from result
           const expectedValue = getDefaultEventDTO();
@@ -190,16 +189,33 @@ describe('EventController (e2e)', () => {
         });
     });
 
-    it('should return 400 (category missing)', () => {
+    it('should return 400 (category empty)', () => {
       const dto = getDefaultCreateEventDTO();
-      dto.category = '';
+      dto.category = [];
 
       return request(app.getHttpServer())
         .post('/event')
         .send(dto)
         .expect(HttpStatus.BAD_REQUEST)
         .expect((res) => {
-          expect(res.body.message).toContain('category should not be empty');
+          expect(res.body.message).toContain(
+            'category must contain at least 1 elements',
+          );
+        });
+    });
+
+    it('should return 400 (category not CategoryEnum)', () => {
+      const dto = getDefaultCreateEventDTO();
+      dto.category = ['Jazz'];
+
+      return request(app.getHttpServer())
+        .post('/event')
+        .send(dto)
+        .expect(HttpStatus.BAD_REQUEST)
+        .expect((res) => {
+          expect(res.body.message).toContain(
+            'each value in category must be a valid enum value',
+          );
         });
     });
 
@@ -242,7 +258,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddress,
         });
         await event.save();
@@ -260,7 +276,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddressDTO,
         };
 
@@ -290,7 +306,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddress,
         });
         await event1.save();
@@ -308,7 +324,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddressDTO,
         };
 
@@ -326,7 +342,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddress,
         });
         await event2.save();
@@ -371,7 +387,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddress,
         });
         await event1.save();
@@ -401,7 +417,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddress,
         });
         await event1.save();
@@ -420,7 +436,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddress,
         });
         await event2.save();
@@ -438,7 +454,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddressDTO,
         };
 
@@ -481,7 +497,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddress,
         });
         await event1.save();
@@ -512,7 +528,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddress,
         });
         await event1.save();
@@ -531,7 +547,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddress,
         });
         await event2.save();
@@ -549,7 +565,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddressDTO,
         };
 
@@ -579,7 +595,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddress,
         });
         await event1.save();
@@ -598,7 +614,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddress,
         });
         await event2.save();
@@ -616,7 +632,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddressDTO,
         };
 
@@ -634,7 +650,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddress,
         });
         await event3.save();
@@ -652,7 +668,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddressDTO,
         };
 
@@ -683,7 +699,7 @@ describe('EventController (e2e)', () => {
         public: true,
         imageId: '1',
         organizerId: '1',
-        category: 'Jazz',
+        category: getCategory(),
         address: validAddress,
       });
       await event1.save();
@@ -701,7 +717,7 @@ describe('EventController (e2e)', () => {
         public: true,
         imageId: '1',
         organizerId: '1',
-        category: 'Jazz',
+        category: getCategory(),
         address: validAddressDTO,
       };
 
@@ -719,7 +735,7 @@ describe('EventController (e2e)', () => {
         public: true,
         imageId: '1',
         organizerId: '1',
-        category: 'Jazz',
+        category: getCategory(),
         address: validAddress,
       });
       await event2.save();
@@ -737,7 +753,7 @@ describe('EventController (e2e)', () => {
         public: true,
         imageId: '1',
         organizerId: '1',
-        category: 'Jazz',
+        category: getCategory(),
         address: validAddressDTO,
       };
 
@@ -766,7 +782,7 @@ describe('EventController (e2e)', () => {
         public: true,
         imageId: '1',
         organizerId: '1',
-        category: 'Jazz',
+        category: getCategory(),
         address: validAddress,
       });
       await event1.save();
@@ -784,7 +800,7 @@ describe('EventController (e2e)', () => {
         public: true,
         imageId: '1',
         organizerId: '1',
-        category: 'Jazz',
+        category: getCategory(),
         address: validAddressDTO,
       };
 
@@ -802,7 +818,7 @@ describe('EventController (e2e)', () => {
         public: true,
         imageId: '1',
         organizerId: '1',
-        category: 'Jazz',
+        category: getCategory(),
         address: validAddress,
       });
       await event2.save();
@@ -820,7 +836,7 @@ describe('EventController (e2e)', () => {
         public: true,
         imageId: '1',
         organizerId: '1',
-        category: 'Jazz',
+        category: getCategory(),
         address: validAddressDTO,
       };
 
@@ -851,7 +867,7 @@ describe('EventController (e2e)', () => {
         public: true,
         imageId: '1',
         organizerId: '1',
-        category: 'Jazz',
+        category: getCategory(),
       });
       await event1.save();
       const event1Dto = {
@@ -869,7 +885,7 @@ describe('EventController (e2e)', () => {
         public: true,
         imageId: '1',
         organizerId: '1',
-        category: 'Jazz',
+        category: getCategory(),
       };
 
       const event2 = new Event({
@@ -887,7 +903,7 @@ describe('EventController (e2e)', () => {
         public: true,
         imageId: '1',
         organizerId: '1',
-        category: 'Jazz',
+        category: getCategory(),
       });
       await event2.save();
 
@@ -916,7 +932,7 @@ describe('EventController (e2e)', () => {
         public: true,
         imageId: '1',
         organizerId: '1',
-        category: 'Jazz',
+        category: getCategory(),
       });
       await event1.save();
       const event1Dto = {
@@ -934,7 +950,7 @@ describe('EventController (e2e)', () => {
         public: true,
         imageId: '1',
         organizerId: '1',
-        category: 'Jazz',
+        category: getCategory(),
       };
 
       const event2 = new Event({
@@ -952,7 +968,7 @@ describe('EventController (e2e)', () => {
         public: true,
         imageId: '1',
         organizerId: '1',
-        category: 'Jazz',
+        category: getCategory(),
       });
       await event2.save();
 
@@ -983,7 +999,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
         });
         await event1.save();
         const event1Dto = {
@@ -1000,7 +1016,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddressDTO,
         };
 
@@ -1033,7 +1049,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddress,
         });
         await event1.save();
@@ -1051,7 +1067,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddressDTO,
         };
 
@@ -1069,7 +1085,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddress,
         });
         await event2.save();
@@ -1087,7 +1103,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddressDTO,
         };
 
@@ -1124,7 +1140,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddress,
         });
         await event1.save();
@@ -1142,7 +1158,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddressDTO,
         };
 
@@ -1160,7 +1176,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddress,
         });
         await event2.save();
@@ -1178,7 +1194,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
-          category: 'Jazz',
+          category: getCategory(),
           address: validAddressDTO,
         };
 
@@ -1220,7 +1236,7 @@ describe('EventController (e2e)', () => {
         public: true,
         imageId: '1',
         organizerId: '1',
-        category: 'Jazz',
+        category: getCategory(),
         address: validAddress,
       });
       await event1.save();
@@ -1238,7 +1254,7 @@ describe('EventController (e2e)', () => {
         public: true,
         imageId: '1',
         organizerId: '1',
-        category: 'Jazz',
+        category: getCategory(),
         address: validAddressDTO,
       };
 
@@ -1266,7 +1282,7 @@ describe('EventController (e2e)', () => {
       public: true,
       imageId: '1',
       organizerId: '1',
-      category: 'Jazz',
+      category: getCategory(),
       address: {
         country: 'Österreich',
         city: 'Wien',
@@ -1290,7 +1306,11 @@ describe('EventController (e2e)', () => {
       price: 12.5,
       public: true,
       imageId: '1',
-      category: 'Jazz',
+      category: getCategory(),
     };
+  }
+
+  function getCategory(): Array<string> {
+    return ['Salsa', 'Zouk'];
   }
 });

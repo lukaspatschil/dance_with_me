@@ -5,6 +5,7 @@ import { EventEntity } from '../entity/event.entity';
 import { GeolocationEnum } from '../schema/enum/geolocation.enum';
 import { EventDto } from '../dto/event.dto';
 import { EventDocument } from '../schema/event.schema';
+import { CategoryEnum } from '../schema/enum/category.enum';
 
 describe('EventMapper', () => {
   describe('mapCreateDtoToEntity', () => {
@@ -99,7 +100,7 @@ describe('EventMapper', () => {
       public: true,
       imageId: '1',
       organizerId: '1',
-      category: 'Jazz',
+      category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: {
         country: 'Österreich',
         city: 'Wien',
@@ -119,7 +120,7 @@ describe('EventMapper', () => {
       price: 12.5,
       public: true,
       imageId: '1',
-      category: 'Jazz',
+      category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: {
         country: 'Österreich',
         city: 'Wien',
@@ -143,7 +144,7 @@ describe('EventMapper', () => {
       price: 12.5,
       public: true,
       imageId: '1',
-      category: 'Jazz',
+      category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
     };
   }
 
@@ -160,7 +161,7 @@ describe('EventMapper', () => {
       price: 12.5,
       public: true,
       imageId: '1',
-      category: 'Jazz',
+      category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: {
         country: 'Österreich',
         city: 'Wien',
@@ -186,7 +187,7 @@ describe('EventMapper', () => {
       public: true,
       imageId: '1',
       organizerId: '1',
-      category: 'Jazz',
+      category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: {
         country: 'Österreich',
         city: 'Wien',
@@ -207,7 +208,7 @@ describe('EventMapper', () => {
       public: true,
       imageId: '1',
       organizerId: '1',
-      category: 'Jazz',
+      category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: {
         country: 'Österreich',
         city: 'Wien',
@@ -232,7 +233,7 @@ describe('EventMapper', () => {
       public: true,
       imageId: '1',
       organizerId: '1',
-      category: 'Jazz',
+      category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
     };
   }
 
@@ -250,7 +251,7 @@ describe('EventMapper', () => {
       public: true,
       imageId: '1',
       organizerId: '1',
-      category: 'Jazz',
+      category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: {
         country: 'Österreich',
         city: 'Wien',

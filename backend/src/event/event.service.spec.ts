@@ -27,6 +27,7 @@ import {
 } from '@nestjs/common';
 import { NotFoundError } from 'rxjs';
 import { LocationEntity } from '../core/entity//location.entity';
+import { CategoryEnum } from '../core/schema/enum/category.enum';
 
 describe('EventService', () => {
   let sut: EventService;
@@ -268,7 +269,7 @@ describe('EventService', () => {
     eventEntity.public = true;
     eventEntity.imageId = '1';
     eventEntity.organizerId = '1';
-    eventEntity.category = 'Jazz';
+    eventEntity.category = [CategoryEnum.SALSA, CategoryEnum.ZOUK];
     eventEntity.address = validAddress;
 
     return eventEntity;
@@ -289,7 +290,7 @@ describe('EventService', () => {
       public: true,
       imageId: '1',
       organizerId: '1',
-      category: 'Jazz',
+      category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: validAddress,
     };
 

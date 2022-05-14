@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { EventEntity } from '../../src/core/entity/event.entity';
 import { EventDto } from '../../src/core/dto/event.dto';
 import { GeolocationEnum } from '../../src/core/schema/enum/geolocation.enum';
+import { CategoryEnum } from '../../src/core/schema/enum/category.enum';
 
 export const validObjectId1 = new mongoose.Types.ObjectId();
 export const validObjectId2 = new mongoose.Types.ObjectId();
@@ -23,7 +24,7 @@ export const validEventDocument = {
   isPublic: true,
   imageId: '1',
   organizerId: '1',
-  category: 'Jazz',
+  category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
 };
 
 export const validEventEntity: EventEntity = {
@@ -40,7 +41,7 @@ export const validEventEntity: EventEntity = {
   public: true,
   imageId: '1',
   organizerId: '1',
-  category: 'Jazz',
+  category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
 };
 
 export const validEventDto: EventDto = {
@@ -57,5 +58,5 @@ export const validEventDto: EventDto = {
   public: true,
   imageId: '1',
   organizerId: '1',
-  category: 'Jazz',
+  category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
 };

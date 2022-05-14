@@ -124,9 +124,9 @@ function createEventDocument() {
     price: 12.5,
     organizerId: '1',
     imageId: '1',
+    category: ['Salsa', 'Zouk'],
     startDateTime: new Date('2020-01-01 00:10:00'),
     endDateTime: new Date('2020-01-01 00:12:00'),
-    category: 'Jazz',
     public: true,
     address: validAddress,
   };

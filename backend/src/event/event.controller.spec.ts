@@ -9,6 +9,7 @@ import { EventServiceMock } from '../../test/stubs/event.service.mock';
 import { NotFoundException } from '@nestjs/common';
 import { UserEntity } from '../core/entity/user.entity';
 import { RoleEnum } from '../core/schema/enum/role.enum';
+import { CategoryEnum } from '../core/schema/enum/category.enum';
 
 describe('EventController', () => {
   let sut: EventController;
@@ -130,7 +131,7 @@ describe('EventController', () => {
       price: 12.5,
       public: true,
       imageId: '1',
-      category: 'Jazz',
+      category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: {
         country: 'Österreich',
         city: 'Wien',
@@ -156,7 +157,7 @@ describe('EventController', () => {
       public: true,
       imageId: '1',
       organizerId: '1',
-      category: 'Jazz',
+      category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: {
         country: 'Österreich',
         city: 'Wien',
@@ -181,7 +182,7 @@ describe('EventController', () => {
       public: true,
       imageId: '1',
       organizerId: '1',
-      category: 'Jazz',
+      category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: {
         country: 'Österreich',
         city: 'Wien',

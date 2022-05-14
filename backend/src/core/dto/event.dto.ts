@@ -1,6 +1,9 @@
 import {
+  ArrayMinSize,
+  IsArray,
   IsBoolean,
   IsDate,
+  IsEnum,
   IsNotEmpty,
   IsNotEmptyObject,
   IsNumber,
@@ -11,6 +14,7 @@ import { LocationDto } from './location.dto';
 import { Transform } from 'class-transformer';
 import { IsBefore } from '../validators/IsBefore';
 import { AddressDto } from './address.dto';
+import { CategoryEnum } from '../schema/enum/category.enum';
 
 export class EventDto {
   id!: string;
@@ -61,5 +65,8 @@ export class EventDto {
   organizerId!: string;
 
   @IsNotEmpty()
-  category!: string;
+  @IsArray()
+  @IsEnum(CategoryEnum, { each: true })
+  @ArrayMinSize(1)
+  category!: CategoryEnum[];
 }

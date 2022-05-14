@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { LocationDocument } from './location.schema';
 import { AddressDocument } from './address.schema';
+import { CategoryEnum } from './enum/category.enum';
 
 @Schema()
 export class EventDocument extends Document {
@@ -35,8 +36,8 @@ export class EventDocument extends Document {
   @Prop({ required: true })
   organizerId!: string;
 
-  @Prop({ required: true })
-  category!: string;
+  @Prop({ type: [String], required: true })
+  category!: CategoryEnum[];
 }
 
 const EventSchema = SchemaFactory.createForClass(EventDocument);

@@ -2,6 +2,7 @@ import { EventEntity } from '../../src/core/entity/event.entity';
 import { LocationEntity } from '../../src/core/entity/location.entity';
 import { GeolocationEnum } from '../../src/core/schema/enum/geolocation.enum';
 import { validAddress } from '../../test/test_data/openStreetMapApi.testData';
+import { CategoryEnum } from '../../src/core/schema/enum/category.enum';
 
 export class EventServiceMock {
   createEvent = jest.fn(() => {
@@ -41,7 +42,7 @@ export class EventServiceMock {
     eventEntity.public = true;
     eventEntity.imageId = '1';
     eventEntity.organizerId = '1';
-    eventEntity.category = 'Jazz';
+    eventEntity.category = [CategoryEnum.SALSA, CategoryEnum.ZOUK];
     eventEntity.address = validAddress;
     return eventEntity;
   }
