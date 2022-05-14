@@ -27,7 +27,7 @@ describe('AuthService', () => {
       imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
         AuthService,
-        { provide:TokenStorageService, useClass: TokenStorageServiceMock},
+        { provide: TokenStorageService, useClass: TokenStorageServiceMock},
         { provide: PasetoService, useClass: PasetoMockService }
       ]
     });

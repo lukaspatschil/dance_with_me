@@ -50,5 +50,11 @@
   },
   "events": {
     "events": "Veranstalltungen"
+  },
+  "navbar": {
+    "create_event": "Veranstalltung erstellen",
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "events": "Veranstalltungen"
   }
 }

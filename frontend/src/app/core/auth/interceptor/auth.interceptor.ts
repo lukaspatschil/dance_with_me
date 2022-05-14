@@ -24,7 +24,8 @@ export class AuthInterceptor implements HttpInterceptor {
 
     if (!this.publicEndpoints.includes(request.url)) {
       httpRequest = request.clone({
-        headers: request.headers.set('Authorization', `Bearer ${this.authService.getToken}`)
+        headers: request.headers.set('Authorization', `Bearer ${this.authService.getToken}`),
+        withCredentials: true
       });
     }
 

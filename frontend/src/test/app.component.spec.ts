@@ -2,12 +2,14 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from '../app/app.component';
 import { TranslateModule } from "@ngx-translate/core";
 import {MockBuilder, MockModule, MockRender} from "ng-mocks";
+import {AuthService} from "../app/core/auth/auth.service";
 
 describe('AppComponent', () => {
 
   beforeEach(async () => {
     return MockBuilder(AppComponent)
       .mock(RouterTestingModule)
+      .mock(AuthService)
       .mock(TranslateModule.forRoot());
   });
 

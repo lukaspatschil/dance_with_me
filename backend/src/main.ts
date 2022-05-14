@@ -13,7 +13,7 @@ async function bootstrap() {
   app.use(cookieParser());
 
   // TODO: remove this when sameSite works in dev environment
-  if (process.env['NODE_ENV'] !== 'development') {
+  if (process.env['NODE_ENV'] === 'development') {
     app.enableCors({
       origin: process.env['FRONTEND_URL'] ?? 'http://localhost:4200',
       credentials: true,

@@ -51,7 +51,8 @@ describe('AuthInterceptor', () => {
 
       // Then
       const expectedRequest = request.clone({
-        headers: request.headers.set('Authorization', `Bearer ${authService.getToken}`)
+        headers: request.headers.set('Authorization', `Bearer ${authService.getToken}`),
+        withCredentials: true
       });
       expect(next.handle).toHaveBeenCalledWith(expectedRequest);
     });

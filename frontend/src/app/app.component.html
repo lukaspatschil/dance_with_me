@@ -21,25 +21,28 @@
 
   <div fxFlex class="top-navbar">
   <ul class="align-content-center leading-10 font-poppins text-red-900">
-    <li class="text-center">
-      <a class="nav-link" [routerLink]="'/create'" (click)="toggleNavbar()">{{'create.create_event' | translate}}</a>
-    </li>
-    <li class="text-center">
-      <a class="nav-link" [routerLink]="'/events'" (click)="toggleNavbar()">{{'events.events' | translate}}</a>
-    </li>
-    <li class="text-center">
-      <a class="nav-link" [routerLink]="'/privacy'" (click)="toggleNavbar()" >{{'privacy_link' | translate}}</a>
-    </li>
+    <div *ngIf="authService.isAuthenticated(); then thenBlock; else elseBlock"></div>
+    <ng-template #thenBlock>
+      <li class="text-center">
+        <a class="nav-link" [routerLink]="'/create'" (click)="toggleNavbar()">{{'navbar.create_event' | translate}}</a>
+      </li>
+      <li class="text-center">
+        <a class="nav-link" [routerLink]="'/events'" (click)="toggleNavbar()">{{'navbar.events' | translate}}</a>
+      </li>
+      <li class="text-center">
+        <a class="nav-link" [routerLink]="'.'" (click)="toggleNavbar(); authService.logout()">{{'navbar.logout' | translate}}</a>
+    </ng-template>
+    <ng-template #elseBlock>
+      <li class="text-center">
+        <a class="nav-link" [routerLink]="'/loginSite'" (click)="toggleNavbar()">{{'navbar.login' | translate}}</a>
+      </li>
+    </ng-template>
   </ul>
   </div>
 </header>
 
 
 <main class="flex-1">
-  <app-legal-page *ngIf="title === 'legal-page'"></app-legal-page>
-  <app-privacy-page *ngIf="title === 'privacy-page'"></app-privacy-page>
-  <app-about-page *ngIf="title === 'about-page'"></app-about-page>
-  <app-create-event-page *ngIf="title === 'create-event-page'"></app-create-event-page>
   <router-outlet></router-outlet>
 </main>
 

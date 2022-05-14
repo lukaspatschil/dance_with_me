@@ -1,5 +1,6 @@
 import {Component, HostBinding} from '@angular/core';
 import { TranslateService } from "@ngx-translate/core";
+import { AuthService } from './core/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -12,9 +13,9 @@ export class AppComponent {
   language = 'de';
 
   @HostBinding('class.navbar-opened') navbarOpened = false;
-  constructor(public translate: TranslateService) {
+  constructor(public translate: TranslateService, public readonly authService: AuthService) {
     translate.addLangs(['en', 'de']);
-    translate.setDefaultLang('de')
+    translate.setDefaultLang('de');
   }
 
   toggleNavbar() {

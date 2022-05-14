@@ -50,5 +50,11 @@
   },
   "events": {
     "events": "Events"
+  },
+  "navbar": {
+    "create_event": "Create event",
+    "login": "Login",
+    "logout": "Logout",
+    "events": "Events"
   }
 }
