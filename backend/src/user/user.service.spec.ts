@@ -6,10 +6,12 @@ import { UserModelMock } from '../../test/stubs/user.model.mock';
 import { Model } from 'mongoose';
 import {
   nonExistingObjectId,
+  throwADataBaseException,
   validObjectId,
   validUserDocument,
   validUserEntity,
 } from '../../test/test_data/user.testData';
+import { InternalServerErrorException } from '@nestjs/common';
 
 describe('UserService', () => {
   let sut: UserService;
@@ -68,6 +70,19 @@ describe('UserService', () => {
 
       // Then
       expect(response).toBeNull();
+    });
+
+    it('should call the delete service, the database throws a database exception and the service should return an Internal Error', async () => {
+      // Given
+      const userId = throwADataBaseException.toString();
+
+      // When
+      const response = sut.deleteUser(userId);
+
+      // Then
+      await expect(response).rejects.toThrow(
+        new InternalServerErrorException(),
+      );
     });
   });
 

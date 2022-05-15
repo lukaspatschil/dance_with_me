@@ -1,4 +1,4 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { MongoMemoryServer } from 'mongodb-memory-server';
@@ -71,7 +71,7 @@ describe('UserController (e2e)', () => {
       return request(app.getHttpServer())
         .delete(`/user/${nonExistingObjectId}`)
         .send()
-        .expect(404)
+        .expect(HttpStatus.NOT_FOUND)
         .expect(notFoundResponse);
     });
   });

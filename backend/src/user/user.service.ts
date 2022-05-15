@@ -1,7 +1,11 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { UserDocument } from '../core/schema/user.schema';
-import { Model, Document } from 'mongoose';
+import { Document, Model } from 'mongoose';
 import { UserEntity } from '../core/entity/user.entity';
 import { UserMapper } from '../core/mapper/user.mapper';
 import { RoleEnum } from '../core/schema/enum/role.enum';
@@ -18,10 +22,10 @@ export class UserService {
   async deleteUser(userId: string): Promise<UserDocument | null> {
     this.logger.log(`Delete user with id: ${userId}`);
     try {
-      const user = await this.userModel.findByIdAndDelete(userId);
-      return user;
+      return await this.userModel.findByIdAndDelete(userId);
     } catch (e) {
-      throw new BadRequestException();
+      this.logger.error(e);
+      throw new InternalServerErrorException();
     }
   }
 

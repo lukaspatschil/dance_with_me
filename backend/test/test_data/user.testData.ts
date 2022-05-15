@@ -5,6 +5,7 @@ import { UserDto } from '../../src/core/dto/user.dto';
 
 export const validObjectId = new mongoose.Types.ObjectId();
 export const nonExistingObjectId = new mongoose.Types.ObjectId();
+export const throwADataBaseException = new mongoose.Types.ObjectId();
 export const invalidObjectId = 'xxxxxxxxxxxxxxxxxxx';
 
 export const validUserDocument = {

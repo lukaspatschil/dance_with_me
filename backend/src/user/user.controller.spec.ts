@@ -42,7 +42,7 @@ describe('UserController', () => {
       );
     });
 
-    it('should call the service and throw a NotFoundException', async () => {
+    it('should call the service with a non existing Id and throw a NotFoundException', async () => {
       // When
       const result = async () =>
         await sut.deleteUser(nonExistingObjectId.toString());

@@ -18,7 +18,8 @@ export class UserController {
   @HttpCode(204)
   async deleteUser(@Param('id') id: string) {
     this.logger.log(`Delete user with id: ${id}`);
-    if ((await this.userService.deleteUser(id)) === null) {
+    const result = await this.userService.deleteUser(id);
+    if (result === null) {
       throw new NotFoundException();
     }
     this.logger.log(`User with id: ${id} was deleted`);
