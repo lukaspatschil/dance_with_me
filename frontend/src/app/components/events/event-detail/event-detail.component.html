@@ -1,38 +1,38 @@
 <div *ngIf="event$ | async as event" class="ml-5 flex flex-col space-y-2 h-screen font-poppins ">
   <h1 class="text-l mb-2 font-light text-gray-900 truncate">
-    {{event.name}}
+    {{event?.name}}
   </h1>
   <div class="flex mt-4 space-x-2 ">
     <span class="small material-icons-outlined text-gray-400">location_on</span>
     <p class="inline-flex text-sm text-gray-800 truncate dark:text-gray-700">
-      {{event.address?.street}} {{event.address?.housenumber}}, {{event.address?.postalcode}} {{event.address?.city}}
+      {{event?.address?.street}} {{event?.address?.housenumber}}, {{event?.address?.postalcode}} {{event?.address?.city}}
     </p>
   </div>
 
   <div class="flex mt-4 space-x-2 ">
     <span class="material-icons-outlined text-gray-400">schedule</span>
     <p class="inline-flex text-sm text-gray-800 truncate dark:text-gray-700">
-      {{event.date}} {{event.startTime}}
+      {{event?.startDateTime?.toLocaleString()}} - {{event?.endDateTime?.toLocaleString()}}
     </p>
   </div>
 
   <div class="flex mt-4 space-x-2 ">
-    <span class="material-icons-outlined text-gray-400">sell</span>
+    <span class="material-icons-outlined text-gray-400">payments</span>
     <p class="break-normal text-sm text-gray-800 dark:text-gray-700">
-      {{event.price}} €
+      {{event?.price}} €
     </p>
   </div>
 
   <div class="flex mt-8 space-x-2 mr-5">
     <span class="material-icons-outlined text-gray-400 font-extralight text-sm">description</span>
     <p class="break-normal text-sm text-gray-800 dark:text-gray-700">
-      {{event.description}}
+      {{event?.description}}
     </p>
   </div>
 
-  <span
+  <span translate
     class="px-2 py-1 rounded-full border border-gray-300 text-gray-500 text-sm align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease">
-              {{event.category}}
+    eventDetails.category.{{event?.category}}
   </span>
 
 </div>

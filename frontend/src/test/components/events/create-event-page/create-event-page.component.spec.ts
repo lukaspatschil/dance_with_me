@@ -1,15 +1,16 @@
-import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {CreateEventPageComponent} from '../../../../app/components/events/create-event-page/create-event-page.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {RouterTestingModule} from "@angular/router/testing";
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 import {EventService} from "../../../../app/services/event.service";
-import * as EventModel from "../../../../app/dto/event.dto";
 import {EventServiceMock} from "../../../mock/event.service.mock";
 import {TranslateModule} from "@ngx-translate/core";
-import {Category} from "../../../../app/enums/category";
+import {Category} from "../../../../app/enums/category.enum";
 import {formatDate} from "@angular/common";
+import {CreateEventDto} from "../../../../app/dto/createEvent.dto";
+import {AddressDto} from "../../../../app/dto/address.dto";
 
 describe('CreateEventPageComponent',
   () => {
@@ -167,26 +168,20 @@ describe('CreateEventPageComponent',
 
     describe('createEvent', () => {
       it('should create-event-page a new event', () => {
-        // When
-        const newEvent: EventModel.EventDto = {
-          name: 'name',
-          description: 'description',
-          address: {
-            country: 'country',
-            street: 'street',
-            city: 'city',
-            housenumber: '10',
-            postalcode: '1020',
-            addition: 'addition'
-          },
-          price: 1,
-          public: true,
-          date: date,
-          starttime: '10:00',
-          endtime: '12:00',
-          category: Category.Salsa
-        };
+        // Given
+        const address = new AddressDto('country', 'city', '1020', 'street', '10', 'addition')
+        const newEvent = new CreateEventDto(
+          'name',
+          'description',
+          address,
+          1,
+          true,
+          new Date(`${date}T10:00`).toISOString(),
+          new Date(`${date}T12:00`).toISOString(),
+          Category.SALSA
+      );
 
+        // When
         createValidInput();
 
         fixture.whenStable().then(() => {
@@ -200,7 +195,7 @@ describe('CreateEventPageComponent',
     describe('onSubmit', () => {
       it('should send a new event to API ', () => {
         // When
-        const newEvent: EventModel.EventDto =  {
+        const newEvent: CreateEventDto =  {
           name: 'name',
           description: 'description',
           address: {
@@ -213,10 +208,9 @@ describe('CreateEventPageComponent',
           },
           price: 1,
           public: true,
-          date: date,
-          starttime: '10:00',
-          endtime: '12:00',
-          category: Category.Salsa
+          startDateTime: new Date(`${date}T10:00`).toISOString(),
+          endDateTime: new Date(`${date}T12:00`).toISOString(),
+          category: Category.SALSA
         };
 
         fixture.whenStable().then(() => {
@@ -251,7 +245,7 @@ describe('CreateEventPageComponent',
       cityElement.value = "city"
       countryElement.value = "country"
       additionElement.value = "addition"
-      categoryElementSalsa.value = Category.Salsa
+      categoryElementSalsa.value = Category.SALSA
       priceElement.value = String(1)
       description.value = "description"
       publicElement.value = String(true)

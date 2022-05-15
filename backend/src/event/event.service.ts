@@ -33,12 +33,7 @@ export class EventService {
       $match: {
         $and: [
           {
-            date: {
-              $gte: startDate,
-            },
-          },
-          {
-            startTime: {
+            startDateTime: {
               $gte: startDate,
             },
           },
@@ -69,16 +64,14 @@ export class EventService {
       sort = {
         $sort: {
           distance: 1,
-          date: 1,
-          startTime: 1,
+          startDateTime: 1,
           name: 1,
         },
       };
     } else {
       sort = {
         $sort: {
-          date: 1,
-          startTime: 1,
+          startDateTime: 1,
           name: 1,
         },
       };

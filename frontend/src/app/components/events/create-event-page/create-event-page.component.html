@@ -75,7 +75,7 @@
           <label translate
                  *ngIf="endTime?.hasError('required')"
                  class="block uppercase text-red-600 text-xs font-bold mb-2">
-            create.event_name_error
+            create.endtime_error
           </label>
         </div>
       </div>
@@ -214,6 +214,11 @@
         <div translate
              *ngIf="(price?.touched || price?.dirty)">
           <label translate
+                 *ngIf="price?.hasError('required')"
+                 class="block uppercase text-red-600 text-xs font-bold mb-2">
+            create.price_required
+          </label>
+          <label translate
                  *ngIf="price?.hasError('min')"
                  class="block uppercase text-red-600 text-xs font-bold mb-2">
             create.price_error
@@ -303,8 +308,7 @@
     <div class="flex flex-row-reverse space-x-4 space-x-reverse">
       <button translate [disabled]="createEventForm?.invalid"
               class="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 border border-emerald-500 rounded"
-              id="create_button"
-              (click)="onSubmit()">
+              id="create_button">
         create.create_button
       </button>
       <div *ngIf="loading">

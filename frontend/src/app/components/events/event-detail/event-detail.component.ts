@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {Observable, switchMap} from "rxjs";
+import {ActivatedRoute} from "@angular/router";
+import {Observable} from "rxjs";
 import {EventEntity} from "../../../entities/event.entity";
 import {EventService} from "../../../services/event.service";
 
@@ -11,10 +11,10 @@ import {EventService} from "../../../services/event.service";
 })
 export class EventDetailComponent implements OnInit {
 
-  event$!: Observable<EventEntity>;
+  event$!: Observable<EventEntity | null>;
 
   constructor(private route: ActivatedRoute,
-              private service: EventService) { }
+              private service: EventService) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id')!;

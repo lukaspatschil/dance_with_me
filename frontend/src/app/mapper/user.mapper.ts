@@ -4,8 +4,10 @@ import {UserEntity} from "../entities/user.entity";
 export class UserMapper {
   public static dtoToEntity(userDto: UserDto): UserEntity | null {
     let userEntity: UserEntity | null = null;
-    if (userDto.id && userDto.displayName && userDto.firstName && userDto.lastName && userDto.role) {
-      userEntity = new UserEntity(userDto.id, userDto.displayName, userDto.firstName, userDto.lastName, userDto.role);
+    if (userDto.id && userDto.displayName && userDto.role) {
+      userEntity = new UserEntity(userDto.id, userDto.displayName, userDto.role);
+      userEntity.firstName = userDto.firstName;
+      userEntity.lastName = userDto.lastName;
       userEntity.pictureUrl = userDto.pictureUrl;
     }
 

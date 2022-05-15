@@ -22,13 +22,13 @@
           <div class="flex mt-4 space-x-2 ">
             <span class="material-icons-outlined">schedule</span>
             <p class="inline-flex text-sm text-gray-500 truncate dark:text-gray-400">
-              {{event.date}} {{event.startTime}}
+              {{event.startDateTime?.toLocaleString()}}
             </p>
           </div>
 
-          <span
+          <span translate
             class="px-2 py-1 rounded-full border border-gray-300 text-gray-500 text-sm align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease">
-              {{event.category}}
+              eventOverview.category.{{event.category}}
           </span>
 
         </div>

@@ -1,5 +1,5 @@
 import {EventDto} from "../../app/dto/event.dto"
-import {Category} from "../../app/enums/category";
+import {Category} from "../../app/enums/category.enum";
 import {Observable, of} from "rxjs";
 
 
@@ -18,10 +18,9 @@ export class EventServiceMock  {
     },
     price: 1,
     public: true,
-    date: '2022-04-24',
-    starttime: '10:00',
-    endtime: '12:00',
-    category: Category.Salsa
+    startDateTime: new Date('2022-04-24T10:00').toISOString(),
+    endDateTime: new Date('2022-04-24T12:00').toISOString(),
+    category: Category.SALSA
   }
 
   createEvent = jest.fn().mockReturnValue(
@@ -50,7 +49,7 @@ export class EventServiceMock  {
       date: '2022-04-24',
       starttime: '10:00',
       endtime: '12:00',
-      category: Category.Salsa
+      category: Category.SALSA
     }])
   )
 
@@ -76,7 +75,7 @@ export class EventServiceMock  {
       date: '2022-04-24',
       starttime: '10:00',
       endtime: '12:00',
-      category: Category.Salsa
+      category: Category.SALSA
     })
   )
 }

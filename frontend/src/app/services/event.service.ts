@@ -4,9 +4,9 @@ import {HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse} from "@angular
 import { environment } from "../../environments/environment"
 import { EventDto } from "../dto/event.dto";
 import {map, Observable} from "rxjs";
-import {EventResponseDto} from "../dto/eventResponse.dto";
 import {EventEntity} from "../entities/event.entity";
 import {EventMapper} from "../mapper/event.mapper"
+import {CreateEventDto} from "../dto/createEvent.dto";
 
 
 @Injectable({
@@ -19,31 +19,31 @@ export class EventService {
   constructor(private http: HttpClient) {
   }
 
-  createEvent(event: EventDto) {
+  createEvent(event: CreateEventDto) {
     return this.http.post<EventDto>(this.URL_EVENT_BASE, event, {
       observe: 'response',
       responseType: 'json'
     })
   }
 
-  getEvent(id: string): Observable<EventEntity>{
-    return this.http.get<EventResponseDto>(this.URL_EVENT_BASE + "/" + id).pipe(
+  getEvent(id: string): Observable<EventEntity | null>{
+    return this.http.get<EventDto>(this.URL_EVENT_BASE + "/" + id).pipe(
       map(event => {
         return EventMapper.mapEventDtoToEntity(event)
       }))
   }
 
   getEvents(): Observable<EventEntity[]> {
-    return this.http.get<EventResponseDto[]>(this.URL_EVENT_BASE).pipe(
+    return this.http.get<EventDto[]>(this.URL_EVENT_BASE).pipe(
       map((eventData) => {
-        if(eventData === undefined){
-          return []
-        } else {
-          return eventData.map((entry: EventResponseDto) => {
-            return EventMapper.mapEventDtoToEntity(entry)
-          }).filter(object => Object.entries(object).length !== 0)
+        let events: EventEntity[] = [];
+        if(eventData){
+          events = eventData
+            .map((entry: EventDto) => EventMapper.mapEventDtoToEntity(entry))
+            .filter((event: EventEntity | null): event is EventEntity => event !== null);
         }
-        })
+        return events;
+      })
     )
   }
 }

@@ -6,7 +6,7 @@ export class AddressEntity {
   housenumber: string;
   addition?: string;
 
-  constructor(country: string, city: string, postalcode:string, street: string, housenumber: string, additon: string) {
+  constructor(country: string, city: string, postalcode:string, street: string, housenumber: string, additon?: string) {
     this.city = city;
     this.country = country;
     this.postalcode = postalcode;

@@ -17,16 +17,12 @@ properties:
   public:
     type: boolean
     example: true
-  date:
+  startDateTime:
     type: string
-    format: date
-    example: "2022-03-26"
-  starttime:
+    example: 2022-05-14T12:00:00.000Z
+  endDateTime:
     type: string
-    example: 18:00:00
-  endtime:
-    type: string
-    example: 20:00:00
+    example: 2022-05-14T14:00:00.000Z
   category:
     type: string
     enum: [Jazz, Pop, Rock]

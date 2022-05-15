@@ -13,7 +13,10 @@ describe('EventMapper', () => {
       const createEventDto = getDefaultCreateEventDto();
 
       // When
-      const result = EventMapper.mapCreateDtoToEntity(createEventDto);
+      const result = EventMapper.mapCreateDtoToEntity(
+        createEventDto,
+        getDefaultOrganizerId(),
+      );
 
       // Then
       const expectedEventEntity = getDefaultEventEntity();
@@ -25,7 +28,10 @@ describe('EventMapper', () => {
       const createEventDto = getCreateEventDtoWithoutAddress();
 
       // When
-      const result = EventMapper.mapCreateDtoToEntity(createEventDto);
+      const result = EventMapper.mapCreateDtoToEntity(
+        createEventDto,
+        getDefaultOrganizerId(),
+      );
 
       // Then
       const expectedEventEntity = getEventEntityWithoutAddress();
@@ -37,7 +43,10 @@ describe('EventMapper', () => {
       const createEventDto = getCreateEventDtoWithoutLocation();
 
       // When
-      const result = EventMapper.mapCreateDtoToEntity(createEventDto);
+      const result = EventMapper.mapCreateDtoToEntity(
+        createEventDto,
+        getDefaultOrganizerId(),
+      );
 
       // Then
       const expectedEventEntity = getEventEntityWithoutLocation();
@@ -80,15 +89,14 @@ describe('EventMapper', () => {
       id: '1',
       name: 'Test name',
       description: 'Test description',
-      date: new Date('2020-01-01'),
-      startTime: new Date('2020-01-01 10:00'),
-      endTime: new Date('2020-01-01 12:00'),
+      startDateTime: new Date('2020-01-01 10:00'),
+      endDateTime: new Date('2020-01-01 12:00'),
       location: {
         type: GeolocationEnum.POINT,
         coordinates: [-171.23794, 8.54529],
       },
       price: 12.5,
-      isPublic: true,
+      public: true,
       imageId: '1',
       organizerId: '1',
       category: 'Jazz',
@@ -106,13 +114,11 @@ describe('EventMapper', () => {
     return {
       name: 'Test name',
       description: 'Test description',
-      date: new Date('2020-01-01'),
-      startTime: new Date('2020-01-01 10:00'),
-      endTime: new Date('2020-01-01 12:00'),
+      startDateTime: new Date('2020-01-01 10:00'),
+      endDateTime: new Date('2020-01-01 12:00'),
       price: 12.5,
-      isPublic: true,
+      public: true,
       imageId: '1',
-      organizerId: '1',
       category: 'Jazz',
       address: {
         country: 'Österreich',
@@ -128,17 +134,15 @@ describe('EventMapper', () => {
     return {
       name: 'Test name',
       description: 'Test description',
-      date: new Date('2020-01-01'),
-      startTime: new Date('2020-01-01 10:00'),
-      endTime: new Date('2020-01-01 12:00'),
+      startDateTime: new Date('2020-01-01 10:00'),
+      endDateTime: new Date('2020-01-01 12:00'),
       location: {
         longitude: -171.23794,
         latitude: 8.54529,
       },
       price: 12.5,
-      isPublic: true,
+      public: true,
       imageId: '1',
-      organizerId: '1',
       category: 'Jazz',
     };
   }
@@ -147,17 +151,15 @@ describe('EventMapper', () => {
     return {
       name: 'Test name',
       description: 'Test description',
-      date: new Date('2020-01-01'),
-      startTime: new Date('2020-01-01 10:00'),
-      endTime: new Date('2020-01-01 12:00'),
+      startDateTime: new Date('2020-01-01 10:00'),
+      endDateTime: new Date('2020-01-01 12:00'),
       location: {
         longitude: -171.23794,
         latitude: 8.54529,
       },
       price: 12.5,
-      isPublic: true,
+      public: true,
       imageId: '1',
-      organizerId: '1',
       category: 'Jazz',
       address: {
         country: 'Österreich',
@@ -174,15 +176,14 @@ describe('EventMapper', () => {
       id: '1',
       name: 'Test name',
       description: 'Test description',
-      date: new Date('2020-01-01'),
-      startTime: new Date('2020-01-01 10:00'),
-      endTime: new Date('2020-01-01 12:00'),
+      startDateTime: new Date('2020-01-01 10:00'),
+      endDateTime: new Date('2020-01-01 12:00'),
       location: {
         longitude: -171.23794,
         latitude: 8.54529,
       },
       price: 12.5,
-      isPublic: true,
+      public: true,
       imageId: '1',
       organizerId: '1',
       category: 'Jazz',
@@ -200,11 +201,10 @@ describe('EventMapper', () => {
     return {
       name: 'Test name',
       description: 'Test description',
-      date: new Date('2020-01-01'),
-      startTime: new Date('2020-01-01 10:00'),
-      endTime: new Date('2020-01-01 12:00'),
+      startDateTime: new Date('2020-01-01 10:00'),
+      endDateTime: new Date('2020-01-01 12:00'),
       price: 12.5,
-      isPublic: true,
+      public: true,
       imageId: '1',
       organizerId: '1',
       category: 'Jazz',
@@ -222,15 +222,14 @@ describe('EventMapper', () => {
     return {
       name: 'Test name',
       description: 'Test description',
-      date: new Date('2020-01-01'),
-      startTime: new Date('2020-01-01 10:00'),
-      endTime: new Date('2020-01-01 12:00'),
+      startDateTime: new Date('2020-01-01 10:00'),
+      endDateTime: new Date('2020-01-01 12:00'),
       location: {
         type: GeolocationEnum.POINT,
         coordinates: [-171.23794, 8.54529],
       },
       price: 12.5,
-      isPublic: true,
+      public: true,
       imageId: '1',
       organizerId: '1',
       category: 'Jazz',
@@ -241,15 +240,14 @@ describe('EventMapper', () => {
     return {
       name: 'Test name',
       description: 'Test description',
-      date: new Date('2020-01-01'),
-      startTime: new Date('2020-01-01 10:00'),
-      endTime: new Date('2020-01-01 12:00'),
+      startDateTime: new Date('2020-01-01 10:00'),
+      endDateTime: new Date('2020-01-01 12:00'),
       location: {
         type: GeolocationEnum.POINT,
         coordinates: [-171.23794, 8.54529],
       },
       price: 12.5,
-      isPublic: true,
+      public: true,
       imageId: '1',
       organizerId: '1',
       category: 'Jazz',
@@ -261,5 +259,9 @@ describe('EventMapper', () => {
         housenumber: '4',
       },
     };
+  }
+
+  function getDefaultOrganizerId(): string {
+    return '1';
   }
 });

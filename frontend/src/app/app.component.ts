@@ -13,9 +13,14 @@ export class AppComponent {
   language = 'de';
 
   @HostBinding('class.navbar-opened') navbarOpened = false;
-  constructor(public translate: TranslateService, public readonly authService: AuthService) {
+  constructor(
+    public readonly translate: TranslateService,
+    public readonly authService: AuthService
+  ) {
     translate.addLangs(['en', 'de']);
     translate.setDefaultLang('de');
+
+    this.authService.refreshAccessToken();
   }
 
   toggleNavbar() {

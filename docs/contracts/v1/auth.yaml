@@ -68,7 +68,7 @@ refreshAuth:
     description: Given a valid refresh token and fingerprint, returns new access and refresh tokens.
     security:
       - fingerprint: []
-    body:
+    requestBody:
       $ref: '#/refreshTokenBody'
     responses:
       '200':
@@ -85,7 +85,7 @@ revokeRefreshToken:
       Invalidate a refresh token so it cannot be used anymore.
     security:
       - fingerprint: []
-    body:
+    requestBody:
       $ref: '#/refreshTokenBody'
     responses:
       '204':
@@ -194,12 +194,13 @@ refreshTokenInvalidResponse:
           - error
 
 refreshTokenBody:
-  application/json:
-    schema:
-      type: object
-      properties:
-        refreshToken:
-          type: string
-          description: opaque refresh token, usually valid for 6 months.
-      required:
-        - refreshToken
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          refreshToken:
+            type: string
+            description: opaque refresh token, usually valid for 6 months.
+        required:
+          - refreshToken

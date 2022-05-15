@@ -14,6 +14,8 @@ import { EventDto } from '../core/dto/event.dto';
 import { EventMapper } from '../core/mapper/event.mapper';
 import { EventEntity } from '../core/entity/event.entity';
 import { QueryDto } from '../core/dto/query.dto';
+import { User } from '../auth/user.decorator';
+import { AuthUser } from '../auth/interfaces';
 
 @Controller('/event')
 export class EventController {
@@ -22,9 +24,15 @@ export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   @Post()
-  async createEvent(@Body() createEventDto: CreateEventDto): Promise<EventDto> {
+  async createEvent(
+    @Body() createEventDto: CreateEventDto,
+    @User() user: AuthUser,
+  ): Promise<EventDto> {
     this.logger.log('Create new event: ' + JSON.stringify(createEventDto));
-    const eventEntity = EventMapper.mapCreateDtoToEntity(createEventDto);
+    const eventEntity = EventMapper.mapCreateDtoToEntity(
+      createEventDto,
+      user.id,
+    );
     return EventMapper.mapEntityToDto(
       await this.eventService.createEvent(eventEntity),
     );

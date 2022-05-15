@@ -12,13 +12,10 @@ export class EventDocument extends Document {
   description!: string;
 
   @Prop({ required: true })
-  date!: Date;
+  startDateTime!: Date;
 
   @Prop({ required: true })
-  startTime!: Date;
-
-  @Prop({ required: true })
-  endTime!: Date;
+  endDateTime!: Date;
 
   @Prop(LocationDocument)
   location!: LocationDocument;
@@ -30,10 +27,10 @@ export class EventDocument extends Document {
   price!: number;
 
   @Prop({ required: true })
-  isPublic!: boolean;
+  public!: boolean;
 
-  @Prop({ required: true })
-  imageId!: string;
+  @Prop({ required: false })
+  imageId?: string;
 
   @Prop({ required: true })
   organizerId!: string;

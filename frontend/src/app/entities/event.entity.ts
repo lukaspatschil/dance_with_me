@@ -1,5 +1,5 @@
 import {LocationEntity} from "./location.entity";
-import {Category} from "../enums/category";
+import {Category} from "../enums/category.enum";
 import {AddressEntity} from "./address.entity";
 
 export class EventEntity {
@@ -10,12 +10,11 @@ export class EventEntity {
   address: AddressEntity;
   price: number;
   public: boolean;
-  date: string;
-  startTime: string;
-  endTime: string;
+  startDateTime: Date;
+  endDateTime: Date;
   category: Category;
 
-  constructor(id: string, name: string, description: string, location: LocationEntity, address: AddressEntity, price: number, isPublic: boolean, date: string, starttime: string, endtime: string, category: Category ){
+  constructor(id: string, name: string, description: string, location: LocationEntity, address: AddressEntity, price: number, isPublic: boolean, startDateTime: Date, endDateTime: Date, category: Category ){
     this.id = id;
     this.name = name;
     this.description = description;
@@ -23,9 +22,8 @@ export class EventEntity {
     this.address = address;
     this.price = price;
     this.public = isPublic;
-    this.date = date;
-    this.startTime = starttime;
-    this.endTime = endtime;
+    this.startDateTime = startDateTime;
+    this.endDateTime = endDateTime;
     this.category = category;
   }
 }

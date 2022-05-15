@@ -1,12 +1,26 @@
 import {LocationEntity} from "../entities/location.entity";
 import {AddressEntity} from "../entities/address.entity";
 import {EventEntity} from "../entities/event.entity";
-import {EventResponseDto} from "../dto/eventResponse.dto";
+import {EventDto} from "../dto/event.dto";
 
 export class EventMapper {
 
-  static mapEventDtoToEntity(entry: EventResponseDto): EventEntity{
-    if (this.checkIfValid(entry) && this.checkIfAddressValid(entry) && this.checkIfLocationValid(entry)) {
+  static mapEventDtoToEntity(entry: EventDto): EventEntity | null {
+    if (entry.id &&
+      entry.name &&
+      entry.description &&
+      typeof entry.price === 'number' &&
+      entry.startDateTime &&
+      entry.endDateTime &&
+      entry.public &&
+      entry.category &&
+      entry.address?.street &&
+      entry.address?.housenumber &&
+      entry.address?.city &&
+      entry.address?.country &&
+      entry.address?.postalcode &&
+      typeof entry.location?.longitude === 'number' &&
+      typeof entry.location?.latitude === 'number') {
         const location = new LocationEntity(
           entry.location.longitude,
           entry.location.latitude);
@@ -23,38 +37,17 @@ export class EventMapper {
           entry.id,
           entry.name,
           entry.description,
-          location, address,
+          location,
+          address,
           entry.price,
           entry.public,
-          entry.date,
-          entry.starttime,
-          entry.endtime,
+          new Date(entry.startDateTime),
+          new Date(entry.endDateTime),
           entry.category);
 
           return event
     } else {
-      return {} as EventEntity
+      return null;
     }
   }
-
-  static checkIfValid(value: EventResponseDto): boolean{
-    return Boolean(value.id &&
-      value.name &&
-      value.description &&
-      Number.isFinite(value.price) &&
-      value.date &&
-      value.starttime &&
-      value.endtime &&
-      value.public &&
-      value.category)
-  }
-
-  static checkIfAddressValid(value: EventResponseDto): boolean{
-    return  Boolean (value.address!.street && value.address!.housenumber && value.address!.city && value.address!.country && value.address!.postalcode)
-  }
-
-  static checkIfLocationValid(value: EventResponseDto): boolean {
-    return Boolean(Number.isFinite(value.location!.longitude) && Number.isFinite(value.location!.latitude))
-  }
-
 }

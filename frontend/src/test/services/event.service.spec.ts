@@ -3,9 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import { EventService } from '../../app/services/event.service';
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 
-import { EventDto } from '../../app/dto/event.dto'
-import { Category } from "../../app/enums/category";
-import { EventResponseDto } from "../../app/dto/eventResponse.dto";
+import { CreateEventDto } from '../../app/dto/createEvent.dto'
+import { Category } from "../../app/enums/category.enum";
+import { EventDto } from "../../app/dto/event.dto";
 
 
 describe('EventService', () => {
@@ -34,7 +34,7 @@ describe('EventService', () => {
   describe('createEvent', () => {
     it('should add an event and return it', () => {
       // When
-      const newEvent: EventDto =  {
+      const newEvent: CreateEventDto =  {
         name: 'name',
         description: 'description',
         address: {
@@ -47,10 +47,9 @@ describe('EventService', () => {
         },
         price: 1,
         public: true,
-        date: '2022-04-24',
-        starttime: '10:00',
-        endtime: '12:00',
-        category: Category.Salsa
+        startDateTime: new Date('2022-04-24T10:00').toISOString(),
+        endDateTime: new Date('2022-04-24T12:00').toISOString(),
+        category: Category.SALSA
       };
 
       eventService.createEvent(newEvent).subscribe((res) =>
@@ -68,7 +67,7 @@ describe('EventService', () => {
   describe('getEvents', () => {
     it('should fetch all events', () => {
       // When
-      const expectedEvents: EventResponseDto[] = [{
+      const expectedEvents: EventDto[] = [{
         id: '1',
         name: 'name',
         description: 'description',
@@ -86,10 +85,9 @@ describe('EventService', () => {
         },
         price: 1,
         public: true,
-        date: '2022-04-24',
-        starttime: '10:00',
-        endtime: '12:00',
-        category: Category.Salsa
+        startDateTime: new Date('2022-04-24T10:00').toISOString(),
+        endDateTime: new Date('2022-04-24T12:00').toISOString(),
+        category: Category.SALSA
       }]
 
       eventService.getEvents().subscribe(
@@ -107,7 +105,7 @@ describe('EventService', () => {
   describe('getEvent', () => {
     it('should fetch event with id 1', () => {
       // When
-      const expectedEvents: EventResponseDto[] = [{
+      const expectedEvents: EventDto[] = [{
         id: '1',
         name: 'name',
         description: 'description',
@@ -125,10 +123,9 @@ describe('EventService', () => {
         },
         price: 1,
         public: true,
-        date: '2022-04-24',
-        starttime: '10:00',
-        endtime: '12:00',
-        category: Category.Salsa
+        startDateTime: new Date('2022-04-24T10:00').toISOString(),
+        endDateTime: new Date('2022-04-24T12:00').toISOString(),
+        category: Category.SALSA
       }]
 
       eventService.getEvent("1").subscribe(

@@ -1,10 +1,10 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import * as EventModel from '../../../dto/event.dto';
-import { FormGroup, Validators, FormBuilder, AbstractControl, FormArray, FormControl } from '@angular/forms';
-import { EventService } from "../../../services/event.service";
-import { requiredTimeValidator } from "../../../validators/requiredTime";
-import { Category } from "../../../enums/category";
+import {Component, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {EventService} from "../../../services/event.service";
+import {requiredTimeValidator} from "../../../validators/requiredTime";
+import {Category} from "../../../enums/category.enum";
 import {Router} from "@angular/router";
+import {CreateEventDto} from "../../../dto/createEvent.dto";
 import {AddressDto} from "../../../dto/address.dto";
 
 @Component({
@@ -15,7 +15,7 @@ import {AddressDto} from "../../../dto/address.dto";
 export class CreateEventPageComponent implements OnInit {
   title = 'create';
 
-  categories = Object.keys(Category);
+  categories = Object.values(Category);
   createEventForm!: FormGroup;
 
   public todayDate = new Date();
@@ -29,7 +29,6 @@ export class CreateEventPageComponent implements OnInit {
   ngOnInit(): void {
     this.createEventForm = this.fb.group({
         name: ['', Validators.required],
-
         address: this.fb.group({
           country: ['', Validators.required],
           street: ['', Validators.required],
@@ -38,7 +37,7 @@ export class CreateEventPageComponent implements OnInit {
           postalcode: ['', [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],
           addition: [],
         }),
-        price: ['', [Validators.min(0), Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],
+        price: ['', [Validators.required, Validators.min(0), Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],
         date: ['', Validators.required],
         startTime: ['', Validators.required],
         endTime: ['', Validators.required],
@@ -106,33 +105,41 @@ export class CreateEventPageComponent implements OnInit {
     return this.createEventForm.get(['description'])
   }
 
-  createEvent(){
-    const event = new EventModel.EventDto();
-    event.name = this.createEventForm.value['name'];
-    event.description = this.createEventForm.value['description'];
-    event.address = this.createEventForm.value['address'];
-    event.price = this.createEventForm.value['price'];
-    event.public = this.createEventForm.value['public'];
-    event.date = this.createEventForm.value['date'];
-    event.starttime = this.createEventForm.value['startTime'];
-    event.endtime = this.createEventForm.value['endTime'];
-    event.category = this.createEventForm.value['category'];
+  createEvent() {
+    const address = new AddressDto(
+      this.createEventForm.value.address.country,
+      this.createEventForm.value.address.city,
+      this.createEventForm.value.address.postalcode,
+      this.createEventForm.value.address.street,
+      this.createEventForm.value.address.housenumber,
+      this.createEventForm.value.address.addition
+    );
 
-    return event
+    return new CreateEventDto(
+      this.createEventForm.value.name,
+      this.createEventForm.value.description,
+      address,
+      Number(this.createEventForm.value.price),
+      this.createEventForm.value.public,
+      new Date(`${this.date?.value}T${this.startTime?.value}`).toISOString(),
+      new Date(`${this.date?.value}T${this.endTime?.value}`).toISOString(),
+      this.createEventForm.value.category,
+    )
   }
 
   onSubmit(){
     if (this.createEventForm.valid){
-      const newEvent = this.createEvent()
+      const newEvent = this.createEvent();
       this.loading = true;
 
       this.eventService.createEvent(newEvent).subscribe({
         next: resp => {
           if (resp.status == 201) {
             this.loading = false;
-            this.router.navigate([''])
+            this.router.navigate(['']);
           }
         }, error: err => {
+          this.loading = false;
           this.error = true;
         }
       });

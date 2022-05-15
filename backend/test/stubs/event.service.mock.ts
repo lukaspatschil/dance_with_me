@@ -34,12 +34,11 @@ export class EventServiceMock {
     const eventEntity = new EventEntity();
     eventEntity.name = 'Test name';
     eventEntity.description = 'Test description';
-    eventEntity.date = new Date('2020-01-01');
-    eventEntity.startTime = new Date('2020-01-01 00:10:00');
-    eventEntity.endTime = new Date('2020-01-01 00:12:00');
+    eventEntity.startDateTime = new Date('2020-01-01 00:10:00');
+    eventEntity.endDateTime = new Date('2020-01-01 00:12:00');
     eventEntity.location = locationEntity;
     eventEntity.price = 12.5;
-    eventEntity.isPublic = true;
+    eventEntity.public = true;
     eventEntity.imageId = '1';
     eventEntity.organizerId = '1';
     eventEntity.category = 'Jazz';

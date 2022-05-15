@@ -12,7 +12,6 @@ export class EventModelMock {
       _id: '1',
       name: eventEntity.name,
       description: eventEntity.description,
-      date: eventEntity.date,
       location: {
         type: GeolocationEnum.POINT,
         coordinates: [
@@ -21,12 +20,12 @@ export class EventModelMock {
         ],
       },
       price: eventEntity.price,
-      organizerId: eventEntity.organizerId,
+      organizerId: '1',
       imageId: eventEntity.imageId,
-      startTime: eventEntity.startTime,
-      endTime: eventEntity.endTime,
+      startDateTime: eventEntity.startDateTime,
+      endDateTime: eventEntity.endDateTime,
       category: eventEntity.category,
-      isPublic: eventEntity.isPublic,
+      public: eventEntity.public,
       address: eventEntity.address,
     };
     return Promise.resolve(eventDocument);
@@ -61,11 +60,9 @@ export class EventModelMock {
     if (
       dateQuery === undefined ||
       dateQuery.$and === undefined ||
-      dateQuery.$and.length !== 2 ||
-      dateQuery.$and[0].date === undefined ||
-      dateQuery.$and[1].startTime === undefined ||
-      Object.keys(dateQuery.$and[0].date).length === 0 ||
-      Object.keys(dateQuery.$and[1].startTime).length === 0
+      dateQuery.$and.length !== 1 ||
+      dateQuery.$and[0].startDateTime === undefined ||
+      Object.keys(dateQuery.$and[0].startDateTime).length === 0
     ) {
       throw new Error('Invalid pipeline');
     }
@@ -120,7 +117,6 @@ function createEventDocument() {
     _id: '1',
     name: 'Test name',
     description: 'Test description',
-    date: new Date('2020-01-01'),
     location: {
       type: GeolocationEnum.POINT,
       coordinates: [-171.23794, 8.54529],
@@ -128,10 +124,10 @@ function createEventDocument() {
     price: 12.5,
     organizerId: '1',
     imageId: '1',
-    startTime: new Date('2020-01-01 00:10:00'),
-    endTime: new Date('2020-01-01 00:12:00'),
+    startDateTime: new Date('2020-01-01 00:10:00'),
+    endDateTime: new Date('2020-01-01 00:12:00'),
     category: 'Jazz',
-    isPublic: true,
+    public: true,
     address: validAddress,
   };
 }

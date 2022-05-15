@@ -28,7 +28,7 @@ export class EventDto {
   @IsDate()
   @MinDate(new Date())
   @IsBefore('endTime', { message: 'startTime must be before the endTime' })
-  date!: Date;
+  startDateTime!: Date;
 
   @IsNotEmpty()
   @Transform((data) => {
@@ -37,16 +37,7 @@ export class EventDto {
   @IsDate()
   @MinDate(new Date())
   @IsBefore('endTime', { message: 'startTime must be before the endTime' })
-  startTime!: Date;
-
-  @IsNotEmpty()
-  @Transform((data) => {
-    return new Date(data.value);
-  })
-  @IsDate()
-  @MinDate(new Date())
-  @IsBefore('endTime', { message: 'startTime must be before the endTime' })
-  endTime!: Date;
+  endDateTime!: Date;
 
   @IsNotEmptyObject()
   @ValidateNested()
@@ -62,8 +53,9 @@ export class EventDto {
 
   @IsNotEmpty()
   @IsBoolean()
-  isPublic!: boolean;
-  imageId!: string;
+  public!: boolean;
+
+  imageId?: string;
 
   @IsNotEmpty()
   organizerId!: string;

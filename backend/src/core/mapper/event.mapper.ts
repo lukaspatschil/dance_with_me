@@ -14,9 +14,8 @@ export class EventMapper {
     newEvent.id = event._id;
     newEvent.name = event.name;
     newEvent.description = event.description;
-    newEvent.date = event.date;
-    newEvent.startTime = event.startTime;
-    newEvent.endTime = event.endTime;
+    newEvent.startDateTime = event.startDateTime;
+    newEvent.endDateTime = event.endDateTime;
     newEvent.location = new LocationEntity();
     newEvent.location.type = event.location.type;
     newEvent.location.coordinates = [
@@ -37,7 +36,7 @@ export class EventMapper {
     newEvent.address.addition = event.address.addition;
 
     newEvent.price = event.price;
-    newEvent.isPublic = event.isPublic;
+    newEvent.public = event.public;
     newEvent.imageId = event.imageId;
     newEvent.organizerId = event.organizerId;
     newEvent.category = event.category;
@@ -45,13 +44,15 @@ export class EventMapper {
     return newEvent as Required<EventEntity>;
   }
 
-  static mapCreateDtoToEntity(event: CreateEventDto): EventEntity {
+  static mapCreateDtoToEntity(
+    event: CreateEventDto,
+    organizerId: EventEntity['organizerId'],
+  ): EventEntity {
     const newEvent = new EventEntity();
     newEvent.name = event.name;
     newEvent.description = event.description;
-    newEvent.date = event.date;
-    newEvent.startTime = event.startTime;
-    newEvent.endTime = event.endTime;
+    newEvent.startDateTime = event.startDateTime;
+    newEvent.endDateTime = event.endDateTime;
     if (event.location) {
       newEvent.location = new LocationEntity();
       newEvent.location.type = GeolocationEnum.POINT;
@@ -80,9 +81,9 @@ export class EventMapper {
     }
 
     newEvent.price = event.price;
-    newEvent.isPublic = event.isPublic;
+    newEvent.public = event.public;
     newEvent.imageId = event.imageId;
-    newEvent.organizerId = event.organizerId;
+    newEvent.organizerId = organizerId;
     newEvent.category = event.category;
 
     return newEvent;
@@ -93,9 +94,8 @@ export class EventMapper {
     newEvent.id = event.id;
     newEvent.name = event.name;
     newEvent.description = event.description;
-    newEvent.date = event.date;
-    newEvent.startTime = event.startTime;
-    newEvent.endTime = event.endTime;
+    newEvent.startDateTime = event.startDateTime;
+    newEvent.endDateTime = event.endDateTime;
     newEvent.location = new LocationDto();
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore currently not using the correct type
@@ -111,7 +111,7 @@ export class EventMapper {
     newEvent.address.housenumber = event.address.housenumber;
     newEvent.address.addition = event.address.addition;
     newEvent.price = event.price;
-    newEvent.isPublic = event.isPublic;
+    newEvent.public = event.public;
     newEvent.imageId = event.imageId;
     newEvent.organizerId = event.organizerId;
     newEvent.category = event.category;

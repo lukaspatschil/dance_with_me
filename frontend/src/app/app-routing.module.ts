@@ -15,13 +15,14 @@ import {EventDetailComponent} from "./components/events/event-detail/event-detai
 
 const routes: Routes = [
   {path: '', component: LandingComponent},
-  {path: '', canActivate: [AuthGuard], children: []},
+  {path: '', canActivate: [AuthGuard], children: [
+      {path: 'create', component: CreateEventPageComponent},
+      {path: 'events', component: EventOverviewComponent},
+      {path: 'event/:id', component: EventDetailComponent},
+    ]},
   {path: 'about', component: AboutPageComponent},
   {path: 'legal', component: LegalPageComponent},
   {path: 'privacy', component: PrivacyPageComponent},
-  {path: 'create', component: CreateEventPageComponent},
-  {path: 'events', component: EventOverviewComponent},
-  {path: 'event/:id', component: EventDetailComponent},
   {path: 'loginSite', component: LoginComponent},
   {path: environment.loginCallback, component: LandingComponent, canActivate: [LoginGuard]},
 ];

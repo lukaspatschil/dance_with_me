@@ -7,6 +7,8 @@ import { GeolocationEnum } from '../core/schema/enum/geolocation.enum';
 import { EventDto } from '../core/dto/event.dto';
 import { EventServiceMock } from '../../test/stubs/event.service.mock';
 import { NotFoundException } from '@nestjs/common';
+import { UserEntity } from '../core/entity/user.entity';
+import { RoleEnum } from '../core/schema/enum/role.enum';
 
 describe('EventController', () => {
   let sut: EventController;
@@ -96,7 +98,7 @@ describe('EventController', () => {
       // Given
       const createEventDto = getCreateEventDTO();
       //When
-      sut.createEvent(createEventDto);
+      sut.createEvent(createEventDto, getDefaultUser());
 
       //Then
       expect(eventService.createEvent).toHaveBeenCalledWith(getEventEntity());
@@ -106,7 +108,7 @@ describe('EventController', () => {
       // Given
       const createEventDto = getCreateEventDTO();
       //When
-      const data = await sut.createEvent(createEventDto);
+      const data = await sut.createEvent(createEventDto, getDefaultUser());
       data.id = '1';
 
       const expectedData = getEventDTO();
@@ -119,17 +121,15 @@ describe('EventController', () => {
     return {
       name: 'Test name',
       description: 'Test description',
-      date: new Date('2020-01-01'),
-      startTime: new Date('2020-01-01 00:10:00'),
-      endTime: new Date('2020-01-01 00:12:00'),
+      startDateTime: new Date('2020-01-01 00:10:00'),
+      endDateTime: new Date('2020-01-01 00:12:00'),
       location: {
         longitude: -171.23794,
         latitude: 8.54529,
       },
       price: 12.5,
-      isPublic: true,
+      public: true,
       imageId: '1',
-      organizerId: '1',
       category: 'Jazz',
       address: {
         country: 'Österreich',
@@ -146,15 +146,14 @@ describe('EventController', () => {
       id: '1',
       name: 'Test name',
       description: 'Test description',
-      date: new Date('2020-01-01'),
-      startTime: new Date('2020-01-01 00:10:00'),
-      endTime: new Date('2020-01-01 00:12:00'),
+      startDateTime: new Date('2020-01-01 00:10:00'),
+      endDateTime: new Date('2020-01-01 00:12:00'),
       location: {
         longitude: -171.23794,
         latitude: 8.54529,
       },
       price: 12.5,
-      isPublic: true,
+      public: true,
       imageId: '1',
       organizerId: '1',
       category: 'Jazz',
@@ -172,15 +171,14 @@ describe('EventController', () => {
     return {
       name: 'Test name',
       description: 'Test description',
-      date: new Date('2020-01-01'),
-      startTime: new Date('2020-01-01 00:10:00'),
-      endTime: new Date('2020-01-01 00:12:00'),
+      startDateTime: new Date('2020-01-01 00:10:00'),
+      endDateTime: new Date('2020-01-01 00:12:00'),
       location: {
         type: GeolocationEnum.POINT,
         coordinates: [-171.23794, 8.54529],
       },
       price: 12.5,
-      isPublic: true,
+      public: true,
       imageId: '1',
       organizerId: '1',
       category: 'Jazz',
@@ -191,6 +189,16 @@ describe('EventController', () => {
         street: 'Stephansplatz',
         housenumber: '4',
       },
+    };
+  }
+
+  function getDefaultUser(): UserEntity {
+    return {
+      id: '1',
+      email: 'john.doe@example.com',
+      displayName: 'John Doe',
+      emailVerified: true,
+      role: RoleEnum.ADMIN,
     };
   }
 });

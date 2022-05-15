@@ -261,12 +261,11 @@ describe('EventService', () => {
     eventEntity.id = '1';
     eventEntity.name = 'Test name';
     eventEntity.description = 'Test description';
-    eventEntity.date = new Date('2020-01-01');
-    eventEntity.startTime = new Date('2020-01-01 00:10:00');
-    eventEntity.endTime = new Date('2020-01-01 00:12:00');
+    eventEntity.startDateTime = new Date('2020-01-01 00:10:00');
+    eventEntity.endDateTime = new Date('2020-01-01 00:12:00');
     eventEntity.location = location;
     eventEntity.price = 12.5;
-    eventEntity.isPublic = true;
+    eventEntity.public = true;
     eventEntity.imageId = '1';
     eventEntity.organizerId = '1';
     eventEntity.category = 'Jazz';
@@ -280,15 +279,14 @@ describe('EventService', () => {
       id: '1',
       name: 'Test name',
       description: 'Test description',
-      date: new Date('2020-01-01'),
-      startTime: new Date('2020-01-01 00:10:00'),
-      endTime: new Date('2020-01-01 00:12:00'),
+      startDateTime: new Date('2020-01-01 00:10:00'),
+      endDateTime: new Date('2020-01-01 00:12:00'),
       location: {
         type: GeolocationEnum.POINT,
         coordinates: [validLongitude, validLatitude],
       },
       price: 12.5,
-      isPublic: true,
+      public: true,
       imageId: '1',
       organizerId: '1',
       category: 'Jazz',

@@ -1,38 +1,16 @@
-import {ComponentFixture} from "@angular/core/testing";
-import {MockBuilder, MockRender} from "ng-mocks";
-import {TranslateModule} from "@ngx-translate/core";
 import {EventMapper} from "../../app/mapper/event.mapper";
-import {Category} from "../../app/enums/category";
+import {Category} from "../../app/enums/category.enum";
 import {EventEntity} from "../../app/entities/event.entity";
-import {EventResponseDto} from "../../app/dto/eventResponse.dto";
+import {EventDto} from "../../app/dto/event.dto";
 import {AddressEntity} from "../../app/entities/address.entity";
 import {LocationEntity} from "../../app/entities/location.entity";
 
 
 describe('EventMapper', () => {
-  let component: EventMapper;
-  let fixture: ComponentFixture<EventMapper>;
-
-  beforeEach(async () => {
-    return MockBuilder(EventMapper)
-      .mock(TranslateModule.forRoot());
-  });
-
-  beforeEach(() => {
-    fixture = MockRender(EventMapper);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-
   describe('mapDtoToEntity', () => {
     it('should return correct entity', () => {
       // Given
-      const eventResponseDto: EventResponseDto = {
+      const eventResponseDto: EventDto = {
         id: '1',
         name: 'name',
         description: 'description',
@@ -51,10 +29,9 @@ describe('EventMapper', () => {
         },
         price: 1,
         public: true,
-        date: '2022-04-24',
-        starttime: '10:00',
-        endtime: '12:00',
-        category: Category.Salsa
+        startDateTime: new Date('2022-04-24T10:00').toISOString(),
+        endDateTime: new Date('2022-04-24T12:00').toISOString(),
+        category: Category.SALSA
       };
 
       // When
@@ -63,26 +40,34 @@ describe('EventMapper', () => {
       // Then
       expect(result).toEqual(createExpectedEventEntity());
     });
+
+    it('should return null on incorrect entities', () => {
+      // Given
+      const incorrectEntity: EventDto = {};
+
+      // When
+      const result = EventMapper.mapEventDtoToEntity(incorrectEntity);
+
+      // Then
+      expect(result).toBeNull();
+    });
   });
 
 
   function createExpectedEventEntity(): EventEntity{
     const addressEntity = new AddressEntity ('country', 'city', '1020', 'street', '10', 'addition')
-
     const locationEntity = new LocationEntity(31.000,40.000)
-    const eventEntity: EventEntity = {
-      id: '1',
-      name: 'name',
-      description: 'description',
-      location: locationEntity,
-      address: addressEntity,
-      price: 1,
-      public: true,
-      date: '2022-04-24',
-      startTime: '10:00',
-      endTime: '12:00',
-      category: Category.Salsa
-    }
-    return eventEntity
+    return new EventEntity(
+      '1',
+      'name',
+      'description',
+      locationEntity,
+      addressEntity,
+      1,
+      true,
+      new Date('2022-04-24T10:00'),
+      new Date('2022-04-24T12:00'),
+      Category.SALSA
+    )
   }
 });

@@ -102,9 +102,9 @@ describe('EventController (e2e)', () => {
         });
     });
 
-    it('should return 400 (startTime missing)', () => {
+    it('should return 400 (startDateTime missing)', () => {
       const dto = getDefaultCreateEventDTO();
-      dto.startTime = '';
+      dto.startDateTime = '';
 
       return request(app.getHttpServer())
         .post('/event')
@@ -112,20 +112,20 @@ describe('EventController (e2e)', () => {
         .expect(HttpStatus.BAD_REQUEST)
         .expect((res) => {
           expect(res.body.message).toContain(
-            'startTime must be before the endTime',
+            'startDateTime must be before the endDateTime',
           );
           expect(res.body.message[1]).toMatch(
-            'minimal allowed date for startTime is',
+            'minimal allowed date for startDateTime is',
           );
           expect(res.body.message).toContain(
-            'startTime must be a Date instance',
+            'startDateTime must be a Date instance',
           );
         });
     });
 
-    it('should return 400 (endTime missing)', () => {
+    it('should return 400 (endDateTime missing)', () => {
       const dto = getDefaultCreateEventDTO();
-      dto.endTime = '';
+      dto.endDateTime = '';
 
       return request(app.getHttpServer())
         .post('/event')
@@ -133,45 +133,16 @@ describe('EventController (e2e)', () => {
         .expect(HttpStatus.BAD_REQUEST)
         .expect((res) => {
           expect(res.body.message).toContain(
-            'endTime must be past the startTime',
+            'endDateTime must be past the startDateTime',
           );
           expect(res.body.message[2]).toMatch(
-            'minimal allowed date for endTime is',
+            'minimal allowed date for endDateTime is',
           );
-          expect(res.body.message).toContain('endTime must be a Date instance');
           expect(res.body.message).toContain(
-            'startTime must be before the endTime',
+            'endDateTime must be a Date instance',
           );
-        });
-    });
-
-    it('should return 400 (date missing)', () => {
-      const dto = getDefaultCreateEventDTO();
-      dto.date = '';
-
-      return request(app.getHttpServer())
-        .post('/event')
-        .send(dto)
-        .expect(HttpStatus.BAD_REQUEST)
-        .expect((res) => {
-          expect(res.body.message[0]).toMatch(
-            'minimal allowed date for date is',
-          );
-          expect(res.body.message[1]).toEqual('date must be a Date instance');
-        });
-    });
-
-    it('should return 400 (date in the past)', () => {
-      const dto = getDefaultCreateEventDTO();
-      dto.date = new Date('2000-01-01').toISOString();
-
-      return request(app.getHttpServer())
-        .post('/event')
-        .send(dto)
-        .expect(HttpStatus.BAD_REQUEST)
-        .expect((res) => {
-          expect(res.body.message[0]).toMatch(
-            'minimal allowed date for date is',
+          expect(res.body.message).toContain(
+            'startDateTime must be before the endDateTime',
           );
         });
     });
@@ -219,32 +190,6 @@ describe('EventController (e2e)', () => {
         });
     });
 
-    it('should return 400 (imageId missing)', () => {
-      const dto = getDefaultCreateEventDTO();
-      dto.imageId = '';
-
-      return request(app.getHttpServer())
-        .post('/event')
-        .send(dto)
-        .expect(HttpStatus.BAD_REQUEST)
-        .expect((res) => {
-          expect(res.body.message).toContain('imageId should not be empty');
-        });
-    });
-
-    it('should return 400 (organizerId missing)', () => {
-      const dto = getDefaultCreateEventDTO();
-      dto.organizerId = '';
-
-      return request(app.getHttpServer())
-        .post('/event')
-        .send(dto)
-        .expect(HttpStatus.BAD_REQUEST)
-        .expect((res) => {
-          expect(res.body.message).toContain('organizerId should not be empty');
-        });
-    });
-
     it('should return 400 (category missing)', () => {
       const dto = getDefaultCreateEventDTO();
       dto.category = '';
@@ -287,15 +232,14 @@ describe('EventController (e2e)', () => {
           _id: validObjectId1.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00'),
-          startTime: new Date('2023-01-01 10:00:00'),
-          endTime: new Date('2023-01-01 12:00:00'),
+          startDateTime: new Date('2023-01-01 10:00:00'),
+          endDateTime: new Date('2023-01-01 12:00:00'),
           location: {
             type: GeolocationEnum.POINT,
             coordinates: [0, 0],
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -306,15 +250,14 @@ describe('EventController (e2e)', () => {
           id: validObjectId1.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00').toISOString(),
-          startTime: new Date('2023-01-01 10:00:00').toISOString(),
-          endTime: new Date('2023-01-01 12:00:00').toISOString(),
+          startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+          endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
           location: {
             longitude: 0,
             latitude: 0,
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -337,15 +280,14 @@ describe('EventController (e2e)', () => {
           _id: validObjectId1.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00'),
-          startTime: new Date('2023-01-01 10:00:00'),
-          endTime: new Date('2023-01-01 12:00:00'),
+          startDateTime: new Date('2023-01-01 10:00:00'),
+          endDateTime: new Date('2023-01-01 12:00:00'),
           location: {
             type: GeolocationEnum.POINT,
             coordinates: [0, 0],
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -356,15 +298,14 @@ describe('EventController (e2e)', () => {
           id: validObjectId1.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00').toISOString(),
-          startTime: new Date('2023-01-01 10:00:00').toISOString(),
-          endTime: new Date('2023-01-01 12:00:00').toISOString(),
+          startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+          endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
           location: {
             longitude: 0,
             latitude: 0,
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -375,15 +316,14 @@ describe('EventController (e2e)', () => {
           _id: validObjectId2.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00'),
-          startTime: new Date('2023-01-01 10:00:00'),
-          endTime: new Date('2023-01-01 12:00:00'),
+          startDateTime: new Date('2023-01-01 10:00:00'),
+          endDateTime: new Date('2023-01-01 12:00:00'),
           location: {
             type: GeolocationEnum.POINT,
             coordinates: [0, 0],
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -421,25 +361,21 @@ describe('EventController (e2e)', () => {
           _id: validObjectId1.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00'),
-          startTime: new Date('2023-01-01 10:00:00'),
-          endTime: new Date('2023-01-01 12:00:00'),
+          startDateTime: new Date('2023-01-01 10:00:00'),
+          endDateTime: new Date('2023-01-01 12:00:00'),
           location: {
             type: GeolocationEnum.POINT,
             coordinates: [0, 0],
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
           address: validAddress,
         });
         await event1.save();
-        validObjectId1.toString();
-        new Date('2023-01-01 00:00:00').toISOString();
-        new Date('2023-01-01 10:00:00').toISOString();
-        new Date('2023-01-01 12:00:00').toISOString();
+
         return request(app.getHttpServer())
           .get('/event')
           .query({ skip: 1 })
@@ -455,15 +391,14 @@ describe('EventController (e2e)', () => {
           _id: validObjectId1.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00'),
-          startTime: new Date('2023-01-01 10:00:00'),
-          endTime: new Date('2023-01-01 12:00:00'),
+          startDateTime: new Date('2023-01-01 10:00:00'),
+          endDateTime: new Date('2023-01-01 12:00:00'),
           location: {
             type: GeolocationEnum.POINT,
             coordinates: [0, 0],
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -475,15 +410,14 @@ describe('EventController (e2e)', () => {
           _id: validObjectId2.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00'),
-          startTime: new Date('2023-01-01 10:00:00'),
-          endTime: new Date('2023-01-01 12:00:00'),
+          startDateTime: new Date('2023-01-01 10:00:00'),
+          endDateTime: new Date('2023-01-01 12:00:00'),
           location: {
             type: GeolocationEnum.POINT,
             coordinates: [0, 0],
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -494,15 +428,14 @@ describe('EventController (e2e)', () => {
           id: validObjectId2.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00').toISOString(),
-          startTime: new Date('2023-01-01 10:00:00').toISOString(),
-          endTime: new Date('2023-01-01 12:00:00').toISOString(),
+          startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+          endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
           location: {
             longitude: 0,
             latitude: 0,
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -538,15 +471,14 @@ describe('EventController (e2e)', () => {
           _id: validObjectId1.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00'),
-          startTime: new Date('2023-01-01 10:00:00'),
-          endTime: new Date('2023-01-01 12:00:00'),
+          startDateTime: new Date('2023-01-01 10:00:00'),
+          endDateTime: new Date('2023-01-01 12:00:00'),
           location: {
             type: GeolocationEnum.POINT,
             coordinates: [0, 0],
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -570,15 +502,14 @@ describe('EventController (e2e)', () => {
           _id: validObjectId1.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00'),
-          startTime: new Date('2023-01-01 10:00:00'),
-          endTime: new Date('2023-01-01 12:00:00'),
+          startDateTime: new Date('2023-01-01 10:00:00'),
+          endDateTime: new Date('2023-01-01 12:00:00'),
           location: {
             type: GeolocationEnum.POINT,
             coordinates: [0, 0],
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -590,15 +521,14 @@ describe('EventController (e2e)', () => {
           _id: validObjectId2.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00'),
-          startTime: new Date('2023-01-01 10:00:00'),
-          endTime: new Date('2023-01-01 12:00:00'),
+          startDateTime: new Date('2023-01-01 10:00:00'),
+          endDateTime: new Date('2023-01-01 12:00:00'),
           location: {
             type: GeolocationEnum.POINT,
             coordinates: [0, 0],
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -609,15 +539,14 @@ describe('EventController (e2e)', () => {
           id: validObjectId2.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00').toISOString(),
-          startTime: new Date('2023-01-01 10:00:00').toISOString(),
-          endTime: new Date('2023-01-01 12:00:00').toISOString(),
+          startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+          endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
           location: {
             longitude: 0,
             latitude: 0,
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -640,38 +569,33 @@ describe('EventController (e2e)', () => {
           _id: validObjectId1.toString(),
           name: 'test1',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00'),
-          startTime: new Date('2023-01-01 10:00:00'),
-          endTime: new Date('2023-01-01 12:00:00'),
+          startDateTime: new Date('2023-01-01 10:00:00'),
+          endDateTime: new Date('2023-01-01 12:00:00'),
           location: {
             type: GeolocationEnum.POINT,
             coordinates: [0, 0],
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
           address: validAddress,
         });
         await event1.save();
-        validObjectId1.toString();
-        new Date('2023-01-01 00:00:00').toISOString();
-        new Date('2023-01-01 10:00:00').toISOString();
-        new Date('2023-01-01 12:00:00').toISOString();
+
         const event2 = new Event({
           _id: validObjectId2.toString(),
           name: 'test2',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00'),
-          startTime: new Date('2023-01-01 10:00:00'),
-          endTime: new Date('2023-01-01 12:00:00'),
+          startDateTime: new Date('2023-01-01 10:00:00'),
+          endDateTime: new Date('2023-01-01 12:00:00'),
           location: {
             type: GeolocationEnum.POINT,
             coordinates: [0, 0],
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -682,15 +606,14 @@ describe('EventController (e2e)', () => {
           id: validObjectId2.toString(),
           name: 'test2',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00').toISOString(),
-          startTime: new Date('2023-01-01 10:00:00').toISOString(),
-          endTime: new Date('2023-01-01 12:00:00').toISOString(),
+          startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+          endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
           location: {
             longitude: 0,
             latitude: 0,
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -701,15 +624,14 @@ describe('EventController (e2e)', () => {
           _id: validObjectId3.toString(),
           name: 'test3',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00'),
-          startTime: new Date('2023-01-01 10:00:00'),
-          endTime: new Date('2023-01-01 12:00:00'),
+          startDateTime: new Date('2023-01-01 10:00:00'),
+          endDateTime: new Date('2023-01-01 12:00:00'),
           location: {
             type: GeolocationEnum.POINT,
             coordinates: [0, 0],
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -720,15 +642,14 @@ describe('EventController (e2e)', () => {
           id: validObjectId3.toString(),
           name: 'test3',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00').toISOString(),
-          startTime: new Date('2023-01-01 10:00:00').toISOString(),
-          endTime: new Date('2023-01-01 12:00:00').toISOString(),
+          startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+          endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
           location: {
             longitude: 0,
             latitude: 0,
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -752,15 +673,14 @@ describe('EventController (e2e)', () => {
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
-        date: new Date('2023-01-01 00:00:00'),
-        startTime: new Date('2023-01-01 10:00:00'),
-        endTime: new Date('2023-01-01 12:00:00'),
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
         location: {
           type: GeolocationEnum.POINT,
           coordinates: [0, 0],
         },
         price: 12.5,
-        isPublic: true,
+        public: true,
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
@@ -771,15 +691,14 @@ describe('EventController (e2e)', () => {
         id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
-        date: new Date('2023-01-01 00:00:00').toISOString(),
-        startTime: new Date('2023-01-01 10:00:00').toISOString(),
-        endTime: new Date('2023-01-01 12:00:00').toISOString(),
+        startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+        endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
         location: {
           longitude: 0,
           latitude: 0,
         },
         price: 12.5,
-        isPublic: true,
+        public: true,
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
@@ -790,15 +709,14 @@ describe('EventController (e2e)', () => {
         _id: validObjectId2.toString(),
         name: 'test2',
         description: 'Test Event Description',
-        date: new Date('2023-01-01 00:00:00'),
-        startTime: new Date('2023-01-01 10:00:00'),
-        endTime: new Date('2023-01-01 12:00:00'),
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
         location: {
           type: GeolocationEnum.POINT,
           coordinates: [0, 0],
         },
         price: 12.5,
-        isPublic: true,
+        public: true,
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
@@ -809,15 +727,14 @@ describe('EventController (e2e)', () => {
         id: validObjectId2.toString(),
         name: 'test2',
         description: 'Test Event Description',
-        date: new Date('2023-01-01 00:00:00').toISOString(),
-        startTime: new Date('2023-01-01 10:00:00').toISOString(),
-        endTime: new Date('2023-01-01 12:00:00').toISOString(),
+        startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+        endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
         location: {
           longitude: 0,
           latitude: 0,
         },
         price: 12.5,
-        isPublic: true,
+        public: true,
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
@@ -834,20 +751,19 @@ describe('EventController (e2e)', () => {
         });
     });
 
-    it('should return two elements because two elements are in the database and should be sorted by date', async () => {
+    it('should return two elements because two elements are in the database and should be sorted by startDateTime', async () => {
       const event1 = new Event({
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
-        date: new Date('2023-01-01 00:00:00'),
-        startTime: new Date('2023-01-01 10:00:00'),
-        endTime: new Date('2023-01-01 12:00:00'),
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
         location: {
           type: GeolocationEnum.POINT,
           coordinates: [0, 0],
         },
         price: 12.5,
-        isPublic: true,
+        public: true,
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
@@ -858,15 +774,14 @@ describe('EventController (e2e)', () => {
         id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
-        date: new Date('2023-01-01 00:00:00').toISOString(),
-        startTime: new Date('2023-01-01 10:00:00').toISOString(),
-        endTime: new Date('2023-01-01 12:00:00').toISOString(),
+        startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+        endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
         location: {
           longitude: 0,
           latitude: 0,
         },
         price: 12.5,
-        isPublic: true,
+        public: true,
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
@@ -877,15 +792,14 @@ describe('EventController (e2e)', () => {
         _id: validObjectId2.toString(),
         name: 'test2',
         description: 'Test Event Description',
-        date: new Date('2022-12-31 00:00'),
-        startTime: new Date('2023-01-01 10:00:00'),
-        endTime: new Date('2023-01-01 12:00:00'),
+        startDateTime: new Date('2023-01-02 12:00:00'),
+        endDateTime: new Date('2023-01-02 14:00:00'),
         location: {
           type: GeolocationEnum.POINT,
           coordinates: [0, 0],
         },
         price: 12.5,
-        isPublic: true,
+        public: true,
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
@@ -896,15 +810,14 @@ describe('EventController (e2e)', () => {
         id: validObjectId2.toString(),
         name: 'test2',
         description: 'Test Event Description',
-        date: new Date('2022-12-31 00:00:00').toISOString(),
-        startTime: new Date('2023-01-01 10:00:00').toISOString(),
-        endTime: new Date('2023-01-01 12:00:00').toISOString(),
+        startDateTime: new Date('2023-01-02 12:00:00').toISOString(),
+        endDateTime: new Date('2023-01-02 14:00:00').toISOString(),
         location: {
           longitude: 0,
           latitude: 0,
         },
         price: 12.5,
-        isPublic: true,
+        public: true,
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
@@ -917,8 +830,8 @@ describe('EventController (e2e)', () => {
         .expect((res) => {
           // replace id with id from result
           expect(res.body.length).toEqual(2);
-          expect(res.body[0]).toEqual(event2Dto);
-          expect(res.body[1]).toEqual(event1Dto);
+          expect(res.body[0]).toEqual(event1Dto);
+          expect(res.body[1]).toEqual(event2Dto);
         });
     });
 
@@ -927,16 +840,15 @@ describe('EventController (e2e)', () => {
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
-        date: new Date('2023-01-01 00:00:00'),
-        startTime: new Date('2023-01-01 10:00:00'),
-        endTime: new Date('2023-01-01 12:00:00'),
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
         location: {
           type: GeolocationEnum.POINT,
           coordinates: [0, 0],
         },
         address: validAddress,
         price: 12.5,
-        isPublic: true,
+        public: true,
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
@@ -946,16 +858,15 @@ describe('EventController (e2e)', () => {
         id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
-        date: new Date('2023-01-01 00:00:00').toISOString(),
-        startTime: new Date('2023-01-01 10:00:00').toISOString(),
-        endTime: new Date('2023-01-01 12:00:00').toISOString(),
+        startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+        endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
         location: {
           longitude: 0,
           latitude: 0,
         },
         address: validAddressDTO,
         price: 12.5,
-        isPublic: true,
+        public: true,
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
@@ -965,16 +876,15 @@ describe('EventController (e2e)', () => {
         _id: validObjectId2.toString(),
         name: 'test1',
         description: 'Test Event Description',
-        date: new Date('2021-01-01 00:00:00'),
-        startTime: new Date('2021-01-01 10:00:00'),
-        endTime: new Date('2021-01-01 12:00:00'),
+        startDateTime: new Date('2021-01-01 10:00:00'),
+        endDateTime: new Date('2021-01-01 12:00:00'),
         location: {
           type: GeolocationEnum.POINT,
           coordinates: [0, 0],
         },
         address: validAddress,
         price: 12.5,
-        isPublic: true,
+        public: true,
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
@@ -995,16 +905,15 @@ describe('EventController (e2e)', () => {
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
-        date: new Date('2024-02-01 00:00:00'),
-        startTime: new Date('2024-02-01 10:00:00'),
-        endTime: new Date('2024-02-01 12:00:00'),
+        startDateTime: new Date('2024-02-01 10:00:00'),
+        endDateTime: new Date('2024-02-01 12:00:00'),
         location: {
           type: GeolocationEnum.POINT,
           coordinates: [0, 0],
         },
         address: validAddress,
         price: 12.5,
-        isPublic: true,
+        public: true,
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
@@ -1014,16 +923,15 @@ describe('EventController (e2e)', () => {
         id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
-        date: new Date('2024-02-01 00:00:00').toISOString(),
-        startTime: new Date('2024-02-01 10:00:00').toISOString(),
-        endTime: new Date('2024-02-01 12:00:00').toISOString(),
+        startDateTime: new Date('2024-02-01 10:00:00').toISOString(),
+        endDateTime: new Date('2024-02-01 12:00:00').toISOString(),
         location: {
           longitude: 0,
           latitude: 0,
         },
         address: validAddressDTO,
         price: 12.5,
-        isPublic: true,
+        public: true,
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
@@ -1033,16 +941,15 @@ describe('EventController (e2e)', () => {
         _id: validObjectId2.toString(),
         name: 'test1',
         description: 'Test Event Description',
-        date: new Date('2023-01-01 00:00:00'),
-        startTime: new Date('2023-01-01 10:00:00'),
-        endTime: new Date('2023-01-01 12:00:00'),
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
         location: {
           type: GeolocationEnum.POINT,
           coordinates: [0, 0],
         },
         address: validAddress,
         price: 12.5,
-        isPublic: true,
+        public: true,
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
@@ -1065,16 +972,15 @@ describe('EventController (e2e)', () => {
           _id: validObjectId1.toString(),
           name: 'test1',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00'),
-          startTime: new Date('2023-01-01 10:00:00'),
-          endTime: new Date('2023-01-01 12:00:00'),
+          startDateTime: new Date('2023-01-01 10:00:00'),
+          endDateTime: new Date('2023-01-01 12:00:00'),
           location: {
             type: GeolocationEnum.POINT,
             coordinates: [0, 0],
           },
           address: validAddress,
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -1084,15 +990,14 @@ describe('EventController (e2e)', () => {
           id: validObjectId1.toString(),
           name: 'test1',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00').toISOString(),
-          startTime: new Date('2023-01-01 10:00:00').toISOString(),
-          endTime: new Date('2023-01-01 12:00:00').toISOString(),
+          startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+          endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
           location: {
             longitude: 0,
             latitude: 0,
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -1100,13 +1005,13 @@ describe('EventController (e2e)', () => {
         };
 
         const body = {
-          latitude: 1,
-          longitude: 1,
+          latitude: 0,
+          longitude: 0,
         };
 
         return request(app.getHttpServer())
           .get('/event')
-          .send(body)
+          .query(body)
           .expect(HttpStatus.OK)
           .expect((res) => {
             expect(res.body).toEqual([event1Dto]);
@@ -1118,15 +1023,14 @@ describe('EventController (e2e)', () => {
           _id: validObjectId1.toString(),
           name: 'test1',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00'),
-          startTime: new Date('2023-01-01 10:00:00'),
-          endTime: new Date('2023-01-01 12:00:00'),
+          startDateTime: new Date('2023-01-01 10:00:00'),
+          endDateTime: new Date('2023-01-01 12:00:00'),
           location: {
             type: GeolocationEnum.POINT,
             coordinates: [1, 1],
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -1137,15 +1041,14 @@ describe('EventController (e2e)', () => {
           id: validObjectId1.toString(),
           name: 'test1',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00').toISOString(),
-          startTime: new Date('2023-01-01 10:00:00').toISOString(),
-          endTime: new Date('2023-01-01 12:00:00').toISOString(),
+          startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+          endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
           location: {
             longitude: 1,
             latitude: 1,
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -1156,15 +1059,14 @@ describe('EventController (e2e)', () => {
           _id: validObjectId2.toString(),
           name: 'test2',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00'),
-          startTime: new Date('2023-01-01 10:00:00'),
-          endTime: new Date('2023-01-01 12:00:00'),
+          startDateTime: new Date('2023-01-01 10:00:00'),
+          endDateTime: new Date('2023-01-01 12:00:00'),
           location: {
             type: GeolocationEnum.POINT,
             coordinates: [0, 0],
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -1175,15 +1077,14 @@ describe('EventController (e2e)', () => {
           id: validObjectId2.toString(),
           name: 'test2',
           description: 'Test Event Description',
-          date: new Date('2023-01-01 00:00:00').toISOString(),
-          startTime: new Date('2023-01-01 10:00:00').toISOString(),
-          endTime: new Date('2023-01-01 12:00:00').toISOString(),
+          startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+          endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
           location: {
             longitude: 0,
             latitude: 0,
           },
           price: 12.5,
-          isPublic: true,
+          public: true,
           imageId: '1',
           organizerId: '1',
           category: 'Jazz',
@@ -1209,20 +1110,77 @@ describe('EventController (e2e)', () => {
       });
 
       it('should return two elements sorted by date because two elements are in the database and have the same distance', async () => {
-        const dto1 = getDefaultCreateEventDTO();
-        const res1 = await request(app.getHttpServer())
-          .post('/event')
-          .send(dto1)
-          .expect(HttpStatus.CREATED);
-        const createdElement1 = res1.body;
+        const event1 = new Event({
+          _id: validObjectId1.toString(),
+          name: 'test1',
+          description: 'Test Event Description',
+          startDateTime: new Date('2023-01-01 10:00:00'),
+          endDateTime: new Date('2023-01-01 12:00:00'),
+          location: {
+            type: GeolocationEnum.POINT,
+            coordinates: [1, 1],
+          },
+          price: 12.5,
+          public: true,
+          imageId: '1',
+          organizerId: '1',
+          category: 'Jazz',
+          address: validAddress,
+        });
+        await event1.save();
+        const event1Dto = {
+          id: validObjectId1.toString(),
+          name: 'test1',
+          description: 'Test Event Description',
+          startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+          endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
+          location: {
+            longitude: 1,
+            latitude: 1,
+          },
+          price: 12.5,
+          public: true,
+          imageId: '1',
+          organizerId: '1',
+          category: 'Jazz',
+          address: validAddressDTO,
+        };
 
-        const dto2 = getDefaultCreateEventDTO();
-        dto2.date = new Date('2022-12-31 00:00').toISOString();
-        const res2 = await request(app.getHttpServer())
-          .post('/event')
-          .send(dto2)
-          .expect(HttpStatus.CREATED);
-        const createdElement2 = res2.body;
+        const event2 = new Event({
+          _id: validObjectId2.toString(),
+          name: 'test2',
+          description: 'Test Event Description',
+          startDateTime: new Date('2023-01-02 10:00:00'),
+          endDateTime: new Date('2023-01-02 12:00:00'),
+          location: {
+            type: GeolocationEnum.POINT,
+            coordinates: [1, 1],
+          },
+          price: 12.5,
+          public: true,
+          imageId: '1',
+          organizerId: '1',
+          category: 'Jazz',
+          address: validAddress,
+        });
+        await event2.save();
+        const event2Dto = {
+          id: validObjectId2.toString(),
+          name: 'test2',
+          description: 'Test Event Description',
+          startDateTime: new Date('2023-01-02 10:00:00').toISOString(),
+          endDateTime: new Date('2023-01-02 12:00:00').toISOString(),
+          location: {
+            longitude: 1,
+            latitude: 1,
+          },
+          price: 12.5,
+          public: true,
+          imageId: '1',
+          organizerId: '1',
+          category: 'Jazz',
+          address: validAddressDTO,
+        };
 
         const body = {
           latitude: 1,
@@ -1234,7 +1192,7 @@ describe('EventController (e2e)', () => {
           .send(body)
           .expect(HttpStatus.OK)
           .expect((res) => {
-            expect(res.body).toEqual([createdElement2, createdElement1]);
+            expect(res.body).toEqual([event1Dto, event2Dto]);
           });
       });
     });
@@ -1252,15 +1210,14 @@ describe('EventController (e2e)', () => {
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
-        date: new Date('2023-01-01 00:00:00'),
-        startTime: new Date('2023-01-01 10:00:00'),
-        endTime: new Date('2023-01-01 12:00:00'),
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
         location: {
           type: GeolocationEnum.POINT,
           coordinates: [1, 2],
         },
         price: 12.5,
-        isPublic: true,
+        public: true,
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
@@ -1271,15 +1228,14 @@ describe('EventController (e2e)', () => {
         id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
-        date: new Date('2023-01-01 00:00:00').toISOString(),
-        startTime: new Date('2023-01-01 10:00:00').toISOString(),
-        endTime: new Date('2023-01-01 12:00:00').toISOString(),
+        startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+        endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
         location: {
           longitude: 1,
           latitude: 2,
         },
         price: 12.5,
-        isPublic: true,
+        public: true,
         imageId: '1',
         organizerId: '1',
         category: 'Jazz',
@@ -1300,15 +1256,14 @@ describe('EventController (e2e)', () => {
       id: '1',
       name: 'Test name',
       description: 'Test description',
-      date: new Date('2023-01-01 00:00').toISOString(),
-      startTime: new Date('2023-01-01 10:00').toISOString(),
-      endTime: new Date('2023-01-01 12:00').toISOString(),
+      startDateTime: new Date('2023-01-01 10:00').toISOString(),
+      endDateTime: new Date('2023-01-01 12:00').toISOString(),
       location: {
         longitude: 16.373819,
         latitude: 48.208176,
       },
       price: 12.5,
-      isPublic: true,
+      public: true,
       imageId: '1',
       organizerId: '1',
       category: 'Jazz',
@@ -1326,17 +1281,15 @@ describe('EventController (e2e)', () => {
     return {
       name: 'Test name',
       description: 'Test description',
-      date: new Date('2023-01-01 00:00').toISOString(),
-      startTime: new Date('2023-01-01 10:00').toISOString(),
-      endTime: new Date('2023-01-01 12:00').toISOString(),
+      startDateTime: new Date('2023-01-01 10:00').toISOString(),
+      endDateTime: new Date('2023-01-01 12:00').toISOString(),
       location: {
         longitude: 16.373819,
         latitude: 48.208176,
       },
       price: 12.5,
-      isPublic: true,
+      public: true,
       imageId: '1',
-      organizerId: '1',
       category: 'Jazz',
     };
   }

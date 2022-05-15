@@ -1,60 +1,79 @@
 {
-  "legal_link": "Rechtliches",
-  "privacy_link": "Privatsphäre",
   "about": {
     "about_link": "Über uns",
     "about_text": "Wir von \"Dance with me\" haben das Ziel, Menschen beim Tanzen zu vereinen. Unsere App soll Tanzbegeisterten helfen, ihre Veranstaltungen schnell und einfach zu finden und so ihre Leidenschaft auszuleben."
   },
   "create": {
-    "create_event": "Veranstalltung erstellen",
+    "addition": "Zusätzliche Information",
     "cancel": "Abbrechen",
-    "create_button": "Veranstalltung erstellen",
     "category": "Kategorie",
     "category_error": "Veranstalltungskategorie wird benötigt.",
-    "public": "Öffentlich",
-    "description": "Beschreibung",
-    "description_error": "Beschreibung wird benötigt",
-    "price": "Preis",
-    "price_error": "Preis darf nicht negativ sein.",
-    "street": "Straße",
-    "street_placeholder": "Straße",
-    "street_error": "Straße wird benötigt.",
-    "zip": "Postleitzahl",
-    "zip_placeholder": "PLZ",
-    "zip_error": "Postleitzahl wird benötigt.",
     "city": "Stadt",
-    "city_placeholder": "Stadt",
     "city_error": "Stadt wird benötigt.",
+    "city_placeholder": "Stadt",
     "country": "Land",
-    "country_placeholder": "Land",
     "country_error": "Land wird benötigt.",
-    "housenumber": "Hausnummer",
-    "housenumber_error": "Hausnummer wird benötigt.",
-    "addition": "Zusätzliche Information",
+    "country_placeholder": "Land",
+    "create_button": "Veranstalltung erstellen",
+    "create_event": "Veranstalltung erstellen",
     "date": "Datum",
     "date_error": "Datum wird benötigt.",
-    "starttime": "Startzeit",
-    "starttime_error": "Startzeit wird benötigt.",
+    "description": "Beschreibung",
+    "description_error": "Beschreibung wird benötigt.",
     "endtime": "Endzeit",
-    "wrong_time_error": "Startzeit muss vor Endzeit liegen.",
     "event_name": "Name der Veranstalltung",
     "event_name_error": "Name der Veranstalltung wird benötigt.",
+    "housenumber": "Hausnummer",
+    "housenumber_error": "Hausnummer wird benötigt.",
     "number_error": "Muss eine Nummer sein.",
-    "validation_error": "Ein Fehler ist aufgetreten, bitte versuchen Sie es erneut."
+    "price": "Preis",
+    "price_error": "Preis darf nicht negativ sein.",
+    "price_required": "Preis wird benötigt.",
+    "public": "Öffentlich",
+    "starttime": "Startzeit",
+    "starttime_error": "Startzeit wird benötigt.",
+    "street": "Straße",
+    "street_error": "Straße wird benötigt.",
+    "street_placeholder": "Straße",
+    "validation_error": "Ein Fehler ist aufgetreten, bitte versuchen Sie es erneut.",
+    "wrong_time_error": "Startzeit muss vor Endzeit liegen.",
+    "zip": "Postleitzahl",
+    "zip_error": "Postleitzahl wird benötigt.",
+    "zip_placeholder": "PLZ"
   },
-  "login": {
-    "welcome": "Willkommen",
-    "description": "Anmelden und tanzen!",
-    "google": "Weiter mit Google",
-    "facebook": "Weiter mit Facebook"
+  "eventDetails": {
+    "category": {
+      "Bachata": "Bachata",
+      "Merengue": "Merengue",
+      "Reggeaton": "negation",
+      "Salsa": "Salsa",
+      "Zouk": "Zouk"
+    }
+  },
+  "eventOverview": {
+    "category": {
+      "Bachata": "Bachata",
+      "Merengue": "Merengue",
+      "Reggeaton": "negation",
+      "Salsa": "Salsa",
+      "Zouk": "Zouk"
+    }
   },
   "events": {
     "events": "Veranstalltungen"
   },
+  "legal_link": "Rechtliches",
+  "login": {
+    "description": "Anmelden und tanzen!",
+    "facebook": "Weiter mit Facebook",
+    "google": "Weiter mit Google",
+    "welcome": "Willkommen"
+  },
   "navbar": {
     "create_event": "Veranstalltung erstellen",
+    "events": "Veranstalltungen",
     "login": "Anmelden",
-    "logout": "Abmelden",
-    "events": "Veranstalltungen"
-  }
+    "logout": "Abmelden"
+  },
+  "privacy_link": "Privatsphäre"
 }

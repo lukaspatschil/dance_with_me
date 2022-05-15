@@ -60,7 +60,8 @@ export class AuthService {
   }
 
   logout() {
-    this.http.post(`${AUTH_API}/revoke`, {}, httpOptions).subscribe(() => {
+    const refreshToken = this.tokenStorage.getRefreshToken();
+    this.http.post(`${AUTH_API}/revoke`, { refreshToken }, httpOptions).subscribe(() => {
       this.tokenStorage.clearRefreshToken();
       this.accessToken = null;
 
