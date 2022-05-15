@@ -15,18 +15,14 @@ $ npm install
 ### Running the app
 
 ```bash
-# development
-$ npm run start -w backend
-
-# production mode
-$ npm run build -w backend
+$ npm run withLocalEnv start:client
 ```
 
 ### Test
 
 ```bash
 # unit tests
-$ npm run test -w backend
+$ npm run test -w frontend
 ```
 
 ## backend
@@ -34,15 +30,10 @@ $ npm run test -w backend
 ### Running the app
 
 ```bash
-# development
-$ npm run start -w backend
-
-# watch mode
-$ npm run start:dev -w backend
-
-# production mode
-$ npm run start:prod -w backend
+$ npm run withLocalEnv start:server
 ```
+
+Make sure the MongoDB and the MinIO instances are running.
 
 ### Test
 
