@@ -36,6 +36,9 @@ properties:
   participants:
     type: integer
     example: 14
+  imageUrl:
+    type: string
+    example: https://example.com/eventImage.png
 required:
   - id
   - name
