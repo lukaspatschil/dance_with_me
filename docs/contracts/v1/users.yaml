@@ -16,7 +16,7 @@ userIdOperations:
         content:
           application/json:
             schema:
-              $ref: './datatypes/UserDetailDTO.yaml'
+              $ref: './datatypes/UserDetailDTO.yaml#/UserDetailDTO'
       '401':
         $ref: './errors.yaml#/unauthorizedResponse'
       '403':
