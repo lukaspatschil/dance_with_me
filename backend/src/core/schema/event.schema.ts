@@ -40,6 +40,6 @@ export class EventDocument extends Document {
   category!: CategoryEnum[];
 }
 
-const EventSchema = SchemaFactory.createForClass(EventDocument);
-EventSchema.index({ location: '2dsphere' });
-export { EventSchema };
+export const EventSchema = SchemaFactory.createForClass(EventDocument).index({
+  location: '2dsphere',
+});

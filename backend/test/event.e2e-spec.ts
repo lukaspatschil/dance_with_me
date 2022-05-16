@@ -33,6 +33,8 @@ describe('EventController (e2e)', () => {
     process.env['MONGODB_URI'] = testDatabaseStub.getUri();
     await connect(testDatabaseStub.getUri());
 
+    Event.ensureIndexes();
+
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
     })
