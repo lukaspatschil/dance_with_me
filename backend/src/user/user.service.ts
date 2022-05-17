@@ -37,7 +37,7 @@ export class UserService {
     const userDoc = await this.userModel.findByIdAndUpdate(
       userId,
       { $set: userAttributes },
-      { upsert: true, new: true },
+      { new: true },
     );
     if (userDoc) {
       this.logger.log(`Found user with id: ${user.id}`);

@@ -1,5 +1,4 @@
 import {
-  nonExistingObjectId,
   throwADataBaseException,
   validObjectId,
   validUserDocument,
@@ -18,14 +17,7 @@ export class UserModelMock {
     }
   });
 
-  findByIdAndUpdate = jest.fn((id: string, { $set }, options) => {
-    if (
-      id === nonExistingObjectId.toString() &&
-      (options === {} || options.upsert !== true || options.new !== true)
-    ) {
-      throw new Error('Invalid options');
-    }
-
+  findByIdAndUpdate = jest.fn((id: string, { $set }) => {
     if (id === validObjectId.toString()) {
       const user = {
         ...validUserDocument,
