@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 
-export const notFoundResponse = { statusCode: 404, message: 'Not Found' };
+export const notFoundResponse = { error: 'not_found' };
 export const deleteResponse = {};
 export const badRequestResponse = {
   statusCode: 400,

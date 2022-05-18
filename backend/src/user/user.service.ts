@@ -9,6 +9,7 @@ import { Document, Model } from 'mongoose';
 import { UserEntity } from '../core/entity/user.entity';
 import { UserMapper } from '../core/mapper/user.mapper';
 import { RoleEnum } from '../core/schema/enum/role.enum';
+import { NotFoundError } from '../core/error/notFound.error';
 
 @Injectable()
 export class UserService {
@@ -51,5 +52,21 @@ export class UserService {
     const newUserDoc = await this.userModel.create(newUser);
     this.logger.log(`Created user with id: ${user.id}`);
     return UserMapper.mapDocumentToEntity(newUserDoc);
+  }
+
+  async getUser(id: string): Promise<UserEntity> {
+    this.logger.log(`Get user with id: ${id}`);
+    let user;
+    try {
+      user = await this.userModel.findById(id);
+    } catch (e) {
+      this.logger.error(e);
+      throw new InternalServerErrorException();
+    }
+    if (user === null) {
+      throw NotFoundError;
+    }
+    this.logger.log('Result: ' + JSON.stringify(user));
+    return UserMapper.mapDocumentToEntity(user);
   }
 }

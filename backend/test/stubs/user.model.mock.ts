@@ -1,4 +1,5 @@
 import {
+  createUserDocument,
   throwADataBaseException,
   validObjectId,
   validUserDocument,
@@ -32,5 +33,17 @@ export class UserModelMock {
 
   create = jest.fn((user: any) => {
     return Promise.resolve(user);
+  });
+
+  findById = jest.fn((id: string) => {
+    if (id === validObjectId.toString()) {
+      const user = createUserDocument();
+      user._id = id;
+      return Promise.resolve(user);
+    } else if (id === throwADataBaseException.toString()) {
+      throw new Error('Database error');
+    } else {
+      return Promise.resolve(null);
+    }
   });
 }

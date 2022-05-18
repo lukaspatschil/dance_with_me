@@ -17,7 +17,7 @@ export class UserMapper {
     return userEntity as Required<UserEntity>;
   }
 
-  static mapEntityToDto(user: Required<UserEntity>): UserDto {
+  static mapEntityToDto(user: UserEntity): UserDto {
     const userDto = new UserDto();
     userDto.id = user.id;
     userDto.firstName = user.firstName;

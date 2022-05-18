@@ -5,6 +5,8 @@ import { UserDocument } from '../core/schema/user.schema';
 import { UserModelMock } from '../../test/stubs/user.model.mock';
 import { Model } from 'mongoose';
 import {
+  createUserEntity,
+  invalidObjectId,
   nonExistingObjectId,
   throwADataBaseException,
   validObjectId,
@@ -12,6 +14,7 @@ import {
   validUserEntity,
 } from '../../test/test_data/user.testData';
 import { InternalServerErrorException } from '@nestjs/common';
+import { NotFoundError } from '../core/error/notFound.error';
 
 describe('UserService', () => {
   let sut: UserService;
@@ -126,6 +129,47 @@ describe('UserService', () => {
       expect(userDocumentMock.create).toHaveBeenCalledWith(
         expect.objectContaining(userEntity),
       );
+    });
+  });
+
+  describe('getUser', () => {
+    it('should call the database', async () => {
+      // When
+      await sut.getUser(validObjectId.toString());
+
+      // Then
+      expect(userDocumentMock.findById).toHaveBeenCalledWith(
+        validObjectId.toString(),
+      );
+    });
+
+    it('should call the service and return a user', async () => {
+      // Given
+      const expectedValue = createUserEntity();
+      expectedValue.id = validObjectId.toString();
+
+      // When
+      const response = await sut.getUser(validObjectId.toString());
+
+      // Then
+      expect(response).toEqual(expectedValue);
+    });
+
+    it('should call the service and the database throws an exception', async () => {
+      // When
+      const result = async () =>
+        await sut.getUser(throwADataBaseException.toString());
+
+      // Then
+      await expect(result).rejects.toThrow(InternalServerErrorException);
+    });
+
+    it('should call the service and the database does not find a user', async () => {
+      // When
+      const result = async () => await sut.getUser(invalidObjectId.toString());
+
+      // Then
+      await expect(result).rejects.toThrow(NotFoundError);
     });
   });
 });

@@ -39,3 +39,46 @@ export const validUserDto: UserDto = {
   role: RoleEnum.USER,
   pictureUrl: 'http://test.com/image.png',
 };
+
+export function createUserEntity(): UserEntity {
+  const validUserEntity: UserEntity = {
+    id: '',
+    role: RoleEnum.USER,
+    displayName: 'Testo1',
+    firstName: 'Tester',
+    lastName: 'Tester',
+    email: 'test@test.com',
+    emailVerified: false,
+    pictureUrl: 'http://test.com/image.png',
+  };
+
+  return validUserEntity;
+}
+
+export function createUserDocument() {
+  const validUserDocument = {
+    _id: '',
+    role: RoleEnum.USER,
+    displayName: 'Testo1',
+    firstName: 'Tester',
+    lastName: 'Tester',
+    email: 'test@test.com',
+    emailVerified: false,
+    pictureUrl: 'http://test.com/image.png',
+  };
+
+  return validUserDocument;
+}
+
+export function createUserDto(): UserDto {
+  const validUserDto: UserDto = {
+    id: '',
+    firstName: 'Tester',
+    lastName: 'Tester',
+    email: 'test@test.com',
+    displayName: 'Testo1',
+    role: RoleEnum.USER,
+    pictureUrl: 'http://test.com/image.png',
+  };
+  return validUserDto;
+}
