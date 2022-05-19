@@ -105,6 +105,9 @@ mutation-backend:
   script:
     - npm run test:mutation -w backend
   allow_failure: true
+  only:
+    - master
+    - develop
 
 
 # integration-test:
