@@ -22,13 +22,15 @@ export class UserController {
 
   @Delete(':id')
   @HttpCode(204)
-  async deleteUser(@Param('id') id: string) {
+  async deleteUser(@Param('id') id: string, @User() user: AuthUser) {
     this.logger.log(`Delete user with id: ${id}`);
-    const result = await this.userService.deleteUser(id);
-    if (result === null) {
-      throw NotFoundError;
-    }
-    this.logger.log(`User with id: ${id} was deleted`);
+    if (user.id === id || user.role === RoleEnum.ADMIN) {
+      const result = await this.userService.deleteUser(id);
+      if (result === null) {
+        throw NotFoundError;
+      }
+      this.logger.log(`User with id: ${id} was deleted`);
+    } else throw MissingPermissionError;
   }
 
   @Get(':id')

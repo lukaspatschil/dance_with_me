@@ -14,6 +14,7 @@ import { nonExistingObjectId, validObjectId } from './test_data/user.testData';
 import { AccessTokenGuard } from '../src/auth/auth.guard';
 import { AuthGuardMock, mockedAuthHeader } from './stubs/auth.guard.mock';
 import { AuthUser } from '../src/auth/interfaces';
+import { validObjectId2 } from './test_data/event.testData';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
@@ -50,7 +51,32 @@ describe('UserController (e2e)', () => {
   });
 
   describe('/user (DELETE)', () => {
-    it('should return 204', async () => {
+    it('should return 204 if user is deleting their own user resource', async () => {
+      //Given
+      const userId = validObjectId.toString();
+      const user = new User({
+        _id: userId,
+        displayName: 'Bill',
+        email: 'bill@initech.com',
+        role: RoleEnum.USER,
+      });
+      const authHeader = mockedAuthHeader({
+        id: userId,
+        displayName: user.displayName,
+        role: user.role,
+      });
+
+      await user.save();
+
+      return request(app.getHttpServer())
+        .delete(`/user/${userId}`)
+        .set('Authorization', authHeader)
+        .send()
+        .expect(204)
+        .expect(deleteResponse);
+    });
+
+    it('should return 403 if user is trying to delete another user', async () => {
       //Given
       const user = new User({
         _id: validObjectId.toString(),
@@ -58,19 +84,56 @@ describe('UserController (e2e)', () => {
         email: 'bill@initech.com',
         role: RoleEnum.USER,
       });
+      const authHeader = mockedAuthHeader({
+        id: validObjectId2.toString(),
+        displayName: user.displayName,
+        role: user.role,
+      });
 
       await user.save();
 
       return request(app.getHttpServer())
         .delete(`/user/${validObjectId.toString()}`)
+        .set('Authorization', authHeader)
+        .send()
+        .expect(HttpStatus.FORBIDDEN)
+        .expect({ error: 'missing_permission' });
+    });
+
+    it('should allow admins to delete users', async () => {
+      //Given
+      const user = new User({
+        _id: validObjectId.toString(),
+        displayName: 'Bill',
+        email: 'bill@initech.com',
+        role: RoleEnum.USER,
+      });
+      const authHeader = mockedAuthHeader({
+        id: validObjectId2.toString(),
+        displayName: 'Some Admin',
+        role: RoleEnum.ADMIN,
+      });
+
+      await user.save();
+
+      return request(app.getHttpServer())
+        .delete(`/user/${validObjectId.toString()}`)
+        .set('Authorization', authHeader)
         .send()
         .expect(204)
         .expect(deleteResponse);
     });
 
-    it('should return 404', () => {
+    it('should return 404 if user does not exist', () => {
+      const authHeader = mockedAuthHeader({
+        id: validObjectId2.toString(),
+        displayName: 'Some Admin',
+        role: RoleEnum.ADMIN,
+      });
+
       return request(app.getHttpServer())
         .delete(`/user/${nonExistingObjectId}`)
+        .set('Authorization', authHeader)
         .send()
         .expect(HttpStatus.NOT_FOUND)
         .expect(notFoundResponse);

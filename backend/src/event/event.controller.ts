@@ -16,6 +16,7 @@ import { EventEntity } from '../core/entity/event.entity';
 import { QueryDto } from '../core/dto/query.dto';
 import { User } from '../auth/user.decorator';
 import { AuthUser } from '../auth/interfaces';
+import { Organizer } from '../auth/role.guard';
 
 @Controller('/event')
 export class EventController {
@@ -23,6 +24,7 @@ export class EventController {
 
   constructor(private readonly eventService: EventService) {}
 
+  @Organizer()
   @Post()
   async createEvent(
     @Body() createEventDto: CreateEventDto,

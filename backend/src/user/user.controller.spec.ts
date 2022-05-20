@@ -11,6 +11,7 @@ import { UserEntity } from '../core/entity/user.entity';
 import { RoleEnum } from '../core/schema/enum/role.enum';
 import { NotFoundError } from '../core/error/notFound.error';
 import { MissingPermissionError } from '../core/error/missingPermission.error';
+import { validObjectId1 } from '../../test/test_data/event.testData';
 
 describe('UserController', () => {
   let sut: UserController;
@@ -58,9 +59,48 @@ describe('UserController', () => {
   });
 
   describe('deleteUser', () => {
-    it('should call the service with correct userId', async () => {
+    it('should should throw forbiddenError if user is not deleting themselves', async () => {
+      // Given
+      const user = {
+        id: validObjectId.toString(),
+        displayName: 'John Doe',
+        role: RoleEnum.USER,
+      };
+
       // When
-      sut.deleteUser(validObjectId.toString());
+      const result = sut.deleteUser(validObjectId1.toString(), user);
+
+      // Then
+      await expect(result).rejects.toThrow(MissingPermissionError);
+    });
+
+    it('should call the service with correct userId', async () => {
+      // Given
+      const user = {
+        id: validObjectId.toString(),
+        displayName: 'John Doe',
+        role: RoleEnum.USER,
+      };
+
+      // When
+      await sut.deleteUser(user.id, user);
+
+      // Then
+      expect(userServiceMock.deleteUser).toHaveBeenCalledWith(
+        validObjectId.toString(),
+      );
+    });
+
+    it('should call the service with correct userId when used by admin', async () => {
+      // Given
+      const user = {
+        id: validObjectId1.toString(),
+        displayName: 'Some Admin',
+        role: RoleEnum.ADMIN,
+      };
+
+      // When
+      await sut.deleteUser(validObjectId.toString(), user);
 
       // Then
       expect(userServiceMock.deleteUser).toHaveBeenCalledWith(
@@ -69,9 +109,15 @@ describe('UserController', () => {
     });
 
     it('should call the service with a non existing Id and throw a NotFoundException', async () => {
+      // Given
+      const user = {
+        id: validObjectId.toString(),
+        displayName: 'Some Admin',
+        role: RoleEnum.ADMIN,
+      };
+
       // When
-      const result = async () =>
-        await sut.deleteUser(nonExistingObjectId.toString());
+      const result = sut.deleteUser(nonExistingObjectId.toString(), user);
 
       // Then
       await expect(result).rejects.toThrow(NotFoundError);
@@ -81,7 +127,7 @@ describe('UserController', () => {
   describe('getUser', () => {
     it('should call the service with correct userId', async () => {
       // When
-      sut.getUser(userAdmin.id, userAdmin);
+      await sut.getUser(userAdmin.id, userAdmin);
 
       // Then
       expect(userServiceMock.getUser).toHaveBeenCalledWith(userAdmin.id);
@@ -103,7 +149,7 @@ describe('UserController', () => {
       it('should call the service with different userId than the own user id and throw an exception', async () => {
         // Given
 
-        const result = async () => await sut.getUser('testId', userUser);
+        const result = sut.getUser('testId', userUser);
 
         // Then
         await expect(result).rejects.toThrow(MissingPermissionError);

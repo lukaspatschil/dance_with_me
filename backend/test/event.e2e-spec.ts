@@ -4,7 +4,7 @@ import { AppModule } from '../src/app.module';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { Test } from '@nestjs/testing';
 import { AccessTokenGuard } from '../src/auth/auth.guard';
-import { AuthGuardMock } from './stubs/auth.guard.mock';
+import { AuthGuardMock, mockedAuthHeader } from './stubs/auth.guard.mock';
 import { connect, disconnect, model, Model } from 'mongoose';
 import { EventDocument, EventSchema } from '../src/core/schema/event.schema';
 import { GeolocationEnum } from '../src/core/schema/enum/geolocation.enum';
@@ -18,6 +18,7 @@ import {
   validAddress,
   validAddressDTO,
 } from './test_data/openStreetMapApi.testData';
+import { RoleEnum } from '../src/core/schema/enum/role.enum';
 
 describe('EventController (e2e)', () => {
   let app: INestApplication;
@@ -33,7 +34,7 @@ describe('EventController (e2e)', () => {
     process.env['MONGODB_URI'] = testDatabaseStub.getUri();
     await connect(testDatabaseStub.getUri());
 
-    Event.ensureIndexes();
+    await Event.ensureIndexes();
 
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
@@ -56,12 +57,25 @@ describe('EventController (e2e)', () => {
   });
 
   describe('/event (Post)', () => {
+    const organizerAuthHeader = (
+      organizerId?: string,
+    ): ['Authorization', string] => [
+      'Authorization',
+      mockedAuthHeader({
+        id: organizerId ?? validObjectId1.toString(),
+        displayName: 'Oscar Organized',
+        role: RoleEnum.ORGANISER,
+      }),
+    ];
+
     it('should return 201', () => {
       const dto = getDefaultCreateEventDTO();
 
       return request(app.getHttpServer())
         .post('/event')
+        .set(...organizerAuthHeader(getDefaultEventDTO().organizerId))
         .send(dto)
+        .expect(HttpStatus.CREATED)
         .expect((res) => {
           // replace id with id from result
           const expectedValue = getDefaultEventDTO();
@@ -73,6 +87,7 @@ describe('EventController (e2e)', () => {
     it('should return 400 (empty object)', () => {
       return request(app.getHttpServer())
         .post('/event')
+        .set(...organizerAuthHeader())
         .send({})
         .expect(HttpStatus.BAD_REQUEST);
     });
@@ -83,6 +98,7 @@ describe('EventController (e2e)', () => {
 
       return request(app.getHttpServer())
         .post('/event')
+        .set(...organizerAuthHeader())
         .send(dto)
         .expect(HttpStatus.BAD_REQUEST)
         .expect((res) => {
@@ -96,6 +112,7 @@ describe('EventController (e2e)', () => {
 
       return request(app.getHttpServer())
         .post('/event')
+        .set(...organizerAuthHeader())
         .send(dto)
         .expect(HttpStatus.BAD_REQUEST)
         .expect((res) => {
@@ -109,6 +126,7 @@ describe('EventController (e2e)', () => {
 
       return request(app.getHttpServer())
         .post('/event')
+        .set(...organizerAuthHeader())
         .send(dto)
         .expect(HttpStatus.BAD_REQUEST)
         .expect((res) => {
@@ -130,6 +148,7 @@ describe('EventController (e2e)', () => {
 
       return request(app.getHttpServer())
         .post('/event')
+        .set(...organizerAuthHeader())
         .send(dto)
         .expect(HttpStatus.BAD_REQUEST)
         .expect((res) => {
@@ -154,6 +173,7 @@ describe('EventController (e2e)', () => {
 
       return request(app.getHttpServer())
         .post('/event')
+        .set(...organizerAuthHeader())
         .send(dto)
         .expect(HttpStatus.BAD_REQUEST)
         .expect((res) => {
@@ -169,6 +189,7 @@ describe('EventController (e2e)', () => {
 
       return request(app.getHttpServer())
         .post('/event')
+        .set(...organizerAuthHeader())
         .send(dto)
         .expect(HttpStatus.BAD_REQUEST)
         .expect((res) => {
@@ -184,6 +205,7 @@ describe('EventController (e2e)', () => {
 
       return request(app.getHttpServer())
         .post('/event')
+        .set(...organizerAuthHeader())
         .send(dto)
         .expect(HttpStatus.BAD_REQUEST)
         .expect((res) => {
@@ -197,6 +219,7 @@ describe('EventController (e2e)', () => {
 
       return request(app.getHttpServer())
         .post('/event')
+        .set(...organizerAuthHeader())
         .send(dto)
         .expect(HttpStatus.BAD_REQUEST)
         .expect((res) => {
@@ -212,6 +235,7 @@ describe('EventController (e2e)', () => {
 
       return request(app.getHttpServer())
         .post('/event')
+        .set(...organizerAuthHeader())
         .send(dto)
         .expect(HttpStatus.BAD_REQUEST)
         .expect((res) => {
@@ -227,8 +251,29 @@ describe('EventController (e2e)', () => {
 
       return request(app.getHttpServer())
         .post('/event')
+        .set(...organizerAuthHeader())
         .send(dto)
         .expect(HttpStatus.BAD_REQUEST);
+    });
+
+    it('should return 403 if user is not organizer', () => {
+      const dto = getDefaultCreateEventDTO();
+      const userAuthHeader = mockedAuthHeader({
+        id: validObjectId1.toString(),
+        displayName: 'user1',
+        role: RoleEnum.USER,
+      });
+
+      return request(app.getHttpServer())
+        .post('/event')
+        .set('Authorization', userAuthHeader)
+        .send(dto)
+        .expect(HttpStatus.FORBIDDEN)
+        .expect((res) => {
+          expect(res.body).toEqual(
+            expect.objectContaining({ error: 'missing_permission' }),
+          );
+        });
     });
   });
 
