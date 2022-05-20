@@ -12,5 +12,5 @@ export class EventDto {
   public?: boolean;
   startDateTime?: string;
   endDateTime?: string;
-  category?: Category;
+  category?: Category[];
 }

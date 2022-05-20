@@ -12,9 +12,9 @@ export class EventEntity {
   public: boolean;
   startDateTime: Date;
   endDateTime: Date;
-  category: Category;
+  category: Category[];
 
-  constructor(id: string, name: string, description: string, location: LocationEntity, address: AddressEntity, price: number, isPublic: boolean, startDateTime: Date, endDateTime: Date, category: Category ){
+  constructor(id: string, name: string, description: string, location: LocationEntity, address: AddressEntity, price: number, isPublic: boolean, startDateTime: Date, endDateTime: Date, category: Category[] ){
     this.id = id;
     this.name = name;
     this.description = description;

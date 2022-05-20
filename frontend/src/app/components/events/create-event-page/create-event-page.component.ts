@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {EventService} from "../../../services/event.service";
 import {requiredTimeValidator} from "../../../validators/requiredTime";
 import {Category} from "../../../enums/category.enum";
@@ -43,7 +43,7 @@ export class CreateEventPageComponent implements OnInit {
         endTime: ['', Validators.required],
         description: ['', Validators.required],
         public: [true],
-        category: ['', Validators.required]
+        category: new FormArray([], [Validators.required])
       }, { validators: requiredTimeValidator}
     );
   }
@@ -142,6 +142,28 @@ export class CreateEventPageComponent implements OnInit {
           this.loading = false;
           this.error = true;
         }
+      });
+    }
+  }
+
+  onCheckChange(event: Event) {
+    const formArray: FormArray = this.createEventForm.get('category') as FormArray;
+
+    const element = event.currentTarget as HTMLInputElement
+    const value = element.value
+    const checked = element.checked
+
+    if(checked){
+      formArray.push(new FormControl(value));
+    }
+    else{
+      let i: number = 0;
+      formArray.controls.forEach((ctrl: AbstractControl | null) => {
+        if(ctrl?.value === value) {
+          formArray.removeAt(i);
+          return;
+        }
+        i++;
       });
     }
   }

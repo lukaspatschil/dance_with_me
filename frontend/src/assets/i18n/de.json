@@ -41,23 +41,12 @@
     "zip_error": "Postleitzahl wird benötigt.",
     "zip_placeholder": "PLZ"
   },
-  "eventDetails": {
-    "category": {
-      "Bachata": "Bachata",
-      "Merengue": "Merengue",
-      "Reggaton": "Reggeaton",
-      "Salsa": "Salsa",
-      "Zouk": "Zouk"
-    }
-  },
-  "eventOverview": {
-    "category": {
-      "Bachata": "Bachata",
-      "Merengue": "Merengue",
-      "Reggaton": "Reggeaton",
-      "Salsa": "Salsa",
-      "Zouk": "Zouk"
-    }
+  "eventCategory": {
+    "Bachata": "Bachata",
+    "Merengue": "Merengue",
+    "Reggeaton": "Reggeaton",
+    "Salsa": "Salsa",
+    "Zouk": "Zouk"
   },
   "events": {
     "events": "Veranstalltungen"

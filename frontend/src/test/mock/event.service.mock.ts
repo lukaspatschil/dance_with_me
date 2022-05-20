@@ -20,7 +20,7 @@ export class EventServiceMock  {
     public: true,
     startDateTime: new Date('2022-04-24T10:00').toISOString(),
     endDateTime: new Date('2022-04-24T12:00').toISOString(),
-    category: Category.SALSA
+    category: [Category.SALSA]
   }
 
   createEvent = jest.fn().mockReturnValue(
@@ -49,7 +49,7 @@ export class EventServiceMock  {
       date: '2022-04-24',
       starttime: '10:00',
       endtime: '12:00',
-      category: Category.SALSA
+      category: [Category.SALSA]
     }])
   )
 
@@ -75,7 +75,7 @@ export class EventServiceMock  {
       date: '2022-04-24',
       starttime: '10:00',
       endtime: '12:00',
-      category: Category.SALSA
+      category: [Category.SALSA]
     })
   )
 }

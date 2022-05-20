@@ -1,4 +1,4 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing';
 
 import {CreateEventPageComponent} from '../../../../app/components/events/create-event-page/create-event-page.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
@@ -68,7 +68,7 @@ describe('CreateEventPageComponent',
         cityElement = fixture.debugElement.nativeElement.querySelector('#city')
         countryElement = fixture.debugElement.nativeElement.querySelector('#country')
         additionElement = fixture.debugElement.nativeElement.querySelector('#addition')
-        categoryElementSalsa = fixture.debugElement.nativeElement.querySelector('#category')
+        categoryElementSalsa = fixture.debugElement.nativeElement.querySelector('#category0')
         description = fixture.debugElement.nativeElement.querySelector('#description')
         priceElement = fixture.debugElement.nativeElement.querySelector('#price')
         publicElement = fixture.debugElement.nativeElement.querySelector('#public')
@@ -96,7 +96,7 @@ describe('CreateEventPageComponent',
       const inputElements = formElement.querySelectorAll('input');
 
       // Then
-      expect(inputElements.length).toEqual(12)
+      expect(inputElements.length).toEqual(17)
     });
 
     describe('CreateEventForm', () => {
@@ -123,7 +123,7 @@ describe('CreateEventPageComponent',
           endTime: '',
           description: '',
           public: true,
-          category: ''
+          category: []
         }
         fixture.whenStable().then(() => {
           // Then
@@ -178,7 +178,7 @@ describe('CreateEventPageComponent',
           true,
           new Date(`${date}T10:00`).toISOString(),
           new Date(`${date}T12:00`).toISOString(),
-          Category.SALSA
+          [Category.SALSA]
       );
 
         // When
@@ -210,7 +210,7 @@ describe('CreateEventPageComponent',
           public: true,
           startDateTime: new Date(`${date}T10:00`).toISOString(),
           endDateTime: new Date(`${date}T12:00`).toISOString(),
-          category: Category.SALSA
+          category: [Category.SALSA]
         };
 
         fixture.whenStable().then(() => {
@@ -234,6 +234,30 @@ describe('CreateEventPageComponent',
       });
     });
 
+    describe('onCheckChange', () => {
+      it('should set a category in eventCreateForm', fakeAsync(()=>{
+        // When
+        const handleSpy = jest.spyOn(comp, 'onCheckChange');
+        createValidInput()
+        fixture.detectChanges();
+
+        // Then
+        expect(comp.createEventForm.get('category')?.value ).toStrictEqual([Category.SALSA]);
+        expect(handleSpy).toHaveBeenCalled();
+      }));
+
+      it('should do nothing if no category is checked', () => {
+        // When
+        const handleSpy = jest.spyOn(comp, 'onCheckChange');
+        fixture.detectChanges();
+
+        // Then
+        expect(comp.createEventForm.get('category')?.value ).toStrictEqual([]);
+        expect(handleSpy).not.toHaveBeenCalled();
+      });
+    });
+
+
     function createValidInput() {
       nameElement.value = "name"
       dateElement.value = date
@@ -245,7 +269,7 @@ describe('CreateEventPageComponent',
       cityElement.value = "city"
       countryElement.value = "country"
       additionElement.value = "addition"
-      categoryElementSalsa.value = Category.SALSA
+      categoryElementSalsa.checked = true
       priceElement.value = String(1)
       description.value = "description"
       publicElement.value = String(true)
@@ -277,7 +301,7 @@ describe('CreateEventPageComponent',
       cityElement.value = "city"
       countryElement.value = "country"
       additionElement.value = "addition"
-      categoryElementSalsa.value = "Salsa"
+      categoryElementSalsa.checked = true
       priceElement.value = "1"
       description.value = "description"
       publicElement.value = String(true)
@@ -292,7 +316,7 @@ describe('CreateEventPageComponent',
       cityElement.dispatchEvent(new Event('input'))
       countryElement.dispatchEvent(new Event('input'))
       additionElement.dispatchEvent(new Event('input'))
-      categoryElementSalsa.dispatchEvent(new Event('input'))
+      categoryElementSalsa.dispatchEvent(new Event('change'))
       priceElement.dispatchEvent(new Event('input'))
       description.dispatchEvent(new Event('input'))
       publicElement.dispatchEvent(new Event('input'))

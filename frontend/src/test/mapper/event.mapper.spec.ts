@@ -31,7 +31,7 @@ describe('EventMapper', () => {
         public: true,
         startDateTime: new Date('2022-04-24T10:00').toISOString(),
         endDateTime: new Date('2022-04-24T12:00').toISOString(),
-        category: Category.SALSA
+        category: [Category.SALSA]
       };
 
       // When
@@ -67,7 +67,7 @@ describe('EventMapper', () => {
       true,
       new Date('2022-04-24T10:00'),
       new Date('2022-04-24T12:00'),
-      Category.SALSA
+      [Category.SALSA]
     )
   }
 });

@@ -9,9 +9,9 @@ export class CreateEventDto {
   public: boolean;
   startDateTime: string;
   endDateTime: string;
-  category: Category;
+  category: Category[];
 
-  constructor(name: string, description: string, address: AddressDto, price: number, isPublic: boolean, startDateTime: string, endDateTime: string, category: Category) {
+  constructor(name: string, description: string, address: AddressDto, price: number, isPublic: boolean, startDateTime: string, endDateTime: string, category: Category[]) {
     this.name = name;
     this.description = description;
     this.address = address;

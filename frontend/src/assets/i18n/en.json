@@ -41,23 +41,12 @@
     "zip_error": "ZIP code is required.",
     "zip_placeholder": "ZIP"
   },
-  "eventDetails": {
-    "category": {
-      "Bachata": "Bachata",
-      "Merengue": "Merengue",
-      "Reggeaton": "Reggeaton",
-      "Salsa": "Salsa",
-      "Zouk": "Zouk"
-    }
-  },
-  "eventOverview": {
-    "category": {
-      "Bachata": "Bachata",
-      "Merengue": "Merengue",
-      "Reggeaton": "Reggeaton",
-      "Salsa": "Salsa",
-      "Zouk": "Zouk"
-    }
+  "eventCategory": {
+    "Bachata": "Bachata",
+    "Merengue": "Merengue",
+    "Reggeaton": "Reggeaton",
+    "Salsa": "Salsa",
+    "Zouk": "Zouk"
   },
   "events": {
     "events": "Events"
