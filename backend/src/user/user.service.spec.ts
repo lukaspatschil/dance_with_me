@@ -54,8 +54,7 @@ describe('UserService', () => {
 
     it('should call the service and delete a user', async () => {
       // Given
-      const validUser = validUserDocument;
-      validUser._id = validObjectId.toString();
+      const validUser = { ...validUserDocument, _id: validObjectId.toString() };
 
       // When
       const response = await sut.deleteUser(validObjectId.toString());
@@ -92,19 +91,22 @@ describe('UserService', () => {
   describe('findAndUpdateOrCreate', () => {
     it('returns user with updated attributes if it exists', async () => {
       // Given
-      validUserEntity.id = validObjectId.toString();
-      validUserEntity.pictureUrl = 'https://example.com/newPictureUrl';
-      const { id: _, ...userEntity } = validUserEntity;
+      const userEntity = {
+        ...validUserEntity,
+        id: validObjectId.toString(),
+        pictureUrl: 'https://example.com/newPictureUrl',
+      };
+      const { id: _, ...expectedUserEntity } = userEntity;
 
       // When
-      const response = await sut.findAndUpdateOrCreate(validUserEntity);
+      const response = await sut.findAndUpdateOrCreate(userEntity);
 
       // Then
-      expect(response).toEqual(validUserEntity);
+      expect(response).toEqual(userEntity);
       expect(userDocumentMock.findByIdAndUpdate).toHaveBeenCalledWith(
         validObjectId.toString(),
         {
-          $set: expect.objectContaining(userEntity),
+          $set: expect.objectContaining(expectedUserEntity),
         },
         expect.any(Object),
       );
@@ -112,22 +114,25 @@ describe('UserService', () => {
 
     it('returns new user if it did not exist', async () => {
       // Given
-      validUserEntity.id = nonExistingObjectId.toString();
-      validUserEntity.pictureUrl = 'https://example.com/newPictureUrl';
-      const { id: _, ...userEntity } = validUserEntity;
+      const userEntity = {
+        ...validUserEntity,
+        id: nonExistingObjectId.toString(),
+        pictureUrl: 'https://example.com/newPictureUrl',
+      };
+      const { id: _, ...expectedUserEntity } = userEntity;
 
       // When
-      const response = await sut.findAndUpdateOrCreate(validUserEntity);
+      const response = await sut.findAndUpdateOrCreate(userEntity);
 
       // Then
-      expect(response).toEqual(validUserEntity);
+      expect(response).toEqual(userEntity);
       expect(userDocumentMock.findByIdAndUpdate).toHaveBeenCalledWith(
         nonExistingObjectId.toString(),
-        { $set: expect.objectContaining(userEntity) },
+        { $set: expect.objectContaining(expectedUserEntity) },
         expect.any(Object),
       );
       expect(userDocumentMock.create).toHaveBeenCalledWith(
-        expect.objectContaining(userEntity),
+        expect.objectContaining(expectedUserEntity),
       );
     });
   });

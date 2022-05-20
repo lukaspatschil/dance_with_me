@@ -18,14 +18,14 @@ export class UserModelMock {
     }
   });
 
-  findByIdAndUpdate = jest.fn((id: string, { $set }) => {
-    if (id === validObjectId.toString()) {
+  findByIdAndUpdate = jest.fn((id: string, { $set }, options) => {
+    if (id === validObjectId.toString() || options?.upsert === true) {
       const user = {
         ...validUserDocument,
         ...$set,
         _id: id,
       };
-      return Promise.resolve(user);
+      return Promise.resolve(options?.new ? user : validUserDocument);
     } else {
       return Promise.resolve(null);
     }
