@@ -50,7 +50,7 @@ describe('CreateEventPageComponent',
       eventService = TestBed.inject(EventService);
     });
 
-    beforeEach(() => {
+    beforeEach(async () => {
       // Given
       fixture = TestBed.createComponent(CreateEventPageComponent)
       comp = fixture.componentInstance;
@@ -76,7 +76,8 @@ describe('CreateEventPageComponent',
         createButton = fixture.debugElement.nativeElement.querySelector('#create_button')
 
         date = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
-      });
+      })
+
 
       fixture.detectChanges();
     });
@@ -104,7 +105,7 @@ describe('CreateEventPageComponent',
         expect(comp.createEventForm.valid).toBeFalsy();
       });
 
-      it('should return empty for all form values', () => {
+      it('should return empty for all form values', async () => {
         // When
         const createForm = comp.createEventForm;
         const createFormValues = {
@@ -125,49 +126,49 @@ describe('CreateEventPageComponent',
           public: true,
           category: []
         }
-        fixture.whenStable().then(() => {
-          // Then
-          expect(createForm.value).toEqual(createFormValues)
-        })
+        await fixture.whenStable()
+        // Then
+        expect(createForm.value).toEqual(createFormValues)
+
       });
 
-      it('should be valid when inputs are filled correctly', () => {
-        fixture.whenStable().then(() => {
-          // When
-          createValidInput();
-          const isFormValid = comp.createEventForm.valid
+      it('should be valid when inputs are filled correctly', async () => {
+        await fixture.whenStable()
+        // When
+        createValidInput();
+        const isFormValid = comp.createEventForm.valid
 
-          // Then
-          expect(isFormValid).toBeTruthy()
-        })
+        // Then
+        expect(isFormValid).toBeTruthy()
+
       });
 
-      it('should be invalid when one input is filled falsely', () => {
-        fixture.whenStable().then(() => {
-          // When
-          createInvalidInput()
-          const isFormValid = comp.createEventForm.valid
+      it('should be invalid when one input is filled falsely', async () => {
+        await fixture.whenStable()
+        // When
+        createInvalidInput()
+        const isFormValid = comp.createEventForm.valid
 
-          // Then
-          expect(isFormValid).toBeFalsy()
-        })
+        // Then
+        expect(isFormValid).toBeFalsy()
+
       });
     })
 
     describe('SubmitButton', () => {
-      it('should be disabled when form invalid', () => {
-        fixture.whenStable().then(() => {
-          // When
-          createInvalidInput()
+      it('should be disabled when form invalid', async () => {
+        await fixture.whenStable()
+        // When
+        createInvalidInput()
 
-          // Then
-          expect(createButton.disabled).toBeTruthy()
-        })
+        // Then
+        expect(createButton.disabled).toBeTruthy()
+
       });
     })
 
     describe('createEvent', () => {
-      it('should create-event-page a new event', () => {
+      it('should create-event-page a new event', async () => {
         // Given
         const address = new AddressDto('country', 'city', '1020', 'street', '10', 'addition')
         const newEvent = new CreateEventDto(
@@ -179,23 +180,23 @@ describe('CreateEventPageComponent',
           new Date(`${date}T10:00`).toISOString(),
           new Date(`${date}T12:00`).toISOString(),
           [Category.SALSA]
-      );
+        );
 
         // When
         createValidInput();
 
-        fixture.whenStable().then(() => {
-          // Then
-          expect(comp.createEvent()).toEqual(newEvent)
-        })
+        await fixture.whenStable()
+        // Then
+        expect(comp.createEvent()).toEqual(newEvent)
+
       });
     });
 
 
     describe('onSubmit', () => {
-      it('should send a new event to API ', () => {
+      it('should send a new event to API ', async () => {
         // When
-        const newEvent: CreateEventDto =  {
+        const newEvent: CreateEventDto = {
           name: 'name',
           description: 'description',
           address: {
@@ -213,24 +214,24 @@ describe('CreateEventPageComponent',
           category: [Category.SALSA]
         };
 
-        fixture.whenStable().then(() => {
-          createValidInput();
-          comp.onSubmit();
+        await fixture.whenStable()
+        createValidInput();
+        comp.onSubmit();
 
-          // Then
-          expect(eventService.createEvent).toHaveBeenCalledWith(newEvent)
-        })
+        // Then
+        expect(eventService.createEvent).toHaveBeenCalledWith(newEvent)
+
       });
 
-      it('should not send a new event to API when input invalid', () => {
-        fixture.whenStable().then(() => {
-          // When
-          createInvalidInput();
-          comp.onSubmit();
+      it('should not send a new event to API when input invalid', async () => {
+        await fixture.whenStable()
+        // When
+        createInvalidInput();
+        comp.onSubmit();
 
-          // Then
-          expect(eventService.createEvent).not.toHaveBeenCalled();
-        })
+        // Then
+        expect(eventService.createEvent).not.toHaveBeenCalled();
+
       });
     });
 

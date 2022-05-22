@@ -36,24 +36,24 @@ describe('EventOverviewComponent', () => {
   });
 
   describe('getEvents', () => {
-    it('should fetch events from API ', () => {
+    it('should fetch events from API ', async () => {
       // When
-      fixture.whenStable().then(() => {
-        comp.getEvents();
-        // Then
-        expect(eventService.getEvents).toHaveBeenCalledTimes(2)
-      })
+      await fixture.whenStable()
+      comp.getEvents();
+
+      // Then
+      expect(eventService.getEvents).toHaveBeenCalledTimes(2)
     });
   });
 
   describe('ngOnInit', () => {
-    it('should fetch events from API ', () => {
+    it('should fetch events from API ', async () => {
       // When
-      fixture.whenStable().then(() => {
-        comp.ngOnInit();
-        // Then
-        expect(eventService.getEvents).toHaveBeenCalledTimes(2)
-      })
+      await fixture.whenStable()
+      comp.ngOnInit();
+
+      // Then
+      expect(eventService.getEvents).toHaveBeenCalledTimes(2)
     });
   });
 });

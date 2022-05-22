@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { UserEntity } from '../entities/user.entity';
 import {HttpClient} from "@angular/common/http";
+import {map, Observable} from "rxjs";
+
 import {UserDto} from "../dto/user.dto";
 import { environment } from '../../environments/environment';
 import {UserMapper} from "../mapper/user.mapper";
@@ -26,5 +28,12 @@ export class UserService {
 
   resetUser() {
     this._user.next(null);
+  }
+
+  deleteUser(){
+    let id = this._user.value?.id
+    return this.http.delete(`${environment.baseUrl}/user/${id}`, {
+      observe: 'response'
+    })
   }
 }

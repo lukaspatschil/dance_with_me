@@ -5,6 +5,8 @@ export class UserDto {
   displayName?: string;
   firstName?: string;
   lastName?: string;
+  email?: string;
+  emailVerified?: boolean;
   pictureUrl?: string;
   role?: RoleEnum;
 }

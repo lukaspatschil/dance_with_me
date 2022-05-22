@@ -31,6 +31,8 @@ describe('UserMapper', () => {
     displayName: 'Max1',
     firstName: 'Max',
     lastName: 'Hermannus',
+    email: 'Mail@mail.com',
+    emailVerified: true,
     role: RoleEnum.USER
   };
 
@@ -39,6 +41,8 @@ describe('UserMapper', () => {
     displayName: 'Max1',
     firstName: 'Max',
     lastName: 'Hermannus',
+    email: 'Mail@mail.com',
+    emailVerified: true,
     role: RoleEnum.USER
   };
 });

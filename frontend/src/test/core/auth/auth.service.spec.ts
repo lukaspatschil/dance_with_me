@@ -8,6 +8,8 @@ import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 import {PasetoService} from "../../../app/core/auth/paseto.service";
 import { PasetoMockService } from '../../mock/paseto.service.mock';
+import {UserService} from "../../../app/services/user.service";
+import {UserServiceMock} from "../../mock/user.service.mock";
 
 describe('AuthService', () => {
   let sut: AuthService;
@@ -19,6 +21,7 @@ describe('AuthService', () => {
   let router: Router;
 
   let pasetoService: PasetoService;
+  let userService: UserService;
 
   const accessToken = 'v1.local.cCvLxEWrOPnZ5WfnYVNKh61Peo_k-IuvF7oqFFqn1knwg4Sh8ry5dhpsB5k_qQ3ercZAHA1zowyt10SdPCa3OMF2RxD3zzMeedpVi8RQKSyKyghhTrC1HhFn1Z5p3WytaAK4HP81SuDK7LfianTv0do4J0in4fc2HWFTdIGxjE3Xx9N0wAhrQ_aM-ZF3_hI70nr-75xaku2cNxB9tmib8yp9OdjRXI_1oADHlj_Q9wuYkUGMzXew3RQPYJY6TzC1Idlfn4w.eyJraWQiOiJ0b2tlbi1kZXYtMTIzIn0';
 
@@ -28,7 +31,8 @@ describe('AuthService', () => {
       providers: [
         AuthService,
         { provide: TokenStorageService, useClass: TokenStorageServiceMock},
-        { provide: PasetoService, useClass: PasetoMockService }
+        { provide: PasetoService, useClass: PasetoMockService },
+        { provide: UserService, useClass: UserServiceMock }
       ]
     });
 
@@ -37,6 +41,7 @@ describe('AuthService', () => {
     tokenService = TestBed.inject(TokenStorageService);
     router = TestBed.inject(Router);
     pasetoService = TestBed.inject(PasetoService);
+    userService = TestBed.inject(UserService);
 
     jest.useFakeTimers();
     jest.spyOn(global, 'setTimeout');
@@ -81,6 +86,8 @@ describe('AuthService', () => {
 
       // Then
       expect(sut.getToken).toBe(accessToken);
+      expect(userService.updateUser).toHaveBeenCalledTimes(1)
+
     });
 
     it('should set the refreshToken in the storage', async () => {

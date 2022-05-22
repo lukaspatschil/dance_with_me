@@ -9,6 +9,7 @@ export type DecodedPasetoToken = {
     exp?: string,
     iat?: string,
     admin?: boolean,
+    sub?: string,
     [key: string]: any
   },
   version: string,

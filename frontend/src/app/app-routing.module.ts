@@ -12,6 +12,7 @@ import {LandingComponent} from "./components/landing/landing.component";
 import {EventOverviewComponent} from "./components/events/event-overview/event-overview.component";
 import {CreateEventPageComponent} from "./components/events/create-event-page/create-event-page.component";
 import {EventDetailComponent} from "./components/events/event-detail/event-detail.component";
+import {UserDetailComponent} from "./components/user/user-detail/user-detail.component";
 
 const routes: Routes = [
   {path: '', component: LandingComponent},
@@ -19,6 +20,7 @@ const routes: Routes = [
       {path: 'create', component: CreateEventPageComponent},
       {path: 'events', component: EventOverviewComponent},
       {path: 'event/:id', component: EventDetailComponent},
+      {path: 'user', component: UserDetailComponent}
     ]},
   {path: 'about', component: AboutPageComponent},
   {path: 'legal', component: LegalPageComponent},

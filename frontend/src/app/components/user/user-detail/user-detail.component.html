@@ -1,0 +1,48 @@
+<div class="ml-5 flex flex-col space-y-5 h-screen font-poppins"
+     xmlns:x-on="http://www.w3.org/1999/xhtml">
+
+  <div class="w-full flex items-center mt-4 space-x-4 ">
+    <img *ngIf="user?.pictureUrl; else noPicture" class="w-10 h-10 rounded-full" src=user.pictureUrl>
+    <ng-template #noPicture>
+      <span  class="material-icons text-gray-800 text-5xl icon-big">account_circle</span>
+    </ng-template>
+
+    <div class="flex flex-col space-y-0,5">
+      <p class=" inline-block align-baseline text-m text-gray-800 truncate dark:text-gray-700">
+        {{user?.displayName}}
+      </p>
+      <p class="align-baseline text-sm text-gray-400 truncate">
+        {{user?.role}}
+      </p>
+    </div>
+  </div>
+
+
+  <div *ngIf="user?.firstName || user?.lastName" class="w-full px-3 mb-6 md:mb-0">
+    <label translate  class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+      user.name
+    </label>
+   <p class="text-sm font-light">{{user?.firstName}} {{user?.lastName}}</p>
+  </div>
+
+  <div class="w-full px-3 mb-6 md:mb-0">
+    <label translate class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+      user.mail
+    </label>
+    <div flex space-x-6 >
+      <p class="inline-flex text-sm font-light truncate">{{user?.email}}</p>
+      <a title="{{'user.verified_tooltip'|translate}}" target="_blank" class="w-16 h-16">
+        <span *ngIf="user?.emailVerified" class="small material-icons text-emerald-500 text-sm">verified_user</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="flex flex-row-reverse space-x-4 pr-5 space-x-reverse pt-10">
+    <button translate
+            (click)="deleteUser()"
+            class="bg-transparent border-red-900 hover:bg-red-900 text-red-900 font-light text-sm hover:text-white py-2 px-4 border hover:border-transparent rounded">
+      user.delete_button
+    </button>
+  </div>
+
+</div>

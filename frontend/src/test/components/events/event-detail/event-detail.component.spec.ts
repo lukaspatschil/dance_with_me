@@ -37,13 +37,14 @@ describe('EventDetailComponent', () => {
 
 
   describe('ngOnInit', () => {
-    it('should fetch event from API ', () => {
+    it('should fetch event from API ', async () => {
       // When
-      fixture.whenStable().then(() => {
-        comp.ngOnInit();
-        // Then
-        expect(eventService.getEvent).toHaveBeenCalledTimes(2)
-      })
+      await fixture.whenStable()
+      comp.ngOnInit();
+
+      // Then
+      expect(eventService.getEvent).toHaveBeenCalled()
+
     });
   });
 });

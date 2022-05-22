@@ -51,6 +51,12 @@
   "events": {
     "events": "Veranstalltungen"
   },
+  "user": {
+    "name": "Name",
+    "mail": "Mail",
+    "delete_button": "Profil löschen",
+    "verified_tooltip": "E-Mail verifiziert"
+  },
   "legal_link": "Rechtliches",
   "login": {
     "description": "Anmelden und tanzen!",
@@ -62,7 +68,8 @@
     "create_event": "Veranstalltung erstellen",
     "events": "Veranstalltungen",
     "login": "Anmelden",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "profile": "Profil"
   },
   "privacy_link": "Privatsphäre"
 }

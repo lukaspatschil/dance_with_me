@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { UserService } from '../../app/services/user.service';
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 import {RoleEnum} from "../../app/enums/role.enum";
@@ -77,11 +76,15 @@ describe('UserService', () => {
     });
   });
 
+
   const userDto: UserDto = {
     id: 'google:12345',
     displayName: 'Max1',
     firstName: 'Max',
     lastName: 'Hermannus',
+    email: 'mail@mail.com',
+    emailVerified: true,
+    pictureUrl: 'pictureUrl',
     role: RoleEnum.USER
   };
 
@@ -90,6 +93,9 @@ describe('UserService', () => {
     displayName: 'Max1',
     firstName: 'Max',
     lastName: 'Hermannus',
+    email: 'mail@mail.com',
+    emailVerified: true,
+    pictureUrl: 'pictureUrl',
     role: RoleEnum.USER
   };
 });

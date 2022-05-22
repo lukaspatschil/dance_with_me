@@ -4,6 +4,7 @@ import {environment} from '../../../environments/environment';
 import {TokenStorageService} from "./token.service";
 import { Router } from '@angular/router';
 import {PasetoService, PasetoToken} from "./paseto.service";
+import {UserService} from "../../services/user.service";
 
 const AUTH_API = `${environment.baseUrl}/auth`;
 const httpOptions = {
@@ -22,12 +23,17 @@ export class AuthService {
     private readonly http: HttpClient,
     private readonly tokenStorage: TokenStorageService,
     private readonly router: Router,
-    private readonly paseto: PasetoService
+    private readonly paseto: PasetoService,
+    private readonly userService: UserService,
   ) {}
 
   private async getTimeoutTime(accessToken: PasetoToken): Promise<number> {
     let timeout = 15 * 60 * 1000;
     const decoded = await this.paseto.decodeToken(accessToken);
+    let id = decoded.payload['sub'];
+    if (id != null) {
+      this.userService.updateUser(id);
+    }
     if (decoded.payload['exp']) {
       timeout = new Date(decoded.payload['exp']).getTime() - new Date().getTime();
     }
@@ -65,6 +71,7 @@ export class AuthService {
       this.tokenStorage.clearRefreshToken();
       this.accessToken = null;
 
+      this.userService.resetUser();
       this.router.parseUrl(environment.loginUrl);
     });
   }

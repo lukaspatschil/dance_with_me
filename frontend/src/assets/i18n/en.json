@@ -51,6 +51,12 @@
   "events": {
     "events": "Events"
   },
+  "user": {
+    "name": "Name",
+    "mail": "Mail",
+    "delete_button": "Delete profile",
+    "verified_tooltip": "Mail is verified"
+  },
   "legal_link": "Legal",
   "login": {
     "description": "Sign in and start dancing!",
@@ -62,7 +68,8 @@
     "create_event": "Create event",
     "events": "Events",
     "login": "Login",
-    "logout": "Logout"
+    "logout": "Logout",
+    "profile": "Profile"
   },
   "privacy_link": "Privacy"
 }

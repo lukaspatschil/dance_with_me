@@ -30,6 +30,9 @@
         <a class="nav-link" [routerLink]="'/events'" (click)="toggleNavbar()">{{'navbar.events' | translate}}</a>
       </li>
       <li class="text-center">
+        <a class="nav-link" [routerLink]="'/user'" (click)="toggleNavbar()">{{'navbar.profile' | translate}}</a>
+      </li>
+      <li class="text-center">
         <a class="nav-link" [routerLink]="'.'" (click)="toggleNavbar(); authService.logout()">{{'navbar.logout' | translate}}</a>
     </ng-template>
     <ng-template #elseBlock>
