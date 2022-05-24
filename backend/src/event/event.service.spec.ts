@@ -29,8 +29,6 @@ import {
 } from '../../test/test_data/openStreetMapApi.testData';
 import {
   nonExistingObjectId,
-  validEventDocument,
-  validEventDto,
   validObjectId1,
   validEventEntity,
   updateOptions,
