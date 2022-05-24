@@ -7,10 +7,11 @@ import {
   nonExistingObjectId,
 } from '../test_data/event.testData';
 import { QueryOptions } from 'mongoose';
-import { LocationEntity } from '../../src/core/entity/location.entity';
 import { validAddress } from '../test_data/openStreetMapApi.testData';
 import { internalErrorResponse } from '../test_data/httpResponse.testData';
 import { CategoryEnum } from '../../src/core/schema/enum/category.enum';
+import { UpdateQuery } from 'mongoose';
+import { EventDocument } from '../../src/core/schema/event.schema';
 
 /* eslint @typescript-eslint/no-magic-numbers: 0 */
 /* eslint @typescript-eslint/naming-convention: 0 */
@@ -51,7 +52,7 @@ export class EventModelMock {
   });
 
   findByIdAndUpdate = jest.fn(
-    (id: string, dict: Dictionary<any>, opt: QueryOptions) => {
+    (id: string, dict: UpdateQuery<EventDocument>, opt: QueryOptions) => {
       if (opt.new === false) {
         const event = validEventDocument;
         event._id = id;
@@ -60,68 +61,57 @@ export class EventModelMock {
         if (id === validObjectId1.toString()) {
           const event = validEventDocument;
 
-          if (dict.hasOwnProperty('id') && dict['id'] != null) {
-            event._id = dict['id'] as string;
+          if (dict['id']) {
+            event._id = dict['id'];
           } else {
             event._id = validObjectId1.toString();
           }
-          if (dict.hasOwnProperty('name') && dict['name'] != null) {
-            event.name = dict['name'] as string;
+          if (dict['name']) {
+            event.name = dict['name'];
           }
-          if (
-            dict.hasOwnProperty('description') &&
-            dict['description'] != null
-          ) {
-            event.description = dict['description'] as string;
+          if (dict['description']) {
+            event.description = dict['description'];
           }
-          if (dict.hasOwnProperty('startTime') && dict['startTime'] != null) {
-            event.startDateTime = dict['startTime'] as Date;
+          if (dict['startDateTime']) {
+            event.startDateTime = dict['startDateTime'];
           }
-          if (dict.hasOwnProperty('endTime') && dict['endTime'] != null) {
-            event.endDateTime = dict['endTime'] as Date;
+          if (dict['endDateTime']) {
+            event.endDateTime = dict['endDateTime'];
           }
-          if (
-            dict.hasOwnProperty('location').hasOwnProperty('coordinates') &&
-            dict['location']['coordinates'] != null
-          ) {
-            event.location = dict['location'] as LocationEntity;
+          if (dict['location']) {
+            event.location.type = GeolocationEnum.POINT;
+            event.location.coordinates = [
+              dict['location'].longitude,
+              dict['location'].latitude,
+            ];
           }
-          if (dict.hasOwnProperty('address') && dict['address'] != null) {
+          if (dict['address']) {
             event.address.country = dict['address']['country'] as string;
             event.address.city = dict['address']['city'] as string;
             event.address.postalcode = dict['address']['postalcode'] as string;
             event.address.street = dict['address']['street'] as string;
-            if (
-              dict['address'].hasOwnProperty('housenumber') &&
-              dict['address']['housenumber'] != null
-            ) {
+            if (dict['address'].housenumber) {
               event.address.housenumber = dict['address'][
                 'housenumber'
               ] as string;
             }
-            if (
-              dict['address'].hasOwnProperty('addition') &&
-              dict['address']['addition'] != null
-            ) {
+            if (dict['address'].addition) {
               event.address.addition = dict['address']['addition'] as string;
             }
           }
-          if (dict.hasOwnProperty('price') && dict['price'] != null) {
+          if (dict['price']) {
             event.price = dict['price'] as number;
           }
-          if (dict.hasOwnProperty('isPublic') && dict['isPublic'] != null) {
-            event.public = dict['isPublic'] as boolean;
+          if (dict['public']) {
+            event.public = dict['public'] as boolean;
           }
-          if (dict.hasOwnProperty('imageId') && dict['imageId'] != null) {
+          if (dict['imageId']) {
             event.imageId = dict['imageId'] as string;
           }
-          if (
-            dict.hasOwnProperty('organizerId') &&
-            dict['organizerId'] != null
-          ) {
+          if (dict['organizerId']) {
             event.organizerId = dict['organizerId'] as string;
           }
-          if (dict.hasOwnProperty('category') && dict['category'] != null) {
+          if (dict['category']) {
             event.category = dict['category'] as CategoryEnum[];
           }
           return Promise.resolve(event);
