@@ -9,7 +9,7 @@ import {
 } from './test_data/httpResponse.testData';
 import { connect, disconnect, model, Model } from 'mongoose';
 import { EventDocument, EventSchema } from '../src/core/schema/event.schema';
-import { UpdateEventDto } from '../src/core/dto/event.dto';
+import { UpdateEventDto } from '../src/core/dto/updateEvent.dto';
 import { AccessTokenGuard } from '../src/auth/auth.guard';
 import { AuthGuardMock, mockedAuthHeader } from './stubs/auth.guard.mock';
 import { connect, disconnect, model, Model } from 'mongoose';
@@ -29,10 +29,12 @@ import { deleteResponse } from './test_data/httpResponse.testData';
 import {
   validAddress,
   validAddressDTO,
+  validUpdateAddress,
 } from './test_data/openStreetMapApi.testData';
 import { RoleEnum } from '../src/core/schema/enum/role.enum';
 import { validObjectId } from './test_data/user.testData';
 import { UserDocument, UserSchema } from '../src/core/schema/user.schema';
+import { CategoryEnum } from '../src/core/schema/enum/category.enum';
 import { Neo4jService } from 'nest-neo4j/dist';
 
 /* eslint @typescript-eslint/no-magic-numbers: 0 */
@@ -1739,18 +1741,18 @@ describe('EventController (e2e)', () => {
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
-        date: new Date('2023-01-01 00:00:00'),
-        startTime: new Date('2023-01-01 10:00:00'),
-        endTime: new Date('2023-01-01 12:00:00'),
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
         location: {
           type: GeolocationEnum.POINT,
           coordinates: [0, 0],
         },
         price: 12.5,
-        isPublic: true,
+        public: true,
         imageId: '1',
         organizerId: '1',
-        category: 'Jazz',
+        category: getCategory(),
+        address: validAddress,
       });
       await event1.save();
 
@@ -1758,18 +1760,18 @@ describe('EventController (e2e)', () => {
         id: validObjectId1.toString(),
         name: 'EventNameNeu',
         description: 'Test Event Description',
-        date: new Date('2023-01-01 00:00:00').toISOString(),
-        startTime: new Date('2023-01-01 10:00:00').toISOString(),
-        endTime: new Date('2023-01-01 12:00:00').toISOString(),
+        startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+        endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
         location: {
           longitude: 0,
           latitude: 0,
         },
         price: 12.5,
-        isPublic: true,
+        public: true,
         imageId: '1',
         organizerId: '1',
-        category: 'Jazz',
+        category: getCategory(),
+        address: validAddress,
       };
 
       const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
@@ -1778,9 +1780,167 @@ describe('EventController (e2e)', () => {
       return request(app.getHttpServer())
         .patch(`/event/${event1._id}`)
         .send(eventUpdateDto)
-        .expect(200)
+        .expect(HttpStatus.OK)
         .expect((res) => {
           expect(res.body).toEqual(event1Dto);
+        });
+    });
+
+    it('should return 200 (change multiple information of event)', async () => {
+      // Give
+      const event1 = new Event({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        category: getCategory(),
+        address: validAddress,
+      });
+      await event1.save();
+
+      const event1DtoUpdated = {
+        id: validObjectId1.toString(),
+        name: 'EventNameNeu',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+        endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
+        location: {
+          longitude: 0,
+          latitude: 0,
+        },
+        price: 20.0,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        category: ['Merengue'],
+        address: validAddress,
+      };
+
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.name = 'EventNameNeu';
+      eventUpdateDto.price = 20.0;
+      eventUpdateDto.category = [CategoryEnum.MERENGUE];
+
+      return request(app.getHttpServer())
+        .patch(`/event/${event1._id}`)
+        .send(eventUpdateDto)
+        .expect(HttpStatus.OK)
+        .expect((res) => {
+          expect(res.body).toEqual(event1DtoUpdated);
+        });
+    });
+
+    it('should return 200 (change location information of event)', async () => {
+      // Give
+      const event1 = new Event({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        category: getCategory(),
+        address: validAddress,
+      });
+      await event1.save();
+
+      const event1DtoUpdated = {
+        id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+        endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
+        location: {
+          longitude: 20,
+          latitude: 20,
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        category: getCategory(),
+        address: validAddress,
+      };
+
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.location = {
+        longitude: 20,
+        latitude: 20,
+      };
+
+      return request(app.getHttpServer())
+        .patch(`/event/${event1._id}`)
+        .send(eventUpdateDto)
+        .expect(HttpStatus.OK)
+        .expect((res) => {
+          expect(res.body).toEqual(event1DtoUpdated);
+        });
+    });
+
+    it('should return 200 (change address information of event)', async () => {
+      // Give
+      const event1 = new Event({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        category: getCategory(),
+        address: validAddress,
+      });
+      await event1.save();
+
+      const event1DtoUpdated = {
+        id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+        endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
+        location: {
+          longitude: 0,
+          latitude: 0,
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        category: getCategory(),
+        address: validUpdateAddress,
+      };
+
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.address = validUpdateAddress;
+
+      return request(app.getHttpServer())
+        .patch(`/event/${event1._id}`)
+        .send(eventUpdateDto)
+        .expect(HttpStatus.OK)
+        .expect((res) => {
+          expect(res.body).toEqual(event1DtoUpdated);
         });
     });
 
@@ -1792,7 +1952,7 @@ describe('EventController (e2e)', () => {
       return request(app.getHttpServer())
         .patch(`/event/${validObjectId1.toString()}`)
         .send(eventUpdateDto)
-        .expect(400);
+        .expect(HttpStatus.BAD_REQUEST);
     });
 
     it('should return 400, empty name', async () => {
@@ -1803,15 +1963,14 @@ describe('EventController (e2e)', () => {
       return request(app.getHttpServer())
         .patch(`/event/${validObjectId1.toString()}`)
         .send(eventUpdateDto)
-        .expect(400);
+        .expect(HttpStatus.BAD_REQUEST);
     });
 
-    it('should return 404', async () => {
+    it('should return 404 on non existing Object Id', async () => {
       return request(app.getHttpServer())
         .patch(`/event/${nonExistingObjectId.toString()}`)
         .send()
-        .expect(404)
-        .expect(notFoundResponse);
+        .expect(HttpStatus.NOT_FOUND);
     });
   });
 

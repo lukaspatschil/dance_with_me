@@ -10,6 +10,7 @@ import { QueryOptions } from 'mongoose';
 import { LocationEntity } from '../../src/core/entity/location.entity';
 import { validAddress } from '../test_data/openStreetMapApi.testData';
 import { internalErrorResponse } from '../test_data/httpResponse.testData';
+import { CategoryEnum } from '../../src/core/schema/enum/category.enum';
 
 /* eslint @typescript-eslint/no-magic-numbers: 0 */
 /* eslint @typescript-eslint/naming-convention: 0 */
@@ -73,14 +74,11 @@ export class EventModelMock {
           ) {
             event.description = dict['description'] as string;
           }
-          if (dict.hasOwnProperty('date') && dict['date'] != null) {
-            event.date = dict['date'] as Date;
-          }
           if (dict.hasOwnProperty('startTime') && dict['startTime'] != null) {
-            event.startTime = dict['startTime'] as Date;
+            event.startDateTime = dict['startTime'] as Date;
           }
           if (dict.hasOwnProperty('endTime') && dict['endTime'] != null) {
-            event.endTime = dict['endTime'] as Date;
+            event.endDateTime = dict['endTime'] as Date;
           }
           if (
             dict.hasOwnProperty('location').hasOwnProperty('coordinates') &&
@@ -88,11 +86,31 @@ export class EventModelMock {
           ) {
             event.location = dict['location'] as LocationEntity;
           }
+          if (dict.hasOwnProperty('address') && dict['address'] != null) {
+            event.address.country = dict['address']['country'] as string;
+            event.address.city = dict['address']['city'] as string;
+            event.address.postalcode = dict['address']['postalcode'] as string;
+            event.address.street = dict['address']['street'] as string;
+            if (
+              dict['address'].hasOwnProperty('housenumber') &&
+              dict['address']['housenumber'] != null
+            ) {
+              event.address.housenumber = dict['address'][
+                'housenumber'
+              ] as string;
+            }
+            if (
+              dict['address'].hasOwnProperty('addition') &&
+              dict['address']['addition'] != null
+            ) {
+              event.address.addition = dict['address']['addition'] as string;
+            }
+          }
           if (dict.hasOwnProperty('price') && dict['price'] != null) {
             event.price = dict['price'] as number;
           }
           if (dict.hasOwnProperty('isPublic') && dict['isPublic'] != null) {
-            event.isPublic = dict['isPublic'] as boolean;
+            event.public = dict['isPublic'] as boolean;
           }
           if (dict.hasOwnProperty('imageId') && dict['imageId'] != null) {
             event.imageId = dict['imageId'] as string;
@@ -104,7 +122,7 @@ export class EventModelMock {
             event.organizerId = dict['organizerId'] as string;
           }
           if (dict.hasOwnProperty('category') && dict['category'] != null) {
-            event.category = dict['category'] as string;
+            event.category = dict['category'] as CategoryEnum[];
           }
           return Promise.resolve(event);
         } else if (id === invalidObjectId.toString()) {

@@ -8,9 +8,11 @@ import {
   Min,
   IsNotEmpty,
 } from 'class-validator';
-import { UpdateLocationDto } from './location.dto';
+import { LocationDto } from './location.dto';
 import { Transform, Type } from 'class-transformer';
 import { IsBefore } from '../validators/IsBefore';
+import { CategoryEnum } from '../schema/enum/category.enum';
+import { AddressDto } from './address.dto';
 
 export class UpdateEventDto {
   @IsOptional()
@@ -31,7 +33,7 @@ export class UpdateEventDto {
   @IsDate()
   @MinDate(new Date())
   @IsBefore('endTime', { message: 'startTime must be before the endTime' })
-  date?: Date;
+  startDateTime?: Date;
 
   @IsOptional()
   @Transform((data) => {
@@ -40,22 +42,16 @@ export class UpdateEventDto {
   @IsOptional()
   @IsDate()
   @MinDate(new Date())
-  @IsBefore('endTime', { message: 'startTime must be before the endTime' })
-  startTime?: Date;
-
-  @IsOptional()
-  @Transform((data) => {
-    return new Date(data.value);
-  })
-  @IsOptional()
-  @IsDate()
-  @MinDate(new Date())
-  endTime?: Date;
+  endDateTime?: Date;
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => UpdateLocationDto)
-  location?: UpdateLocationDto;
+  @Type(() => LocationDto)
+  location?: LocationDto;
+
+  @IsOptional()
+  @ValidateNested()
+  address?: AddressDto;
 
   @IsOptional()
   @IsNumber()
@@ -64,7 +60,7 @@ export class UpdateEventDto {
 
   @IsOptional()
   @IsBoolean()
-  isPublic?: boolean;
+  public?: boolean;
 
   @IsOptional()
   imageId?: string;
@@ -73,5 +69,5 @@ export class UpdateEventDto {
   organizerId?: string;
 
   @IsOptional()
-  category?: string;
+  category?: CategoryEnum[];
 }

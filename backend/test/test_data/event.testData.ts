@@ -5,6 +5,7 @@ import { EventDto } from '../../src/core/dto/event.dto';
 import { UpdateEventDto } from '../../src/core/dto/updateEvent.dto';
 import { GeolocationEnum } from '../../src/core/schema/enum/geolocation.enum';
 import { CategoryEnum } from '../../src/core/schema/enum/category.enum';
+import { validAddress } from './openStreetMapApi.testData';
 
 /* eslint @typescript-eslint/naming-convention: 0 */
 
@@ -24,8 +25,9 @@ export const validEventDocument = {
     type: GeolocationEnum.POINT,
     coordinates: [8.54529, -171.23794],
   },
+  address: validAddress,
   price: 12.5,
-  isPublic: true,
+  public: true,
   imageId: '1',
   organizerId: '1',
   category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
@@ -40,6 +42,14 @@ export const validEventEntity: EventEntity = {
   location: {
     type: GeolocationEnum.POINT,
     coordinates: [8.54529, -171.23794],
+  },
+  address: {
+    addition: undefined,
+    city: 'Wien',
+    country: 'Österreich',
+    housenumber: '4',
+    postalcode: '1010',
+    street: 'Stephansplatz',
   },
   price: 12.5,
   public: true,
@@ -56,8 +66,8 @@ export const validEventDto: EventDto = {
   startDateTime: new Date('2023-01-01 10:00'),
   endDateTime: new Date('2023-01-01 12:00'),
   location: {
-    longitude: -171.23794,
-    latitude: 8.54529,
+    longitude: 8.54529,
+    latitude: -171.23794,
   },
   price: 12.5,
   public: true,
@@ -65,6 +75,13 @@ export const validEventDto: EventDto = {
   organizerId: '1',
   category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
   participants: 0,
+  address: {
+    country: 'Österreich',
+    city: 'Wien',
+    postalcode: '1010',
+    street: 'Stephansplatz',
+    housenumber: '4',
+  },
   userParticipates: false,
 };
 
@@ -73,15 +90,15 @@ export const validEventUpdateEntity: UpdateEventEntity = {
   id: undefined,
   name: 'Test name2',
   description: 'Test description2',
-  date: undefined,
-  startTime: undefined,
-  endTime: undefined,
+  startDateTime: undefined,
+  endDateTime: undefined,
   location: undefined,
+  address: undefined,
   price: 21.5,
-  isPublic: undefined,
+  public: undefined,
   imageId: '2',
   organizerId: '2',
-  category: 'Hardstyle',
+  category: [CategoryEnum.MERENGUE],
 };
 
 export const validEventUpdateDto: UpdateEventDto = {
@@ -90,7 +107,7 @@ export const validEventUpdateDto: UpdateEventDto = {
   price: 21.5,
   imageId: '2',
   organizerId: '2',
-  category: 'Hardstyle',
+  category: [CategoryEnum.MERENGUE],
 };
 
 export const updateOptions: QueryOptions = { new: true };

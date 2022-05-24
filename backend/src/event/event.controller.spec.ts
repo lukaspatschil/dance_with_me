@@ -11,10 +11,8 @@ import {
   USER_PARTICIPATES_IN_EVENT_USER_ID,
 } from '../../test/stubs/event.service.mock';
 import {
-  nonExistingObjectId,
   validEventUpdateDto,
   validEventUpdateEntity,
-  updateOptions,
   validEventDto,
   validObjectId1,
 } from '../../test/test_data/event.testData';
@@ -22,7 +20,6 @@ import { NotFoundException } from '@nestjs/common';
 import { UserEntity } from '../core/entity/user.entity';
 import { RoleEnum } from '../core/schema/enum/role.enum';
 import { CategoryEnum } from '../core/schema/enum/category.enum';
-import { LocationDto } from '../core/dto/location.dto';
 
 describe('EventController', () => {
   let sut: EventController;
@@ -273,12 +270,8 @@ describe('EventController', () => {
     });
   });
 
-  function getCreateEventDTO() {
-    const location = new LocationDto();
-    location.longitude = -171.23794;
-    location.latitude = 8.54529;
-
-    const createEventDto: CreateEventDto = {
+  function getCreateEventDTO(): CreateEventDto {
+    return {
       name: 'Test name',
       description: 'Test description',
       startDateTime: new Date('2020-01-01 00:10:00'),

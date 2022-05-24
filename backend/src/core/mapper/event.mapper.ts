@@ -6,7 +6,7 @@ import { GeolocationEnum } from '../schema/enum/geolocation.enum';
 import { LocationEntity } from '../entity/location.entity';
 import { EventDto } from '../dto/event.dto';
 import { UpdateEventDto } from '../dto/updateEvent.dto';
-import { LocationDto, UpdateLocationDto } from '../dto/location.dto';
+import { LocationDto } from '../dto/location.dto';
 import { AddressEntity } from '../entity/address.entity';
 import { AddressDto } from '../dto/address.dto';
 
@@ -98,9 +98,8 @@ export class EventMapper {
     newEvent.id = event.id;
     newEvent.name = event.name;
     newEvent.description = event.description;
-    newEvent.date = event.date;
-    newEvent.startTime = event.startTime;
-    newEvent.endTime = event.endTime;
+    newEvent.startDateTime = event.startDateTime;
+    newEvent.endDateTime = event.endDateTime;
     newEvent.location = new LocationEntity();
     if (event.location && event.location.longitude && event.location.latitude) {
       newEvent.location.type = GeolocationEnum.POINT;
@@ -113,8 +112,32 @@ export class EventMapper {
       //newEvent.location.coordinates = undefined;
       newEvent.location = undefined;
     }
+    if (event.address) {
+      if (
+        event.address.country &&
+        event.address.city &&
+        event.address.postalcode &&
+        event.address.street
+      ) {
+        newEvent.address = new AddressEntity(
+          event.address.country,
+          event.address.city,
+          event.address.postalcode,
+          event.address.street,
+        );
+
+        if (event.address.housenumber) {
+          newEvent.address.housenumber = event.address.housenumber;
+        }
+        if (event.address.addition) {
+          newEvent.address.addition = event.address.addition;
+        }
+      }
+    } else {
+      newEvent.address = undefined;
+    }
     newEvent.price = event.price;
-    newEvent.isPublic = event.isPublic;
+    newEvent.public = event.public;
     newEvent.imageId = event.imageId;
     newEvent.organizerId = event.organizerId;
     newEvent.category = event.category;
@@ -164,10 +187,9 @@ export class EventMapper {
     newEvent.id = event.id;
     newEvent.name = event.name;
     newEvent.description = event.description;
-    newEvent.date = event.date;
-    newEvent.startTime = event.startTime;
-    newEvent.endTime = event.endTime;
-    newEvent.location = new UpdateLocationDto();
+    newEvent.startDateTime = event.startDateTime;
+    newEvent.endDateTime = event.endDateTime;
+    newEvent.location = new LocationDto();
     if (event.location != null) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore currently not using the correct type
@@ -177,7 +199,7 @@ export class EventMapper {
       newEvent.location.longitude = event.location.coordinates[1];
     }
     newEvent.price = event.price;
-    newEvent.isPublic = event.isPublic;
+    newEvent.public = event.public;
     newEvent.imageId = event.imageId;
     newEvent.organizerId = event.organizerId;
     newEvent.category = event.category;

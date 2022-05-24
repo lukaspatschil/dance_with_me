@@ -8,6 +8,6 @@ export class LocationEntity {
 
 export class UpdateLocationEntity {
   type?: GeolocationEnum;
-  coordinates?: number[] | undefined;
+  coordinates?: [number, number] | undefined;
   //coordinates?: (number | undefined)[];
 }

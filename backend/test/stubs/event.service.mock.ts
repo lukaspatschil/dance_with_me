@@ -2,7 +2,7 @@ import { EventEntity } from '../../src/core/entity/event.entity';
 import { UpdateEventEntity } from '../../src/core/entity/updateEvent.entity';
 import { LocationEntity } from '../../src/core/entity/location.entity';
 import { GeolocationEnum } from '../../src/core/schema/enum/geolocation.enum';
-import { validAddress } from '../../test/test_data/openStreetMapApi.testData';
+import { validAddress } from '../test_data/openStreetMapApi.testData';
 import { CategoryEnum } from '../../src/core/schema/enum/category.enum';
 import {
   validEventDocument,
@@ -69,8 +69,7 @@ export class EventServiceMock {
 
   deleteEvent = jest.fn((id: string) => {
     if (id === validObjectId1.toString()) {
-      const event = validEventDocument;
-      return Promise.resolve(event);
+      return Promise.resolve(validEventDocument);
     } else {
       return Promise.resolve(null);
     }
@@ -86,16 +85,13 @@ export class EventServiceMock {
       if (eventEntity.description) {
         event.description = eventEntity.description;
       }
-      if (eventEntity.date) {
-        event.date = eventEntity.date;
+      if (eventEntity.startDateTime) {
+        event.startDateTime = eventEntity.startDateTime;
       }
-      if (eventEntity.startTime) {
-        event.startTime = eventEntity.startTime;
+      if (eventEntity.endDateTime) {
+        event.endDateTime = eventEntity.endDateTime;
       }
-      if (eventEntity.endTime) {
-        event.endTime = eventEntity.endTime;
-      }
-      if (eventEntity.location) {
+      if (eventEntity.location && event.location) {
         if (eventEntity.location.coordinates) {
           event.location.coordinates = eventEntity.location.coordinates;
         }
@@ -103,8 +99,8 @@ export class EventServiceMock {
       if (eventEntity.price) {
         event.price = eventEntity.price;
       }
-      if (eventEntity.isPublic) {
-        event.isPublic = eventEntity.isPublic;
+      if (eventEntity.public) {
+        event.public = eventEntity.public;
       }
       if (eventEntity.imageId) {
         event.imageId = eventEntity.imageId;

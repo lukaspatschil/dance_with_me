@@ -1,16 +1,31 @@
 import { UpdateLocationEntity } from './location.entity';
+import { CategoryEnum } from '../schema/enum/category.enum';
+import { AddressEntity } from './address.entity';
+import { IsOptional } from 'class-validator';
 
 export class UpdateEventEntity {
+  @IsOptional()
   id?: string;
+  @IsOptional()
   name?: string;
+  @IsOptional()
   description?: string;
-  date?: Date;
-  startTime?: Date;
-  endTime?: Date;
+  @IsOptional()
+  startDateTime?: Date;
+  @IsOptional()
+  endDateTime?: Date;
+  @IsOptional()
   location?: UpdateLocationEntity;
+  @IsOptional()
+  address?: AddressEntity;
+  @IsOptional()
   price?: number;
-  isPublic?: boolean;
+  @IsOptional()
+  public?: boolean;
+  @IsOptional()
   imageId?: string;
+  @IsOptional()
   organizerId?: string;
-  category?: string;
+  @IsOptional()
+  category?: CategoryEnum[];
 }
