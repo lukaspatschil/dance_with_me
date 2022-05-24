@@ -44,6 +44,8 @@ import { UserEntity } from '../core/entity/user.entity';
 import { RoleEnum } from '../core/schema/enum/role.enum';
 import { AlreadyParticipatedConflictError } from '../core/error/alreadyParticipatedConflict.error';
 import { NotYetParticipatedConflictError } from '../core/error/notYetParticipatedConflict.error';
+import { Neo4jService } from 'nest-neo4j/dist';
+import { Neo4jEventServiceMock } from '../../test/stubs/neo4j.event.service.mock';
 
 describe('EventService', () => {
   let sut: EventService;
@@ -60,6 +62,10 @@ describe('EventService', () => {
         {
           provide: getModelToken(EventDocument.name),
           useClass: EventModelMock,
+        },
+        {
+          provide: Neo4jService,
+          useClass: Neo4jEventServiceMock,
         },
       ],
     }).compile();

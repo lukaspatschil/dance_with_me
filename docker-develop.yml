@@ -70,9 +70,23 @@ services:
       - "traefik.enable=false"
     restart: always
 
+  dev-neo4j:
+    image: neo4j:4.4.6
+    networks:
+      - dev-internal
+    ports:
+      - '7474:7474'
+      - '7687:7687'
+    volumes:
+      - neo4j-data:/data
+    env_file:
+      - ./develop.env
+    restart: always
+
 volumes:
   mongodb_data_container:
   minio-data:
+  neo4j-data:
 
 networks:
   dev-internal:

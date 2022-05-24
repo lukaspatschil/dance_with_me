@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserDocument, UserSchema } from '../core/schema/user.schema';
 import { UserController } from './user.controller';
+import { DatabaseModule } from '../core/database/database.module';
 import { EventModule } from '../event/event.module';
 
 @Module({
@@ -10,6 +11,7 @@ import { EventModule } from '../event/event.module';
     MongooseModule.forFeature([
       { name: UserDocument.name, schema: UserSchema },
     ]),
+    DatabaseModule,
     EventModule,
   ],
   providers: [UserService],

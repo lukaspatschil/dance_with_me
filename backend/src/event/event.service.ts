@@ -16,6 +16,7 @@ import { OpenStreetMapApiService } from '../openStreetMapApi/openStreetMapApi.se
 import { AuthUser } from '../auth/interfaces';
 import { NotYetParticipatedConflictError } from '../core/error/notYetParticipatedConflict.error';
 import { AlreadyParticipatedConflictError } from '../core/error/alreadyParticipatedConflict.error';
+import { Neo4jService } from 'nest-neo4j';
 
 const DEFAULT_TAKE = 50;
 const DEFAULT_SKIP = 0;
@@ -25,10 +26,13 @@ const DEFAULT_RADIUS = 100;
 export class EventService {
   private readonly logger = new Logger(EventService.name);
 
+  private readonly PARTICIPATES_RELATIONSHIP: string = 'PARTICIPATES';
+
   constructor(
     @InjectModel(EventDocument.name)
     private readonly eventModel: Model<EventDocument>,
     private readonly positionStackService: OpenStreetMapApiService,
+    private readonly neo4jService: Neo4jService,
   ) {}
 
   async getEventsQueryDto(query: QueryDto): Promise<EventEntity[]> {
@@ -121,6 +125,11 @@ export class EventService {
     try {
       const createdEvent = await this.eventModel.create(eventEntity);
       result = EventMapper.mapDocumentToEntity(createdEvent);
+
+      const neo4jResult = await this.neo4jService.write(
+        `CREATE (e:Event {id: '${result.id}'})`,
+      );
+      this.logger.log(neo4jResult);
     } catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException(error);
@@ -151,12 +160,15 @@ export class EventService {
   ): Promise<(EventDocument & { _id: any }) | null> {
     this.logger.log(`Deleting event with id ${id}`);
 
+    let result;
     try {
-      return await this.eventModel.findByIdAndDelete(id);
+      result = await this.eventModel.findByIdAndDelete(id);
+      await this.neo4jService.write(`MATCH (e:Event {id: '${id}'}) DELETE e;`);
     } catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException(error);
     }
+    return result;
   }
 
   async deleteParticipation(eventId: string, user: AuthUser): Promise<void> {
@@ -169,6 +181,11 @@ export class EventService {
       result = await this.eventModel.findByIdAndUpdate(eventId, {
         $pull: { participants: user.id },
       });
+
+      const neo4jResult = await this.neo4jService.write(
+        `MATCH (u:User {id: '${user.id}'})-[r:${this.PARTICIPATES_RELATIONSHIP}]->(e:Event {id: '${eventId}'}) DELETE r;`,
+      );
+      this.logger.log(neo4jResult);
     } catch (e) {
       this.logger.error(e);
       throw new InternalServerErrorException();
@@ -203,6 +220,11 @@ export class EventService {
       result = await this.eventModel.findByIdAndUpdate(eventId, {
         $addToSet: { participants: user.id },
       });
+
+      const neo4jResult = await this.neo4jService.write(
+        `Match (e:Event {id: '${eventId}'}), (u:User {id: '${user.id}'}) CREATE (u)-[p:${this.PARTICIPATES_RELATIONSHIP}]->(e)`,
+      );
+      this.logger.log(neo4jResult);
     } catch (e) {
       this.logger.error(e);
       throw new InternalServerErrorException();

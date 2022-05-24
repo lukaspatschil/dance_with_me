@@ -30,6 +30,18 @@ services:
       - "traefik.enable=false"
     restart: always
 
+  local-neo4j:
+    image: neo4j:4.4.6
+    ports:
+      - '7474:7474'
+      - '7687:7687'
+    volumes:
+      - neo4j-data-local:/data
+    env_file:
+      - ./local.env
+    restart: always
+
 volumes:
   mongodb-data-container-local:
   minio-data-local:
+  neo4j-data-local:

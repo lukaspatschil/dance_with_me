@@ -13,10 +13,11 @@ import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard } from './auth/auth.guard';
 import { UserModule } from './user/user.module';
 import { EmailModule } from './email/email.module';
+import { RecommendationModule } from './recommendation/recommendation.module';
 
 @Module({
   imports: [
-    ConfigModule,
+    ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
     LoggerModule,
     PaymentModule,
@@ -25,6 +26,7 @@ import { EmailModule } from './email/email.module';
     ImageModule,
     UserModule,
     EmailModule,
+    RecommendationModule,
   ],
   controllers: [AppController, AuthController],
   providers: [

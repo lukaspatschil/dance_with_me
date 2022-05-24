@@ -22,12 +22,14 @@ import {
 import { RoleEnum } from '../src/core/schema/enum/role.enum';
 import { validObjectId } from './test_data/user.testData';
 import { UserDocument, UserSchema } from '../src/core/schema/user.schema';
+import { Neo4jService } from 'nest-neo4j/dist';
 
 /* eslint @typescript-eslint/no-magic-numbers: 0 */
 /* eslint @typescript-eslint/naming-convention: 0 */
 
 describe('EventController (e2e)', () => {
   let app: INestApplication;
+  let neo4J: Neo4jService;
 
   let testDatabaseStub: MongoMemoryServer;
   const eventModel: Model<EventDocument> = model<EventDocument>(
@@ -58,12 +60,15 @@ describe('EventController (e2e)', () => {
 
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
+    neo4J = app.get(Neo4jService);
+
     await app.init();
   });
 
   afterEach(async () => {
     await disconnect();
     await testDatabaseStub.stop();
+    await neo4J.write('MATCH (n) DETACH DELETE n');
     await app.close();
   });
 

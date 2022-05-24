@@ -10,6 +10,7 @@ import { UserEntity } from '../core/entity/user.entity';
 import { UserMapper } from '../core/mapper/user.mapper';
 import { RoleEnum } from '../core/schema/enum/role.enum';
 import { NotFoundError } from '../core/error/notFound.error';
+import { Neo4jService } from 'nest-neo4j';
 import { EventService } from '../event/event.service';
 
 @Injectable()
@@ -20,6 +21,7 @@ export class UserService {
     private readonly eventService: EventService,
     @InjectModel(UserDocument.name)
     private readonly userModel: Model<UserDocument>,
+    private readonly neo4jService: Neo4jService,
   ) {}
 
   async deleteUser(userId: string): Promise<UserDocument | null> {
@@ -49,15 +51,29 @@ export class UserService {
       this.logger.log(`Found user with id: ${user.id}`);
       return UserMapper.mapDocumentToEntity(userDoc);
     }
+
     const newUser: Omit<UserDocument, keyof Omit<Document, '_id'>> = {
       // eslint-disable-next-line @typescript-eslint/naming-convention
       _id: userId,
       ...userAttributes,
       role: RoleEnum.USER,
     };
-    const newUserDoc = await this.userModel.create(newUser);
-    this.logger.log(`Created user with id: ${user.id}`);
-    return UserMapper.mapDocumentToEntity(newUserDoc);
+
+    let result;
+    try {
+      const newUserDoc = await this.userModel.create(newUser);
+      this.logger.log(`Created user with id: ${user.id}`);
+      result = UserMapper.mapDocumentToEntity(newUserDoc);
+      const neo4jResult = await this.neo4jService.write(
+        `CREATE (u:User {id: '${result.id}'});`,
+      );
+      this.logger.log(`Neo4j result: ${neo4jResult}`);
+    } catch (e) {
+      this.logger.error(e);
+      throw new InternalServerErrorException();
+    }
+
+    return result;
   }
 
   async getUser(id: string): Promise<UserEntity> {

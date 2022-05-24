@@ -19,3 +19,11 @@ process.env.AWS_ENDPOINT = 'http://localhost:9000';
 process.env.BUCKET_REGION = 'eu-west-1';
 process.env.BUCKET_NAME_PREFIX = 'dancewithme-images-';
 process.env.STAGE = 'test';
+
+process.env.NEO4J_HOST = 'localhost';
+process.env.NEO4J_SCHEME = 'neo4j';
+process.env.NEO4J_USERNAME = 'neo4j';
+process.env.NEO4J_PASSWORD = 'dancewithme';
+process.env.NEO4J_PORT = 7687;
+process.env.NEO4J_ENDPOINT = 'neo4j://localhost:7687';
+process.env.NEO4J_AUTH = 'neo4j/dancewithme';
