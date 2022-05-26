@@ -9,6 +9,7 @@ export class CreateEventDto {
   public: boolean;
   startDateTime: string;
   endDateTime: string;
+  imageId?: string;
   category: Category[];
 
   constructor(name: string, description: string, address: AddressDto, price: number, isPublic: boolean, startDateTime: string, endDateTime: string, category: Category[]) {

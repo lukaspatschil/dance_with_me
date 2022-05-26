@@ -6,6 +6,9 @@ import {Category} from "../../../enums/category.enum";
 import {Router} from "@angular/router";
 import {CreateEventDto} from "../../../dto/createEvent.dto";
 import {AddressDto} from "../../../dto/address.dto";
+import {requiredImageType} from "../../../validators/requiredImageType";
+import {ImageService} from "../../../services/image.service";
+import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: 'app-create-event-page',
@@ -23,7 +26,11 @@ export class CreateEventPageComponent implements OnInit {
   public error = false;
 
 
-  constructor(private fb: FormBuilder, private eventService: EventService, private router: Router,
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly eventService: EventService,
+    private readonly router: Router,
+    private readonly imageService: ImageService
   ) {}
 
   ngOnInit(): void {
@@ -43,7 +50,8 @@ export class CreateEventPageComponent implements OnInit {
         endTime: ['', Validators.required],
         description: ['', Validators.required],
         public: [true],
-        category: new FormArray([], [Validators.required])
+        category: new FormArray([], [Validators.required]),
+        image: [null, requiredImageType()]
       }, { validators: requiredTimeValidator}
     );
   }
@@ -105,6 +113,14 @@ export class CreateEventPageComponent implements OnInit {
     return this.createEventForm.get(['description'])
   }
 
+  get image(): AbstractControl | null {
+    return this.createEventForm.get(['image']);
+  }
+
+  clearImage() {
+    this.image?.patchValue(null);
+  }
+
   createEvent() {
     const address = new AddressDto(
       this.createEventForm.value.address.country,
@@ -132,18 +148,35 @@ export class CreateEventPageComponent implements OnInit {
       const newEvent = this.createEvent();
       this.loading = true;
 
-      this.eventService.createEvent(newEvent).subscribe({
-        next: resp => {
-          if (resp.status == 201) {
+      if (this.image?.value) {
+        this.imageService.uploadImage(this.image.value).subscribe({
+          next: response => {
+            newEvent.imageId = response.id;
+            this.uploadEvent(newEvent);
+          },
+          error: () => {
             this.loading = false;
-            this.router.navigate(['']);
+            this.error = true;
           }
-        }, error: err => {
-          this.loading = false;
-          this.error = true;
-        }
-      });
+        });
+      } else {
+        this.uploadEvent(newEvent);
+      }
     }
+  }
+
+  private uploadEvent(event: CreateEventDto) {
+    this.eventService.createEvent(event).subscribe({
+      next: resp => {
+        if (resp.status == 201) {
+          this.loading = false;
+          this.router.navigate(['']);
+        }
+      }, error: err => {
+        this.loading = false;
+        this.error = true;
+      }
+    });
   }
 
   onCheckChange(event: Event) {

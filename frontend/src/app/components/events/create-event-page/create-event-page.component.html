@@ -86,7 +86,7 @@
       formGroupName="address"
       class="form-control flex flex-wrap -mx-3 mb-6">
       <div class="w-full sm:w-3/4 md:w-2/3 px-3 mb-6 md:mb-0">
-        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="address">
+        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="street">
           {{'create.street' | translate}} *
         </label>
         <input
@@ -235,7 +235,7 @@
     <!--- Description Block -->
     <div class="flex flex-wrap -mx-3 mb-5">
       <div class="w-full px-3 mb-6 md:mb-0">
-        <label translate for="description" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+        <label for="description" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
           {{'create.description' | translate}} *
         </label>
         <textarea required
@@ -294,6 +294,39 @@
                  *ngIf="category?.hasError('required')"
                  class="block uppercase text-red-600 text-xs font-bold mb-2">
             create.category_error
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!--- Image Block -->
+    <div class="flex flex-wrap -mx-3 mb-5">
+      <div class="w-full px-3 mb-6 md:mb-0">
+        <label for="image" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+          {{'create.image' | translate}} *
+        </label>
+        <div class="flex">
+          <input appImageExtractor type="file"
+                    formControlName="image"
+                    name="image"
+                    accept=".png, .jpg, .jpeg"
+                    class="block w-full cursor-pointer bg-gray-50 border border-gray-300 text-gray-900 focus:outline-none focus:border-transparent text-sm rounded-l-lg"
+                 id="image">
+          <div class="block cursor-pointer bg-gray-50 border border-gray-300 text-gray-900 focus:outline-none focus:border-transparent text-sm rounded-r-lg items-center justify-center flex">
+            <button
+              type="button"
+              (click)="clearImage()"
+              data-placement="top">
+                  <span class="material-icons" aria-hidden="true">clear</span>
+            </button>
+          </div>
+        </div>
+        <div translate
+             *ngIf="(image?.touched && image?.value)">
+          <label translate
+                 *ngIf="image?.hasError('wrongType')"
+                 class="block uppercase text-red-600 text-xs font-bold mb-2">
+            create.image_type
           </label>
         </div>
       </div>

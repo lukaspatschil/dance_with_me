@@ -39,7 +39,9 @@
     "wrong_time_error": "Startzeit muss vor Endzeit liegen.",
     "zip": "Postleitzahl",
     "zip_error": "Postleitzahl wird benötigt.",
-    "zip_placeholder": "PLZ"
+    "zip_placeholder": "PLZ",
+    "image": "Bild",
+    "image_type": "Das Bild muss ein JPEG oder PNG sein."
   },
   "eventCategory": {
     "Bachata": "Bachata",

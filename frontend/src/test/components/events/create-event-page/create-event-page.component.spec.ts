@@ -92,12 +92,12 @@ describe('CreateEventPageComponent',
     });
 
     it('should return the amount of input fields', () => {
-      // WHen
+      // When
       const formElement = fixture.debugElement.nativeElement.querySelector('#createForm');
       const inputElements = formElement.querySelectorAll('input');
 
       // Then
-      expect(inputElements.length).toEqual(17)
+      expect(inputElements.length).toEqual(18)
     });
 
     describe('CreateEventForm', () => {
@@ -124,16 +124,19 @@ describe('CreateEventPageComponent',
           endTime: '',
           description: '',
           public: true,
-          category: []
+          category: [],
+          image: null
         }
-        await fixture.whenStable()
-        // Then
-        expect(createForm.value).toEqual(createFormValues)
+        await fixture.whenStable();
 
+        // Then
+        expect(createForm.value).toEqual(createFormValues);
       });
 
       it('should be valid when inputs are filled correctly', async () => {
-        await fixture.whenStable()
+        // Given
+        await fixture.whenStable();
+
         // When
         createValidInput();
         const isFormValid = comp.createEventForm.valid
@@ -144,7 +147,9 @@ describe('CreateEventPageComponent',
       });
 
       it('should be invalid when one input is filled falsely', async () => {
+        // Given
         await fixture.whenStable()
+
         // When
         createInvalidInput()
         const isFormValid = comp.createEventForm.valid
@@ -158,12 +163,12 @@ describe('CreateEventPageComponent',
     describe('SubmitButton', () => {
       it('should be disabled when form invalid', async () => {
         await fixture.whenStable()
+
         // When
         createInvalidInput()
 
         // Then
         expect(createButton.disabled).toBeTruthy()
-
       });
     })
 
@@ -184,14 +189,22 @@ describe('CreateEventPageComponent',
 
         // When
         createValidInput();
-
         await fixture.whenStable()
+
         // Then
         expect(comp.createEvent()).toEqual(newEvent)
-
       });
     });
 
+    describe('clearImage', () => {
+      it('should set the value of image to null', () => {
+        // When
+        comp.clearImage();
+
+        // Then
+        expect(comp.image?.value).toBeNull();
+      });
+    });
 
     describe('onSubmit', () => {
       it('should send a new event to API ', async () => {
@@ -220,18 +233,18 @@ describe('CreateEventPageComponent',
 
         // Then
         expect(eventService.createEvent).toHaveBeenCalledWith(newEvent)
-
       });
 
       it('should not send a new event to API when input invalid', async () => {
+        // Given
         await fixture.whenStable()
+
         // When
         createInvalidInput();
         comp.onSubmit();
 
         // Then
         expect(eventService.createEvent).not.toHaveBeenCalled();
-
       });
     });
 

@@ -39,7 +39,9 @@
     "wrong_time_error": "Start time needs to be before end time..",
     "zip": "ZIP code",
     "zip_error": "ZIP code is required.",
-    "zip_placeholder": "ZIP"
+    "zip_placeholder": "ZIP",
+    "image": "Image",
+    "image_type": "The image needs to be of type jpeg or png."
   },
   "eventCategory": {
     "Bachata": "Bachata",

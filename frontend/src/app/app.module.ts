@@ -4,6 +4,7 @@ import { HttpClient, HttpClientModule} from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import {ImageAccessorDirective} from "./directives/image.directive";
 
 // Language selection
 import { TranslateLoader, TranslateModule} from "@ngx-translate/core";
@@ -31,6 +32,7 @@ import { UserDetailComponent } from './components/user/user-detail/user-detail.c
     LandingComponent,
     EventOverviewComponent,
     EventDetailComponent,
+    ImageAccessorDirective,
     UserDetailComponent
   ],
   imports: [
