@@ -1,0 +1,46 @@
+paymentOperations:
+  post:
+    description: Finalizes a payment intent on the server and sets an event to paid.
+    tags:
+      - payment
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              paymentMethodId:
+                type: string
+              eventId:
+                type: string
+            required:
+              - paymentMethodId
+              - eventId
+    responses:
+      '204':
+        description: No Content
+      '400':
+        description: Bad request.
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: './errors.yaml#/invalidFieldsSchema'
+      '401':
+        $ref: './errors.yaml#/unauthorizedResponse'
+      '403':
+        $ref: '#/forbiddenResponse'
+
+forbiddenResponse:
+  description: Missing permission to access/change/delete payment requests.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          error:
+            type: string
+            enum:
+              - missing_permission
+        required:
+          - error

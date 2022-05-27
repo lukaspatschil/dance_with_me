@@ -66,6 +66,9 @@ paths:
   /auth/force_logout:
     $ref: 'docs/contracts/v1/auth.yaml#/forceLogout'
 
+  /payment:
+    $ref: 'docs/contracts/v1/payment.yaml#/paymentOperations'
+
 components:
   securitySchemes:
     tokenAuth:

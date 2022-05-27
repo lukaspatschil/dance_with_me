@@ -1,6 +1,6 @@
 eventOperations:
   get:
-    description: Returns all events ordered by their start date and their name. If a location is given, the data is ordered by their distance, start date and their name.
+    description: Returns all events ordered by their start date and their name. If a location is given, the data is ordered by their distance, start date and their name. Only returns events which are paid for.
     tags:
       - event
     parameters:
