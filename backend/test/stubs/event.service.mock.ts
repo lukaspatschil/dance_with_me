@@ -3,6 +3,10 @@ import { LocationEntity } from '../../src/core/entity/location.entity';
 import { GeolocationEnum } from '../../src/core/schema/enum/geolocation.enum';
 import { validAddress } from '../../test/test_data/openStreetMapApi.testData';
 import { CategoryEnum } from '../../src/core/schema/enum/category.enum';
+import {
+  validEventDocument,
+  validObjectId1,
+} from '../test_data/event.testData';
 
 export class EventServiceMock {
   createEvent = jest.fn(() => {
@@ -46,4 +50,14 @@ export class EventServiceMock {
     eventEntity.address = validAddress;
     return eventEntity;
   }
+
+  deleteEvent = jest.fn((id: string) => {
+    if (id === validObjectId1.toString()) {
+      const event = validEventDocument;
+      event._id = id;
+      return Promise.resolve(event);
+    } else {
+      return Promise.resolve(null);
+    }
+  });
 }

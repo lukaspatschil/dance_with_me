@@ -28,10 +28,17 @@ import {
 import { NotFoundError } from 'rxjs';
 import { LocationEntity } from '../core/entity//location.entity';
 import { CategoryEnum } from '../core/schema/enum/category.enum';
+import {
+  invalidObjectId,
+  nonExistingObjectId,
+  validEventDocument,
+  validEventEntity,
+  validObjectId1,
+} from '../../test/test_data/event.testData';
 
 describe('EventService', () => {
   let sut: EventService;
-  let eventDocument: Model<EventDocument>;
+  let eventDocumentMock: Model<EventDocument>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -50,7 +57,7 @@ describe('EventService', () => {
 
     sut = module.get<EventService>(EventService);
 
-    eventDocument = module.get<Model<EventDocument>>(
+    eventDocumentMock = module.get<Model<EventDocument>>(
       getModelToken(EventDocument.name),
     );
   });
@@ -68,7 +75,7 @@ describe('EventService', () => {
       await sut.createEvent(eventEntity);
 
       // Then
-      expect(eventDocument.create).toHaveBeenCalled();
+      expect(eventDocumentMock.create).toHaveBeenCalled();
     });
 
     it('should call the database and throw a DB Error', async () => {
@@ -151,7 +158,7 @@ describe('EventService', () => {
       await sut.getEventById(param);
 
       // Then
-      expect(eventDocument.findById).toHaveBeenCalled();
+      expect(eventDocumentMock.findById).toHaveBeenCalled();
     });
 
     it('should call getEventById and throw an error', async () => {
@@ -186,7 +193,7 @@ describe('EventService', () => {
       await sut.getEventsQueryDto(param);
 
       // Then
-      expect(eventDocument.aggregate).toHaveBeenCalled();
+      expect(eventDocumentMock.aggregate).toHaveBeenCalled();
     });
 
     it('should call the database using the take: 1 parameter and find 1 element in the database', async () => {
@@ -199,6 +206,7 @@ describe('EventService', () => {
       // Then
       expect(result).toEqual([createEventEntity()]);
     });
+
     it('should call the database using the skip: 2 parameter and find 3 elements in the database', async () => {
       // Given
       const param = { skip: 2 };
@@ -239,7 +247,7 @@ describe('EventService', () => {
       await sut.getEventsQueryDto(query);
 
       // Then
-      expect(eventDocument.aggregate).toHaveBeenCalled();
+      expect(eventDocumentMock.aggregate).toHaveBeenCalled();
     });
 
     it('should call the database and find all elements in the database in a certain radius', async () => {
@@ -250,9 +258,67 @@ describe('EventService', () => {
       await sut.getEventsQueryDto(query);
 
       // Then
-      expect(eventDocument.aggregate).toHaveBeenCalled();
+      expect(eventDocumentMock.aggregate).toHaveBeenCalled();
     });
   });
+
+  describe('deleteUser', () => {
+    it('should call the database', async () => {
+      // When
+      await sut.deleteEvent(validObjectId1.toString());
+
+      // Then
+      expect(eventDocumentMock.findByIdAndDelete).toHaveBeenCalledWith(
+        validObjectId1.toString(),
+      );
+    });
+
+    it('should call the service and delete an event', async () => {
+      // Given
+      const event = validEventDocument;
+      event._id = validObjectId1.toString();
+
+      // When
+      const response = await sut.deleteEvent(validObjectId1.toString());
+
+      // Then
+      expect(response).toEqual(event);
+    });
+
+    it('should return null when deleting a non existing event', async () => {
+      //Given
+      const eventId = nonExistingObjectId.toString();
+
+      // When
+      const response = await sut.deleteEvent(eventId);
+
+      // Then
+      expect(response).toBeNull();
+    });
+
+    it('should return null when deleting an invalid event id', async () => {
+      //Given
+      const eventId = invalidObjectId.toString();
+
+      // When
+      const response = await sut.deleteEvent(eventId);
+
+      // Then
+      expect(response).toBeNull();
+    });
+
+    it('should return an internal error response when some error occurs', async () => {
+      //Given
+      const eventId = '-2';
+
+      // When
+      const result = async () => await sut.deleteEvent(eventId);
+
+      // Then
+      expect(result).rejects.toThrow(InternalServerErrorException);
+    });
+  });
+
   function createEventEntity(): EventEntity {
     const location = new LocationEntity();
     location.type = GeolocationEnum.POINT;

@@ -13,7 +13,13 @@ import {
   validObjectId1,
   validObjectId2,
   validObjectId3,
+  validEventEntity,
+  invalidObjectId,
 } from './test_data/event.testData';
+import {
+  deleteResponse,
+  notFoundResponse,
+} from './test_data/httpResponse.testData';
 import {
   validAddress,
   validAddressDTO,
@@ -1311,6 +1317,42 @@ describe('EventController (e2e)', () => {
         .expect((res) => {
           expect(res.body).toEqual(event1Dto);
         });
+    });
+  });
+
+  describe('/event (Delete)', () => {
+    it('should return 204', async () => {
+      const event = new Event({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [1, 2],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        category: getCategory(),
+        address: validAddress,
+      });
+      await event.save();
+
+      return request(app.getHttpServer())
+        .delete(`/event/${event._id}`)
+        .send()
+        .expect(HttpStatus.NO_CONTENT)
+        .expect(deleteResponse);
+    });
+
+    it('should return 404', async () => {
+      return request(app.getHttpServer())
+        .delete(`/event/${nonExistingObjectId.toString()}`)
+        .send()
+        .expect(HttpStatus.NOT_FOUND);
     });
   });
 

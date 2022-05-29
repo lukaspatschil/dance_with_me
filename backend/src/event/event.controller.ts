@@ -1,7 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Logger,
   NotFoundException,
   Param,
@@ -61,5 +64,19 @@ export class EventController {
     return result.map((item) =>
       EventMapper.mapEntityToDto(item as Required<EventEntity>),
     );
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteEvent(@Param('id') id: string): Promise<void> {
+    this.logger.log(`Deleting event with id ${id}`);
+    const event = await this.eventService.deleteEvent(id);
+
+    if (!event) {
+      this.logger.error(`Event with id ${id} not found`);
+      throw new NotFoundException();
+    }
+
+    this.logger.log(`Event with id ${id} was deleted`);
   }
 }

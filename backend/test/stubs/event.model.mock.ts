@@ -1,5 +1,11 @@
 import { GeolocationEnum } from '../../src/core/schema/enum/geolocation.enum';
 import { EventEntity } from '../../src/core/entity/event.entity';
+import {
+  validObjectId1,
+  validEventDocument,
+  invalidObjectId,
+  nonExistingObjectId,
+} from '../test_data/event.testData';
 import { validAddress } from '../test_data/openStreetMapApi.testData';
 
 export class EventModelMock {
@@ -30,6 +36,7 @@ export class EventModelMock {
     };
     return Promise.resolve(eventDocument);
   });
+
   findById = jest.fn((id) => {
     if (id === '-1') {
       return null;
@@ -97,6 +104,20 @@ export class EventModelMock {
     }
 
     return Promise.resolve(value);
+  });
+
+  findByIdAndDelete = jest.fn((id: string) => {
+    if (
+      id === invalidObjectId.toString() ||
+      id === nonExistingObjectId.toString()
+    ) {
+      return Promise.resolve(null);
+    } else if (id === '-2') {
+      throw new Error('Random DB Error');
+    }
+    const event = validEventDocument;
+    event._id = id;
+    return Promise.resolve(event);
   });
 }
 

@@ -3,6 +3,7 @@ import {
   InternalServerErrorException,
   Injectable,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, PipelineStage } from 'mongoose';
@@ -130,5 +131,19 @@ export class EventService {
     }
 
     return EventMapper.mapDocumentToEntity(event);
+  }
+
+  async deleteEvent(
+    id: string,
+  ): Promise<(EventDocument & { _id: any }) | null> {
+    this.logger.log(`Deleting event with id ${id}`);
+
+    try {
+      const event = await this.eventModel.findByIdAndDelete(id);
+      return event;
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException(error);
+    }
   }
 }

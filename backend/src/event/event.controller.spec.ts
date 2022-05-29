@@ -10,6 +10,10 @@ import { NotFoundException } from '@nestjs/common';
 import { UserEntity } from '../core/entity/user.entity';
 import { RoleEnum } from '../core/schema/enum/role.enum';
 import { CategoryEnum } from '../core/schema/enum/category.enum';
+import {
+  nonExistingObjectId,
+  validObjectId1,
+} from '../../test/test_data/event.testData';
 
 describe('EventController', () => {
   let sut: EventController;
@@ -115,6 +119,30 @@ describe('EventController', () => {
       const expectedData = getEventDTO();
       //Then
       expect(data).toEqual(expectedData);
+    });
+  });
+
+  describe('deleteEvent', () => {
+    it('should call deleteEvent', async () => {
+      // Given
+      const idDto = validObjectId1.toString();
+
+      //When
+      await sut.deleteEvent(idDto);
+
+      //Then
+      expect(eventService.deleteEvent).toHaveBeenCalledWith(
+        validObjectId1.toString(),
+      );
+    });
+
+    it('should call deleteEvent and throw a NotFoundError', async () => {
+      // When
+      const result = async () =>
+        await sut.deleteEvent(nonExistingObjectId.toString());
+
+      //Then
+      await expect(result).rejects.toThrow(new NotFoundException());
     });
   });
 
