@@ -20,6 +20,8 @@ import {
   validAddressDTO,
 } from './test_data/openStreetMapApi.testData';
 import { RoleEnum } from '../src/core/schema/enum/role.enum';
+import { validObjectId } from './test_data/user.testData';
+import { UserDocument, UserSchema } from '../src/core/schema/user.schema';
 
 describe('EventController (e2e)', () => {
   let app: INestApplication;
@@ -28,6 +30,11 @@ describe('EventController (e2e)', () => {
   const Event: Model<EventDocument> = model<EventDocument>(
     'eventdocuments',
     EventSchema,
+  );
+
+  const User: Model<UserDocument> = model<UserDocument>(
+    'userdocuments',
+    UserSchema,
   );
 
   beforeEach(async () => {
@@ -306,6 +313,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
+          participants: [],
           category: getCategory(),
           address: validAddress,
         });
@@ -324,6 +332,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
+          participants: 0,
           category: getCategory(),
           address: validAddressDTO,
         };
@@ -356,6 +365,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddress,
+          participants: [],
         });
         await event1.save();
         const event1Dto = {
@@ -374,6 +384,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddressDTO,
+          participants: 0,
         };
 
         const event2 = new Event({
@@ -392,6 +403,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddress,
+          participants: [],
         });
         await event2.save();
 
@@ -437,6 +449,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddress,
+          participants: [],
         });
         await event1.save();
 
@@ -467,6 +480,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddress,
+          participants: [],
         });
         await event1.save();
 
@@ -486,6 +500,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddress,
+          participants: [],
         });
         await event2.save();
         const event2Dto = {
@@ -504,6 +519,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddressDTO,
+          participants: 0,
         };
 
         return request(app.getHttpServer())
@@ -547,6 +563,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddress,
+          participants: [],
         });
         await event1.save();
 
@@ -578,6 +595,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddress,
+          participants: [],
         });
         await event1.save();
 
@@ -597,6 +615,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddress,
+          participants: [],
         });
         await event2.save();
         const event2Dto = {
@@ -615,6 +634,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddressDTO,
+          participants: 0,
         };
 
         return request(app.getHttpServer())
@@ -645,6 +665,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddress,
+          participants: [],
         });
         await event1.save();
 
@@ -664,6 +685,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddress,
+          participants: [],
         });
         await event2.save();
         const event2Dto = {
@@ -682,6 +704,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddressDTO,
+          participants: 0,
         };
 
         const event3 = new Event({
@@ -700,6 +723,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddress,
+          participants: [],
         });
         await event3.save();
         const event3Dto = {
@@ -718,6 +742,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddressDTO,
+          participants: 0,
         };
 
         return request(app.getHttpServer())
@@ -749,6 +774,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddress,
+        participants: [],
       });
       await event1.save();
       const event1Dto = {
@@ -767,6 +793,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddressDTO,
+        participants: 0,
       };
 
       const event2 = new Event({
@@ -785,6 +812,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddress,
+        participants: [],
       });
       await event2.save();
       const event2Dto = {
@@ -803,6 +831,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddressDTO,
+        participants: 0,
       };
 
       return request(app.getHttpServer())
@@ -832,6 +861,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddress,
+        participants: [],
       });
       await event1.save();
       const event1Dto = {
@@ -850,6 +880,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddressDTO,
+        participants: 0,
       };
 
       const event2 = new Event({
@@ -868,6 +899,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddress,
+        participants: [],
       });
       await event2.save();
       const event2Dto = {
@@ -886,6 +918,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddressDTO,
+        participants: 0,
       };
 
       return request(app.getHttpServer())
@@ -916,6 +949,7 @@ describe('EventController (e2e)', () => {
         imageId: '1',
         organizerId: '1',
         category: getCategory(),
+        participants: [],
       });
       await event1.save();
       const event1Dto = {
@@ -934,6 +968,7 @@ describe('EventController (e2e)', () => {
         imageId: '1',
         organizerId: '1',
         category: getCategory(),
+        participants: 0,
       };
 
       const event2 = new Event({
@@ -952,6 +987,7 @@ describe('EventController (e2e)', () => {
         imageId: '1',
         organizerId: '1',
         category: getCategory(),
+        participants: [],
       });
       await event2.save();
 
@@ -981,6 +1017,7 @@ describe('EventController (e2e)', () => {
         imageId: '1',
         organizerId: '1',
         category: getCategory(),
+        participants: [],
       });
       await event1.save();
       const event1Dto = {
@@ -999,6 +1036,7 @@ describe('EventController (e2e)', () => {
         imageId: '1',
         organizerId: '1',
         category: getCategory(),
+        participants: 0,
       };
 
       const event2 = new Event({
@@ -1017,6 +1055,7 @@ describe('EventController (e2e)', () => {
         imageId: '1',
         organizerId: '1',
         category: getCategory(),
+        participants: [],
       });
       await event2.save();
 
@@ -1048,6 +1087,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           category: getCategory(),
+          participants: [],
         });
         await event1.save();
         const event1Dto = {
@@ -1066,6 +1106,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddressDTO,
+          participants: 0,
         };
 
         const body = {
@@ -1099,6 +1140,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddress,
+          participants: [],
         });
         await event1.save();
         const event1Dto = {
@@ -1115,6 +1157,7 @@ describe('EventController (e2e)', () => {
           public: true,
           imageId: '1',
           organizerId: '1',
+          participants: 0,
           category: getCategory(),
           address: validAddressDTO,
         };
@@ -1135,6 +1178,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddress,
+          participants: [],
         });
         await event2.save();
         const event2Dto = {
@@ -1153,6 +1197,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddressDTO,
+          participants: 0,
         };
 
         const query = {
@@ -1190,6 +1235,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddress,
+          participants: [],
         });
         await event1.save();
         const event1Dto = {
@@ -1208,6 +1254,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddressDTO,
+          participants: 0,
         };
 
         const event2 = new Event({
@@ -1226,6 +1273,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddress,
+          participants: [],
         });
         await event2.save();
         const event2Dto = {
@@ -1244,6 +1292,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           address: validAddressDTO,
+          participants: 0,
         };
 
         const body = {
@@ -1286,6 +1335,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddress,
+        participants: [],
       });
       await event1.save();
       const event1Dto = {
@@ -1304,6 +1354,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddressDTO,
+        participants: 0,
       };
 
       return request(app.getHttpServer())
@@ -1351,6 +1402,293 @@ describe('EventController (e2e)', () => {
     });
   });
 
+  describe('/event/:eventid/participate (Post)', () => {
+    it('should add participation at event', async () => {
+      const event = new Event({
+        _id: validObjectId1.toString(),
+        name: 'Test Event',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        category: getCategory(),
+        address: validAddress,
+      });
+      await event.save();
+
+      const userId = validObjectId.toString();
+      const user = new User({
+        _id: userId,
+        displayName: 'Bill',
+        email: 'bill@initech.com',
+        role: RoleEnum.USER,
+      });
+
+      const authHeader = mockedAuthHeader({
+        id: userId,
+        displayName: user.displayName,
+        role: user.role,
+      });
+
+      await user.save();
+
+      return request(app.getHttpServer())
+        .post('/event/' + validObjectId1.toString() + '/participation')
+        .set('Authorization', authHeader)
+        .expect(HttpStatus.NO_CONTENT);
+    });
+  });
+
+  describe('/event/:eventid/participate (Delete)', () => {
+    it('should delete the participation at a non existing event and throw a not found error', async () => {
+      const userId = validObjectId.toString();
+      const user = new User({
+        _id: userId,
+        displayName: 'Bill',
+        email: 'bill@initech.com',
+        role: RoleEnum.USER,
+      });
+
+      const authHeader = mockedAuthHeader({
+        id: userId,
+        displayName: user.displayName,
+        role: user.role,
+      });
+
+      await user.save();
+
+      return request(app.getHttpServer())
+        .delete('/event/' + validObjectId1.toString() + '/participation')
+        .set('Authorization', authHeader)
+        .expect(HttpStatus.NOT_FOUND);
+    });
+
+    it('should delete participation at an event where the user did not participate and throw a conflict exception', async () => {
+      const event = new Event({
+        _id: validObjectId1.toString(),
+        name: 'Test Event',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        category: getCategory(),
+        address: validAddress,
+        participants: [],
+      });
+      await event.save();
+
+      const userId = validObjectId.toString();
+      const user = new User({
+        _id: userId,
+        displayName: 'Bill',
+        email: 'bill@initech.com',
+        role: RoleEnum.USER,
+      });
+
+      const authHeader = mockedAuthHeader({
+        id: userId,
+        displayName: user.displayName,
+        role: user.role,
+      });
+
+      await user.save();
+
+      return request(app.getHttpServer())
+        .delete('/event/' + validObjectId1.toString() + '/participation')
+        .set('Authorization', authHeader)
+        .expect(HttpStatus.CONFLICT);
+    });
+
+    it('should delete participation at an existing event where the user participated and return the status code 204', async () => {
+      const event = new Event({
+        _id: validObjectId1.toString(),
+        name: 'Test Event',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        category: getCategory(),
+        address: validAddress,
+        participants: [validObjectId.toString()],
+      });
+      await event.save();
+
+      const userId = validObjectId.toString();
+      const user = new User({
+        _id: userId,
+        displayName: 'Bill',
+        email: 'bill@initech.com',
+        role: RoleEnum.USER,
+      });
+
+      const authHeader = mockedAuthHeader({
+        id: userId,
+        displayName: user.displayName,
+        role: user.role,
+      });
+
+      await user.save();
+
+      return request(app.getHttpServer())
+        .delete('/event/' + validObjectId1.toString() + '/participation')
+        .set('Authorization', authHeader)
+        .expect(HttpStatus.NO_CONTENT);
+    });
+  });
+
+  it('delete User should remove all future participations', async () => {
+    // event 1
+    const startDate1 = new Date(addMinutes(new Date(), -30).toISOString());
+    const endDate1 = new Date(addMinutes(new Date(), -10).toISOString());
+    const event1 = new Event({
+      _id: validObjectId1.toString(),
+      name: 'test1',
+      description: 'Test Event Description',
+      startDateTime: startDate1,
+      endDateTime: endDate1,
+      location: {
+        type: GeolocationEnum.POINT,
+        coordinates: [1, 2],
+      },
+      price: 12.5,
+      public: true,
+      imageId: '1',
+      organizerId: '1',
+      category: getCategory(),
+      address: validAddress,
+      participants: [],
+    });
+    await event1.save();
+    const event1Dto = {
+      id: validObjectId1.toString(),
+      name: 'test1',
+      description: 'Test Event Description',
+      startDateTime: startDate1.toISOString(),
+      endDateTime: endDate1.toISOString(),
+      location: {
+        longitude: 1,
+        latitude: 2,
+      },
+      price: 12.5,
+      public: true,
+      imageId: '1',
+      organizerId: '1',
+      category: getCategory(),
+      address: validAddressDTO,
+      participants: 1,
+    };
+
+    // event 2
+    const startDate2 = new Date(addMinutes(new Date(), 10).toISOString());
+    const endDate2 = new Date(addMinutes(new Date(), 30).toISOString());
+    const event2 = new Event({
+      _id: validObjectId2.toString(),
+      name: 'test1',
+      description: 'Test Event Description',
+      startDateTime: startDate2,
+      endDateTime: endDate2,
+      location: {
+        type: GeolocationEnum.POINT,
+        coordinates: [1, 2],
+      },
+      price: 12.5,
+      public: true,
+      imageId: '1',
+      organizerId: '1',
+      category: getCategory(),
+      address: validAddress,
+      participants: [],
+    });
+    await event2.save();
+    const event2Dto = {
+      id: validObjectId2.toString(),
+      name: 'test1',
+      description: 'Test Event Description',
+      startDateTime: startDate2.toISOString(),
+      endDateTime: endDate2.toISOString(),
+      location: {
+        longitude: 1,
+        latitude: 2,
+      },
+      price: 12.5,
+      public: true,
+      imageId: '1',
+      organizerId: '1',
+      category: getCategory(),
+      address: validAddressDTO,
+      participants: 0,
+    };
+
+    //save user
+    const userId = validObjectId.toString();
+    const user = new User({
+      _id: userId,
+      displayName: 'Bill',
+      email: 'bill@initech.com',
+      role: RoleEnum.USER,
+    });
+    await user.save();
+
+    const authHeader = mockedAuthHeader({
+      id: userId,
+      displayName: user.displayName,
+      role: user.role,
+    });
+
+    // add participations
+    await request(app.getHttpServer())
+      .post('/event/' + validObjectId1.toString() + '/participation')
+      .set('Authorization', authHeader)
+      .expect(HttpStatus.NO_CONTENT);
+
+    await request(app.getHttpServer())
+      .post('/event/' + validObjectId2.toString() + '/participation')
+      .set('Authorization', authHeader)
+      .expect(HttpStatus.NO_CONTENT);
+
+    // delete user
+    await request(app.getHttpServer())
+      .delete('/user/' + userId)
+      .set('Authorization', authHeader)
+      .expect(HttpStatus.NO_CONTENT);
+
+    // check participations
+    await request(app.getHttpServer())
+      .get('/event/' + validObjectId1.toString())
+      .expect(HttpStatus.OK)
+      .expect((res) => {
+        expect(res.body).toEqual(event1Dto);
+      });
+
+    await request(app.getHttpServer())
+      .get('/event/' + validObjectId2.toString())
+      .expect(HttpStatus.OK)
+      .expect((res) => {
+        expect(res.body).toEqual(event2Dto);
+      });
+  });
+
   function getDefaultEventDTO() {
     return {
       id: '1',
@@ -1367,6 +1705,7 @@ describe('EventController (e2e)', () => {
       imageId: '1',
       organizerId: '1',
       category: getCategory(),
+      participants: 0,
       address: {
         country: 'Österreich',
         city: 'Wien',
@@ -1396,5 +1735,9 @@ describe('EventController (e2e)', () => {
 
   function getCategory(): Array<string> {
     return ['Salsa', 'Zouk'];
+  }
+
+  function addMinutes(date: Date, minutes: number) {
+    return new Date(date.getTime() + minutes * 60000);
   }
 });

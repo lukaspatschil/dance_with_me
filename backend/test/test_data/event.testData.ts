@@ -42,6 +42,7 @@ export const validEventEntity: EventEntity = {
   imageId: '1',
   organizerId: '1',
   category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
+  participants: [],
 };
 
 export const validEventDto: EventDto = {
@@ -59,4 +60,5 @@ export const validEventDto: EventDto = {
   imageId: '1',
   organizerId: '1',
   category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
+  participants: 0,
 };

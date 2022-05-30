@@ -7,6 +7,11 @@ import {
 } from '../test_data/event.testData';
 import { validAddress } from '../test_data/openStreetMapApi.testData';
 
+export const NotFoundErrorId = '-1';
+export const DBErrorId = '-2';
+export const ParticipationAlreadyStored = '-3';
+export const ParticipationNotAlreadyStored = '-4';
+
 export class EventModelMock {
   create = jest.fn((eventEntity: EventEntity) => {
     if (eventEntity.id === '-2') {
@@ -32,6 +37,7 @@ export class EventModelMock {
       category: eventEntity.category,
       public: eventEntity.public,
       address: eventEntity.address,
+      participants: [],
     };
     return Promise.resolve(eventDocument);
   });
@@ -118,6 +124,42 @@ export class EventModelMock {
     event._id = id;
     return Promise.resolve(event);
   });
+
+  findByIdAndUpdate = jest.fn((id: string, update: any) => {
+    if (id === NotFoundErrorId) {
+      return null;
+    }
+    if (id === DBErrorId) {
+      throw new Error('Random DB error');
+    }
+
+    if (update.$addToSet) {
+      const userId: string = update.$addToSet.participants;
+
+      if (id == ParticipationAlreadyStored) {
+        // the user already set the participation in the event
+        const eventDocument = createEventDocument();
+        eventDocument.participants.push(userId);
+        return eventDocument;
+      } else {
+        return createEventDocument();
+      }
+    } else {
+      const userId: string = update.$pull.participants;
+
+      if (id == ParticipationAlreadyStored) {
+        const eventDocument = createEventDocument();
+        eventDocument.participants.push(userId);
+        return eventDocument;
+      } else {
+        return createEventDocument();
+      }
+    }
+  });
+
+  updateMany = jest.fn((filter: any, update: any) => {
+    return Promise.resolve();
+  });
 }
 
 export class EventModelMockSkip {
@@ -149,5 +191,6 @@ function createEventDocument() {
     endDateTime: new Date('2020-01-01 00:12:00'),
     public: true,
     address: validAddress,
+    participants: [] as string[],
   };
 }

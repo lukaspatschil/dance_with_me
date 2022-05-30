@@ -1,7 +1,7 @@
 import {
   BadRequestException,
-  InternalServerErrorException,
   Injectable,
+  InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -11,8 +11,11 @@ import { EventMapper } from '../core/mapper/event.mapper';
 import { EventEntity } from '../core/entity/event.entity';
 import { GeolocationEnum } from '../core/schema/enum/geolocation.enum';
 import { QueryDto } from '../core/dto/query.dto';
-import { NotFoundError } from 'rxjs';
+import { NotFoundError } from '../core/error/notFound.error';
 import { OpenStreetMapApiService } from '../openStreetMapApi/openStreetMapApi.service';
+import { AuthUser } from '../auth/interfaces';
+import { NotYetParticipatedConflictError } from '../core/error/notYetParticipatedConflict.error';
+import { AlreadyParticipatedConflictError } from '../core/error/alreadyParticipatedConflict.error';
 
 @Injectable()
 export class EventService {
@@ -126,7 +129,7 @@ export class EventService {
     }
 
     if (!event) {
-      throw new NotFoundError('Event not found');
+      throw NotFoundError;
     }
 
     return EventMapper.mapDocumentToEntity(event);
@@ -138,11 +141,92 @@ export class EventService {
     this.logger.log(`Deleting event with id ${id}`);
 
     try {
-      const event = await this.eventModel.findByIdAndDelete(id);
-      return event;
+      return await this.eventModel.findByIdAndDelete(id);
     } catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException(error);
     }
+  }
+
+  async deleteParticipation(eventId: string, user: AuthUser): Promise<void> {
+    this.logger.log(
+      `Delete participation for event ${eventId} by user ${user.id}`,
+    );
+
+    let result;
+    try {
+      result = await this.eventModel.findByIdAndUpdate(eventId, {
+        $pull: { participants: user.id },
+      });
+    } catch (e) {
+      this.logger.error(e);
+      throw new InternalServerErrorException();
+    }
+
+    if (result == null) {
+      this.logger.error(`Event with id ${eventId} not found`);
+      throw NotFoundError;
+    }
+
+    const event = EventMapper.mapDocumentToEntity(result);
+
+    if (
+      !event.participants.find((participant) => {
+        return participant === user.id;
+      })
+    ) {
+      this.logger.error(`User with id ${user.id} did not participate`);
+      throw NotYetParticipatedConflictError;
+    }
+    return;
+  }
+
+  async createParticipation(eventId: string, user: AuthUser) {
+    this.logger.log(
+      `Create participation for event ${eventId} by user ${user.id}`,
+    );
+
+    let result;
+
+    try {
+      result = await this.eventModel.findByIdAndUpdate(eventId, {
+        $addToSet: { participants: user.id },
+      });
+    } catch (e) {
+      this.logger.error(e);
+      throw new InternalServerErrorException();
+    }
+
+    if (result == null) {
+      this.logger.error(`Event with id ${eventId} not found`);
+      throw NotFoundError;
+    }
+
+    const event = EventMapper.mapDocumentToEntity(result);
+
+    if (
+      event.participants.find((participant) => {
+        return participant === user.id;
+      })
+    ) {
+      this.logger.error(`User with id ${user.id} already participates`);
+      throw AlreadyParticipatedConflictError;
+    }
+  }
+
+  async deleteUsersFromFutureEvents(userId: string): Promise<void> {
+    this.logger.log(`Delete participation for future events by user ${userId}`);
+
+    let result;
+    try {
+      result = await this.eventModel.updateMany(
+        { participants: userId, startDateTime: { $gte: new Date() } },
+        { $pull: { participants: userId } },
+      );
+    } catch (e) {
+      this.logger.error(e);
+      throw new InternalServerErrorException();
+    }
+    return Promise.resolve();
   }
 }

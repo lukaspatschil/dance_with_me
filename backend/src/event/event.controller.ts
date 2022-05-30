@@ -21,7 +21,7 @@ import { User } from '../auth/user.decorator';
 import { AuthUser } from '../auth/interfaces';
 import { Organizer } from '../auth/role.guard';
 
-@Controller('/event')
+@Controller('event')
 export class EventController {
   private readonly logger = new Logger(EventController.name);
 
@@ -58,7 +58,7 @@ export class EventController {
 
   @Get()
   async getEvents(@Query() query: QueryDto): Promise<EventDto[]> {
-    this.logger.log('Get Events with query: {}', JSON.stringify(query));
+    this.logger.log(`Get Events with query: ${JSON.stringify(query)}`);
     const result = await this.eventService.getEventsQueryDto(query);
     this.logger.log('Result: ' + JSON.stringify(result));
     return result.map((item) =>
@@ -66,7 +66,7 @@ export class EventController {
     );
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteEvent(@Param('id') id: string): Promise<void> {
     this.logger.log(`Deleting event with id ${id}`);
@@ -78,5 +78,32 @@ export class EventController {
     }
 
     this.logger.log(`Event with id ${id} was deleted`);
+  }
+
+  @Post('/:id/participation')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async createParticipation(
+    @Param('id') eventId: string,
+    @User() user: AuthUser,
+  ): Promise<void> {
+    this.logger.log(
+      `Create participation for event ${eventId} by user ${user.id}`,
+    );
+
+    return await this.eventService.createParticipation(eventId, user);
+  }
+
+  @Delete('/:id/participation')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteParticipation(
+    @Param('id') eventId: string,
+    @User() user: AuthUser,
+  ): Promise<void> {
+    this.logger.log(
+      `Delete participation for event ${eventId} by user ${user.id}`,
+      eventId,
+      user.id,
+    );
+    await this.eventService.deleteParticipation(eventId, user);
   }
 }

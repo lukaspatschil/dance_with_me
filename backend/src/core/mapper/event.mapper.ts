@@ -40,6 +40,7 @@ export class EventMapper {
     newEvent.imageId = event.imageId;
     newEvent.organizerId = event.organizerId;
     newEvent.category = event.category;
+    newEvent.participants = event.participants;
 
     return newEvent as Required<EventEntity>;
   }
@@ -85,6 +86,7 @@ export class EventMapper {
     newEvent.imageId = event.imageId;
     newEvent.organizerId = organizerId;
     newEvent.category = event.category;
+    newEvent.participants = [];
 
     return newEvent;
   }
@@ -115,6 +117,7 @@ export class EventMapper {
     newEvent.imageId = event.imageId;
     newEvent.organizerId = event.organizerId;
     newEvent.category = event.category;
+    newEvent.participants = event.participants.length;
 
     return newEvent;
   }

@@ -7,6 +7,7 @@ import {
   IsNotEmpty,
   IsNotEmptyObject,
   IsNumber,
+  Min,
   MinDate,
   ValidateNested,
 } from 'class-validator';
@@ -69,4 +70,8 @@ export class EventDto {
   @IsEnum(CategoryEnum, { each: true })
   @ArrayMinSize(1)
   category!: CategoryEnum[];
+
+  @IsNumber()
+  @Min(0)
+  participants!: number;
 }

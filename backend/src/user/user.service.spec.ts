@@ -15,6 +15,8 @@ import {
 } from '../../test/test_data/user.testData';
 import { InternalServerErrorException } from '@nestjs/common';
 import { NotFoundError } from '../core/error/notFound.error';
+import { EventService } from '../event/event.service';
+import { EventServiceForUserServiceMock } from '../../test/stubs/event.service.for.User.service.mock';
 
 describe('UserService', () => {
   let sut: UserService;
@@ -27,6 +29,10 @@ describe('UserService', () => {
         {
           provide: getModelToken(UserDocument.name),
           useClass: UserModelMock,
+        },
+        {
+          provide: EventService,
+          useClass: EventServiceForUserServiceMock,
         },
       ],
     }).compile();
@@ -166,7 +172,7 @@ describe('UserService', () => {
         await sut.getUser(throwADataBaseException.toString());
 
       // Then
-      await expect(result).rejects.toThrow(InternalServerErrorException);
+      expect(result).rejects.toThrow(InternalServerErrorException);
     });
 
     it('should call the service and the database does not find a user', async () => {
@@ -174,7 +180,7 @@ describe('UserService', () => {
       const result = async () => await sut.getUser(invalidObjectId.toString());
 
       // Then
-      await expect(result).rejects.toThrow(NotFoundError);
+      expect(result).rejects.toThrow(NotFoundError);
     });
   });
 });

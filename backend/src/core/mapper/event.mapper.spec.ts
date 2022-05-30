@@ -6,6 +6,7 @@ import { GeolocationEnum } from '../schema/enum/geolocation.enum';
 import { EventDto } from '../dto/event.dto';
 import { EventDocument } from '../schema/event.schema';
 import { CategoryEnum } from '../schema/enum/category.enum';
+import { UserDocument } from '../schema/user.schema';
 
 describe('EventMapper', () => {
   describe('mapCreateDtoToEntity', () => {
@@ -108,6 +109,7 @@ describe('EventMapper', () => {
         street: 'Stephansplatz',
         housenumber: '4',
       },
+      participants: [] as string[],
     } as EventDocument;
   }
 
@@ -195,6 +197,7 @@ describe('EventMapper', () => {
         street: 'Stephansplatz',
         housenumber: '4',
       },
+      participants: 0,
     };
   }
 
@@ -216,6 +219,7 @@ describe('EventMapper', () => {
         street: 'Stephansplatz',
         housenumber: '4',
       },
+      participants: [],
     };
   }
 
@@ -234,6 +238,7 @@ describe('EventMapper', () => {
       imageId: '1',
       organizerId: '1',
       category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
+      participants: [],
     };
   }
 
@@ -259,6 +264,7 @@ describe('EventMapper', () => {
         street: 'Stephansplatz',
         housenumber: '4',
       },
+      participants: [],
     };
   }
 

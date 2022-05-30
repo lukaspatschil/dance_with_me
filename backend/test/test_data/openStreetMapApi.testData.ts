@@ -104,6 +104,7 @@ export function getEventEntityWithoutAddress(): EventEntity {
     imageId: '1',
     organizerId: '1',
     category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
+    participants: [],
   };
 }
 
@@ -120,6 +121,7 @@ export function getEventEntityWithoutLocation(): EventEntity {
     organizerId: '1',
     category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
     address: validAddress,
+    participants: [],
   };
 }
 
@@ -139,5 +141,6 @@ export function getEventEntityWithAddressAndLocation(): EventEntity {
     organizerId: '1',
     category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
     address: validAddress,
+    participants: [],
   };
 }

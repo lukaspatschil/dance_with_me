@@ -48,6 +48,7 @@ export class EventServiceMock {
     eventEntity.organizerId = '1';
     eventEntity.category = [CategoryEnum.SALSA, CategoryEnum.ZOUK];
     eventEntity.address = validAddress;
+    eventEntity.participants = [];
     return eventEntity;
   }
 
@@ -59,5 +60,13 @@ export class EventServiceMock {
     } else {
       return Promise.resolve(null);
     }
+  });
+
+  createParticipation = jest.fn((id, user) => {
+    return Promise.resolve();
+  });
+
+  deleteParticipation = jest.fn((id, user) => {
+    return Promise.resolve();
   });
 }

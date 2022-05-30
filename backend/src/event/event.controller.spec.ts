@@ -146,6 +146,56 @@ describe('EventController', () => {
     });
   });
 
+  describe('createParticipation', () => {
+    it('should call the add participation to an event', () => {
+      // When
+      sut.createParticipation('1', getDefaultUser());
+
+      // Then
+      expect(eventService.createParticipation).toHaveBeenCalled();
+    });
+
+    it('should call the add participation to an event with the correct parameters', () => {
+      // Given
+      const eventId = '1';
+      const user = getDefaultUser();
+
+      // When
+      sut.createParticipation(eventId, user);
+
+      // Then
+      expect(eventService.createParticipation).toHaveBeenCalledWith(
+        eventId,
+        user,
+      );
+    });
+  });
+
+  describe('removeParticipation', () => {
+    it('should call the delete participation to an event', () => {
+      // When
+      sut.deleteParticipation('1', getDefaultUser());
+
+      // Then
+      expect(eventService.deleteParticipation).toHaveBeenCalled();
+    });
+
+    it('should call the delete participation to an event with the correct parameters', () => {
+      // Given
+      const eventId = '1';
+      const user = getDefaultUser();
+
+      // When
+      sut.deleteParticipation(eventId, user);
+
+      // Then
+      expect(eventService.deleteParticipation).toHaveBeenCalledWith(
+        eventId,
+        user,
+      );
+    });
+  });
+
   function getCreateEventDTO(): CreateEventDto {
     return {
       name: 'Test name',
@@ -193,6 +243,7 @@ describe('EventController', () => {
         street: 'Stephansplatz',
         housenumber: '4',
       },
+      participants: 0,
     };
   }
 
@@ -218,6 +269,7 @@ describe('EventController', () => {
         street: 'Stephansplatz',
         housenumber: '4',
       },
+      participants: [],
     };
   }
 

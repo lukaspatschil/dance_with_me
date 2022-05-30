@@ -10,24 +10,29 @@ import { UserEntity } from '../core/entity/user.entity';
 import { UserMapper } from '../core/mapper/user.mapper';
 import { RoleEnum } from '../core/schema/enum/role.enum';
 import { NotFoundError } from '../core/error/notFound.error';
+import { EventService } from '../event/event.service';
 
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name);
 
   constructor(
+    private readonly eventService: EventService,
     @InjectModel(UserDocument.name)
     private readonly userModel: Model<UserDocument>,
   ) {}
 
   async deleteUser(userId: string): Promise<UserDocument | null> {
     this.logger.log(`Delete user with id: ${userId}`);
+    let result;
     try {
-      return await this.userModel.findByIdAndDelete(userId);
+      result = await this.userModel.findByIdAndDelete(userId);
+      await this.eventService.deleteUsersFromFutureEvents(userId);
     } catch (e) {
       this.logger.error(e);
       throw new InternalServerErrorException();
     }
+    return result;
   }
 
   async findAndUpdateOrCreate(

@@ -14,5 +14,6 @@ import { OpenStreetMapApiModule } from '../openStreetMapApi/openStreetMapApi.mod
   ],
   providers: [EventService],
   controllers: [EventController],
+  exports: [EventService],
 })
 export class EventModule {}

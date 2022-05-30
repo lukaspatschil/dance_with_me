@@ -3,7 +3,13 @@ import { EventService } from './event.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { EventDocument } from '../core/schema/event.schema';
 import { Model } from 'mongoose';
-import { EventModelMock } from '../../test/stubs/event.model.mock';
+import {
+  DBErrorId,
+  EventModelMock,
+  NotFoundErrorId,
+  ParticipationAlreadyStored,
+  ParticipationNotAlreadyStored,
+} from '../../test/stubs/event.model.mock';
 import { EventEntity } from '../core/entity/event.entity';
 import { GeolocationEnum } from '../core/schema/enum/geolocation.enum';
 import { OpenStreetMapApiService } from '../openStreetMapApi/openStreetMapApi.service';
@@ -25,7 +31,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { NotFoundError } from 'rxjs';
+import { NotFoundError } from '../core/error/notFound.error';
 import { LocationEntity } from '../core/entity//location.entity';
 import { CategoryEnum } from '../core/schema/enum/category.enum';
 import {
@@ -34,6 +40,10 @@ import {
   validEventDocument,
   validObjectId1,
 } from '../../test/test_data/event.testData';
+import { UserEntity } from '../core/entity/user.entity';
+import { RoleEnum } from '../core/schema/enum/role.enum';
+import { AlreadyParticipatedConflictError } from '../core/error/alreadyParticipatedConflict.error';
+import { NotYetParticipatedConflictError } from '../core/error/notYetParticipatedConflict.error';
 
 describe('EventService', () => {
   let sut: EventService;
@@ -261,7 +271,7 @@ describe('EventService', () => {
     });
   });
 
-  describe('deleteUser', () => {
+  describe('deleteEvent', () => {
     it('should call the database', async () => {
       // When
       await sut.deleteEvent(validObjectId1.toString());
@@ -314,9 +324,132 @@ describe('EventService', () => {
       const result = async () => await sut.deleteEvent(eventId);
 
       // Then
-      expect(result).rejects.toThrow(InternalServerErrorException);
+      await expect(result).rejects.toThrow(InternalServerErrorException);
     });
   });
+
+  describe('createParticipation', () => {
+    it('should call the add participation to an not existing event and throw not found exception', () => {
+      // Given
+
+      const eventId = NotFoundErrorId;
+      const user = getDefaultUser();
+
+      // When
+      const result = sut.createParticipation(eventId, user);
+
+      // Then
+      expect(result).rejects.toThrow(NotFoundError);
+    });
+
+    it('should call the add participation to an event and thrown a random database exception', () => {
+      // Given
+
+      const eventId = DBErrorId;
+      const user = getDefaultUser();
+
+      // When
+      const result = sut.createParticipation(eventId, user);
+
+      // Then
+      expect(result).rejects.toThrow(new InternalServerErrorException());
+    });
+
+    it('should call the add participation to an event where the user already participates and throw a ConflictException', async () => {
+      const eventId = ParticipationAlreadyStored;
+      const user = getDefaultUser();
+
+      // When
+      const result = sut.createParticipation(eventId, user);
+
+      // Then
+      await expect(result).rejects.toThrow(AlreadyParticipatedConflictError);
+    });
+
+    it('should call the add participation to an event and return nothing', async () => {
+      const eventId = ParticipationNotAlreadyStored;
+      const user = getDefaultUser();
+
+      // When
+      const result = await sut.createParticipation(eventId, user);
+
+      // Then
+    });
+  });
+
+  describe('removeParticipation', () => {
+    it('should call the delete participation to an not existing event and throw a NotFoundException', async () => {
+      // Given
+
+      const eventId = NotFoundErrorId;
+      const user = getDefaultUser();
+
+      // When
+      const result = sut.deleteParticipation(eventId, user);
+
+      // Then
+      await expect(result).rejects.toThrow(NotFoundError);
+    });
+
+    it('should call the delete participation to an event and throw a random database exception', () => {
+      // Given
+
+      const eventId = DBErrorId;
+      const user = getDefaultUser();
+
+      // When
+      const result = sut.deleteParticipation(eventId, user);
+
+      // Then
+      expect(result).rejects.toThrow(new InternalServerErrorException());
+    });
+
+    it('should call the delete participation to an event and throw a ConflictException', () => {
+      // Given
+
+      const eventId = ParticipationNotAlreadyStored;
+      const user = getDefaultUser();
+
+      // When
+      const result = sut.deleteParticipation(eventId, user);
+
+      // Then
+      expect(result).rejects.toThrow(NotYetParticipatedConflictError);
+    });
+
+    //TODO: add testcases
+  });
+
+  describe('deleteUsersFromFutureEvents', () => {
+    it('should call the database and delete all users from future events', async () => {
+      // Given
+      const userId = validObjectId1.toString();
+
+      // When
+      await sut.deleteUsersFromFutureEvents(userId);
+
+      // Then
+      expect(eventDocumentMock.updateMany).toHaveBeenCalled();
+    });
+
+    it('should call the database and delete all users from future events', async () => {
+      // Given
+      const userId = validObjectId1.toString();
+
+      // When
+      await sut.deleteUsersFromFutureEvents(userId);
+    });
+  });
+
+  function getDefaultUser(): UserEntity {
+    return {
+      id: '1',
+      email: 'john.doe@example.com',
+      displayName: 'John Doe',
+      emailVerified: true,
+      role: RoleEnum.ADMIN,
+    };
+  }
 
   function createEventEntity(): EventEntity {
     const location = new LocationEntity();
@@ -336,6 +469,7 @@ describe('EventService', () => {
     eventEntity.organizerId = '1';
     eventEntity.category = [CategoryEnum.SALSA, CategoryEnum.ZOUK];
     eventEntity.address = validAddress;
+    eventEntity.participants = [];
 
     return eventEntity;
   }
@@ -357,6 +491,7 @@ describe('EventService', () => {
       organizerId: '1',
       category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: validAddress,
+      participants: [],
     };
 
     return eventEntity;
