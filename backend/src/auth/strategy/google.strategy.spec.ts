@@ -4,6 +4,9 @@ import { AuthService } from '../auth.service';
 import { GoogleStrategy } from './google.strategy';
 import { UserEntity } from '../../core/entity/user.entity';
 import { ConfigService } from '@nestjs/config';
+import { Strategy } from 'passport-google-oauth20';
+
+jest.mock('passport-google-oauth20');
 
 describe('GoogleStrategy', function () {
   const googleProfile: any = {
@@ -83,6 +86,30 @@ describe('GoogleStrategy', function () {
     expect(strategy).toBeDefined();
   });
 
+  it('should call authenticate with correct options', () => {
+    // Given
+    jest
+      .spyOn(Strategy.prototype, 'authenticate')
+      .mockImplementation(jest.fn());
+    const mockState = 'mock-state';
+    const req: any = {
+      query: {
+        state: mockState,
+      },
+    };
+
+    // When
+    strategy.authenticate(req, {});
+
+    // Then
+    expect(Strategy.prototype.authenticate).toHaveBeenCalledWith(
+      req,
+      expect.objectContaining({
+        state: 'mock-state',
+      }),
+    );
+  });
+
   it('should call callback with error if the user could not be validated', async () => {
     // Given
     const callback = jest.fn();
@@ -97,6 +124,23 @@ describe('GoogleStrategy', function () {
 
     // Then
     expect(callback).toHaveBeenCalledWith(expect.any(Error), false);
+  });
+
+  it('should correctly transform minimal user profile without name property or photos', async () => {
+    // Given
+    const callback = jest.fn();
+    const { name: _, photos: _2, ...profile } = googleProfile;
+
+    // When
+    await strategy.validate(
+      'mock-access-token',
+      'mock-refresh-token',
+      profile,
+      callback,
+    );
+
+    // Then
+    expect(callback).toHaveBeenCalledWith(null, user);
   });
 
   it('should correctly transform provided user profile', async () => {

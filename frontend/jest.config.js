@@ -10,7 +10,7 @@ module.exports = {
     "default",
     ["jest-junit", {outputDirectory: "reports"}]
   ],
-  coverageReporters: ['text-summary', 'html', 'lcov'],
+  coverageReporters: ['text-summary', 'html', 'lcov', 'cobertura'],
   coverageDirectory: 'coverage',
   "coveragePathIgnorePatterns": ["test/mock"],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths || {}, {

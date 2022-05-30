@@ -18,7 +18,7 @@ export class EmailService {
     event: EventEntity,
     invoiceId: string,
     total: number,
-    currency?: string,
+    currency = 'EUR',
   ) {
     const frontendUrl = this.configService.get<string>('FRONTEND_URL');
     const eventUrl = `${frontendUrl}/event/${event.id}`;
@@ -36,7 +36,7 @@ export class EmailService {
           eventDate: event.startDateTime.toDateString(),
           invoiceId,
           total,
-          currency: currency ?? 'EUR',
+          currency: currency,
         },
         attachments: [
           // For real invoices, the invoice PDF should be attached.

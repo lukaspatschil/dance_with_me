@@ -20,7 +20,7 @@ export class AccessTokenStrategy extends PassportStrategy(
 
   async validate(req: Request): Promise<AuthUser> {
     const fingerPrint = req.cookies?.[fingerPrintCookieName];
-    const authHeader = req.headers?.authorization;
+    const authHeader = req.headers.authorization;
     const bearerMatch = /Bearer\s+(?<token>\S+)/i;
     const token = authHeader?.match(bearerMatch)?.groups?.['token'];
 

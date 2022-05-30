@@ -67,24 +67,30 @@ test-frontend:
   stage: test
   script:
     - npm run test:cov -w frontend
-  coverage: '/Statements\s+:\s(\d+.?\d+)%/'
+  coverage: '/Branches\s+:\s(\d+.?\d+)%/'
   artifacts:
     when: always
     reports:
       junit:
         - frontend/reports/junit.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: frontend/coverage/cobertura-coverage.xml
 
 test-backend:
   needs: ["lint-backend"]
   stage: test
   script:
     - npm run test:cov -w backend
-  coverage: '/Statements\s+:\s(\d+.?\d+)%/'
+  coverage: '/Branches\s+:\s(\d+.?\d+)%/'
   artifacts:
     when: always
     reports:
       junit:
         - backend/reports/junit.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: backend/coverage/cobertura-coverage.xml
 
 e2e test-backend:
   <<: *inso-runner-setup

@@ -111,7 +111,8 @@
     "coverageReporters": [
       "lcov",
       "text-summary",
-      "html"
+      "html",
+      "cobertura"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",

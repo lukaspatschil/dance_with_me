@@ -4,7 +4,9 @@ import { AuthService } from '../auth.service';
 import { FacebookStrategy } from './facebook.strategy';
 import { UserEntity } from '../../core/entity/user.entity';
 import { ConfigService } from '@nestjs/config';
-import { Profile } from 'passport-facebook';
+import { Strategy, Profile } from 'passport-facebook';
+
+jest.mock('passport-facebook');
 
 describe('FacebookStrategy', function () {
   const facebookProfile: Profile = {
@@ -89,15 +91,41 @@ describe('FacebookStrategy', function () {
     expect(strategy).toBeDefined();
   });
 
+  it('should call authenticate with correct options', () => {
+    // Given
+    jest
+      .spyOn(Strategy.prototype, 'authenticate')
+      .mockImplementation(jest.fn());
+    const mockState = 'mock-state';
+    const req: any = {
+      query: {
+        state: mockState,
+      },
+    };
+
+    // When
+    strategy.authenticate(req, {});
+
+    // Then
+    expect(Strategy.prototype.authenticate).toHaveBeenCalledWith(
+      req,
+      expect.objectContaining({
+        authType: 'rerequest',
+        state: 'mock-state',
+      }),
+    );
+  });
+
   it('should call callback with error if email is missing', async () => {
     // Given
     const callback = jest.fn();
+    const { emails: _, ...profile } = facebookProfile;
 
     // When
     await strategy.validate(
       'mock-access-token',
       'mock-refresh-token',
-      { ...facebookProfile, emails: [] },
+      profile,
       callback,
     );
 
@@ -119,6 +147,23 @@ describe('FacebookStrategy', function () {
 
     // Then
     expect(callback).toHaveBeenCalledWith(expect.any(Error), false);
+  });
+
+  it('should correctly transform minimal user profile without name property or photos', async () => {
+    // Given
+    const callback = jest.fn();
+    const { name: _, photos: _2, ...profile } = facebookProfile;
+
+    // When
+    await strategy.validate(
+      'mock-access-token',
+      'mock-refresh-token',
+      profile,
+      callback,
+    );
+
+    // Then
+    expect(callback).toHaveBeenCalledWith(null, user);
   });
 
   it('should correctly transform provided user profile', async () => {

@@ -41,9 +41,10 @@ export class OpenStreetMapApiService {
     }
     const response: OpenStreetMapEntity = promiseResponse.data;
     if (
-      response.address?.country &&
-      response.address?.postcode &&
-      response.address?.road
+      response.address &&
+      response.address.country &&
+      response.address.postcode &&
+      response.address.road
     ) {
       return {
         country: response.address.country,
@@ -83,10 +84,10 @@ export class OpenStreetMapApiService {
     }
     const response: Array<OpenStreetMapEntity> = promiseResponse.data;
 
-    if (response[0]?.lat && response[0]?.lon) {
+    if (response[0] && response[0].lat && response[0].lon) {
       return {
         type: GeolocationEnum.POINT,
-        coordinates: [Number(response[0]?.lat), Number(response[0]?.lon)],
+        coordinates: [Number(response[0].lat), Number(response[0].lon)],
       } as LocationEntity;
     }
     throw new NotFoundException();

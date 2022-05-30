@@ -75,7 +75,7 @@ describe('AccessTokenStrategy', function () {
 
   it('should throw error if fingerprint is not provided', () => {
     // Given
-    const request = { ...validRequest, cookies: {} };
+    const { cookies: _, ...request } = validRequest;
 
     // When
     const promise = strategy.validate(request);
