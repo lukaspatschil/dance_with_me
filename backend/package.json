@@ -106,12 +106,7 @@
     },
     "reporters": [
       "default",
-      [
-        "jest-junit",
-        {
-          "outputDirectory": "reports"
-        }
-      ]
+      ["jest-junit", {"outputDirectory": "reports"}]
     ],
     "collectCoverageFrom": [
       "**/*.(t|j)s",

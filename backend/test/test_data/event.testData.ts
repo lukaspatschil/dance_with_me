@@ -87,7 +87,6 @@ export const validEventDto: EventDto = {
 
 // Update Objects
 export const validEventUpdateEntity: UpdateEventEntity = {
-  id: undefined,
   name: 'Test name2',
   description: 'Test description2',
   startDateTime: undefined,

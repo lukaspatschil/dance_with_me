@@ -95,7 +95,6 @@ export class EventMapper {
 
   static mapDtoToEntityUpdate(event: UpdateEventDto): UpdateEventEntity {
     const newEvent = new UpdateEventEntity();
-    newEvent.id = event.id;
     newEvent.name = event.name;
     newEvent.description = event.description;
     newEvent.startDateTime = event.startDateTime;
@@ -184,7 +183,6 @@ export class EventMapper {
     event: Required<UpdateEventEntity>,
   ): UpdateEventDto {
     const newEvent = new UpdateEventDto();
-    newEvent.id = event.id;
     newEvent.name = event.name;
     newEvent.description = event.description;
     newEvent.startDateTime = event.startDateTime;

@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  InternalServerErrorException,
   Logger,
   NotFoundException,
   Param,
@@ -123,6 +124,27 @@ export class EventController {
     @Body() updateEventDto: UpdateEventDto,
   ) {
     this.logger.log(`Updating event with id ${id}`);
+
+    if (
+      (updateEventDto.startDateTime && !updateEventDto.endDateTime) ||
+      (!updateEventDto.startDateTime && updateEventDto.endDateTime)
+    ) {
+      let requestedEvent;
+      try {
+        requestedEvent = await this.eventService.getEventById(id);
+      } catch (error) {
+        this.logger.error(error);
+        throw new NotFoundException(
+          'Can not find Event with id for location update: ' + id,
+        );
+      }
+
+      if (updateEventDto.startDateTime) {
+        updateEventDto.endDateTime = requestedEvent.endDateTime;
+      } else {
+        updateEventDto.startDateTime = requestedEvent.startDateTime;
+      }
+    }
 
     return EventMapper.mapEntityToDto(
       await this.eventService.updateEvent(

@@ -16,9 +16,6 @@ import { AddressDto } from './address.dto';
 
 export class UpdateEventDto {
   @IsOptional()
-  id?: string;
-
-  @IsOptional()
   @IsNotEmpty()
   name?: string;
 
@@ -32,7 +29,7 @@ export class UpdateEventDto {
   @IsOptional()
   @IsDate()
   @MinDate(new Date())
-  @IsBefore('endTime', { message: 'startTime must be before the endTime' })
+  //@IsBefore('endTime', { message: 'startTime must be before the endTime' })
   startDateTime?: Date;
 
   @IsOptional()

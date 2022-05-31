@@ -1944,7 +1944,137 @@ describe('EventController (e2e)', () => {
         });
     });
 
-    it('should return 400, malformed price', async () => {
+    it('should return 200 (change startDateTime of event)', async () => {
+      // Give
+      const event1 = new Event({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 09:00:00'),
+        endDateTime: new Date('2023-01-02 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        category: getCategory(),
+        address: validAddress,
+      });
+      await event1.save();
+
+      const event1DtoUpdated = {
+        id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 11:00:00').toISOString(),
+        endDateTime: new Date('2023-01-02 12:00:00').toISOString(),
+        location: {
+          longitude: 0,
+          latitude: 0,
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        category: getCategory(),
+        address: validAddress,
+      };
+
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.startDateTime = new Date('2023-01-01 11:00:00');
+
+      return request(app.getHttpServer())
+        .patch(`/event/${event1._id}`)
+        .send(eventUpdateDto)
+        .expect((res) => {
+          expect(res.body).toEqual(event1DtoUpdated);
+        });
+    });
+
+    it('should return 200 (change endDateTime of event)', async () => {
+      // Give
+      const event1 = new Event({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 09:00:00'),
+        endDateTime: new Date('2023-01-02 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        category: getCategory(),
+        address: validAddress,
+      });
+      await event1.save();
+
+      const event1DtoUpdated = {
+        id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 09:00:00').toISOString(),
+        endDateTime: new Date('2023-01-01 11:30:00').toISOString(),
+        location: {
+          longitude: 0,
+          latitude: 0,
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        category: getCategory(),
+        address: validAddress,
+      };
+
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.endDateTime = new Date('2023-01-01 11:30:00');
+
+      return request(app.getHttpServer())
+        .patch(`/event/${event1._id}`)
+        .send(eventUpdateDto)
+        .expect((res) => {
+          expect(res.body).toEqual(event1DtoUpdated);
+        });
+    });
+
+    it('should return 400 (startDateTime after endDateTime of event)', async () => {
+      // Give
+      const event1 = new Event({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        category: getCategory(),
+        address: validAddress,
+      });
+      await event1.save();
+
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.startDateTime = new Date('2023-01-01 15:00:00');
+
+      return request(app.getHttpServer())
+        .patch(`/event/${validObjectId1.toString()}`)
+        .send(eventUpdateDto)
+        .expect(HttpStatus.BAD_REQUEST);
+    });
+
+    it('should return 400 (malformed price)', async () => {
       // Give
       const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
       eventUpdateDto.price = -12345;
@@ -1955,7 +2085,7 @@ describe('EventController (e2e)', () => {
         .expect(HttpStatus.BAD_REQUEST);
     });
 
-    it('should return 400, empty name', async () => {
+    it('should return 400 (empty name)', async () => {
       // Give
       const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
       eventUpdateDto.name = '';
@@ -1966,7 +2096,7 @@ describe('EventController (e2e)', () => {
         .expect(HttpStatus.BAD_REQUEST);
     });
 
-    it('should return 404 on non existing Object Id', async () => {
+    it('should return 404 (non existing Object Id)', async () => {
       return request(app.getHttpServer())
         .patch(`/event/${nonExistingObjectId.toString()}`)
         .send()
