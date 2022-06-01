@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { UserEntity } from '../entities/user.entity';
 import {HttpClient} from "@angular/common/http";
-import {map, Observable} from "rxjs";
 
 import {UserDto} from "../dto/user.dto";
 import { environment } from '../../environments/environment';
 import {UserMapper} from "../mapper/user.mapper";
+import {RoleEnum} from "../enums/role.enum";
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,10 @@ export class UserService {
       const userEntity = UserMapper.dtoToEntity(user);
       this._user.next(userEntity);
     });
+  }
+
+  get role(): RoleEnum | null {
+    return this._user.value?.role ?? null;
   }
 
   resetUser() {

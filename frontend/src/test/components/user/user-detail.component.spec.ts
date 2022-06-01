@@ -9,6 +9,9 @@ import {UserEntity} from "../../../app/entities/user.entity";
 import {Role} from "../../../app/enums/role";
 import {RoleEnum} from "../../../app/enums/role.enum";
 import {expandEnvs} from "env-cmd/dist/expand-envs";
+import {AuthService} from "../../../app/core/auth/auth.service";
+import {AuthServiceMock} from "../../mock/auth.service.mock";
+import {Router} from "@angular/router";
 
 describe('UserDetailComponent', () => {
   let comp: UserDetailComponent;
@@ -16,17 +19,21 @@ describe('UserDetailComponent', () => {
 
   let httpMock: HttpTestingController;
   let userService: UserService;
+  let authService: AuthService;
+  let router: Router;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ UserDetailComponent ],
       imports: [ HttpClientTestingModule, RouterTestingModule, TranslateModule.forRoot()],
-      providers: [{provide: UserService, useClass: UserServiceMock}]
+      providers: [{provide: UserService, useClass: UserServiceMock}, {provide: AuthService, useClass: AuthServiceMock}]
     })
       .compileComponents();
 
     httpMock = TestBed.inject(HttpTestingController);
     userService = TestBed.inject(UserService);
+    authService = TestBed.inject(AuthService);
+    router = TestBed.inject(Router);
   });
 
   beforeEach(() => {
@@ -63,6 +70,29 @@ describe('UserDetailComponent', () => {
 
       // Then
       expect(userService.deleteUser).toHaveBeenCalled()
+    });
+
+    it('should logout after deleting', async () => {
+      // When
+      await fixture.whenStable();
+
+      // When
+      comp.deleteUser();
+
+      // Then
+      expect(authService.logout).toHaveBeenCalled();
+    });
+
+    it('should redirect after deleting', async () => {
+      // When
+      jest.spyOn(router, 'navigate');
+      await fixture.whenStable();
+
+      // When
+      comp.deleteUser();
+
+      // Then
+      expect(router.navigate).toHaveBeenCalledWith(['']);
     });
   });
 

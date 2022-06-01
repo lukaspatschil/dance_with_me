@@ -1,6 +1,7 @@
 import {Component, HostBinding} from '@angular/core';
 import { TranslateService } from "@ngx-translate/core";
 import { AuthService } from './core/auth/auth.service';
+import {UserService} from "./services/user.service";
 
 @Component({
   selector: 'app-root',
@@ -15,12 +16,11 @@ export class AppComponent {
   @HostBinding('class.navbar-opened') navbarOpened = false;
   constructor(
     public readonly translate: TranslateService,
-    public readonly authService: AuthService
+    public readonly authService: AuthService,
+    public readonly userService: UserService
   ) {
     translate.addLangs(['en', 'de']);
     translate.setDefaultLang('de');
-
-    this.authService.refreshAccessToken();
   }
 
   toggleNavbar() {

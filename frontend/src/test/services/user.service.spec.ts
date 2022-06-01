@@ -5,6 +5,7 @@ import {RoleEnum} from "../../app/enums/role.enum";
 import {UserDto} from "../../app/dto/user.dto";
 import {environment} from "../../environments/environment";
 import { UserEntity } from '../../app/entities/user.entity';
+import {Role} from "../../app/enums/role";
 
 describe('UserService', () => {
   let sut: UserService;
@@ -76,6 +77,59 @@ describe('UserService', () => {
     });
   });
 
+  describe('role', () => {
+    it('should return null initially', () => {
+      // When
+      const role = sut.role;
+
+      // Then
+      expect(role).toBeNull();
+    });
+
+    it('should return the role of the user', () => {
+      // Given
+      const id = 'google:12345';
+      sut.updateUser(id);
+      const req = httpMock.expectOne(`${environment.baseUrl}/user/${id}`);
+      req.flush(userDto);
+      sut.user$.subscribe(() => {});
+
+      // When
+      const role = sut.role;
+
+      // Then
+      expect(role).toEqual(RoleEnum.USER);
+    });
+  });
+
+  describe('deleteUser', () => {
+    it('should delete the user', () => {
+      // Given
+      const id = 'google:12345';
+      sut.updateUser(id);
+      const pre = httpMock.expectOne(`${environment.baseUrl}/user/${id}`);
+      pre.flush(userDto);
+      sut.user$.subscribe(() => {});
+
+      // When
+      const result = sut.deleteUser();
+
+      // Then
+      result.subscribe(() => {});
+      const req = httpMock.expectOne(`${environment.baseUrl}/user/${id}`);
+      req.flush(userDto);
+    });
+
+    it('should delete the user', () => {
+      // When
+      const result = sut.deleteUser();
+
+      // Then
+      result.subscribe(() => {});
+      const req = httpMock.expectOne(`${environment.baseUrl}/user/undefined`);
+      req.flush(userDto);
+    });
+  });
 
   const userDto: UserDto = {
     id: 'google:12345',

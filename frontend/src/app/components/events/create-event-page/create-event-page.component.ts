@@ -65,16 +65,16 @@ export class CreateEventPageComponent implements OnInit {
     return this.createEventForm.get('price')
   }
 
-  get date(): AbstractControl | null {
-    return this.createEventForm.get('date')
+  get date(): AbstractControl {
+    return this.createEventForm.get('date')!
   }
 
-  get startTime(): AbstractControl | null {
-    return this.createEventForm.get('startTime')
+  get startTime(): AbstractControl {
+    return this.createEventForm.get('startTime')!
   }
 
-  get endTime(): AbstractControl | null {
-    return this.createEventForm.get('endTime')
+  get endTime(): AbstractControl {
+    return this.createEventForm.get('endTime')!
   }
 
   get category(): AbstractControl | null {
@@ -101,24 +101,24 @@ export class CreateEventPageComponent implements OnInit {
     return this. createEventForm.get(['address', 'postalcode'])
   }
 
-  get addition(): AbstractControl | null{
-    return this.createEventForm.get(['address', 'addition'])
+  get addition(): AbstractControl{
+    return this.createEventForm.get(['address', 'addition'])!
   }
 
-  get public(): AbstractControl | null {
-    return this.createEventForm.get(['public'])
+  get public(): AbstractControl {
+    return this.createEventForm.get(['public'])!
   }
 
   get description(): AbstractControl | null {
     return this.createEventForm.get(['description'])
   }
 
-  get image(): AbstractControl | null {
-    return this.createEventForm.get(['image']);
+  get image(): AbstractControl {
+    return this.createEventForm.get(['image'])!;
   }
 
   clearImage() {
-    this.image?.patchValue(null);
+    this.image.patchValue(null);
   }
 
   createEvent() {
@@ -128,7 +128,7 @@ export class CreateEventPageComponent implements OnInit {
       this.createEventForm.value.address.postalcode,
       this.createEventForm.value.address.street,
       this.createEventForm.value.address.housenumber,
-      this.createEventForm.value.address.addition
+      this.addition.value
     );
 
     return new CreateEventDto(
@@ -136,9 +136,9 @@ export class CreateEventPageComponent implements OnInit {
       this.createEventForm.value.description,
       address,
       Number(this.createEventForm.value.price),
-      this.createEventForm.value.public,
-      new Date(`${this.date?.value}T${this.startTime?.value}`).toISOString(),
-      new Date(`${this.date?.value}T${this.endTime?.value}`).toISOString(),
+      this.public.value,
+      new Date(`${this.date.value}T${this.startTime.value}`).toISOString(),
+      new Date(`${this.date.value}T${this.endTime.value}`).toISOString(),
       this.createEventForm.value.category,
     )
   }
@@ -148,7 +148,7 @@ export class CreateEventPageComponent implements OnInit {
       const newEvent = this.createEvent();
       this.loading = true;
 
-      if (this.image?.value) {
+      if (this.image.value) {
         this.imageService.uploadImage(this.image.value).subscribe({
           next: response => {
             newEvent.imageId = response.id;
@@ -168,7 +168,7 @@ export class CreateEventPageComponent implements OnInit {
   private uploadEvent(event: CreateEventDto) {
     this.eventService.createEvent(event).subscribe({
       next: resp => {
-        if (resp.status == 201) {
+        if (resp.status === 201) {
           this.loading = false;
           this.router.navigate(['']);
         }

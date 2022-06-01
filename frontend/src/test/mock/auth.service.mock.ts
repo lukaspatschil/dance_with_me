@@ -4,4 +4,8 @@ export class AuthServiceMock {
   setTokens = jest.fn();
 
   getToken = 'token';
+
+  refreshAccessToken = jest.fn(() => Promise.resolve());
+
+  logout = jest.fn();
 }

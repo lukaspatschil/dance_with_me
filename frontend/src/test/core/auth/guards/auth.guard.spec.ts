@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AuthGuard } from '../../../app/core/auth/auth.guard';
+import { AuthGuard } from '../../../../app/core/auth/guards/auth.guard';
 import {RouterTestingModule} from "@angular/router/testing";
-import {AuthService} from "../../../app/core/auth/auth.service";
-import {AuthServiceMock} from "../../mock/auth.service.mock";
+import {AuthService} from "../../../../app/core/auth/auth.service";
+import {AuthServiceMock} from "../../../mock/auth.service.mock";
 import {ActivatedRouteSnapshot, Router, RouterStateSnapshot} from "@angular/router";
-import {environment} from "../../../environments/environment";
+import {environment} from "../../../../environments/environment";
 
 describe('AuthGuard', () => {
 

@@ -116,7 +116,7 @@ describe('AuthService', () => {
     it('should refresh tokens after 15 minutes', async () => {
       jest.useFakeTimers('legacy');
       // Given
-      const refreshSpy = jest.spyOn(sut, 'refreshAccessToken').mockImplementationOnce(() => {});
+      const refreshSpy = jest.spyOn(sut, 'refreshAccessToken').mockImplementationOnce(() => Promise.resolve());
       pasetoService.decodeToken = jest.fn().mockReturnValue({payload: {}});
       const refreshToken = 'refreshToken';
 

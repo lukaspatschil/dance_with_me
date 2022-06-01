@@ -41,5 +41,9 @@ export class UserServiceMock  {
   resetUser = jest.fn()
 
   deleteUser = jest.fn().mockReturnValue(
-    of(204))
+    of({status: 204}))
+
+  get role() {
+    return RoleEnum.USER;
+  }
 }

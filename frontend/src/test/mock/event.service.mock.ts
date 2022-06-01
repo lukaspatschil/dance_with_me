@@ -1,11 +1,11 @@
 import {EventDto} from "../../app/dto/event.dto"
 import {Category} from "../../app/enums/category.enum";
-import {Observable, of} from "rxjs";
+import {of} from "rxjs";
 
 
 export class EventServiceMock  {
 
-  response: EventDto ={
+  response: EventDto = {
     name: 'name',
     description: 'description',
     address: {

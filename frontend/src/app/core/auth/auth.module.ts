@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from "./auth.service";
-import { AuthGuard } from "./auth.guard";
+import { AuthGuard } from "./guards/auth.guard";
 import { TokenStorageService } from "./token.service";
 import { LoginGuard } from "./login.guard";
 import { LoginComponent } from './login/login.component';

@@ -76,13 +76,21 @@ export class AuthService {
     });
   }
 
-  refreshAccessToken() {
-    const refreshToken = this.tokenStorage.getRefreshToken();
-    if (refreshToken) {
-      this.http.post(`${AUTH_API}/refresh_token`, { refreshToken }, httpOptions)
-        .subscribe(async (response: any) => {
-          await this.setTokens(response.accessToken, response.refreshToken);
-        });
-    }
+  refreshAccessToken(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const refreshToken = this.tokenStorage.getRefreshToken();
+      if (refreshToken) {
+        this.http.post(`${AUTH_API}/refresh_token`, { refreshToken }, httpOptions)
+          .subscribe({
+            next: async (response: any) => {
+              await this.setTokens(response.accessToken, response.refreshToken);
+              resolve();
+            },
+            error: err => reject(err)
+          });
+      } else {
+        resolve();
+      }
+    });
   }
 }

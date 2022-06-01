@@ -11,6 +11,8 @@ import {Category} from "../../../../app/enums/category.enum";
 import {formatDate} from "@angular/common";
 import {CreateEventDto} from "../../../../app/dto/createEvent.dto";
 import {AddressDto} from "../../../../app/dto/address.dto";
+import {ImageService} from "../../../../app/services/image.service";
+import {ImageServiceMock} from "../../../mock/image.service.mock";
 
 describe('CreateEventPageComponent',
   () => {
@@ -35,6 +37,7 @@ describe('CreateEventPageComponent',
 
     let httpMock: HttpTestingController;
     let eventService: EventService;
+    let imageService: ImageService;
 
     let date: string;
 
@@ -43,11 +46,12 @@ describe('CreateEventPageComponent',
       TestBed.configureTestingModule({
         imports: [ReactiveFormsModule, FormsModule, RouterTestingModule, HttpClientTestingModule, TranslateModule.forRoot()],
         declarations: [CreateEventPageComponent],
-        providers: [{provide: EventService, useClass: EventServiceMock}]
+        providers: [{provide: EventService, useClass: EventServiceMock}, {provide: ImageService, useClass: ImageServiceMock}]
       });
 
       httpMock = TestBed.inject(HttpTestingController);
       eventService = TestBed.inject(EventService);
+      imageService = TestBed.inject(ImageService);
     });
 
     beforeEach(async () => {
