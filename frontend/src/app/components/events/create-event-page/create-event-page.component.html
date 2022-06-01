@@ -1,8 +1,8 @@
 <div class="p-5 space-y-4 font-poppins justify-center items-center">
   <form [formGroup]="createEventForm" (ngSubmit)="onSubmit()" class="form font-poppins justify-center items-center" id="createForm">
-    <p translate class="text-l mb-8">create.create_event</p>
-    <div class="flex flex-wrap -mx-3 mb-6">
-      <div class="form-group w-full md:w-1/2 px-3 mb-6 md:mb-0">
+    <h1 translate class="font-medium leading-tight text-2xl mt-0 mb-4">create.create_event</h1>
+    <div class="flex flex-wrap -mx-3 mb-3">
+      <div class="form-group w-full md:w-1/2 px-3 mb-3 md:mb-0">
         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="event-name">
           {{'create.event_name' | translate}} *
         </label>
@@ -21,8 +21,8 @@
     </div>
 
     <!--- Date/Time Block -->
-    <div class="flex flex-wrap -mx-3 mb-6">
-      <div class="w-full sm:w-full md:w-1/3 px-3 mb-6 md:mb-0">
+    <div class="flex flex-wrap -mx-3 mb-3">
+      <div class="w-full sm:w-full md:w-1/3 px-3 mb-3 md:mb-0">
         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="date">
           {{'create.date' | translate}} *
         </label>
@@ -40,7 +40,7 @@
           </label>
         </div>
       </div>
-      <div class="sm:w-1/2 md:w-1/3 px-3 mb-6 md:mb-0">
+      <div class="sm:w-1/2 md:w-1/3 px-3 mb-3 md:mb-0">
         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="startTime">
           {{'create.starttime' | translate}} *
         </label>
@@ -62,7 +62,7 @@
           </label>
         </div>
       </div>
-      <div class="sm:w-1/2 md:w-1/3 px-3 mb-6 md:mb-0">
+      <div class="sm:w-1/2 md:w-1/3 px-3 mb-3 md:mb-0">
         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="endTime">
           {{'create.endtime' | translate}} *
         </label>
@@ -84,8 +84,8 @@
     <!--- Address Block -->
     <div
       formGroupName="address"
-      class="form-control flex flex-wrap -mx-3 mb-6">
-      <div class="w-full sm:w-3/4 md:w-2/3 px-3 mb-6 md:mb-0">
+      class="form-control flex flex-wrap -mx-3 mb-3">
+      <div class="w-full sm:w-3/4 md:w-2/3 px-3 mb-3 md:mb-0">
         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="street">
           {{'create.street' | translate}} *
         </label>
@@ -103,7 +103,7 @@
           </label>
         </div>
       </div>
-      <div class="w-full sm:w-1/4 md:w-1/3 px-3 mb-6 md:mb-3">
+      <div class="w-full sm:w-1/4 md:w-1/3 px-3 mb-3 md:mb-3">
         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="city">
           {{'create.housenumber' | translate}} *
         </label>
@@ -127,7 +127,7 @@
           </label>
         </div>
       </div>
-      <div class="w-full sm:w-1/4 px-3 mb-6 md:mb-0">
+      <div class="w-full sm:w-1/4 px-3 mb-3 md:mb-0">
         <label translate class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="zip">
           create.addition
         </label>
@@ -137,7 +137,7 @@
           name="addition"
           class="appearance-none block w-full text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-red-900" id="addition" type="text" placeholder="">
       </div>
-      <div class="w-full sm:w-1/4 px-3 mb-6 md:mb-0">
+      <div class="w-full sm:w-1/4 px-3 mb-3 md:mb-0">
         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="zip">
           {{'create.zip' | translate}} *
         </label>
@@ -160,7 +160,7 @@
           </label>
         </div>
       </div>
-      <div class="w-full sm:w-1/4 px-3 mb-6 md:mb-0">
+      <div class="w-full sm:w-1/4 px-3 mb-3 md:mb-0">
         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="city">
           {{'create.city' | translate}} *
         </label>
@@ -178,7 +178,7 @@
           </label>
         </div>
       </div>
-      <div class="w-full sm:w-1/4 px-3 mb-6 md:mb-0">
+      <div class="w-full sm:w-1/4 px-3 mb-3 md:mb-0">
         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="city">
           {{'create.country' | translate}} *
         </label>
@@ -198,8 +198,8 @@
       </div>
     </div>
 
-    <div class="flex flex-wrap -mx-3 mb-6">
-      <div class="w-full px-3 mb-6 md:mb-0">
+    <div class="flex flex-wrap -mx-3 mb-3">
+      <div class="w-full px-3 mb-3 md:mb-0">
         <label for="price" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
           {{'create.price' | translate}} *
         </label>
@@ -234,8 +234,8 @@
 
     <!--- Description Block -->
     <div class="flex flex-wrap -mx-3 mb-5">
-      <div class="w-full px-3 mb-6 md:mb-0">
-        <label for="description" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+      <div class="w-full px-3 mb-3 md:mb-0">
+        <label translate for="description" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
           {{'create.description' | translate}} *
         </label>
         <textarea required
@@ -256,7 +256,7 @@
     </div>
 
 
-    <div class="flex space-x-6 mb-6">
+    <div class="flex space-x-6 mb-3">
       <label for="description" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
         {{'create.public' | translate}} *
       </label>
@@ -275,8 +275,8 @@
       </div>
     </div>
 
-    <div class="flex flex-wrap -mx-3 mb-6">
-      <div class="w-full px-3 mb-6 md:mb-0">
+    <div class="flex flex-wrap -mx-3 mb-3">
+      <div class="w-full px-3 mb-3 md:mb-0">
         <label translate class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
           create.category
         </label>
@@ -301,7 +301,7 @@
 
     <!--- Image Block -->
     <div class="flex flex-wrap -mx-3 mb-5">
-      <div class="w-full px-3 mb-6 md:mb-0">
+      <div class="w-full px-3 mb-3 md:mb-0">
         <label for="image" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
           {{'create.image' | translate}} *
         </label>

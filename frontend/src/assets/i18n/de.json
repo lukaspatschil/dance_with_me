@@ -53,12 +53,6 @@
   "events": {
     "events": "Veranstalltungen"
   },
-  "user": {
-    "name": "Name",
-    "mail": "Mail",
-    "delete_button": "Profil löschen",
-    "verified_tooltip": "E-Mail verifiziert"
-  },
   "legal_link": "Rechtliches",
   "login": {
     "description": "Anmelden und tanzen!",
@@ -73,5 +67,35 @@
     "logout": "Abmelden",
     "profile": "Profil"
   },
-  "privacy_link": "Privatsphäre"
+  "payment": {
+    "addition": "Zusätzliche Information",
+    "card_details": "Kartendetails",
+    "city": "Stadt",
+    "city_error": "Stadt wird benötigt.",
+    "city_placeholder": "Stadt",
+    "country": "Land",
+    "country_error": "Land wird benötigt.",
+    "country_placeholder": "Land",
+    "housenumber": "Hausnummer",
+    "housenumber_error": "Hausnummer wird benötigt.",
+    "name": "Name",
+    "name_error": "Name wird benötigt.",
+    "number_error": "Muss eine Nummer sein.",
+    "pay_button": "Zahle 10€",
+    "paymentForm": "Finalisiere Bezahlung",
+    "street": "Straße",
+    "street_error": "Straße wird benötigt.",
+    "street_placeholder": "Straße",
+    "validation_error": "Ein Fehler ist aufgetreten, bitte versuchen Sie es erneut.",
+    "zip": "Postleitzahl",
+    "zip_error": "Postleitzahl wird benötigt.",
+    "zip_placeholder": "PLZ"
+  },
+  "privacy_link": "Privatsphäre",
+  "user": {
+    "delete_button": "Profil löschen",
+    "mail": "Mail",
+    "name": "Name",
+    "verified_tooltip": "E-Mail verifiziert"
+  }
 }

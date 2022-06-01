@@ -19,6 +19,10 @@ export class UserService {
 
   constructor(private readonly http: HttpClient) {}
 
+  get user(): UserEntity | null {
+    return this._user.value;
+  }
+
   updateUser(userId: string) {
     this.http.get<UserDto>(`${environment.baseUrl}/user/${userId}`).subscribe(user => {
       const userEntity = UserMapper.dtoToEntity(user);

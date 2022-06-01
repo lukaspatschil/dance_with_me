@@ -15,6 +15,7 @@ import {EventDetailComponent} from "./components/events/event-detail/event-detai
 import {UserDetailComponent} from "./components/user/user-detail/user-detail.component";
 import {OrganiserGuard} from "./core/auth/guards/organiser.guard";
 import {RefreshGuard} from "./core/auth/guards/refresh.guard";
+import {PaymentComponent} from "./components/payment/payment.component";
 
 const routes: Routes = [
   {path: '', canActivate: [RefreshGuard], children: [
@@ -23,7 +24,8 @@ const routes: Routes = [
         {path: 'create', canActivate: [OrganiserGuard], component: CreateEventPageComponent},
         {path: 'events', component: EventOverviewComponent},
         {path: 'event/:id', component: EventDetailComponent},
-        {path: 'user', component: UserDetailComponent}
+        {path: 'user', component: UserDetailComponent},
+        {path: 'payment/:id', component: PaymentComponent}
       ]},
     {path: 'about', component: AboutPageComponent},
     {path: 'legal', component: LegalPageComponent},

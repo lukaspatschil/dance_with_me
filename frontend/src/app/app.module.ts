@@ -21,6 +21,7 @@ import { CreateEventPageComponent} from "./components/events/create-event-page/c
 import { CoreModule } from "./core/core.module";
 import { EventDetailComponent } from './components/events/event-detail/event-detail.component';
 import { UserDetailComponent } from './components/user/user-detail/user-detail.component';
+import {PaymentComponent} from "./components/payment/payment.component";
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { UserDetailComponent } from './components/user/user-detail/user-detail.c
     EventOverviewComponent,
     EventDetailComponent,
     ImageAccessorDirective,
-    UserDetailComponent
+    UserDetailComponent,
+    PaymentComponent
   ],
   imports: [
     AppRoutingModule,

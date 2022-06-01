@@ -102,6 +102,31 @@ describe('UserService', () => {
     });
   });
 
+  describe('get user', () => {
+    it('should return null initially', () => {
+      // When
+      const user = sut.user;
+
+      // Then
+      expect(user).toBeNull();
+    });
+
+    it('should return the user', () => {
+      // Given
+      const id = 'google:12345';
+      sut.updateUser(id);
+      const req = httpMock.expectOne(`${environment.baseUrl}/user/${id}`);
+      req.flush(userDto);
+      sut.user$.subscribe(() => {});
+
+      // When
+      const user = sut.user;
+
+      // Then
+      expect(user).toEqual(userEntity);
+    });
+  });
+
   describe('deleteUser', () => {
     it('should delete the user', () => {
       // Given

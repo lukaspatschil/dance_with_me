@@ -170,9 +170,9 @@ export class CreateEventPageComponent implements OnInit {
       next: resp => {
         if (resp.status === 201) {
           this.loading = false;
-          this.router.navigate(['']);
+          this.router.navigate([`/payment/${resp.body?.id}`]);
         }
-      }, error: err => {
+      }, error: () => {
         this.loading = false;
         this.error = true;
       }

@@ -53,12 +53,6 @@
   "events": {
     "events": "Events"
   },
-  "user": {
-    "name": "Name",
-    "mail": "Mail",
-    "delete_button": "Delete profile",
-    "verified_tooltip": "Mail is verified"
-  },
   "legal_link": "Legal",
   "login": {
     "description": "Sign in and start dancing!",
@@ -73,5 +67,35 @@
     "logout": "Logout",
     "profile": "Profile"
   },
-  "privacy_link": "Privacy"
+  "payment": {
+    "addition": "Addition",
+    "card_details": "Card details",
+    "city": "City",
+    "city_error": "City is required.",
+    "city_placeholder": "City",
+    "country": "Country",
+    "country_error": "Country is required.",
+    "country_placeholder": "Country",
+    "housenumber": "House number",
+    "housenumber_error": "House number is required.",
+    "name": "Name",
+    "name_error": "Name is required.",
+    "number_error": "Only numbers.",
+    "pay_button": "Pay 10€",
+    "paymentForm": "Finalize payment",
+    "street": "Street",
+    "street_error": "Street is required.",
+    "street_placeholder": "Street",
+    "validation_error": "An error occurred, please try again!",
+    "zip": "ZIP code",
+    "zip_error": "ZIP code is required.",
+    "zip_placeholder": "ZIP"
+  },
+  "privacy_link": "Privacy",
+  "user": {
+    "delete_button": "Delete profile",
+    "mail": "Mail",
+    "name": "Name",
+    "verified_tooltip": "Mail is verified"
+  }
 }
