@@ -38,7 +38,6 @@
     "cookie-parser": "^1.4.6",
     "eslint-config-dance-with-me": "^1.0.0",
     "handlebars": "^4.7.7",
-    "mailer": "^0.6.7",
     "mongoose": "^6.2.10",
     "nest-neo4j": "^0.1.5",
     "nest-winston": "^1.6.2",

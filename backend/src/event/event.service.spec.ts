@@ -34,6 +34,7 @@ import {
   updateOptions,
   validEventUpdateEntity,
   invalidObjectId,
+  validEventDocument,
 } from '../../test/test_data/event.testData';
 import {
   InternalServerErrorException,
@@ -323,7 +324,7 @@ describe('EventService', () => {
       );
       // Then
       expect(response).toEqual(expectedUpdatedEvent);
-      expect(eventDocumentMock.aggregate).toHaveBeenCalled();
+      expect(eventDocumentMock.findByIdAndUpdate).toHaveBeenCalled();
     });
 
     it('should throw a NotFoundException when updating a non existing event', async () => {

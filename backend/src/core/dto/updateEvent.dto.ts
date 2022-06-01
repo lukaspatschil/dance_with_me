@@ -7,12 +7,13 @@ import {
   IsOptional,
   Min,
   IsNotEmpty,
+  ValidateIf,
 } from 'class-validator';
 import { LocationDto } from './location.dto';
 import { Transform, Type } from 'class-transformer';
-import { IsBefore } from '../validators/IsBefore';
 import { CategoryEnum } from '../schema/enum/category.enum';
 import { AddressDto } from './address.dto';
+import { IsBefore } from '../validators/IsBefore';
 
 export class UpdateEventDto {
   @IsOptional()
@@ -26,6 +27,7 @@ export class UpdateEventDto {
   @Transform((data) => {
     return new Date(data.value);
   })
+  //@ValidateIf((event) => event.endDateTime)
   @IsOptional()
   @IsDate()
   @MinDate(new Date())
@@ -36,7 +38,6 @@ export class UpdateEventDto {
   @Transform((data) => {
     return new Date(data.value);
   })
-  @IsOptional()
   @IsDate()
   @MinDate(new Date())
   endDateTime?: Date;

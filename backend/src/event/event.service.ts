@@ -17,6 +17,8 @@ import { OpenStreetMapApiService } from '../openStreetMapApi/openStreetMapApi.se
 import { AuthUser } from '../auth/interfaces';
 import { NotYetParticipatedConflictError } from '../core/error/notYetParticipatedConflict.error';
 import { AlreadyParticipatedConflictError } from '../core/error/alreadyParticipatedConflict.error';
+import { ValidationError } from 'class-validator';
+import { NotFoundError } from 'rxjs';
 import { Neo4jService } from 'nest-neo4j';
 
 const DEFAULT_TAKE = 50;
@@ -143,6 +145,29 @@ export class EventService {
     eventEntity: UpdateEventEntity,
   ): Promise<Required<EventEntity>> {
     this.logger.log(`Update event with id: ${eventId}`);
+    if (eventEntity.startDateTime && eventEntity.endDateTime) {
+      if (eventEntity.startDateTime > eventEntity.endDateTime) {
+        const err = new BadRequestException(
+          'startDateTime must be before endDateTime',
+        );
+        this.logger.error(err);
+        throw err;
+      }
+      if (eventEntity.startDateTime <= new Date()) {
+        const err = new BadRequestException(
+          'startDateTime must be before the current time',
+        );
+        this.logger.error(err);
+        throw err;
+      }
+      if (eventEntity.endDateTime <= new Date()) {
+        const err = new BadRequestException(
+          'endDateTime must be before the current time',
+        );
+        this.logger.error(err);
+        throw err;
+      }
+    }
     const { ...query } = eventEntity;
     let event = null;
     try {

@@ -15,6 +15,7 @@ import {
   validEventUpdateEntity,
   validEventDto,
   validObjectId1,
+  nonExistingObjectId,
 } from '../../test/test_data/event.testData';
 import { NotFoundException } from '@nestjs/common';
 import { UserEntity } from '../core/entity/user.entity';
@@ -158,7 +159,7 @@ describe('EventController', () => {
       await sut.deleteEvent(idDto);
 
       //Then
-      expect(eventService.deleteEvent).toHaveBeenCalledWith(
+      expect(eventServiceMock.deleteEvent).toHaveBeenCalledWith(
         validObjectId1.toString(),
       );
     });
