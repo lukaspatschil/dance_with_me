@@ -15,12 +15,12 @@ export class EventMapper {
       entry.public &&
       entry.category &&
       entry.address?.street &&
-      entry.address?.housenumber &&
-      entry.address?.city &&
-      entry.address?.country &&
-      entry.address?.postalcode &&
+      entry.address.housenumber &&
+      entry.address.city &&
+      entry.address.country &&
+      entry.address.postalcode &&
       typeof entry.location?.longitude === 'number' &&
-      typeof entry.location?.latitude === 'number') {
+      typeof entry.location.latitude === 'number') {
         const location = new LocationEntity(
           entry.location.longitude,
           entry.location.latitude);

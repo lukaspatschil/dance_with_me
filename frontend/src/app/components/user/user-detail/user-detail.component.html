@@ -2,7 +2,7 @@
      xmlns:x-on="http://www.w3.org/1999/xhtml">
 
   <div class="w-full flex items-center mt-4 space-x-4 ">
-    <img *ngIf="user?.pictureUrl; else noPicture" class="w-10 h-10 rounded-full" src=user.pictureUrl>
+    <img *ngIf="user?.pictureUrl; else noPicture" class="w-10 h-10 rounded-full" src="{{user?.pictureUrl}}" referrerpolicy="no-referrer">
     <ng-template #noPicture>
       <span  class="material-icons text-gray-800 text-5xl icon-big">account_circle</span>
     </ng-template>

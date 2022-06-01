@@ -51,6 +51,54 @@ describe('EventMapper', () => {
       // Then
       expect(result).toBeNull();
     });
+
+    it('should return null on undefined address', () => {
+      // Given
+      const eventResponseDto: EventDto = {
+        id: '1',
+        name: 'name',
+        description: 'description',
+        price: 1,
+        public: true,
+        startDateTime: new Date('2022-04-24T10:00').toISOString(),
+        endDateTime: new Date('2022-04-24T12:00').toISOString(),
+        category: [Category.SALSA],
+        address: {
+          country: 'country',
+          street: 'street',
+          city: 'city',
+          housenumber: '10',
+          postalcode: '1020',
+          addition: 'addition'
+        }
+      };
+
+      // When
+      const result = EventMapper.mapEventDtoToEntity(eventResponseDto);
+
+      // Then
+      expect(result).toBeNull();
+    });
+
+    it('should return null on undefined location', () => {
+      // Given
+      const eventResponseDto: EventDto = {
+        id: '1',
+        name: 'name',
+        description: 'description',
+        price: 1,
+        public: true,
+        startDateTime: new Date('2022-04-24T10:00').toISOString(),
+        endDateTime: new Date('2022-04-24T12:00').toISOString(),
+        category: [Category.SALSA]
+      };
+
+      // When
+      const result = EventMapper.mapEventDtoToEntity(eventResponseDto);
+
+      // Then
+      expect(result).toBeNull();
+    });
   });
 
 
