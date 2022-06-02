@@ -12,7 +12,7 @@ export class RefreshGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Promise<boolean> {
     if (!this.authService.isAuthenticated()) {
-      await this.authService.refreshAccessToken();
+      await this.authService.refreshAccessToken().catch(() => {});
     }
 
     return true;
