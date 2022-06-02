@@ -2,13 +2,15 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
   OnApplicationBootstrap,
 } from '@nestjs/common';
-import { PutObjectRequest } from 'aws-sdk/clients/s3';
+import { PutObjectRequest, GetObjectRequest } from 'aws-sdk/clients/s3';
 import { InjectS3, S3 } from 'nestjs-s3';
 import { ImageSizeEnum } from '../core/schema/enum/imageSize.enum';
 import { ConfigService } from '@nestjs/config';
 import { FileEntity } from '../core/entity/file.entity';
+import { Readable } from 'stream';
 import mongoose from 'mongoose';
 import { extname } from 'path';
 import sharp = require('sharp');
@@ -21,6 +23,44 @@ export class ImageService implements OnApplicationBootstrap {
     @InjectS3() private readonly s3: S3,
     private configService: ConfigService,
   ) {}
+
+  async getImage(id: string, imageSize: ImageSizeEnum): Promise<Readable> {
+    const bucketName =
+      this.configService.get('BUCKET_NAME_PREFIX') +
+      this.configService.get('STAGE');
+    const key = `${imageSize.toLowerCase()}/${id}`;
+    this.logger.log(`Get File with Key: ${id} from Bucket: ${imageSize}.`);
+    const config: GetObjectRequest = {
+      Bucket: bucketName,
+      Key: key,
+    };
+    let response;
+    try {
+      response = await this.s3.getObject(config).promise();
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.name === 'NoSuchKey') {
+          this.logger.error(`Bucket ${imageSize} doesn't contain key ${id}.`);
+          throw new NotFoundException();
+        }
+      }
+      this.logger.error(`Unknown s3 error ${error}.`);
+      throw new InternalServerErrorException();
+    }
+    if (response?.Body instanceof Readable) {
+      return response?.Body;
+    }
+    if (response?.Body instanceof Buffer) {
+      return Readable.from(response?.Body);
+    }
+    if (typeof response?.Body === 'string') {
+      return Readable.from([response?.Body]);
+    }
+    this.logger.error(
+      'S3 response was not a valid format, jpg and png are normally a buffer.',
+    );
+    throw new InternalServerErrorException();
+  }
 
   async uploadImage(file: FileEntity): Promise<FileEntity> {
     const bucketName =

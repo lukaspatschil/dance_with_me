@@ -72,6 +72,7 @@ getImage:
     summary: Get an image
     description: >
       Fetch an image by its ID in different sizes: thumbnail, small, medium (default), large or original
+    security: []
     parameters:
       - in: path
         name: imageid

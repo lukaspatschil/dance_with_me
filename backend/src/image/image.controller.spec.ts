@@ -8,6 +8,9 @@ import {
   validFileMulter,
 } from '../../test/test_data/image.testData';
 import { ImageServiceMock } from '../../test/stubs/image.service.mock';
+import { validFilenameJPG } from '../../test/test_data/image.testData';
+import { ImageSizeEnum } from '../core/schema/enum/imageSize.enum';
+import { StreamableFile } from '@nestjs/common';
 
 describe('ImageController', () => {
   let sut: ImageController;
@@ -29,6 +32,7 @@ describe('ImageController', () => {
   it('should be defined', () => {
     expect(sut).toBeDefined();
   });
+
   describe('uploadImage', () => {
     it('should call uploadImage and return file', async () => {
       //Given
@@ -42,6 +46,18 @@ describe('ImageController', () => {
 
       //Then
       expect(response).toEqual(validFileDto());
+    });
+  });
+
+  describe('getImageById', () => {
+    it('should return a StreamableFile', async () => {
+      // When
+      const result = await sut.getImageById(validFilenameJPG, {
+        size: ImageSizeEnum.MEDIUM,
+      });
+
+      // Then
+      expect(result).toBeInstanceOf(StreamableFile);
     });
   });
 });

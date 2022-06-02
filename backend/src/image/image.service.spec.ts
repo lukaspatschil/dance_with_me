@@ -2,6 +2,21 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ImageService } from './image.service';
 import { getS3ConnectionToken, S3 } from 'nestjs-s3';
 import { MockS3Instance } from '../../test/stubs/s3.mock';
+import { ImageSizeEnum } from '../core/schema/enum/imageSize.enum';
+import {
+  bufferMock,
+  invalidFilenameJPG,
+  invalidFilenamePDF,
+  notFoundFilenamePNG,
+  stringAWSBinaryImageResponse,
+  validFilenamePNG,
+  validFilenamePNGReadable,
+  validFilenamePNGString,
+} from '../../test/test_data/image.testData';
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ConfigMock } from '../../test/stubs/config.mock';
 import {
@@ -15,7 +30,6 @@ import {
   validFileKey,
 } from '../../test/test_data/image.testData';
 import mongoose from 'mongoose';
-import { InternalServerErrorException } from '@nestjs/common';
 
 describe('ImageService', () => {
   let sut: ImageService;
@@ -32,7 +46,6 @@ describe('ImageService', () => {
           provide: ConfigService,
           useClass: ConfigMock,
         },
-
         ImageService,
       ],
     }).compile();
@@ -191,6 +204,78 @@ describe('ImageService', () => {
       const result = async () => await sut.uploadImage(validFile);
       //Then
       await expect(result).rejects.toThrow(new InternalServerErrorException());
+    });
+  });
+  describe('getImage', () => {
+    it('should call the getObject on S3', async () => {
+      // When
+      await sut.getImage(validFilenamePNG, ImageSizeEnum.MEDIUM);
+
+      // Then
+      expect(s3.getObject).toHaveBeenCalled();
+    });
+
+    it('should call the getObject on S3 and return a buffer', async () => {
+      // When
+      const readable = await sut.getImage(
+        validFilenamePNG,
+        ImageSizeEnum.MEDIUM,
+      );
+      const result = readable.read();
+
+      // Then
+      expect(result).toEqual(bufferMock());
+    });
+
+    it('should call the getObject on S3 and return a readable', async () => {
+      // When
+      const readable = await sut.getImage(
+        validFilenamePNGReadable,
+        ImageSizeEnum.MEDIUM,
+      );
+      const result = readable.read();
+
+      // Then
+      expect(result).toEqual(bufferMock());
+    });
+
+    it('should call the getObject on S3 and return a string', async () => {
+      // When
+      const readable = await sut.getImage(
+        validFilenamePNGString,
+        ImageSizeEnum.MEDIUM,
+      );
+      const result = readable.read();
+
+      // Then
+      expect(result).toEqual(stringAWSBinaryImageResponse());
+    });
+
+    it('should call the service and throw a NotFoundException', () => {
+      // When
+      const result = async () =>
+        await sut.getImage(notFoundFilenamePNG, ImageSizeEnum.MEDIUM);
+
+      // Then
+      expect(result).rejects.toThrow(new NotFoundException());
+    });
+
+    it('should call the service and throw an InternalServerErrorException', () => {
+      // When
+      const result = async () =>
+        await sut.getImage(invalidFilenameJPG, ImageSizeEnum.MEDIUM);
+
+      // Then
+      expect(result).rejects.toThrow(new InternalServerErrorException());
+    });
+
+    it('should call the service and throw an InternalServerErrorException due s3 wrong type', () => {
+      // When
+      const result = async () =>
+        await sut.getImage(invalidFilenamePDF, ImageSizeEnum.MEDIUM);
+
+      // Then
+      expect(result).rejects.toThrow(new InternalServerErrorException());
     });
   });
 });

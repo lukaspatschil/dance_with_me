@@ -4,6 +4,9 @@ import { Test } from '@nestjs/testing';
 import { AppModule } from '../src/app.module';
 import { AccessTokenGuard } from '../src/auth/auth.guard';
 import { AuthGuardMock, mockedAuthHeader } from './stubs/auth.guard.mock';
+import { bufferMock, e2eValidFilename } from './test_data/image.testData';
+import { PutObjectRequest } from 'aws-sdk/clients/s3';
+import { ImageSizeEnum } from '../src/core/schema/enum/imageSize.enum';
 import request from 'supertest';
 import {
   getDefaultUserImageTest,
@@ -45,6 +48,7 @@ describe('ImageController (e2e)', () => {
     s3 = new AWS.S3(config);
     app = moduleRef.createNestApplication();
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
     await app.init();
   });
 
@@ -121,6 +125,41 @@ describe('ImageController (e2e)', () => {
     });
   });
 
+  describe('/image (Get)', () => {
+    afterAll(async () => {
+      await resetAllBuckets();
+    });
+
+    it('should return 200', async () => {
+      const bucket =
+        (process.env['BUCKET_NAME_PREFIX'] ?? '') +
+        (process.env['STAGE'] ?? '');
+      const config: PutObjectRequest = {
+        Bucket: bucket,
+        Key: ImageSizeEnum.ORIGINAL.toLowerCase() + '/' + e2eValidFilename,
+        Body: bufferMock(),
+        ContentType: 'image/jpg',
+      };
+      await s3.putObject(config).promise();
+      return request(app.getHttpServer())
+        .get('/image/5d6ede6a0ba62570afcedd3a.jpg?size=original')
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual(bufferMock());
+          expect(res.headers['content-type']).toEqual('image/*');
+        });
+    });
+    it('should return 400 invalid size', async () => {
+      return request(app.getHttpServer())
+        .get('/image/5d6ede6a0ba62570afcedd3a.jpg?size=biggest')
+        .expect(400);
+    });
+    it('should return 404 the key does not exist', async () => {
+      return request(app.getHttpServer())
+        .get('/image/5d6ede6a0ba62570afcedd.jpg?size=original')
+        .expect(404);
+    });
+  });
   async function resetAllBuckets() {
     try {
       const bucket =

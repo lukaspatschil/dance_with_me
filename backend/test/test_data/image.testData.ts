@@ -23,6 +23,8 @@ export const invalidFilenameJPG =
 export const invalidFilenamePDF =
   new mongoose.Types.ObjectId().toString() + '.pdf';
 
+export const e2eValidFilename = '5d6ede6a0ba62570afcedd3a.jpg';
+
 export function bufferMock() {
   return Buffer.from([1, 2, 3]);
 }

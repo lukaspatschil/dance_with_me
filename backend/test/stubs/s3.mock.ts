@@ -24,21 +24,24 @@ export class MockS3Instance {
   getObject = jest.fn((getObjectRequest: any) => {
     this._functionCalled = 'getObject';
     const config: GetObjectRequest = getObjectRequest;
-    if (config.Key === validFilenamePNG || config.Key === validFilenameJPG) {
+    if (
+      config.Key.includes(validFilenamePNG) ||
+      config.Key.includes(validFilenameJPG)
+    ) {
       this._buffer = true;
       return this;
-    } else if (config.Key === validFilenamePNGReadable) {
+    } else if (config.Key.includes(validFilenamePNGReadable)) {
       this._readable = true;
       return this;
-    } else if (config.Key === validFilenamePNGString) {
+    } else if (config.Key.includes(validFilenamePNGString)) {
       this._string = true;
       return this;
-    } else if (config.Key === invalidFilenamePDF) {
+    } else if (config.Key.includes(invalidFilenamePDF)) {
       this._buffer = false;
       this._readable = false;
       this._string = false;
       return this;
-    } else if (config.Key === notFoundFilenamePNG) {
+    } else if (config.Key.includes(notFoundFilenamePNG)) {
       const err = new Error();
       err.name = 'NoSuchKey';
       throw err;

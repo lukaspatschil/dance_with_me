@@ -1,6 +1,11 @@
 import {
   Controller,
+  Get,
   Logger,
+  Param,
+  Query,
+  StreamableFile,
+  Header,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -12,6 +17,8 @@ import { FileMapper } from '../core/mapper/file.mapper';
 import { User } from '../auth/user.decorator';
 import { UserEntity } from '../core/entity/user.entity';
 import { FileDto } from '../core/dto/file.dto';
+import { Public } from '../auth/auth.guard';
+import { ImageSizeDto } from '../core/dto/ImageSize.dto';
 import { Organizer } from '../auth/role.guard';
 import { multerOptions } from './multer.config';
 
@@ -33,5 +40,16 @@ export class ImageController {
       await FileMapper.mapFileToEntity(file),
     );
     return FileMapper.mapEntityToDto(result, user.id);
+  }
+  @Get('/:id')
+  @Public()
+  @Header('content-type', 'image/*')
+  async getImageById(
+    @Param('id') id: string,
+    @Query() imageSize: ImageSizeDto,
+  ) {
+    this.logger.log('Get Picture with id: ' + id);
+    const result = await this.imageService.getImage(id, imageSize.size);
+    return new StreamableFile(result);
   }
 }
