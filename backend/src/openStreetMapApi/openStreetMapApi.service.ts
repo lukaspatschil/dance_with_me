@@ -65,14 +65,13 @@ export class OpenStreetMapApiService {
   ): Promise<LocationEntity> {
     let promiseResponse = null;
     let url = new URLSearchParams(
-      `&street=${addressEntity.housenumber} ${addressEntity.street}&city=${addressEntity.city}&country=${addressEntity.country}&postalcode=${addressEntity.postalcode}`,
+      `street=${addressEntity.housenumber} ${addressEntity.street}&city=${addressEntity.city}&country=${addressEntity.country}&postalcode=${addressEntity.postalcode}`,
     ).toString();
 
-    url =
-      this.configService.get(
-        'NOMINATIM_SEARCH_ENDPOINT',
-        'https://nominatim.openstreetmap.org/search/?format=json&addressdetails=1&limit=1',
-      ) + url;
+    url = `${this.configService.get(
+      'NOMINATIM_SEARCH_ENDPOINT',
+      'https://nominatim.openstreetmap.org/search/?format=json&addressdetails=1&limit=1',
+    )}&${url}`;
 
     try {
       promiseResponse = await lastValueFrom(
@@ -87,7 +86,7 @@ export class OpenStreetMapApiService {
     if (response[0] && response[0].lat && response[0].lon) {
       return {
         type: GeolocationEnum.POINT,
-        coordinates: [Number(response[0].lat), Number(response[0].lon)],
+        coordinates: [Number(response[0].lon), Number(response[0].lat)],
       } as LocationEntity;
     }
     throw new NotFoundException();
