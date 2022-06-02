@@ -1,0 +1,47 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { ImageController } from './image.controller';
+import { ImageService } from './image.service';
+import {
+  getDefaultUserImageTest,
+  validCreated,
+  validFileDto,
+  validFileMulter,
+} from '../../test/test_data/image.testData';
+import { ImageServiceMock } from '../../test/stubs/image.service.mock';
+
+describe('ImageController', () => {
+  let sut: ImageController;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        {
+          provide: ImageService,
+          useClass: ImageServiceMock,
+        },
+      ],
+      controllers: [ImageController],
+    }).compile();
+
+    sut = module.get<ImageController>(ImageController);
+  });
+
+  it('should be defined', () => {
+    expect(sut).toBeDefined();
+  });
+  describe('uploadImage', () => {
+    it('should call uploadImage and return file', async () => {
+      //Given
+      Date.now = jest.fn(() => validCreated);
+
+      //When
+      const response = await sut.uploadFile(
+        validFileMulter(),
+        getDefaultUserImageTest(),
+      );
+
+      //Then
+      expect(response).toEqual(validFileDto());
+    });
+  });
+});

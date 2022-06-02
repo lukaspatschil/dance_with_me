@@ -1,7 +1,6 @@
 import { GeolocationEnum } from '../../src/core/schema/enum/geolocation.enum';
 import { EventEntity } from '../../src/core/entity/event.entity';
 import {
-  validObjectId1,
   validEventDocument,
   invalidObjectId,
   nonExistingObjectId,

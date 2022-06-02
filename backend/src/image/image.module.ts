@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { S3Module } from 'nestjs-s3';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PictureService } from './picture.service';
-import { PictureController } from './picture.controller';
+import { ImageService } from './image.service';
+import { ImageController } from './image.controller';
 
 @Module({
   imports: [
@@ -19,8 +19,9 @@ import { PictureController } from './picture.controller';
       }),
       inject: [ConfigService],
     }),
+    ConfigModule,
   ],
-  providers: [PictureService],
-  controllers: [PictureController],
+  providers: [ImageService],
+  controllers: [ImageController],
 })
-export class PictureModule {}
+export class ImageModule {}

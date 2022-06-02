@@ -13,13 +13,8 @@ import {
   validObjectId1,
   validObjectId2,
   validObjectId3,
-  validEventEntity,
-  invalidObjectId,
 } from './test_data/event.testData';
-import {
-  deleteResponse,
-  notFoundResponse,
-} from './test_data/httpResponse.testData';
+import { deleteResponse } from './test_data/httpResponse.testData';
 import {
   validAddress,
   validAddressDTO,

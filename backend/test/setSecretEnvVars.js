@@ -12,3 +12,10 @@ process.env.POSITION_STACK_REVERSE_ENDPOINT = `https://mock.example.com/reverse?
 process.env.API_BASE = 'https://api.mock.example.com';
 process.env.FRONTEND_URL = 'https://mock.example.com';
 process.env.FRONTEND_LOGIN_CALLBACK = '/loginMock';
+
+process.env.AWS_ACCESS_KEY_ID = 'minioadmin';
+process.env.AWS_SECRET_ACCESS_KEY = 'minioadmin';
+process.env.AWS_ENDPOINT = 'http://localhost:9000';
+process.env.BUCKET_REGION = 'eu-west-1';
+process.env.BUCKET_NAME_PREFIX = 'dancewithme-images-';
+process.env.STAGE = 'test';

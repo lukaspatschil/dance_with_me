@@ -18,7 +18,7 @@ async function bootstrap() {
       origin: process.env['FRONTEND_URL'] ?? 'http://localhost:4200',
       credentials: true,
       allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
       preflightContinue: false,
       optionsSuccessStatus: 204,
     });

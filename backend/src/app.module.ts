@@ -6,7 +6,7 @@ import { PaymentModule } from './payment/payment.module';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './core/database/database.module';
 import { LoggerModule } from './core/logger/logger.module';
-import { PictureModule } from './picture/picture.module';
+import { ImageModule } from './image/image.module';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
@@ -22,7 +22,7 @@ import { EmailModule } from './email/email.module';
     PaymentModule,
     AuthModule,
     EventModule,
-    PictureModule,
+    ImageModule,
     UserModule,
     EmailModule,
   ],

@@ -32,7 +32,6 @@ import {
   invalidObjectId,
   nonExistingObjectId,
   validEventDocument,
-  validEventEntity,
   validObjectId1,
 } from '../../test/test_data/event.testData';
 
