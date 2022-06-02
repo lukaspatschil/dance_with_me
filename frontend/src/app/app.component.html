@@ -8,13 +8,13 @@
 
     <div class="flex flex-row-reverse space-x-0.25 space-x-reverse inset-y-0 left-0">
 
-      <button class="items-center rounded-md text-slate-300" type="button" (click)="toggleNavbar()" >
+      <button class="items-center rounded-md text-slate-300" type="button" (click)="toggleNavbar()" id="nav-bar">
         <button class="flex items-center py-2 rounded text-red-900">
           <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
         </button>
       </button>
 
-      <button class="bg-white px-3 text-sm text-gray-200" (click)="toggleLanguage()">{{language}}</button>
+      <button class="bg-white px-3 text-sm text-gray-200" (click)="toggleLanguage()" id="nav-language">{{language}}</button>
 
     </div>
   </nav>
@@ -27,20 +27,20 @@
         <a class="nav-link" [routerLink]="'/admin'" (click)="toggleNavbar()">{{'navbar.admin' | translate}}</a>
       </li>
       <li *ngIf="userService.role === 'Organiser' || userService.role === 'Admin'" class="text-center">
-        <a class="nav-link" [routerLink]="'/create'" (click)="toggleNavbar()">{{'navbar.create_event' | translate}}</a>
+        <a class="nav-link" [routerLink]="'/create'" (click)="toggleNavbar()" id="nav-create">{{'navbar.create_event' | translate}}</a>
       </li>
       <li class="text-center">
-        <a class="nav-link" [routerLink]="'/events'" (click)="toggleNavbar()">{{'navbar.events' | translate}}</a>
+        <a class="nav-link" [routerLink]="'/events'" (click)="toggleNavbar()" id="nav-events">{{'navbar.events' | translate}}</a>
       </li>
       <li class="text-center">
-        <a class="nav-link" [routerLink]="'/user'" (click)="toggleNavbar()">{{'navbar.profile' | translate}}</a>
+        <a class="nav-link" [routerLink]="'/user'" (click)="toggleNavbar()" id="nav-user">{{'navbar.profile' | translate}}</a>
       </li>
       <li class="text-center">
-        <a class="nav-link" [routerLink]="'.'" (click)="toggleNavbar(); authService.logout()">{{'navbar.logout' | translate}}</a>
+        <a class="nav-link" [routerLink]="'.'" (click)="toggleNavbar(); authService.logout()" id="nav-logout">{{'navbar.logout' | translate}}</a>
     </ng-template>
     <ng-template #elseBlock>
       <li class="text-center">
-        <a class="nav-link" [routerLink]="'/loginSite'" (click)="toggleNavbar()">{{'navbar.login' | translate}}</a>
+        <a class="nav-link" [routerLink]="'/loginSite'" (click)="toggleNavbar()" id="nav-login">{{'navbar.login' | translate}}</a>
       </li>
     </ng-template>
   </ul>

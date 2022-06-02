@@ -4,29 +4,29 @@ import { RoleEnum } from './enum/role.enum';
 
 @Schema()
 export class UserDocument extends Document {
-  @Prop({ required: true })
+  @Prop({ required: true, type: String })
   // eslint-disable-next-line @typescript-eslint/naming-convention
   override _id!: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, type: String })
   role!: RoleEnum;
 
-  @Prop({ required: true })
+  @Prop({ required: true, type: String })
   displayName!: string;
 
-  @Prop()
+  @Prop({ required: false, type: String })
   firstName?: string;
 
-  @Prop()
+  @Prop({ required: false, type: String })
   lastName?: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, type: String })
   email!: string;
 
-  @Prop()
+  @Prop({ required: true, type: Boolean })
   emailVerified!: boolean;
 
-  @Prop()
+  @Prop({ required: false, type: String })
   pictureUrl?: string;
 }
 

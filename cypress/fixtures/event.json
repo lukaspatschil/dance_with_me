@@ -1,0 +1,28 @@
+{
+  "data": {
+    "name": "Dance event",
+    "description": "This is a dance event created for testing",
+    "date": "2022-11-12",
+    "startTime": "20:15",
+    "endTime": "22:00",
+    "street": "Schönbrunner Straße",
+    "housenumber": "222",
+    "postalcode": "1120",
+    "city": "Wien",
+    "country": "Österreich",
+    "price": "12",
+    "image": "example.jpg"
+  },
+  "payment": {
+    "name": "Lukas Spatschil",
+    "street": "Kurze Gasse",
+    "housenumber": "6",
+    "postalcode": "2340",
+    "city": "Mödling",
+    "country": "AT",
+    "cardnumber": "4242 4242 4242 4242",
+    "expire": "12/23",
+    "zip": "12345",
+    "cvc": "123"
+  }
+}

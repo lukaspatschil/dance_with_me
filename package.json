@@ -29,7 +29,9 @@
   },
   "devDependencies": {
     "cypress": "^9.5.3",
+    "cypress-file-upload": "^5.0.8",
     "env-cmd": "^10.1.0",
+    "mongoose": "^6.3.5",
     "sonarqube-scanner": "^2.8.1",
     "start-server-and-test": "^1.14.0"
   },

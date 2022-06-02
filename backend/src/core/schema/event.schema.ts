@@ -7,16 +7,16 @@ import { UserDocument } from './user.schema';
 
 @Schema()
 export class EventDocument extends Document {
-  @Prop({ required: true })
+  @Prop({ required: true, type: String })
   name!: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, type: String })
   description!: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, type: Date })
   startDateTime!: Date;
 
-  @Prop({ required: true })
+  @Prop({ required: true, type: Date })
   endDateTime!: Date;
 
   @Prop(LocationDocument)
@@ -25,16 +25,16 @@ export class EventDocument extends Document {
   @Prop(AddressDocument)
   address!: AddressDocument;
 
-  @Prop({ required: true })
+  @Prop({ required: true, type: Number })
   price!: number;
 
-  @Prop({ required: true })
+  @Prop({ required: true, type: Boolean })
   public!: boolean;
 
-  @Prop({ required: false })
+  @Prop({ required: false, type: String })
   imageId?: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, type: String })
   organizerId!: string;
 
   @Prop({ required: true })
