@@ -43,7 +43,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { NotFoundError } from '../core/error/notFound.error';
-import { LocationEntity } from '../core/entity//location.entity';
+import { LocationEntity } from '../core/entity/location.entity';
 import { CategoryEnum } from '../core/schema/enum/category.enum';
 import { UserEntity } from '../core/entity/user.entity';
 import { RoleEnum } from '../core/schema/enum/role.enum';

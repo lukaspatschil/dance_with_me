@@ -7,13 +7,11 @@ import {
   IsOptional,
   Min,
   IsNotEmpty,
-  ValidateIf,
 } from 'class-validator';
 import { LocationDto } from './location.dto';
 import { Transform, Type } from 'class-transformer';
 import { CategoryEnum } from '../schema/enum/category.enum';
 import { AddressDto } from './address.dto';
-import { IsBefore } from '../validators/IsBefore';
 
 export class UpdateEventDto {
   @IsOptional()

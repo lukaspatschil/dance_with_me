@@ -3,10 +3,7 @@ import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { Test } from '@nestjs/testing';
-import {
-  deleteResponse,
-  notFoundResponse,
-} from './test_data/httpResponse.testData';
+import { deleteResponse } from './test_data/httpResponse.testData';
 import { connect, disconnect, model, Model } from 'mongoose';
 import { EventDocument, EventSchema } from '../src/core/schema/event.schema';
 import { UpdateEventDto } from '../src/core/dto/updateEvent.dto';
@@ -18,10 +15,6 @@ import {
   validObjectId1,
   validObjectId2,
   validObjectId3,
-  validEventDto,
-  validEventDocument,
-  validEventEntity,
-  invalidObjectId,
 } from './test_data/event.testData';
 import {
   validAddress,
