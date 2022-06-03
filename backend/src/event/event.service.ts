@@ -23,6 +23,7 @@ import { Neo4jService } from 'nest-neo4j';
 const DEFAULT_TAKE = 50;
 const DEFAULT_SKIP = 0;
 const DEFAULT_RADIUS = 100;
+import { NotFoundError } from '../core/error/notFound.error';
 
 @Injectable()
 export class EventService {

@@ -41,7 +41,6 @@ import {
 import {
   BadRequestException,
   InternalServerErrorException,
-  NotFoundException,
 } from '@nestjs/common';
 import { NotFoundError } from '../core/error/notFound.error';
 import { LocationEntity } from '../core/entity//location.entity';

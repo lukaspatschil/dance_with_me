@@ -12,7 +12,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AddressEntity } from '../../src/core/entity/address.entity';
-import { NotFoundError } from 'rxjs';
+import { NotFoundError } from '../../src/core/error/notFound.error';
 
 export class OpenStreetMapApiModelMock {
   getAddress = jest.fn((long: number, lang: number) => {
