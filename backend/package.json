@@ -96,7 +96,10 @@
       "json",
       "ts"
     ],
-    "rootDir": "test/unit",
+    "roots": [
+      "<rootDir>/src",
+      "<rootDir>/test/unit"
+    ],
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
@@ -117,7 +120,7 @@
       "html",
       "cobertura"
     ],
-    "coverageDirectory": "../coverage",
+    "coverageDirectory": "coverage",
     "testEnvironment": "node",
     "coverageThreshold": {
       "global": {
@@ -127,6 +130,6 @@
         "statements": 80
       }
     },
-    "testSequencer": "<rootDir>/../alphabeticTestSequencer.js"
+    "testSequencer": "<rootDir>/test/alphabeticTestSequencer.js"
   }
 }
