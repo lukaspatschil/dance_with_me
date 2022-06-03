@@ -1,0 +1,76 @@
+version: "3.9"
+services:
+  server:
+    build:
+      context: .
+      target: production
+      dockerfile: ./backend/Dockerfile
+    hostname: server
+    volumes:
+      - /usr/src/app/node_modules
+
+    ports:
+      - 3000:3000
+    networks:
+      - internal
+    env_file:
+      - ./develop.env
+      - ./secrets.env
+
+  webclient:
+    build:
+      context: .
+      target: static
+      dockerfile: ./frontend/Dockerfile
+    volumes:
+      - /usr/src/app/node_modules
+    ports:
+      - 4200:80
+    networks:
+      - internal
+
+  dev-database:
+    image: mongo:5.0.4
+    environment:
+      MONGO_INITDB_DATABASE: danceWithMe
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+    networks:
+      - internal
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://dev-database:27017/
+    networks:
+      - internal
+
+  minio-server:
+    container_name: minio-server
+    hostname: minio-server
+    image: minio/minio:RELEASE.2022-05-19T18-20-59Z
+    networks:
+      - internal
+    ports:
+      - 9000:9000
+    volumes:
+      - minio-data:/data
+    env_file:
+      - ./develop.env
+    command: server /data
+    labels:
+      - "traefik.enable=false"
+    restart: always
+
+volumes:
+  mongodb_data_container:
+  minio-data:
+
+networks:
+  internal:
+    driver: bridge

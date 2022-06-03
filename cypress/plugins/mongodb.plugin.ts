@@ -17,10 +17,10 @@ export async function connectMongoDb() {
   await connect('mongodb://localhost:27017');
   await User.ensureIndexes();
   await Event.ensureIndexes();
-  await new Promise((resolve: any) => User.remove({}, resolve));
-  await new Promise((resolve: any) => Event.remove({}, resolve));
+  const users = await User.remove({}).exec();
+  const events = await Event.remove({}).exec();
 
-  return null;
+  return {users, events};
 }
 
 export async function disconnectMongoDb() {

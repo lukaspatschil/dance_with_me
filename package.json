@@ -20,9 +20,10 @@
     "start:client": "npm run start -w frontend",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "docker:start": "docker-compose up --build",
-    "cy:open": "start-test docker:start 8080 cypress:open",
-    "cy:run": "start-test docker:start 8080 cypress:run",
+    "docker:start": "docker-compose -f docker-compose.yml up --build",
+    "docker:start:cypress": "docker-compose -f docker-cypress.yml up --build",
+    "cy:open": "start-test docker:start:cypress 4200 cypress:open",
+    "cy:run": "start-test docker:start 4200 cypress:run",
     "sonar-scanner": "sonar-scanner",
     "withLocalEnv": "env-cmd -f local.env env-cmd -f secrets.env --silent npm run",
     "generate": "npm run generate -w generator"
