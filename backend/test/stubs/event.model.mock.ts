@@ -51,8 +51,43 @@ export class EventModelMock {
     return Promise.resolve(eventDocument);
   });
 
+  /*
+  findByIdAndUpdateParticipation = jest.fn((id: string, update: any) => {
+
+  });
+   */
+
   findByIdAndUpdate = jest.fn(
     (id: string, dict: UpdateQuery<EventDocument>, opt: QueryOptions) => {
+      if (id === NotFoundErrorId) {
+        return null;
+      }
+      if (id === DBErrorId) {
+        throw new Error('Random DB error');
+      }
+      if (dict.$addToSet) {
+        const userId: string = dict.$addToSet.participants;
+
+        if (id == ParticipationAlreadyStored) {
+          // the user already set the participation in the event
+          const eventDocument = createEventDocument();
+          eventDocument.participants.push(userId);
+          return eventDocument;
+        } else {
+          return createEventDocument();
+        }
+      }
+      if (dict.$pull) {
+        const userId: string = dict.$pull.participants;
+
+        if (id == ParticipationAlreadyStored) {
+          const eventDocument = createEventDocument();
+          eventDocument.participants.push(userId);
+          return eventDocument;
+        } else {
+          return createEventDocument();
+        }
+      }
       if (opt.new === false) {
         const event = validEventDocument;
         event._id = id;
@@ -113,6 +148,9 @@ export class EventModelMock {
           }
           if (dict['category']) {
             event.category = dict['category'] as CategoryEnum[];
+          }
+          if (dict['participants']) {
+            event.participants = dict['participants'] as string[];
           }
           return Promise.resolve(event);
         } else if (id === invalidObjectId.toString()) {
@@ -207,39 +245,7 @@ export class EventModelMock {
     return Promise.resolve(event);
   });
 
-  findByIdAndUpdate = jest.fn((id: string, update: any) => {
-    if (id === NotFoundErrorId) {
-      return null;
-    }
-    if (id === DBErrorId) {
-      throw new Error('Random DB error');
-    }
-
-    if (update.$addToSet) {
-      const userId: string = update.$addToSet.participants;
-
-      if (id == ParticipationAlreadyStored) {
-        // the user already set the participation in the event
-        const eventDocument = createEventDocument();
-        eventDocument.participants.push(userId);
-        return eventDocument;
-      } else {
-        return createEventDocument();
-      }
-    } else {
-      const userId: string = update.$pull.participants;
-
-      if (id == ParticipationAlreadyStored) {
-        const eventDocument = createEventDocument();
-        eventDocument.participants.push(userId);
-        return eventDocument;
-      } else {
-        return createEventDocument();
-      }
-    }
-  });
-
-  updateMany = jest.fn(() => {
+  updateMany = jest.fn((filter: any, update: any) => {
     return Promise.resolve();
   });
 }

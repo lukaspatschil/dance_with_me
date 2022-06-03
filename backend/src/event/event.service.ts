@@ -12,7 +12,6 @@ import { EventEntity } from '../core/entity/event.entity';
 import { UpdateEventEntity } from '../core/entity/updateEvent.entity';
 import { GeolocationEnum } from '../core/schema/enum/geolocation.enum';
 import { QueryDto } from '../core/dto/query.dto';
-import { NotFoundError } from '../core/error/notFound.error';
 import { OpenStreetMapApiService } from '../openStreetMapApi/openStreetMapApi.service';
 import { AuthUser } from '../auth/interfaces';
 import { NotYetParticipatedConflictError } from '../core/error/notYetParticipatedConflict.error';
@@ -160,13 +159,6 @@ export class EventService {
         this.logger.error(err);
         throw err;
       }
-      if (eventEntity.endDateTime <= new Date()) {
-        const err = new BadRequestException(
-          'endDateTime must be before the current time',
-        );
-        this.logger.error(err);
-        throw err;
-      }
     }
     const { ...query } = eventEntity;
     let event = null;
@@ -179,7 +171,7 @@ export class EventService {
       throw new InternalServerErrorException(error);
     }
     if (event === null) {
-      throw new NotFoundException();
+      throw NotFoundError;
     }
 
     return EventMapper.mapDocumentToEntity(event);

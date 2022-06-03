@@ -16,6 +16,10 @@ import {
   validEventDto,
   validObjectId1,
   nonExistingObjectId,
+  validEventUpdateEntityStartDateTime,
+  validEventUpdateDtoStartDateTime,
+  validEventUpdateDtoEndDateTime,
+  validEventUpdateEntityEndDateTime,
 } from '../../test/test_data/event.testData';
 import { NotFoundException } from '@nestjs/common';
 import { UserEntity } from '../core/entity/user.entity';
@@ -181,7 +185,7 @@ describe('EventController', () => {
       await sut.createParticipation('1', getDefaultUser());
 
       // Then
-      expect(eventService.createParticipation).toHaveBeenCalled();
+      expect(eventServiceMock.createParticipation).toHaveBeenCalled();
     });
 
     it('should call the add participation to an event with the correct parameters', async () => {
@@ -193,7 +197,7 @@ describe('EventController', () => {
       await sut.createParticipation(eventId, user);
 
       // Then
-      expect(eventService.createParticipation).toHaveBeenCalledWith(
+      expect(eventServiceMock.createParticipation).toHaveBeenCalledWith(
         eventId,
         user,
       );
@@ -206,7 +210,7 @@ describe('EventController', () => {
       await sut.deleteParticipation('1', getDefaultUser());
 
       // Then
-      expect(eventService.deleteParticipation).toHaveBeenCalled();
+      expect(eventServiceMock.deleteParticipation).toHaveBeenCalled();
     });
 
     it('should call the delete participation to an event with the correct parameters', async () => {
@@ -218,7 +222,7 @@ describe('EventController', () => {
       await sut.deleteParticipation(eventId, user);
 
       // Then
-      expect(eventService.deleteParticipation).toHaveBeenCalledWith(
+      expect(eventServiceMock.deleteParticipation).toHaveBeenCalledWith(
         eventId,
         user,
       );
@@ -264,6 +268,42 @@ describe('EventController', () => {
       const response = await sut.updateEvent(
         validObjectId1.toString(),
         validEventUpdateDto,
+      );
+
+      //Then
+      expect(response).toEqual(expectedUpdatedEventDto);
+    });
+
+    it('should call the service to update the startDateTime and return updated event', async () => {
+      // Given
+      const expectedUpdatedEventDto = validEventDto;
+      expectedUpdatedEventDto.id = '-2';
+      const updateEvent = validEventUpdateEntityStartDateTime;
+      if (updateEvent.startDateTime) {
+        expectedUpdatedEventDto.startDateTime = updateEvent.startDateTime;
+      }
+      // When
+      const response = await sut.updateEvent(
+        '-2',
+        validEventUpdateDtoStartDateTime,
+      );
+
+      //Then
+      expect(response).toEqual(expectedUpdatedEventDto);
+    });
+
+    it('should call the service to update the endDateTime and return updated event', async () => {
+      // Given
+      const expectedUpdatedEventDto = validEventDto;
+      expectedUpdatedEventDto.id = '-2';
+      const updateEvent = validEventUpdateEntityEndDateTime;
+      if (updateEvent.endDateTime) {
+        expectedUpdatedEventDto.endDateTime = updateEvent.endDateTime;
+      }
+      // When
+      const response = await sut.updateEvent(
+        '-2',
+        validEventUpdateDtoEndDateTime,
       );
 
       //Then

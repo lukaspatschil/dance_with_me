@@ -12,13 +12,14 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AddressEntity } from '../../src/core/entity/address.entity';
+import { NotFoundError } from 'rxjs';
 
 export class OpenStreetMapApiModelMock {
   getAddress = jest.fn((long: number, lang: number) => {
     if (long === validLongitude && lang === validLatitude) {
       return getEventEntityWithAddressAndLocation().address;
     } else if (long === noCountryLongitude && lang === noCountryLatitude) {
-      throw new NotFoundException();
+      throw NotFoundError;
     } else {
       throw new InternalServerErrorException();
     }
@@ -28,7 +29,7 @@ export class OpenStreetMapApiModelMock {
     if (address === validAddress) {
       return getEventEntityWithAddressAndLocation().location;
     } else if (address === invalidAddress) {
-      throw new NotFoundException();
+      throw NotFoundError;
     } else {
       throw new InternalServerErrorException();
     }

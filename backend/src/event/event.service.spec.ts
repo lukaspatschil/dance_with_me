@@ -35,8 +35,11 @@ import {
   validEventUpdateEntity,
   invalidObjectId,
   validEventDocument,
+  invalidEventUpdateEntity1,
+  invalidEventUpdateEntity2,
 } from '../../test/test_data/event.testData';
 import {
+  BadRequestException,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
@@ -120,7 +123,7 @@ describe('EventService', () => {
       const result = async () => await sut.createEvent(eventEntity);
 
       // Then
-      await expect(result).rejects.toThrow(new NotFoundException());
+      await expect(result).rejects.toThrow(NotFoundError);
     });
 
     it('should call the service and throw a NotFoundException from openStreetMap getLocation', async () => {
@@ -134,7 +137,7 @@ describe('EventService', () => {
       const result = async () => await sut.createEvent(eventEntity);
 
       // Then
-      await expect(result).rejects.toThrow(new NotFoundException());
+      await expect(result).rejects.toThrow(NotFoundError);
     });
 
     it('should call the service and throw a InternalServerErrorException from openStreetMap getAddress', async () => {
@@ -336,7 +339,7 @@ describe('EventService', () => {
         );
 
       // Then
-      await expect(response).rejects.toThrow(new NotFoundException());
+      await expect(response).rejects.toThrow(NotFoundError);
     });
 
     it('should return an internal error when requesting a malformed id', async () => {
@@ -348,7 +351,37 @@ describe('EventService', () => {
         );
 
       // Then
-      await expect(response).rejects.toThrow(new NotFoundException());
+      await expect(response).rejects.toThrow(NotFoundError);
+    });
+
+    it('should return an internal error when trying to set a startDateTime later than the endDateTime', async () => {
+      // When
+      const response = async () =>
+        await sut.updateEvent(
+          validObjectId1.toString(),
+          invalidEventUpdateEntity1,
+        );
+
+      // Then
+      await expect(response).rejects.toThrow(
+        new BadRequestException('startDateTime must be before endDateTime'),
+      );
+    });
+
+    it('should return an internal error when trying to set a startDateTime earlier than the current Time', async () => {
+      // When
+      const response = async () =>
+        await sut.updateEvent(
+          validObjectId1.toString(),
+          invalidEventUpdateEntity2,
+        );
+
+      // Then
+      await expect(response).rejects.toThrow(
+        new BadRequestException(
+          'startDateTime must be before the current time',
+        ),
+      );
     });
   });
 

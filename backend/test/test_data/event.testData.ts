@@ -31,6 +31,7 @@ export const validEventDocument = {
   imageId: '1',
   organizerId: '1',
   category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
+  participants: ['Mike', 'Pete'],
 };
 
 export const validEventEntity: EventEntity = {
@@ -56,13 +57,13 @@ export const validEventEntity: EventEntity = {
   imageId: '1',
   organizerId: '1',
   category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
-  participants: [],
+  participants: ['Mike', 'Pete'],
 };
 
 export const validEventDto: EventDto = {
   id: '',
-  name: 'Test name',
-  description: 'Test description',
+  name: 'Test Event',
+  description: 'Test Event Description',
   startDateTime: new Date('2023-01-01 10:00'),
   endDateTime: new Date('2023-01-01 12:00'),
   location: {
@@ -74,7 +75,7 @@ export const validEventDto: EventDto = {
   imageId: '1',
   organizerId: '1',
   category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
-  participants: 0,
+  participants: 2,
   address: {
     country: 'Österreich',
     city: 'Wien',
@@ -100,6 +101,64 @@ export const validEventUpdateEntity: UpdateEventEntity = {
   category: [CategoryEnum.MERENGUE],
 };
 
+export const validEventUpdateEntityStartDateTime: UpdateEventEntity = {
+  name: undefined,
+  description: undefined,
+  startDateTime: new Date('2023-01-01 11:00:00'),
+  endDateTime: undefined,
+  location: undefined,
+  address: undefined,
+  price: undefined,
+  public: undefined,
+  imageId: undefined,
+  organizerId: undefined,
+  category: undefined,
+};
+
+export const validEventUpdateEntityEndDateTime: UpdateEventEntity = {
+  name: undefined,
+  description: undefined,
+  startDateTime: undefined,
+  endDateTime: new Date('2025-01-01 11:00:00'),
+  location: undefined,
+  address: undefined,
+  price: undefined,
+  public: undefined,
+  imageId: undefined,
+  organizerId: undefined,
+  category: undefined,
+};
+
+// startDateTime after endDateTime
+export const invalidEventUpdateEntity1: UpdateEventEntity = {
+  name: undefined,
+  description: undefined,
+  startDateTime: new Date('2023-01-01 18:00:00'),
+  endDateTime: new Date('2023-01-01 12:00:00'),
+  location: undefined,
+  address: undefined,
+  price: undefined,
+  public: undefined,
+  imageId: undefined,
+  organizerId: undefined,
+  category: undefined,
+};
+
+// startDateTime before current date
+export const invalidEventUpdateEntity2: UpdateEventEntity = {
+  name: undefined,
+  description: undefined,
+  startDateTime: new Date('2020-01-01 18:00:00'),
+  endDateTime: new Date('2023-01-01 12:00:00'),
+  location: undefined,
+  address: undefined,
+  price: undefined,
+  public: undefined,
+  imageId: undefined,
+  organizerId: undefined,
+  category: undefined,
+};
+
 export const validEventUpdateDto: UpdateEventDto = {
   name: 'Test name2',
   description: 'Test description2',
@@ -107,6 +166,14 @@ export const validEventUpdateDto: UpdateEventDto = {
   imageId: '2',
   organizerId: '2',
   category: [CategoryEnum.MERENGUE],
+};
+
+export const validEventUpdateDtoStartDateTime: UpdateEventDto = {
+  startDateTime: new Date('2023-01-01 11:00:00'),
+};
+
+export const validEventUpdateDtoEndDateTime: UpdateEventDto = {
+  endDateTime: new Date('2025-01-01 11:00:00'),
 };
 
 export const updateOptions: QueryOptions = { new: true };

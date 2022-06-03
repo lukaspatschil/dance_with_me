@@ -22,6 +22,9 @@ export class EventServiceMock {
     if (id === '-1') {
       throw new Error('Test Error');
     }
+    if (id === '-2') {
+      return validEventEntity;
+    }
     if (id === USER_PARTICIPATES_IN_EVENT_EVENT_ID) {
       const eventEntity = this.getEventEntity();
       eventEntity.id = USER_PARTICIPATES_IN_EVENT_EVENT_ID;
@@ -76,7 +79,7 @@ export class EventServiceMock {
   });
 
   updateEvent = jest.fn((id: string, eventEntity: UpdateEventEntity) => {
-    if (id === validObjectId1.toString()) {
+    if (id === validObjectId1.toString() || '-2') {
       const event = validEventEntity;
       event.id = id;
       if (eventEntity.name) {

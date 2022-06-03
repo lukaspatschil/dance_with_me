@@ -12,8 +12,6 @@ import { EventDocument, EventSchema } from '../src/core/schema/event.schema';
 import { UpdateEventDto } from '../src/core/dto/updateEvent.dto';
 import { AccessTokenGuard } from '../src/auth/auth.guard';
 import { AuthGuardMock, mockedAuthHeader } from './stubs/auth.guard.mock';
-import { connect, disconnect, model, Model } from 'mongoose';
-import { EventDocument, EventSchema } from '../src/core/schema/event.schema';
 import { GeolocationEnum } from '../src/core/schema/enum/geolocation.enum';
 import {
   nonExistingObjectId,
@@ -25,7 +23,6 @@ import {
   validEventEntity,
   invalidObjectId,
 } from './test_data/event.testData';
-import { deleteResponse } from './test_data/httpResponse.testData';
 import {
   validAddress,
   validAddressDTO,
@@ -1930,6 +1927,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validUpdateAddress,
+        participants = 0,
       };
 
       const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
