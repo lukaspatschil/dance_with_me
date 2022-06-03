@@ -19,7 +19,7 @@
     "test:watch": "jest --watch --runInBand",
     "test:cov": "jest --coverage --runInBand",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest",
-    "test:e2e": "jest --config ./test/jest-e2e.json --runInBand",
+    "test:e2e": "jest --config test/e2e/jest-e2e.json --runInBand",
     "test:mutation": "stryker run"
   },
   "dependencies": {
@@ -96,7 +96,7 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": "test/unit",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
@@ -127,6 +127,6 @@
         "statements": 80
       }
     },
-    "testSequencer": "<rootDir>/../test/alphabeticTestSequencer.js"
+    "testSequencer": "<rootDir>/../alphabeticTestSequencer.js"
   }
 }
