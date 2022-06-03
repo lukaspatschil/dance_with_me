@@ -1750,6 +1750,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddress,
+        participants: [],
       });
       await event1.save();
 
@@ -1769,6 +1770,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddress,
+        participants: 0,
       };
 
       const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
@@ -1801,6 +1803,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddress,
+        participants: [],
       });
       await event1.save();
 
@@ -1820,6 +1823,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: ['Merengue'],
         address: validAddress,
+        participants: 0,
       };
 
       const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
@@ -1854,6 +1858,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddress,
+        participants: [],
       });
       await event1.save();
 
@@ -1873,6 +1878,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddress,
+        participants: 0,
       };
 
       const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
@@ -1908,6 +1914,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddress,
+        participants: [],
       });
       await event1.save();
 
@@ -1927,7 +1934,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validUpdateAddress,
-        participants = 0,
+        participants: 0,
       };
 
       const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
@@ -1960,6 +1967,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddress,
+        participants: [],
       });
       await event1.save();
 
@@ -1979,6 +1987,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddress,
+        participants: 0,
       };
 
       const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
@@ -2010,6 +2019,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddress,
+        participants: [],
       });
       await event1.save();
 
@@ -2029,6 +2039,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddress,
+        participants: 0,
       };
 
       const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
@@ -2060,6 +2071,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddress,
+        participants: [],
       });
       await event1.save();
 
@@ -2090,6 +2102,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddress,
+        participants: [],
       });
       await event1.save();
 
@@ -2120,6 +2133,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddress,
+        participants: [],
       });
       await event1.save();
 
@@ -2151,6 +2165,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         address: validAddress,
+        participants: [],
       });
       await event1.save();
 

@@ -156,7 +156,7 @@ export class EventModelMock {
         } else if (id === invalidObjectId.toString()) {
           return Promise.resolve(internalErrorResponse);
         } else {
-          return Promise.resolve(null);
+          return null;
         }
       }
     },
