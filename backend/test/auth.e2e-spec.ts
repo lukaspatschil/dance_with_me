@@ -1,4 +1,4 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { MongoMemoryServer } from 'mongodb-memory-server';
@@ -13,6 +13,8 @@ import { fingerPrintCookieName } from '../src/auth/constants';
 import { AuthService } from '../src/auth/auth.service';
 import { UserMapper } from '../src/core/mapper/user.mapper';
 
+/* eslint @typescript-eslint/naming-convention: 0 */
+
 describe('AuthController (e2e)', () => {
   interceptOauth();
   let app: INestApplication;
@@ -20,7 +22,7 @@ describe('AuthController (e2e)', () => {
   let authService: AuthService;
 
   let testDatabaseStub: MongoMemoryServer;
-  const User: Model<UserDocument> = model<UserDocument>(
+  const userModel: Model<UserDocument> = model<UserDocument>(
     'userdocuments',
     UserSchema,
   );
@@ -49,7 +51,7 @@ describe('AuthController (e2e)', () => {
 
     await app.init();
 
-    user = await User.create({
+    user = await userModel.create({
       ...validUserDocument,
       _id: 'mockUserId',
     });
@@ -103,7 +105,7 @@ describe('AuthController (e2e)', () => {
       return request(app.getHttpServer())
         .get('/auth/login_redirect/foo')
         .send()
-        .expect(403);
+        .expect(HttpStatus.FORBIDDEN);
     });
   });
 
@@ -162,7 +164,7 @@ describe('AuthController (e2e)', () => {
         .post('/auth/refresh_token')
         .set('Cookie', [`${fingerPrintCookieName}=${tokens.fingerPrint}`])
         .send({ refreshToken: tokens.refreshToken })
-        .expect(200)
+        .expect(HttpStatus.OK)
         .expect('set-cookie', setFingerprintRegex)
         .expect((res) => {
           expect(res.body.accessToken).toBeDefined();
@@ -181,7 +183,7 @@ describe('AuthController (e2e)', () => {
       return agent
         .post('/auth/refresh_token')
         .send({ refreshToken: res.body.refreshToken })
-        .expect(200);
+        .expect(HttpStatus.OK);
     });
 
     it('should not allow refresh token to be reused', async () => {
@@ -196,7 +198,7 @@ describe('AuthController (e2e)', () => {
         .post('/auth/refresh_token')
         .set('Authorization', `Bearer ${tokens.refreshToken}`)
         .send()
-        .expect(401);
+        .expect(HttpStatus.UNAUTHORIZED);
     });
   });
 
@@ -207,7 +209,7 @@ describe('AuthController (e2e)', () => {
         .post('/auth/revoke')
         .set('Cookie', [`${fingerPrintCookieName}=${tokens.fingerPrint}`])
         .send({ refreshToken: tokens.refreshToken })
-        .expect(204)
+        .expect(HttpStatus.NO_CONTENT)
         .expect('set-cookie', clearFingerprintRegex);
     });
 
@@ -223,7 +225,7 @@ describe('AuthController (e2e)', () => {
         .post('/auth/refresh_token')
         .set('Authorization', `Bearer ${tokens.refreshToken}`)
         .send()
-        .expect(401);
+        .expect(HttpStatus.UNAUTHORIZED);
     });
   });
 
@@ -235,7 +237,7 @@ describe('AuthController (e2e)', () => {
         .set('Cookie', [`${fingerPrintCookieName}=${tokens.fingerPrint}`])
         .set('Authorization', `Bearer ${tokens.accessToken}`)
         .send()
-        .expect(204)
+        .expect(HttpStatus.NO_CONTENT)
         .expect('set-cookie', clearFingerprintRegex);
     });
 
@@ -251,7 +253,7 @@ describe('AuthController (e2e)', () => {
         .post('/auth/refresh_token')
         .set('Authorization', `Bearer ${tokens.refreshToken}`)
         .send()
-        .expect(401);
+        .expect(HttpStatus.UNAUTHORIZED);
     });
   });
 
@@ -263,25 +265,25 @@ describe('AuthController (e2e)', () => {
         .query({ code, state })
         .send()
         .expect((res) => res.redirect);
-      const fragment = authRes.headers['location'].split('#')[1];
+      const fragment = authRes.headers.location.split('#')[1];
       const refreshToken = fragment.match(/refresh_token=(?<token>[^&]*)/)
         .groups.token;
 
       const refreshRes = await agent
         .post('/auth/refresh_token')
         .send({ refreshToken })
-        .expect(200);
+        .expect(HttpStatus.OK);
 
       await agent
         .post('/auth/revoke')
         .send({ refreshToken: refreshRes.body.refreshToken })
-        .expect(204)
+        .expect(HttpStatus.NO_CONTENT)
         .expect('set-cookie', clearFingerprintRegex);
 
       return agent
         .post('/auth/refresh_token')
         .send({ refreshToken: refreshRes.body.refreshToken })
-        .expect(401);
+        .expect(HttpStatus.UNAUTHORIZED);
     });
 
     it('should allow logging in with facebook and revoking all sessions', async () => {
@@ -291,7 +293,7 @@ describe('AuthController (e2e)', () => {
         .query({ code, state })
         .send()
         .expect((res) => res.redirect);
-      const fragment = authRes.headers['location'].split('#')[1];
+      const fragment = authRes.headers.location.split('#')[1];
       const accessToken = fragment.match(/access_token=(?<token>[^&]*)/).groups
         .token;
 
@@ -299,12 +301,12 @@ describe('AuthController (e2e)', () => {
         .post('/auth/force_logout')
         .set('Authorization', `Bearer ${accessToken}`)
         .send()
-        .expect(204);
+        .expect(HttpStatus.NO_CONTENT);
 
       return agent
         .post('/auth/refresh_token')
         .send({ refreshToken: authRes.body.refreshToken })
-        .expect(401);
+        .expect(HttpStatus.UNAUTHORIZED);
     });
   });
 });

@@ -6,7 +6,8 @@ import { GeolocationEnum } from '../schema/enum/geolocation.enum';
 import { EventDto } from '../dto/event.dto';
 import { EventDocument } from '../schema/event.schema';
 import { CategoryEnum } from '../schema/enum/category.enum';
-import { UserDocument } from '../schema/user.schema';
+
+/* eslint @typescript-eslint/no-magic-numbers: 0 */
 
 describe('EventMapper', () => {
   describe('mapCreateDtoToEntity', () => {

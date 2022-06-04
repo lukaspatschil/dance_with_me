@@ -1,7 +1,7 @@
 {
-  "name": "config",
+  "name": "eslint-config-dance-with-me",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "tslint-preset.js",
   "license": "MIT",
   "files": [
     "eslint-preset.js",

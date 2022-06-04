@@ -13,7 +13,7 @@ export class IdentityProviderGuard extends AuthGuard(['google', 'facebook']) {
 
   override canActivate(
     context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  ): Observable<boolean> | Promise<boolean> | boolean {
     const { provider } = context.switchToHttp().getRequest().params;
 
     if (provider !== 'google' && provider !== 'facebook') {

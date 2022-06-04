@@ -3,6 +3,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   Logger,
   Param,
 } from '@nestjs/common';
@@ -21,7 +22,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Delete(':id')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   async deleteUser(@Param('id') id: string, @User() user: AuthUser) {
     this.logger.log(`Delete user with id: ${id}`);
     if (user.id === id || user.role === RoleEnum.ADMIN) {

@@ -17,8 +17,8 @@ export interface PasetoPayload extends PasetoPayloadInput {
   kid: string;
 }
 
-export type AuthUser = Required<Pick<UserEntity, 'id' | 'role'>> &
-  Pick<UserEntity, 'displayName' | 'pictureUrl'>;
+export type AuthUser = Pick<UserEntity, 'displayName' | 'pictureUrl'> &
+  Required<Pick<UserEntity, 'id' | 'role'>>;
 
 export interface AuthProviderUser {
   id: string;

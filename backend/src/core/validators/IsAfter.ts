@@ -4,6 +4,8 @@ import {
   ValidationArguments,
 } from 'class-validator';
 
+/* @typescript-eslint/naming-convention: 0 */
+
 export function IsAfter(
   property: string,
   validationOptions?: ValidationOptions,

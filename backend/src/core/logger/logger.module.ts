@@ -8,7 +8,7 @@ import 'winston-daily-rotate-file';
   imports: [
     WinstonModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         transports: [
           new winston.transports.Console(),
           new winston.transports.DailyRotateFile({

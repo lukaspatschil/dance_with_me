@@ -1,14 +1,14 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {EventService} from "../../../services/event.service";
-import {requiredTimeValidator} from "../../../validators/requiredTime";
-import {Category} from "../../../enums/category.enum";
-import {Router} from "@angular/router";
-import {CreateEventDto} from "../../../dto/createEvent.dto";
-import {AddressDto} from "../../../dto/address.dto";
-import {requiredImageType} from "../../../validators/requiredImageType";
-import {ImageService} from "../../../services/image.service";
-import {environment} from "../../../../environments/environment";
+import { Component, OnInit } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { EventService } from '../../../services/event.service';
+import { requiredTimeValidator } from '../../../validators/requiredTime';
+import { Category } from '../../../enums/category.enum';
+import { Router } from '@angular/router';
+import { CreateEventDto } from '../../../dto/createEvent.dto';
+import { AddressDto } from '../../../dto/address.dto';
+import { requiredImageType } from '../../../validators/requiredImageType';
+import { ImageService } from '../../../services/image.service';
+import { HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'app-create-event-page',
@@ -19,10 +19,13 @@ export class CreateEventPageComponent implements OnInit {
   title = 'create';
 
   categories = Object.values(Category);
+
   createEventForm!: FormGroup;
 
   public todayDate = new Date();
+
   public loading = false;
+
   public error = false;
 
 
@@ -35,93 +38,93 @@ export class CreateEventPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.createEventForm = this.fb.group({
-        name: ['', Validators.required],
-        address: this.fb.group({
-          country: ['', Validators.required],
-          street: ['', Validators.required],
-          city: ['', Validators.required],
-          housenumber: ['', [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],
-          postalcode: ['', [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],
-          addition: [],
-        }),
-        price: ['', [Validators.required, Validators.min(0), Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],
-        date: ['', Validators.required],
-        startTime: ['', Validators.required],
-        endTime: ['', Validators.required],
-        description: ['', Validators.required],
-        public: [true],
-        category: new FormArray([], [Validators.required]),
-        image: [null, requiredImageType()]
-      }, { validators: requiredTimeValidator}
+      name: ['', Validators.required],
+      address: this.fb.group({
+        country: ['', Validators.required],
+        street: ['', Validators.required],
+        city: ['', Validators.required],
+        housenumber: ['', [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],
+        postalcode: ['', [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],
+        addition: []
+      }),
+      price: ['', [Validators.required, Validators.min(0), Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],
+      date: ['', Validators.required],
+      startTime: ['', Validators.required],
+      endTime: ['', Validators.required],
+      description: ['', Validators.required],
+      public: [true],
+      category: new FormArray([], [Validators.required]),
+      image: [null, requiredImageType()]
+    }, { validators: requiredTimeValidator }
     );
   }
 
 
   get name(): AbstractControl | null {
-    return this.createEventForm.get('name')
+    return this.createEventForm.get('name');
   }
 
   get price(): AbstractControl | null {
-    return this.createEventForm.get('price')
+    return this.createEventForm.get('price');
   }
 
   get date(): AbstractControl {
-    return this.createEventForm.get('date')!
+    return this.createEventForm.get('date')!;
   }
 
   get startTime(): AbstractControl {
-    return this.createEventForm.get('startTime')!
+    return this.createEventForm.get('startTime')!;
   }
 
   get endTime(): AbstractControl {
-    return this.createEventForm.get('endTime')!
+    return this.createEventForm.get('endTime')!;
   }
 
   get category(): AbstractControl | null {
-    return this.createEventForm.get('category')
+    return this.createEventForm.get('category');
   }
 
   get country(): AbstractControl | null {
-    return this. createEventForm.get(['address', 'country'])
+    return this. createEventForm.get(['address', 'country']);
   }
 
   get street(): AbstractControl | null {
-    return this. createEventForm.get(['address', 'street'])
+    return this. createEventForm.get(['address', 'street']);
   }
 
   get city(): AbstractControl | null {
-    return this. createEventForm.get(['address', 'city'])
+    return this. createEventForm.get(['address', 'city']);
   }
 
   get housenumber(): AbstractControl | null {
-    return this. createEventForm.get(['address', 'housenumber'])
+    return this. createEventForm.get(['address', 'housenumber']);
   }
 
   get postalcode(): AbstractControl | null {
-    return this. createEventForm.get(['address', 'postalcode'])
+    return this. createEventForm.get(['address', 'postalcode']);
   }
 
   get addition(): AbstractControl{
-    return this.createEventForm.get(['address', 'addition'])!
+    return this.createEventForm.get(['address', 'addition'])!;
   }
 
   get public(): AbstractControl {
-    return this.createEventForm.get(['public'])!
+    return this.createEventForm.get(['public'])!;
   }
 
   get description(): AbstractControl | null {
-    return this.createEventForm.get(['description'])
+    return this.createEventForm.get(['description']);
   }
 
   get image(): AbstractControl {
     return this.createEventForm.get(['image'])!;
   }
 
-  clearImage() {
+  clearImage(): void {
     this.image.patchValue(null);
   }
 
-  createEvent() {
+  createEvent(): CreateEventDto {
     const address = new AddressDto(
       this.createEventForm.value.address.country,
       this.createEventForm.value.address.city,
@@ -139,11 +142,11 @@ export class CreateEventPageComponent implements OnInit {
       this.public.value,
       new Date(`${this.date.value}T${this.startTime.value}`).toISOString(),
       new Date(`${this.date.value}T${this.endTime.value}`).toISOString(),
-      this.createEventForm.value.category,
-    )
+      this.createEventForm.value.category
+    );
   }
 
-  onSubmit(){
+  onSubmit(): void {
     if (this.createEventForm.valid){
       const newEvent = this.createEvent();
       this.loading = true;
@@ -165,12 +168,12 @@ export class CreateEventPageComponent implements OnInit {
     }
   }
 
-  private uploadEvent(event: CreateEventDto) {
+  private uploadEvent(event: CreateEventDto): void {
     this.eventService.createEvent(event).subscribe({
       next: resp => {
-        if (resp.status === 201) {
+        if (resp.status === HttpStatusCode.Created) {
           this.loading = false;
-          this.router.navigate([`/payment/${resp.body?.id}`]);
+          void this.router.navigate([`/payment/${resp.body?.id}`]);
         }
       }, error: () => {
         this.loading = false;
@@ -179,20 +182,19 @@ export class CreateEventPageComponent implements OnInit {
     });
   }
 
-  onCheckChange(event: Event) {
+  onCheckChange(event: Event): void {
     const formArray: FormArray = this.createEventForm.get('category') as FormArray;
 
-    const element = event.currentTarget as HTMLInputElement
-    const value = element.value
-    const checked = element.checked
+    const element = event.currentTarget as HTMLInputElement;
+    const value = element.value;
+    const checked = element.checked;
 
-    if(checked){
+    if (checked){
       formArray.push(new FormControl(value));
-    }
-    else{
-      let i: number = 0;
+    } else {
+      let i = 0;
       formArray.controls.forEach((ctrl: AbstractControl | null) => {
-        if(ctrl?.value === value) {
+        if (ctrl?.value === value) {
           formArray.removeAt(i);
           return;
         }

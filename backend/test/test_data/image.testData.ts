@@ -8,6 +8,8 @@ import { RoleEnum } from '../../src/core/schema/enum/role.enum';
 import { UserEntity } from '../../src/core/entity/user.entity';
 import { FileDto } from '../../src/core/dto/file.dto';
 
+/* eslint @typescript-eslint/no-magic-numbers: 0 */
+/* eslint @typescript-eslint/naming-convention: 0 */
 export const validFilenamePNG =
   new mongoose.Types.ObjectId().toString() + '.png';
 export const validFilenameJPG =

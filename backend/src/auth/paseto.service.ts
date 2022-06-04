@@ -9,19 +9,22 @@ import { PasetoPayload, PasetoPayloadInput } from './interfaces';
 @Injectable()
 export class PasetoService implements OnModuleInit {
   private readonly logger = new Logger(PasetoService.name);
+
   private readonly keys: { [id: string]: { key: KeyObject; expires: number } } =
     {};
 
-  constructor(private configService: ConfigService) {}
+  constructor(private readonly configService: ConfigService) {}
 
   async onModuleInit(): Promise<void> {
     await this.addNewKey();
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     const interval = setInterval(this.addNewKey, pasetoKeyRotationInterval);
     interval.unref();
   }
 
   private async addNewKey(): Promise<{ kid: string; key: KeyObject }> {
     const key = await paseto.generateKey('public');
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     const kid = randomBytes(16).toString('base64url');
     const expires = Date.now() + pasetoKeyRotationInterval / 2;
 
@@ -50,7 +53,7 @@ export class PasetoService implements OnModuleInit {
     return newestKey.expires > Date.now() ? newestKey : await this.addNewKey();
   }
 
-  private async getKeyByKid(kid: string): Promise<KeyObject> {
+  private getKeyByKid(kid: string): KeyObject {
     const key = this.keys[kid];
     if (!key) {
       throw new Error(`Key with kid ${kid} not found`);
@@ -73,7 +76,7 @@ export class PasetoService implements OnModuleInit {
 
   async verifyToken(token: string): Promise<PasetoPayload> {
     const { kid } = <PasetoPayload>decode(token).payload;
-    const key = await this.getKeyByKid(kid);
+    const key = this.getKeyByKid(kid);
 
     const options = {
       issuer: this.configService.get('API_BASE'),

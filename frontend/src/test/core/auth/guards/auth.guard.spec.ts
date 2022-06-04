@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 
 import { AuthGuard } from '../../../../app/core/auth/guards/auth.guard';
-import {RouterTestingModule} from "@angular/router/testing";
-import {AuthService} from "../../../../app/core/auth/auth.service";
-import {AuthServiceMock} from "../../../mock/auth.service.mock";
-import {ActivatedRouteSnapshot, Router, RouterStateSnapshot} from "@angular/router";
-import {environment} from "../../../../environments/environment";
+import { RouterTestingModule } from '@angular/router/testing';
+import { AuthService } from '../../../../app/core/auth/auth.service';
+import { AuthServiceMock } from '../../../mock/auth.service.mock';
+import { Router } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 
 describe('AuthGuard', () => {
 
@@ -32,12 +32,8 @@ describe('AuthGuard', () => {
 
   describe('canActivate', () => {
     it('should return true if the user is authenticated', () => {
-      // Given
-      const route = {} as unknown as ActivatedRouteSnapshot;
-      const state = {} as RouterStateSnapshot;
-
       // When
-      const result = sut.canActivate(route, state);
+      const result = sut.canActivate();
 
       // Then
       expect(result).toBeTruthy();
@@ -47,11 +43,9 @@ describe('AuthGuard', () => {
       // Given
       jest.spyOn(router, 'parseUrl');
       authService.isAuthenticated = jest.fn().mockReturnValue(false);
-      const route = {} as unknown as ActivatedRouteSnapshot;
-      const state = {} as RouterStateSnapshot;
 
       // When
-      sut.canActivate(route, state);
+      sut.canActivate();
 
       // Then
       expect(router.parseUrl).toHaveBeenCalledWith(environment.loginUrl);
@@ -61,11 +55,9 @@ describe('AuthGuard', () => {
       // Given
       jest.spyOn(router, 'parseUrl');
       authService.isAuthenticated = jest.fn().mockReturnValue(false);
-      const route = {} as unknown as ActivatedRouteSnapshot;
-      const state = {} as RouterStateSnapshot;
 
       // When
-      const result = sut.canActivate(route, state);
+      const result = sut.canActivate();
 
       // Then
       const expectedUrl = router.parseUrl(environment.loginUrl);

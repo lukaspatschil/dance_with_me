@@ -12,11 +12,17 @@ import {
 } from '../test_data/image.testData';
 import { Readable } from 'stream';
 
+/* eslint @typescript-eslint/no-magic-numbers: 0 */
+/* eslint @typescript-eslint/naming-convention: 0 */
+
 // Add your mock functions in this object as needed
 export class MockS3Instance {
   _functionCalled = '';
+
   _buffer = false;
+
   _readable = false;
+
   _string = false;
 
   copyObject = jest.fn().mockReturnThis();
@@ -49,6 +55,7 @@ export class MockS3Instance {
       throw new Error();
     }
   });
+
   putObject = jest.fn((putObjectRequest: any) => {
     this._functionCalled = 'putObject';
     const config: PutObjectRequest = putObjectRequest;

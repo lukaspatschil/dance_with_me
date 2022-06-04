@@ -8,7 +8,8 @@ import { Model } from 'mongoose';
 import { UserEntity } from '../core/entity/user.entity';
 import { RoleEnum } from '../core/schema/enum/role.enum';
 import { createHash } from 'crypto';
-
+/* eslint @typescript-eslint/no-magic-numbers: 0 */
+/* eslint @typescript-eslint/naming-convention: 0 */
 describe('AuthService', () => {
   let service: AuthService;
   let userService: UserService;
@@ -88,7 +89,7 @@ describe('AuthService', () => {
   });
 
   describe('checkFingerPrint', () => {
-    it('should return false if the fingerPrintHash is falsy', async () => {
+    it('should return false if the fingerPrintHash is falsy', () => {
       // When
       const result = AuthService.checkFingerPrint(
         tokens.fingerPrint,
@@ -99,7 +100,7 @@ describe('AuthService', () => {
       expect(result).toBeFalsy();
     });
 
-    it('should return false if the fingerPrintHash does not match', async () => {
+    it('should return false if the fingerPrintHash does not match', () => {
       //Given
       const hash = createHash('sha256')
         .update(tokens.fingerPrint)
@@ -115,7 +116,7 @@ describe('AuthService', () => {
       expect(result).toBeFalsy();
     });
 
-    it('should return true if the fingerPrintHash matches', async () => {
+    it('should return true if the fingerPrintHash matches', () => {
       //Given
       const hash = createHash('sha256')
         .update(tokens.fingerPrint)
@@ -156,13 +157,17 @@ describe('AuthService', () => {
     });
 
     it('should use pasetoService to create token', async () => {
-      jest.spyOn(service['pasetoService'], 'createToken');
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      jest.spyOn(service.pasetoService, 'createToken');
 
       // When
       await service.authenticateUser(user);
 
       // Then
-      expect(service['pasetoService'].createToken).toHaveBeenCalled();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      expect(service.pasetoService.createToken).toHaveBeenCalled();
     });
 
     it('should return tokens and fingerprint', async () => {
@@ -196,20 +201,26 @@ describe('AuthService', () => {
     });
 
     it('should pass fingerprint hash when creating access token', async () => {
-      jest.spyOn(service['pasetoService'], 'createToken');
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      jest.spyOn(service.pasetoService, 'createToken');
 
       // When
       const { fingerPrint } = await service.authenticateUser(user);
 
       // Then
       const hash = createHash('sha256').update(fingerPrint).digest('base64url');
-      expect(service['pasetoService'].createToken).toHaveBeenCalledWith(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      expect(service.pasetoService.createToken).toHaveBeenCalledWith(
         expect.objectContaining({ fingerPrintHash: hash }),
       );
     });
 
     it('should pass appropriate claims for access token', async () => {
-      jest.spyOn(service['pasetoService'], 'createToken');
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      jest.spyOn(service.pasetoService, 'createToken');
 
       // When
       await service.authenticateUser({
@@ -218,7 +229,11 @@ describe('AuthService', () => {
       });
 
       // Then
-      expect(service['pasetoService'].createToken).toHaveBeenCalledWith(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      expect(service.pasetoService.createToken).toHaveBeenCalledWith(
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         expect.objectContaining({
           sub: user.id,
           role: user.role,

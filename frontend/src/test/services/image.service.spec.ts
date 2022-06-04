@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ImageService } from '../../app/services/image.service';
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {environment} from "../../environments/environment";
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { environment } from '../../environments/environment';
 
 describe('ImageService', () => {
   let sut: ImageService;
@@ -28,7 +28,7 @@ describe('ImageService', () => {
   describe('uploadImage', () => {
     it('should send post request', () => {
       // Given
-      const file = new File([""], "filename", { type: 'image/png' });
+      const file = new File([''], 'filename', { type: 'image/png' });
 
       // When
       sut.uploadImage(file).subscribe(() => {});
@@ -40,7 +40,7 @@ describe('ImageService', () => {
 
     it('should send the file', () => {
       // Given
-      const file = new File([""], "filename", { type: 'image/png' });
+      const file = new File([''], 'filename', { type: 'image/png' });
 
       // When
       sut.uploadImage(file).subscribe(() => {});
@@ -49,7 +49,7 @@ describe('ImageService', () => {
       const expectedFormData = new FormData();
       expectedFormData.append('file', file, file.name);
       const req = httpTestingController.expectOne(`${environment.baseUrl}/image`);
-      expect(req.request.body).toEqual(expectedFormData)
+      expect(req.request.body).toEqual(expectedFormData);
     });
   });
 });

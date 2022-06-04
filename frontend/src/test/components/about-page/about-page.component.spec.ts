@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture } from '@angular/core/testing';
 
 import { AboutPageComponent } from '../../../app/components/about-page/about-page.component';
-import {MockBuilder, MockRender} from "ng-mocks";
-import {TranslateModule} from "@ngx-translate/core";
+import { MockBuilder, MockRender } from 'ng-mocks';
+import { TranslateModule } from '@ngx-translate/core';
 
 describe('AboutPageComponent', () => {
   let component: AboutPageComponent;

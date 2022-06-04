@@ -23,16 +23,19 @@ import { RoleEnum } from '../src/core/schema/enum/role.enum';
 import { validObjectId } from './test_data/user.testData';
 import { UserDocument, UserSchema } from '../src/core/schema/user.schema';
 
+/* eslint @typescript-eslint/no-magic-numbers: 0 */
+/* eslint @typescript-eslint/naming-convention: 0 */
+
 describe('EventController (e2e)', () => {
   let app: INestApplication;
 
   let testDatabaseStub: MongoMemoryServer;
-  const Event: Model<EventDocument> = model<EventDocument>(
+  const eventModel: Model<EventDocument> = model<EventDocument>(
     'eventdocuments',
     EventSchema,
   );
 
-  const User: Model<UserDocument> = model<UserDocument>(
+  const userModel: Model<UserDocument> = model<UserDocument>(
     'userdocuments',
     UserSchema,
   );
@@ -42,7 +45,7 @@ describe('EventController (e2e)', () => {
     process.env['MONGODB_URI'] = testDatabaseStub.getUri();
     await connect(testDatabaseStub.getUri());
 
-    await Event.ensureIndexes();
+    await eventModel.ensureIndexes();
 
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
@@ -299,7 +302,7 @@ describe('EventController (e2e)', () => {
 
     describe('using the take parameter', () => {
       it('should return 200 and one element because the query parameter take=1 is used and one element is in the database', async () => {
-        const event = new Event({
+        const event = new eventModel({
           _id: validObjectId1.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
@@ -349,7 +352,7 @@ describe('EventController (e2e)', () => {
       });
 
       it('should return 200 and one element because the query parameter take=1 is used and two elements are in the database', async () => {
-        const event1 = new Event({
+        const event1 = new eventModel({
           _id: validObjectId1.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
@@ -387,7 +390,7 @@ describe('EventController (e2e)', () => {
           participants: 0,
         };
 
-        const event2 = new Event({
+        const event2 = new eventModel({
           _id: validObjectId2.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
@@ -433,7 +436,7 @@ describe('EventController (e2e)', () => {
       });
 
       it('should return 200 and no element because the query parameter skip=1 is used and one element is in the database', async () => {
-        const event1 = new Event({
+        const event1 = new eventModel({
           _id: validObjectId1.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
@@ -464,7 +467,7 @@ describe('EventController (e2e)', () => {
       });
 
       it('should return 200 and one element because the query parameter skip=1 is used and two elements are in the database', async () => {
-        const event1 = new Event({
+        const event1 = new eventModel({
           _id: validObjectId1.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
@@ -484,7 +487,7 @@ describe('EventController (e2e)', () => {
         });
         await event1.save();
 
-        const event2 = new Event({
+        const event2 = new eventModel({
           _id: validObjectId2.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
@@ -547,7 +550,7 @@ describe('EventController (e2e)', () => {
       });
 
       it('should return 200 and no element because the query parameter skip=1 and take=1 is used and one element is in the database', async () => {
-        const event1 = new Event({
+        const event1 = new eventModel({
           _id: validObjectId1.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
@@ -579,7 +582,7 @@ describe('EventController (e2e)', () => {
       });
 
       it('should return 200 and one element because the query parameter skip=1 and take=1 is used and two elements are in the database', async () => {
-        const event1 = new Event({
+        const event1 = new eventModel({
           _id: validObjectId1.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
@@ -599,7 +602,7 @@ describe('EventController (e2e)', () => {
         });
         await event1.save();
 
-        const event2 = new Event({
+        const event2 = new eventModel({
           _id: validObjectId2.toString(),
           name: 'Test Event',
           description: 'Test Event Description',
@@ -649,7 +652,7 @@ describe('EventController (e2e)', () => {
       });
 
       it('should return 200 and two elements because the query parameter skip=1 and take=2 is used and three elements are in the database', async () => {
-        const event1 = new Event({
+        const event1 = new eventModel({
           _id: validObjectId1.toString(),
           name: 'test1',
           description: 'Test Event Description',
@@ -669,7 +672,7 @@ describe('EventController (e2e)', () => {
         });
         await event1.save();
 
-        const event2 = new Event({
+        const event2 = new eventModel({
           _id: validObjectId2.toString(),
           name: 'test2',
           description: 'Test Event Description',
@@ -707,7 +710,7 @@ describe('EventController (e2e)', () => {
           participants: 0,
         };
 
-        const event3 = new Event({
+        const event3 = new eventModel({
           _id: validObjectId3.toString(),
           name: 'test3',
           description: 'Test Event Description',
@@ -758,7 +761,7 @@ describe('EventController (e2e)', () => {
     });
 
     it('should return two elements because two elements are in the database and should be sorted by name', async () => {
-      const event1 = new Event({
+      const event1 = new eventModel({
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
@@ -796,7 +799,7 @@ describe('EventController (e2e)', () => {
         participants: 0,
       };
 
-      const event2 = new Event({
+      const event2 = new eventModel({
         _id: validObjectId2.toString(),
         name: 'test2',
         description: 'Test Event Description',
@@ -845,7 +848,7 @@ describe('EventController (e2e)', () => {
     });
 
     it('should return two elements because two elements are in the database and should be sorted by startDateTime', async () => {
-      const event1 = new Event({
+      const event1 = new eventModel({
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
@@ -883,7 +886,7 @@ describe('EventController (e2e)', () => {
         participants: 0,
       };
 
-      const event2 = new Event({
+      const event2 = new eventModel({
         _id: validObjectId2.toString(),
         name: 'test2',
         description: 'Test Event Description',
@@ -933,7 +936,7 @@ describe('EventController (e2e)', () => {
     });
 
     it('should return one element because two elements are in the database and one is in the past and one is in the future', async () => {
-      const event1 = new Event({
+      const event1 = new eventModel({
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
@@ -971,7 +974,7 @@ describe('EventController (e2e)', () => {
         participants: 0,
       };
 
-      const event2 = new Event({
+      const event2 = new eventModel({
         _id: validObjectId2.toString(),
         name: 'test1',
         description: 'Test Event Description',
@@ -1001,7 +1004,7 @@ describe('EventController (e2e)', () => {
     });
 
     it('should return one element because two elements are in the database and one is in the past and one is in the future given a timestamp', async () => {
-      const event1 = new Event({
+      const event1 = new eventModel({
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
@@ -1039,7 +1042,7 @@ describe('EventController (e2e)', () => {
         participants: 0,
       };
 
-      const event2 = new Event({
+      const event2 = new eventModel({
         _id: validObjectId2.toString(),
         name: 'test1',
         description: 'Test Event Description',
@@ -1071,7 +1074,7 @@ describe('EventController (e2e)', () => {
 
     describe('find by location', () => {
       it('should return one elements because one element is in the database', async () => {
-        const event1 = new Event({
+        const event1 = new eventModel({
           _id: validObjectId1.toString(),
           name: 'test1',
           description: 'Test Event Description',
@@ -1124,7 +1127,7 @@ describe('EventController (e2e)', () => {
       });
 
       it('should return two elements sorted by distance because two elements are in the database', async () => {
-        const event1 = new Event({
+        const event1 = new eventModel({
           _id: validObjectId1.toString(),
           name: 'test1',
           description: 'Test Event Description',
@@ -1162,7 +1165,7 @@ describe('EventController (e2e)', () => {
           address: validAddressDTO,
         };
 
-        const event2 = new Event({
+        const event2 = new eventModel({
           _id: validObjectId2.toString(),
           name: 'test2',
           description: 'Test Event Description',
@@ -1219,7 +1222,7 @@ describe('EventController (e2e)', () => {
       });
 
       it('should return two elements sorted by date because two elements are in the database and have the same distance', async () => {
-        const event1 = new Event({
+        const event1 = new eventModel({
           _id: validObjectId1.toString(),
           name: 'test1',
           description: 'Test Event Description',
@@ -1257,7 +1260,7 @@ describe('EventController (e2e)', () => {
           participants: 0,
         };
 
-        const event2 = new Event({
+        const event2 = new eventModel({
           _id: validObjectId2.toString(),
           name: 'test2',
           description: 'Test Event Description',
@@ -1319,7 +1322,7 @@ describe('EventController (e2e)', () => {
     });
 
     it('should return the correct element', async () => {
-      const event1 = new Event({
+      const event1 = new eventModel({
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
@@ -1368,7 +1371,7 @@ describe('EventController (e2e)', () => {
 
   describe('/event (Delete)', () => {
     it('should return 204', async () => {
-      const event = new Event({
+      const event = new eventModel({
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
@@ -1404,7 +1407,7 @@ describe('EventController (e2e)', () => {
 
   describe('/event/:eventid/participate (Post)', () => {
     it('should add participation at event', async () => {
-      const event = new Event({
+      const event = new eventModel({
         _id: validObjectId1.toString(),
         name: 'Test Event',
         description: 'Test Event Description',
@@ -1424,7 +1427,7 @@ describe('EventController (e2e)', () => {
       await event.save();
 
       const userId = validObjectId.toString();
-      const user = new User({
+      const user = new userModel({
         _id: userId,
         displayName: 'Bill',
         email: 'bill@initech.com',
@@ -1449,7 +1452,7 @@ describe('EventController (e2e)', () => {
   describe('/event/:eventid/participate (Delete)', () => {
     it('should delete the participation at a non existing event and throw a not found error', async () => {
       const userId = validObjectId.toString();
-      const user = new User({
+      const user = new userModel({
         _id: userId,
         displayName: 'Bill',
         email: 'bill@initech.com',
@@ -1471,7 +1474,7 @@ describe('EventController (e2e)', () => {
     });
 
     it('should delete participation at an event where the user did not participate and throw a conflict exception', async () => {
-      const event = new Event({
+      const event = new eventModel({
         _id: validObjectId1.toString(),
         name: 'Test Event',
         description: 'Test Event Description',
@@ -1492,7 +1495,7 @@ describe('EventController (e2e)', () => {
       await event.save();
 
       const userId = validObjectId.toString();
-      const user = new User({
+      const user = new userModel({
         _id: userId,
         displayName: 'Bill',
         email: 'bill@initech.com',
@@ -1514,7 +1517,7 @@ describe('EventController (e2e)', () => {
     });
 
     it('should delete participation at an existing event where the user participated and return the status code 204', async () => {
-      const event = new Event({
+      const event = new eventModel({
         _id: validObjectId1.toString(),
         name: 'Test Event',
         description: 'Test Event Description',
@@ -1535,7 +1538,7 @@ describe('EventController (e2e)', () => {
       await event.save();
 
       const userId = validObjectId.toString();
-      const user = new User({
+      const user = new userModel({
         _id: userId,
         displayName: 'Bill',
         email: 'bill@initech.com',
@@ -1561,7 +1564,7 @@ describe('EventController (e2e)', () => {
     // event 1
     const startDate1 = new Date(addMinutes(new Date(), -30).toISOString());
     const endDate1 = new Date(addMinutes(new Date(), -10).toISOString());
-    const event1 = new Event({
+    const event1 = new eventModel({
       _id: validObjectId1.toString(),
       name: 'test1',
       description: 'Test Event Description',
@@ -1602,7 +1605,7 @@ describe('EventController (e2e)', () => {
     // event 2
     const startDate2 = new Date(addMinutes(new Date(), 10).toISOString());
     const endDate2 = new Date(addMinutes(new Date(), 30).toISOString());
-    const event2 = new Event({
+    const event2 = new eventModel({
       _id: validObjectId2.toString(),
       name: 'test1',
       description: 'Test Event Description',
@@ -1642,7 +1645,7 @@ describe('EventController (e2e)', () => {
 
     //save user
     const userId = validObjectId.toString();
-    const user = new User({
+    const user = new userModel({
       _id: userId,
       displayName: 'Bill',
       email: 'bill@initech.com',
@@ -1733,7 +1736,7 @@ describe('EventController (e2e)', () => {
     };
   }
 
-  function getCategory(): Array<string> {
+  function getCategory(): string[] {
     return ['Salsa', 'Zouk'];
   }
 

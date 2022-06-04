@@ -53,7 +53,7 @@ describe('RefreshTokenStrategy', function () {
     expect(strategy).toBeDefined();
   });
 
-  it('should throw error if refresh token is not provided', () => {
+  it('should throw error if refresh token is not provided', async () => {
     // Given
     const request = { ...validRequest, body: {} };
 
@@ -61,10 +61,10 @@ describe('RefreshTokenStrategy', function () {
     const promise = strategy.validate(request);
 
     // Then
-    expect(promise).rejects.toThrowError();
+    await expect(promise).rejects.toThrowError();
   });
 
-  it('should throw error if fingerprint is not provided', () => {
+  it('should throw error if fingerprint is not provided', async () => {
     // Given
     const request = { ...validRequest, cookies: {} };
 
@@ -72,10 +72,10 @@ describe('RefreshTokenStrategy', function () {
     const promise = strategy.validate(request);
 
     // Then
-    expect(promise).rejects.toThrowError();
+    await expect(promise).rejects.toThrowError();
   });
 
-  it('should throw error if refresh token and fingerprint pair does not exist', () => {
+  it('should throw error if refresh token and fingerprint pair does not exist', async () => {
     // Given
     const request = {
       ...validRequest,
@@ -86,14 +86,14 @@ describe('RefreshTokenStrategy', function () {
     const promise = strategy.validate(request);
 
     // Then
-    expect(promise).rejects.toThrowError();
+    await expect(promise).rejects.toThrowError();
   });
 
-  it('should return correct userEntity if refresh token and fingerprint pair exists', () => {
+  it('should return correct userEntity if refresh token and fingerprint pair exists', async () => {
     // When
     const promise = strategy.validate(validRequest);
 
     // Then
-    expect(promise).resolves.toEqual(user);
+    await expect(promise).resolves.toEqual(user);
   });
 });

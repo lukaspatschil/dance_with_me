@@ -5,6 +5,7 @@ import { UserDocument } from './user.schema';
 @Schema()
 export class RefreshTokenDocument extends Document {
   @Prop({ required: true })
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   override _id!: string;
 
   @Prop({ required: true })

@@ -4,7 +4,8 @@ import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer
 export const multerOptions: MulterOptions = {
   // Enable file size limits
   limits: {
-    fileSize: Number(process.env['MAX_FILE_SIZE']) ?? 33554432,
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    fileSize: Number(process.env['MAX_FILE_SIZE'] ?? 33554432),
   },
   // Check the mimetypes to allow for upload
   fileFilter: (req: any, file: any, cb: any) => {

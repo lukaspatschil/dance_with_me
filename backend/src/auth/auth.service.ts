@@ -14,13 +14,15 @@ import { RefreshTokenDocument } from '../core/schema/refreshtoken.schema';
 import { UserEntity } from '../core/entity/user.entity';
 import { UserMapper } from '../core/mapper/user.mapper';
 
+/* eslint @typescript-eslint/no-magic-numbers: 0 */
+
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
 
   constructor(
-    private userService: UserService,
-    private pasetoService: PasetoService,
+    private readonly userService: UserService,
+    private readonly pasetoService: PasetoService,
     @InjectModel(RefreshTokenDocument.name)
     private readonly refreshTokenModel: Model<RefreshTokenDocument>,
   ) {}
@@ -47,6 +49,7 @@ export class AuthService {
     const refreshToken = AuthService.generateRefreshToken();
 
     await this.refreshTokenModel.create({
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       _id: refreshToken,
       fingerprint: fingerPrint,
       user: user.id,

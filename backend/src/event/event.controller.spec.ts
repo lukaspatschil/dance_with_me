@@ -39,12 +39,12 @@ describe('EventController', () => {
   });
 
   describe('getEventById', () => {
-    it('should call getEventById and return event', () => {
+    it('should call getEventById and return event', async () => {
       // Given
       const params = { id: '1' };
 
       // When
-      sut.getEventById(params);
+      await sut.getEventById(params);
 
       // Then
       expect(eventService.getEventById).toHaveBeenCalled();
@@ -63,22 +63,22 @@ describe('EventController', () => {
   });
 
   describe('getEvents', () => {
-    it('should call getEvents`', () => {
+    it('should call getEvents`', async () => {
       // Given
       const query = { take: 1, skip: 0 };
 
       // When
-      sut.getEvents(query);
+      await sut.getEvents(query);
 
       // Then
       expect(eventService.getEventsQueryDto).toBeCalledWith(query);
     });
 
-    it('should call getEventsByLocation`', () => {
+    it('should call getEventsByLocation`', async () => {
       // Given
       const query = { take: 1, skip: 0, longitude: 1, latitude: 2 };
       // When
-      sut.getEvents(query);
+      await sut.getEvents(query);
 
       // Then
       expect(eventService.getEventsQueryDto).toBeCalledWith(query);
@@ -99,11 +99,11 @@ describe('EventController', () => {
   });
 
   describe('createEvent', () => {
-    it('should call createEvent', () => {
+    it('should call createEvent', async () => {
       // Given
       const createEventDto = getCreateEventDTO();
       //When
-      sut.createEvent(createEventDto, getDefaultUser());
+      await sut.createEvent(createEventDto, getDefaultUser());
 
       //Then
       expect(eventService.createEvent).toHaveBeenCalledWith(getEventEntity());
@@ -138,8 +138,9 @@ describe('EventController', () => {
 
     it('should call deleteEvent and throw a NotFoundError', async () => {
       // When
-      const result = async () =>
+      const result = async () => {
         await sut.deleteEvent(nonExistingObjectId.toString());
+      };
 
       //Then
       await expect(result).rejects.toThrow(new NotFoundException());
@@ -147,21 +148,21 @@ describe('EventController', () => {
   });
 
   describe('createParticipation', () => {
-    it('should call the add participation to an event', () => {
+    it('should call the add participation to an event', async () => {
       // When
-      sut.createParticipation('1', getDefaultUser());
+      await sut.createParticipation('1', getDefaultUser());
 
       // Then
       expect(eventService.createParticipation).toHaveBeenCalled();
     });
 
-    it('should call the add participation to an event with the correct parameters', () => {
+    it('should call the add participation to an event with the correct parameters', async () => {
       // Given
       const eventId = '1';
       const user = getDefaultUser();
 
       // When
-      sut.createParticipation(eventId, user);
+      await sut.createParticipation(eventId, user);
 
       // Then
       expect(eventService.createParticipation).toHaveBeenCalledWith(
@@ -172,21 +173,21 @@ describe('EventController', () => {
   });
 
   describe('removeParticipation', () => {
-    it('should call the delete participation to an event', () => {
+    it('should call the delete participation to an event', async () => {
       // When
-      sut.deleteParticipation('1', getDefaultUser());
+      await sut.deleteParticipation('1', getDefaultUser());
 
       // Then
       expect(eventService.deleteParticipation).toHaveBeenCalled();
     });
 
-    it('should call the delete participation to an event with the correct parameters', () => {
+    it('should call the delete participation to an event with the correct parameters', async () => {
       // Given
       const eventId = '1';
       const user = getDefaultUser();
 
       // When
-      sut.deleteParticipation(eventId, user);
+      await sut.deleteParticipation(eventId, user);
 
       // Then
       expect(eventService.deleteParticipation).toHaveBeenCalledWith(
@@ -255,6 +256,7 @@ describe('EventController', () => {
       endDateTime: new Date('2020-01-01 00:12:00'),
       location: {
         type: GeolocationEnum.POINT,
+        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
         coordinates: [-171.23794, 8.54529],
       },
       price: 12.5,

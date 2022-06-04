@@ -25,7 +25,9 @@ describe('EmailService (e2e)', () => {
   });
 
   afterAll(async () => {
-    await emailService['mailerService']['transporter'].close();
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await emailService.mailerService.transporter.close();
   });
 
   describe('sendUserConfirmation', () => {
@@ -34,6 +36,7 @@ describe('EmailService (e2e)', () => {
         validUserEntity,
         validEventEntity,
         'test-invoice-id',
+        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
         10,
       );
       // The URL can be used to display the message in the browser.

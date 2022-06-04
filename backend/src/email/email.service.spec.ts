@@ -23,6 +23,7 @@ describe('EmailService', () => {
           useValue: {
             get: jest.fn((key: string) => {
               return {
+                // eslint-disable-next-line @typescript-eslint/naming-convention
                 FRONTEND_URL: 'mock-frontend-url',
               }[key];
             }),
@@ -42,18 +43,21 @@ describe('EmailService', () => {
     it('should log error if sending fails', async () => {
       // Given
       const errorMessage = 'test-error';
-      jest
-        .spyOn(sut['mailerService'], 'sendMail')
-        .mockImplementationOnce(() => {
-          throw new Error(errorMessage);
-        });
-      const loggerSpy = jest.spyOn(sut['logger'], 'error');
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      jest.spyOn(sut.mailerService, 'sendMail').mockImplementationOnce(() => {
+        throw new Error(errorMessage);
+      });
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const loggerSpy = jest.spyOn(sut.logger, 'error');
 
       // When
       await sut.sendInvoice(
         validUserEntity,
         validEventEntity,
         'test-invoice-id',
+        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
         10,
       );
 
@@ -67,7 +71,9 @@ describe('EmailService', () => {
     it('should send email using mailerService', async () => {
       // Given
       const sendMailSpy = jest
-        .spyOn(sut['mailerService'], 'sendMail')
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        .spyOn(sut.mailerService, 'sendMail')
         .mockImplementationOnce(() => {
           return Promise.resolve();
         });
@@ -107,17 +113,18 @@ describe('EmailService', () => {
     it('should return message object', async () => {
       // Given
       const messageInfo = { messageId: 'test-message-id' };
-      jest
-        .spyOn(sut['mailerService'], 'sendMail')
-        .mockImplementationOnce(() => {
-          return Promise.resolve(messageInfo);
-        });
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      jest.spyOn(sut.mailerService, 'sendMail').mockImplementationOnce(() => {
+        return Promise.resolve(messageInfo);
+      });
 
       // When
       const res = await sut.sendInvoice(
         validUserEntity,
         validEventEntity,
         'test-invoice-id',
+        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
         10,
       );
 

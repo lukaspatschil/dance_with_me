@@ -16,11 +16,13 @@ import { AuthGuardMock, mockedAuthHeader } from './stubs/auth.guard.mock';
 import { AuthUser } from '../src/auth/interfaces';
 import { validObjectId2 } from './test_data/event.testData';
 
+/* eslint @typescript-eslint/naming-convention: 0 */
+
 describe('UserController (e2e)', () => {
   let app: INestApplication;
 
   let testDatabaseStub: MongoMemoryServer;
-  const User: Model<UserDocument> = model<UserDocument>(
+  const userModel: Model<UserDocument> = model<UserDocument>(
     'userdocuments',
     UserSchema,
   );
@@ -54,7 +56,7 @@ describe('UserController (e2e)', () => {
     it('should return 204 if user is deleting their own user resource', async () => {
       //Given
       const userId = validObjectId.toString();
-      const user = new User({
+      const user = new userModel({
         _id: userId,
         displayName: 'Bill',
         email: 'bill@initech.com',
@@ -72,13 +74,13 @@ describe('UserController (e2e)', () => {
         .delete(`/user/${userId}`)
         .set('Authorization', authHeader)
         .send()
-        .expect(204)
+        .expect(HttpStatus.NO_CONTENT)
         .expect(deleteResponse);
     });
 
     it('should return 403 if user is trying to delete another user', async () => {
       //Given
-      const user = new User({
+      const user = new userModel({
         _id: validObjectId.toString(),
         displayName: 'Bill',
         email: 'bill@initech.com',
@@ -102,7 +104,7 @@ describe('UserController (e2e)', () => {
 
     it('should allow admins to delete users', async () => {
       //Given
-      const user = new User({
+      const user = new userModel({
         _id: validObjectId.toString(),
         displayName: 'Bill',
         email: 'bill@initech.com',
@@ -120,7 +122,7 @@ describe('UserController (e2e)', () => {
         .delete(`/user/${validObjectId.toString()}`)
         .set('Authorization', authHeader)
         .send()
-        .expect(204)
+        .expect(HttpStatus.NO_CONTENT)
         .expect(deleteResponse);
     });
 
@@ -153,7 +155,7 @@ describe('UserController (e2e)', () => {
           role: RoleEnum.USER,
         };
 
-        const user = new User({
+        const user = new userModel({
           _id: id,
           role: RoleEnum.USER,
           displayName: 'Testo1',
@@ -195,7 +197,7 @@ describe('UserController (e2e)', () => {
           role: RoleEnum.USER,
         };
 
-        const user = new User({
+        const user = new userModel({
           _id: id,
           role: RoleEnum.USER,
           displayName: 'Testo1',
@@ -226,7 +228,7 @@ describe('UserController (e2e)', () => {
           role: RoleEnum.ADMIN,
         };
 
-        const user = new User({
+        const user = new userModel({
           _id: validObjectId.toString(),
           role: RoleEnum.USER,
           displayName: 'Testo1',

@@ -1,8 +1,8 @@
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from '../app/app.component';
-import { TranslateModule } from "@ngx-translate/core";
-import {MockBuilder, MockModule, MockRender} from "ng-mocks";
-import {AuthService} from "../app/core/auth/auth.service";
+import { TranslateModule } from '@ngx-translate/core';
+import { MockBuilder, MockRender } from 'ng-mocks';
+import { AuthService } from '../app/core/auth/auth.service';
 
 describe('AppComponent', () => {
 
@@ -19,7 +19,7 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'dance-with-me-web-client'`, () => {
+  it('should have as title \'dance-with-me-web-client\'', () => {
     const fixture = MockRender(AppComponent);
     const app = fixture.componentInstance;
     expect(app.title).toEqual('dance-with-me-web-client');
@@ -61,7 +61,7 @@ describe('AppComponent', () => {
       // Then
       expect(comp.navbarOpened).toBe(false);
     });
-  })
+  });
 
 
   describe('toggleLanguage', () => {
@@ -101,6 +101,6 @@ describe('AppComponent', () => {
       // Then
       expect(comp.language).toBe('de');
     });
-  })
+  });
 
 });

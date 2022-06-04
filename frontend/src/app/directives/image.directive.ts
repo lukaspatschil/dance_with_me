@@ -13,12 +13,15 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 export class ImageAccessorDirective implements ControlValueAccessor {
   private file: File | null = null;
-  onChange = (file: File) => {};
-  onTouched = () => {};
+
+  onChange: (file: File) => void  = () => {};
+
+  onTouched = (): void => {};
 
   constructor(private readonly element: ElementRef) {}
 
-  @HostListener('change', ['$event.target.files']) async _handleInput(event: FileList) {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  @HostListener('change', ['$event.target.files']) _handleInput(event: FileList): void {
     const file = event.item(0);
 
     if (file) {

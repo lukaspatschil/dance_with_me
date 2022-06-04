@@ -1,18 +1,18 @@
-import {ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 
-import {CreateEventPageComponent} from '../../../../app/components/events/create-event-page/create-event-page.component';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {RouterTestingModule} from "@angular/router/testing";
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {EventService} from "../../../../app/services/event.service";
-import {EventServiceMock} from "../../../mock/event.service.mock";
-import {TranslateModule} from "@ngx-translate/core";
-import {Category} from "../../../../app/enums/category.enum";
-import {formatDate} from "@angular/common";
-import {CreateEventDto} from "../../../../app/dto/createEvent.dto";
-import {AddressDto} from "../../../../app/dto/address.dto";
-import {ImageService} from "../../../../app/services/image.service";
-import {ImageServiceMock} from "../../../mock/image.service.mock";
+import { CreateEventPageComponent } from '../../../../app/components/events/create-event-page/create-event-page.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { EventService } from '../../../../app/services/event.service';
+import { EventServiceMock } from '../../../mock/event.service.mock';
+import { TranslateModule } from '@ngx-translate/core';
+import { Category } from '../../../../app/enums/category.enum';
+import { formatDate } from '@angular/common';
+import { CreateEventDto } from '../../../../app/dto/createEvent.dto';
+import { AddressDto } from '../../../../app/dto/address.dto';
+import { ImageService } from '../../../../app/services/image.service';
+import { ImageServiceMock } from '../../../mock/image.service.mock';
 
 describe('CreateEventPageComponent',
   () => {
@@ -37,50 +37,46 @@ describe('CreateEventPageComponent',
 
     let httpMock: HttpTestingController;
     let eventService: EventService;
-    let imageService: ImageService;
 
     let date: string;
 
 
-    beforeEach(async () => {
+    beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [ReactiveFormsModule, FormsModule, RouterTestingModule, HttpClientTestingModule, TranslateModule.forRoot()],
         declarations: [CreateEventPageComponent],
-        providers: [{provide: EventService, useClass: EventServiceMock}, {provide: ImageService, useClass: ImageServiceMock}]
+        providers: [{ provide: EventService, useClass: EventServiceMock }, { provide: ImageService, useClass: ImageServiceMock }]
       });
 
       httpMock = TestBed.inject(HttpTestingController);
       eventService = TestBed.inject(EventService);
-      imageService = TestBed.inject(ImageService);
     });
 
-    beforeEach(async () => {
-      // Given
-      fixture = TestBed.createComponent(CreateEventPageComponent)
+    beforeEach(() => {
+      fixture = TestBed.createComponent(CreateEventPageComponent);
       comp = fixture.componentInstance;
       comp.ngOnInit();
 
-      fixture.whenStable().then(() => {
+      void fixture.whenStable().then(() => {
+        nameElement = fixture.debugElement.nativeElement.querySelector('#event-name');
+        dateElement = fixture.debugElement.nativeElement.querySelector('#date');
+        timeElement = fixture.debugElement.nativeElement.querySelector('#startTime');
+        endElement = fixture.debugElement.nativeElement.querySelector('#endTime');
+        streetElement = fixture.debugElement.nativeElement.querySelector('#street');
+        houseNrElement = fixture.debugElement.nativeElement.querySelector('#housenumber');
+        zipElement = fixture.debugElement.nativeElement.querySelector('#zip');
+        cityElement = fixture.debugElement.nativeElement.querySelector('#city');
+        countryElement = fixture.debugElement.nativeElement.querySelector('#country');
+        additionElement = fixture.debugElement.nativeElement.querySelector('#addition');
+        categoryElementSalsa = fixture.debugElement.nativeElement.querySelector('#category0');
+        description = fixture.debugElement.nativeElement.querySelector('#description');
+        priceElement = fixture.debugElement.nativeElement.querySelector('#price');
+        publicElement = fixture.debugElement.nativeElement.querySelector('#public');
 
-        nameElement = fixture.debugElement.nativeElement.querySelector('#event-name')
-        dateElement = fixture.debugElement.nativeElement.querySelector('#date')
-        timeElement = fixture.debugElement.nativeElement.querySelector('#startTime')
-        endElement = fixture.debugElement.nativeElement.querySelector('#endTime')
-        streetElement = fixture.debugElement.nativeElement.querySelector('#street')
-        houseNrElement = fixture.debugElement.nativeElement.querySelector('#housenumber')
-        zipElement = fixture.debugElement.nativeElement.querySelector('#zip')
-        cityElement = fixture.debugElement.nativeElement.querySelector('#city')
-        countryElement = fixture.debugElement.nativeElement.querySelector('#country')
-        additionElement = fixture.debugElement.nativeElement.querySelector('#addition')
-        categoryElementSalsa = fixture.debugElement.nativeElement.querySelector('#category0')
-        description = fixture.debugElement.nativeElement.querySelector('#description')
-        priceElement = fixture.debugElement.nativeElement.querySelector('#price')
-        publicElement = fixture.debugElement.nativeElement.querySelector('#public')
+        createButton = fixture.debugElement.nativeElement.querySelector('#create_button');
+      });
 
-        createButton = fixture.debugElement.nativeElement.querySelector('#create_button')
-
-        date = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
-      })
+      date = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
 
 
       fixture.detectChanges();
@@ -101,7 +97,8 @@ describe('CreateEventPageComponent',
       const inputElements = formElement.querySelectorAll('input');
 
       // Then
-      expect(inputElements.length).toEqual(18)
+      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+      expect(inputElements.length).toEqual(18);
     });
 
     describe('CreateEventForm', () => {
@@ -130,7 +127,7 @@ describe('CreateEventPageComponent',
           public: true,
           category: [],
           image: null
-        }
+        };
         await fixture.whenStable();
 
         // Then
@@ -143,43 +140,43 @@ describe('CreateEventPageComponent',
 
         // When
         createValidInput();
-        const isFormValid = comp.createEventForm.valid
+        const isFormValid = comp.createEventForm.valid;
 
         // Then
-        expect(isFormValid).toBeTruthy()
+        expect(isFormValid).toBeTruthy();
 
       });
 
       it('should be invalid when one input is filled falsely', async () => {
         // Given
-        await fixture.whenStable()
+        await fixture.whenStable();
 
         // When
-        createInvalidInput()
-        const isFormValid = comp.createEventForm.valid
+        createInvalidInput();
+        const isFormValid = comp.createEventForm.valid;
 
         // Then
-        expect(isFormValid).toBeFalsy()
+        expect(isFormValid).toBeFalsy();
 
       });
-    })
+    });
 
     describe('SubmitButton', () => {
       it('should be disabled when form invalid', async () => {
-        await fixture.whenStable()
+        await fixture.whenStable();
 
         // When
-        createInvalidInput()
+        createInvalidInput();
 
         // Then
-        expect(createButton.disabled).toBeTruthy()
+        expect(createButton.disabled).toBeTruthy();
       });
-    })
+    });
 
     describe('createEvent', () => {
       it('should create-event-page a new event', async () => {
         // Given
-        const address = new AddressDto('country', 'city', '1020', 'street', '10', 'addition')
+        const address = new AddressDto('country', 'city', '1020', 'street', '10', 'addition');
         const newEvent = new CreateEventDto(
           'name',
           'description',
@@ -193,10 +190,10 @@ describe('CreateEventPageComponent',
 
         // When
         createValidInput();
-        await fixture.whenStable()
+        await fixture.whenStable();
 
         // Then
-        expect(comp.createEvent()).toEqual(newEvent)
+        expect(comp.createEvent()).toEqual(newEvent);
       });
     });
 
@@ -206,7 +203,7 @@ describe('CreateEventPageComponent',
         comp.clearImage();
 
         // Then
-        expect(comp.image?.value).toBeNull();
+        expect(comp.image.value).toBeNull();
       });
     });
 
@@ -231,17 +228,17 @@ describe('CreateEventPageComponent',
           category: [Category.SALSA]
         };
 
-        await fixture.whenStable()
+        await fixture.whenStable();
         createValidInput();
         comp.onSubmit();
 
         // Then
-        expect(eventService.createEvent).toHaveBeenCalledWith(newEvent)
+        expect(eventService.createEvent).toHaveBeenCalledWith(newEvent);
       });
 
       it('should not send a new event to API when input invalid', async () => {
         // Given
-        await fixture.whenStable()
+        await fixture.whenStable();
 
         // When
         createInvalidInput();
@@ -256,7 +253,7 @@ describe('CreateEventPageComponent',
       it('should set a category in eventCreateForm', fakeAsync(()=>{
         // When
         const handleSpy = jest.spyOn(comp, 'onCheckChange');
-        createValidInput()
+        createValidInput();
         fixture.detectChanges();
 
         // Then
@@ -276,67 +273,69 @@ describe('CreateEventPageComponent',
     });
 
 
-    function createValidInput() {
-      nameElement.value = "name"
-      dateElement.value = date
-      timeElement.value = "10:00"
-      endElement.value = "12:00"
-      streetElement.value = "street"
-      houseNrElement.value = String(10)
-      zipElement.value = String(1020)
-      cityElement.value = "city"
-      countryElement.value = "country"
-      additionElement.value = "addition"
-      categoryElementSalsa.checked = true
-      priceElement.value = String(1)
-      description.value = "description"
-      publicElement.value = String(true)
+    function createValidInput(): void {
+      nameElement.value = 'name';
+      dateElement.value = date;
+      timeElement.value = '10:00';
+      endElement.value = '12:00';
+      streetElement.value = 'street';
+      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+      houseNrElement.value = String(10);
+      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+      zipElement.value = String(1020);
+      cityElement.value = 'city';
+      countryElement.value = 'country';
+      additionElement.value = 'addition';
+      categoryElementSalsa.checked = true;
+      priceElement.value = String(1);
+      description.value = 'description';
+      publicElement.value = String(true);
 
-      nameElement.dispatchEvent(new Event('input'))
-      dateElement.dispatchEvent(new Event('input'))
-      timeElement.dispatchEvent(new Event('input'))
-      endElement.dispatchEvent(new Event('input'))
-      streetElement.dispatchEvent(new Event('input'))
-      houseNrElement.dispatchEvent(new Event('input'))
-      zipElement.dispatchEvent(new Event('input'))
-      cityElement.dispatchEvent(new Event('input'))
-      countryElement.dispatchEvent(new Event('input'))
-      additionElement.dispatchEvent(new Event('input'))
-      categoryElementSalsa.dispatchEvent(new Event('change'))
-      priceElement.dispatchEvent(new Event('input'))
-      description.dispatchEvent(new Event('input'))
-      publicElement.dispatchEvent(new Event('input'))
+      nameElement.dispatchEvent(new Event('input'));
+      dateElement.dispatchEvent(new Event('input'));
+      timeElement.dispatchEvent(new Event('input'));
+      endElement.dispatchEvent(new Event('input'));
+      streetElement.dispatchEvent(new Event('input'));
+      houseNrElement.dispatchEvent(new Event('input'));
+      zipElement.dispatchEvent(new Event('input'));
+      cityElement.dispatchEvent(new Event('input'));
+      countryElement.dispatchEvent(new Event('input'));
+      additionElement.dispatchEvent(new Event('input'));
+      categoryElementSalsa.dispatchEvent(new Event('change'));
+      priceElement.dispatchEvent(new Event('input'));
+      description.dispatchEvent(new Event('input'));
+      publicElement.dispatchEvent(new Event('input'));
     }
 
-    function createInvalidInput() {
-      nameElement.value = ""
-      dateElement.value = "2022-04-24"
-      timeElement.value = "10:00"
-      endElement.value = "12:00"
-      streetElement.value = "street"
-      houseNrElement.value = "1"
-      zipElement.value = "1020"
-      cityElement.value = "city"
-      countryElement.value = "country"
-      additionElement.value = "addition"
-      categoryElementSalsa.checked = true
-      priceElement.value = "1"
-      description.value = "description"
-      publicElement.value = String(true)
+    function createInvalidInput(): void {
+      nameElement.value = '';
+      dateElement.value = '2022-04-24';
+      timeElement.value = '10:00';
+      endElement.value = '12:00';
+      streetElement.value = 'street';
+      houseNrElement.value = '1';
+      zipElement.value = '1020';
+      cityElement.value = 'city';
+      countryElement.value = 'country';
+      additionElement.value = 'addition';
+      categoryElementSalsa.checked = true;
+      priceElement.value = '1';
+      description.value = 'description';
+      publicElement.value = String(true);
 
-      nameElement.dispatchEvent(new Event('input'))
-      dateElement.dispatchEvent(new Event('input'))
-      timeElement.dispatchEvent(new Event('input'))
-      endElement.dispatchEvent(new Event('input'))
-      streetElement.dispatchEvent(new Event('input'))
-      houseNrElement.dispatchEvent(new Event('input'))
-      zipElement.dispatchEvent(new Event('input'))
-      cityElement.dispatchEvent(new Event('input'))
-      countryElement.dispatchEvent(new Event('input'))
-      additionElement.dispatchEvent(new Event('input'))
-      categoryElementSalsa.dispatchEvent(new Event('change'))
-      priceElement.dispatchEvent(new Event('input'))
-      description.dispatchEvent(new Event('input'))
-      publicElement.dispatchEvent(new Event('input'))
+      nameElement.dispatchEvent(new Event('input'));
+      dateElement.dispatchEvent(new Event('input'));
+      timeElement.dispatchEvent(new Event('input'));
+      endElement.dispatchEvent(new Event('input'));
+      streetElement.dispatchEvent(new Event('input'));
+      houseNrElement.dispatchEvent(new Event('input'));
+      zipElement.dispatchEvent(new Event('input'));
+      cityElement.dispatchEvent(new Event('input'));
+      countryElement.dispatchEvent(new Event('input'));
+      additionElement.dispatchEvent(new Event('input'));
+      categoryElementSalsa.dispatchEvent(new Event('change'));
+      priceElement.dispatchEvent(new Event('input'));
+      description.dispatchEvent(new Event('input'));
+      publicElement.dispatchEvent(new Event('input'));
     }
   });

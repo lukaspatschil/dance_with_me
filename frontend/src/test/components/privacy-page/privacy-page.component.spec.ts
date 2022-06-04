@@ -1,27 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PrivacyPageComponent } from '../../../app/components/privacy-page/privacy-page.component';
-import {AppComponent} from "../../../app/app.component";
 
 describe('PrivacyPageComponent', () => {
-  let component: PrivacyPageComponent;
   let fixture: ComponentFixture<PrivacyPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ PrivacyPageComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PrivacyPageComponent);
-    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it(`should have as title 'privacy-page'`, () => {
-    const fixture = TestBed.createComponent(PrivacyPageComponent);
+  it('should have as title \'privacy-page\'', () => {
     const app = fixture.componentInstance;
     expect(app.title).toEqual('privacy-page');
   });

@@ -1,17 +1,26 @@
-import {LocationEntity} from "./location.entity";
-import {Category} from "../enums/category.enum";
-import {AddressEntity} from "./address.entity";
+import { LocationEntity } from './location.entity';
+import { Category } from '../enums/category.enum';
+import { AddressEntity } from './address.entity';
 
 export class EventEntity {
   id: string;
+
   name: string;
+
   description: string;
+
   location: LocationEntity;
+
   address: AddressEntity;
+
   price: number;
+
   public: boolean;
+
   startDateTime: Date;
+
   endDateTime: Date;
+
   category: Category[];
 
   constructor(id: string, name: string, description: string, location: LocationEntity, address: AddressEntity, price: number, isPublic: boolean, startDateTime: Date, endDateTime: Date, category: Category[] ){

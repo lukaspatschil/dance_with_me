@@ -1,11 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { UserService } from '../../app/services/user.service';
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {RoleEnum} from "../../app/enums/role.enum";
-import {UserDto} from "../../app/dto/user.dto";
-import {environment} from "../../environments/environment";
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { RoleEnum } from '../../app/enums/role.enum';
+import { UserDto } from '../../app/dto/user.dto';
+import { environment } from '../../environments/environment';
 import { UserEntity } from '../../app/entities/user.entity';
-import {Role} from "../../app/enums/role";
 
 describe('UserService', () => {
   let sut: UserService;
@@ -14,7 +13,7 @@ describe('UserService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule]
     });
 
     sut = TestBed.inject(UserService);
@@ -52,7 +51,7 @@ describe('UserService', () => {
 
       // Then
       sut.user$.subscribe(user => {
-        expect(user).toEqual(userEntity)
+        expect(user).toEqual(userEntity);
       });
       const req = httpMock.expectOne(`${environment.baseUrl}/user/${id}`);
       req.flush(userDto);

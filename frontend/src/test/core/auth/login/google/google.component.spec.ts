@@ -10,7 +10,7 @@ describe('GoogleComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ GoogleComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

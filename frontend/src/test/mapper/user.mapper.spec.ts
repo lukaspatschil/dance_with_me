@@ -1,7 +1,7 @@
-import {UserDto} from "../../app/dto/user.dto";
-import {RoleEnum} from "../../app/enums/role.enum";
-import {UserEntity} from "../../app/entities/user.entity";
-import {UserMapper} from "../../app/mapper/user.mapper";
+import { UserDto } from '../../app/dto/user.dto';
+import { RoleEnum } from '../../app/enums/role.enum';
+import { UserEntity } from '../../app/entities/user.entity';
+import { UserMapper } from '../../app/mapper/user.mapper';
 
 
 describe('UserMapper', () => {
@@ -16,7 +16,7 @@ describe('UserMapper', () => {
 
     it('should return null on invalid dtos', () => {
       // Given
-      const invalidDto = {...userDto, displayName: undefined};
+      const invalidDto = { ...userDto, displayName: undefined };
 
       // When
       const result = UserMapper.dtoToEntity(invalidDto);

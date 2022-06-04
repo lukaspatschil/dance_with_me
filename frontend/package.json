@@ -33,6 +33,7 @@
     "@ngx-translate/http-loader": "^7.0.0",
     "@popperjs/core": "^2.10.2",
     "@stripe/stripe-js": "^1.29.0",
+    "eslint-config-dance-with-me": "^1.0.0",
     "express": "^4.15.2",
     "material-icons": "^1.10.9",
     "rxjs": "~7.4.0",

@@ -1,15 +1,23 @@
-import {AddressDto} from "./address.dto";
-import {Category} from "../enums/category.enum";
+import { AddressDto } from './address.dto';
+import { Category } from '../enums/category.enum';
 
 export class CreateEventDto {
   name: string;
+
   description: string;
+
   address: AddressDto;
+
   price: number;
+
   public: boolean;
+
   startDateTime: string;
+
   endDateTime: string;
+
   imageId?: string;
+
   category: Category[];
 
   constructor(name: string, description: string, address: AddressDto, price: number, isPublic: boolean, startDateTime: string, endDateTime: string, category: Category[]) {

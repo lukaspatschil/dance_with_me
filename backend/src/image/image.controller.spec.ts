@@ -6,9 +6,9 @@ import {
   validCreated,
   validFileDto,
   validFileMulter,
+  validFilenameJPG,
 } from '../../test/test_data/image.testData';
 import { ImageServiceMock } from '../../test/stubs/image.service.mock';
-import { validFilenameJPG } from '../../test/test_data/image.testData';
 import { ImageSizeEnum } from '../core/schema/enum/imageSize.enum';
 import { StreamableFile } from '@nestjs/common';
 

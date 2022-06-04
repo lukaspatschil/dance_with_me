@@ -1,9 +1,9 @@
-import {EventMapper} from "../../app/mapper/event.mapper";
-import {Category} from "../../app/enums/category.enum";
-import {EventEntity} from "../../app/entities/event.entity";
-import {EventDto} from "../../app/dto/event.dto";
-import {AddressEntity} from "../../app/entities/address.entity";
-import {LocationEntity} from "../../app/entities/location.entity";
+import { EventMapper } from '../../app/mapper/event.mapper';
+import { Category } from '../../app/enums/category.enum';
+import { EventEntity } from '../../app/entities/event.entity';
+import { EventDto } from '../../app/dto/event.dto';
+import { AddressEntity } from '../../app/entities/address.entity';
+import { LocationEntity } from '../../app/entities/location.entity';
 
 
 describe('EventMapper', () => {
@@ -103,8 +103,10 @@ describe('EventMapper', () => {
 
 
   function createExpectedEventEntity(): EventEntity{
-    const addressEntity = new AddressEntity ('country', 'city', '1020', 'street', '10', 'addition')
-    const locationEntity = new LocationEntity(31.000,40.000)
+    const addressEntity = new AddressEntity('country', 'city', '1020', 'street', '10', 'addition');
+    const longitude = 31.000;
+    const latitude = 40.000;
+    const locationEntity = new LocationEntity(longitude, latitude);
     return new EventEntity(
       '1',
       'name',
@@ -116,6 +118,6 @@ describe('EventMapper', () => {
       new Date('2022-04-24T10:00'),
       new Date('2022-04-24T12:00'),
       [Category.SALSA]
-    )
+    );
   }
 });

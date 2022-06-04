@@ -96,7 +96,7 @@ describe('EventService', () => {
       const result = async () => await sut.createEvent(eventEntity);
 
       // Then
-      expect(result).rejects.toThrow(InternalServerErrorException);
+      await expect(result).rejects.toThrow(InternalServerErrorException);
     });
 
     it('should call the service and throw a NotFoundException from openStreetMap getAddress ', async () => {
@@ -329,7 +329,7 @@ describe('EventService', () => {
   });
 
   describe('createParticipation', () => {
-    it('should call the add participation to an not existing event and throw not found exception', () => {
+    it('should call the add participation to an not existing event and throw not found exception', async () => {
       // Given
 
       const eventId = NotFoundErrorId;
@@ -339,10 +339,10 @@ describe('EventService', () => {
       const result = sut.createParticipation(eventId, user);
 
       // Then
-      expect(result).rejects.toThrow(NotFoundError);
+      await expect(result).rejects.toThrow(NotFoundError);
     });
 
-    it('should call the add participation to an event and thrown a random database exception', () => {
+    it('should call the add participation to an event and thrown a random database exception', async () => {
       // Given
 
       const eventId = DBErrorId;
@@ -352,7 +352,7 @@ describe('EventService', () => {
       const result = sut.createParticipation(eventId, user);
 
       // Then
-      expect(result).rejects.toThrow(new InternalServerErrorException());
+      await expect(result).rejects.toThrow(new InternalServerErrorException());
     });
 
     it('should call the add participation to an event where the user already participates and throw a ConflictException', async () => {
@@ -371,9 +371,11 @@ describe('EventService', () => {
       const user = getDefaultUser();
 
       // When
+      // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
       const result = await sut.createParticipation(eventId, user);
 
       // Then
+      expect(result).toBeUndefined();
     });
   });
 
@@ -391,7 +393,7 @@ describe('EventService', () => {
       await expect(result).rejects.toThrow(NotFoundError);
     });
 
-    it('should call the delete participation to an event and throw a random database exception', () => {
+    it('should call the delete participation to an event and throw a random database exception', async () => {
       // Given
 
       const eventId = DBErrorId;
@@ -401,10 +403,10 @@ describe('EventService', () => {
       const result = sut.deleteParticipation(eventId, user);
 
       // Then
-      expect(result).rejects.toThrow(new InternalServerErrorException());
+      await expect(result).rejects.toThrow(new InternalServerErrorException());
     });
 
-    it('should call the delete participation to an event and throw a ConflictException', () => {
+    it('should call the delete participation to an event and throw a ConflictException', async () => {
       // Given
 
       const eventId = ParticipationNotAlreadyStored;
@@ -414,7 +416,7 @@ describe('EventService', () => {
       const result = sut.deleteParticipation(eventId, user);
 
       // Then
-      expect(result).rejects.toThrow(NotYetParticipatedConflictError);
+      await expect(result).rejects.toThrow(NotYetParticipatedConflictError);
     });
 
     //TODO: add testcases
@@ -454,6 +456,7 @@ describe('EventService', () => {
   function createEventEntity(): EventEntity {
     const location = new LocationEntity();
     location.type = GeolocationEnum.POINT;
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     location.coordinates = [-171.23794, 8.54529];
 
     const eventEntity = new EventEntity();

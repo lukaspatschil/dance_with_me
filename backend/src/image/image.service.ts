@@ -13,7 +13,10 @@ import { FileEntity } from '../core/entity/file.entity';
 import { Readable } from 'stream';
 import mongoose from 'mongoose';
 import { extname } from 'path';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 import sharp = require('sharp');
+
+/* eslint @typescript-eslint/naming-convention: 0 */
 
 @Injectable()
 export class ImageService implements OnApplicationBootstrap {
@@ -21,7 +24,7 @@ export class ImageService implements OnApplicationBootstrap {
 
   constructor(
     @InjectS3() private readonly s3: S3,
-    private configService: ConfigService,
+    private readonly configService: ConfigService,
   ) {}
 
   async getImage(id: string, imageSize: ImageSizeEnum): Promise<Readable> {
@@ -47,14 +50,14 @@ export class ImageService implements OnApplicationBootstrap {
       this.logger.error(`Unknown s3 error ${error}.`);
       throw new InternalServerErrorException();
     }
-    if (response?.Body instanceof Readable) {
-      return response?.Body;
+    if (response.Body instanceof Readable) {
+      return response.Body;
     }
-    if (response?.Body instanceof Buffer) {
-      return Readable.from(response?.Body);
+    if (response.Body instanceof Buffer) {
+      return Readable.from(response.Body);
     }
-    if (typeof response?.Body === 'string') {
-      return Readable.from([response?.Body]);
+    if (typeof response.Body === 'string') {
+      return Readable.from([response.Body]);
     }
     this.logger.error(
       'S3 response was not a valid format, jpg and png are normally a buffer.',
@@ -70,7 +73,7 @@ export class ImageService implements OnApplicationBootstrap {
       file.fileName = `${new mongoose.Types.ObjectId()}${extname(
         file.originalFileName,
       )}`;
-      const fileSharp = await sharp(file.buffer);
+      const fileSharp = sharp(file.buffer);
       const metaInfos = await fileSharp.metadata();
       file.width = metaInfos.width;
       file.height = metaInfos.height;

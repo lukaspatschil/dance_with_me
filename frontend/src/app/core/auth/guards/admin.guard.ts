@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
-import {AuthService} from "../auth.service";
-import {environment} from "../../../../environments/environment";
-import {UserService} from "../../../services/user.service";
-import {RoleEnum} from "../../../enums/role.enum";
+import { CanActivate, Router, UrlTree } from '@angular/router';
+import { environment } from '../../../../environments/environment';
+import { UserService } from '../../../services/user.service';
+import { RoleEnum } from '../../../enums/role.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +10,7 @@ import {RoleEnum} from "../../../enums/role.enum";
 export class AdminGuard implements CanActivate {
   constructor(private readonly userService: UserService, private readonly router: Router) {}
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): boolean | UrlTree {
+  canActivate(): UrlTree | boolean {
     let isAuthenticated: UrlTree | boolean = this.userService.role === RoleEnum.ADMIN;
 
     if (!isAuthenticated) {

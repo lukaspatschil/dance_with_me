@@ -1,7 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { ValidationPipe } from '@nestjs/common';
+import { HttpStatus, ValidationPipe } from '@nestjs/common';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 import cookieParser = require('cookie-parser');
 
 async function bootstrap() {
@@ -20,9 +21,10 @@ async function bootstrap() {
       allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
       preflightContinue: false,
-      optionsSuccessStatus: 204,
+      optionsSuccessStatus: HttpStatus.NO_CONTENT,
     });
   }
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   await app.listen(process.env['GATEWAY_PORT'] ?? 3000);
 }
-bootstrap();
+void bootstrap();

@@ -1,5 +1,6 @@
 export class LocationEntity {
   longitude: number;
+
   latitude: number;
 
   constructor(longitude: number, latitude: number) {

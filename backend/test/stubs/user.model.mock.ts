@@ -5,6 +5,8 @@ import {
   validUserDocument,
 } from '../test_data/user.testData';
 
+/* eslint @typescript-eslint/naming-convention: 0 */
+
 export class UserModelMock {
   findByIdAndDelete = jest.fn((id: string) => {
     if (id === validObjectId.toString()) {

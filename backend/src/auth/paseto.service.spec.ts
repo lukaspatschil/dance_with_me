@@ -5,7 +5,7 @@ import { pasetoKeyRotationInterval } from './constants';
 import { RoleEnum } from '../core/schema/enum/role.enum';
 import { V4, decode } from 'paseto';
 import { PasetoPayload } from './interfaces';
-
+/* eslint @typescript-eslint/no-magic-numbers: 0 */
 describe('PasetoService', () => {
   let service: PasetoService;
   let config: ConfigService;
@@ -46,7 +46,9 @@ describe('PasetoService', () => {
       await service.onModuleInit();
 
       // Then
-      expect(service['addNewKey']).toHaveBeenCalled();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      expect(service.addNewKey).toHaveBeenCalled();
     });
 
     it('should set up interval for adding new keys', async () => {
@@ -56,7 +58,9 @@ describe('PasetoService', () => {
 
       // Then
       expect(setInterval).toHaveBeenLastCalledWith(
-        service['addNewKey'],
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        service.addNewKey,
         pasetoKeyRotationInterval,
       );
     });
@@ -65,17 +69,23 @@ describe('PasetoService', () => {
   describe('addNewKey', () => {
     it('should add a new key', async () => {
       // When
-      const newKey = await service['addNewKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const newKey = await service.addNewKey();
 
       // Then
-      expect(Object.keys(service['keys'])).toContain(newKey.kid);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      expect(Object.keys(service.keys)).toContain(newKey.kid);
     });
 
     it('should set up a timeout', async () => {
       jest.spyOn(global, 'setTimeout');
 
       // When
-      await service['addNewKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      await service.addNewKey();
 
       // Then
       expect(setTimeout).toHaveBeenCalled();
@@ -85,11 +95,15 @@ describe('PasetoService', () => {
       jest.useFakeTimers('legacy');
 
       // When
-      const { kid } = await service['addNewKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const { kid } = await service.addNewKey();
       jest.advanceTimersByTime(pasetoKeyRotationInterval * 2);
 
       // Then
-      expect(service['keys'][kid]).toBeUndefined();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      expect(service.keys[kid]).toBeUndefined();
       jest.useRealTimers();
     });
   });
@@ -97,13 +111,21 @@ describe('PasetoService', () => {
   describe('getNewestKey', () => {
     it('should not get old key', async () => {
       // Given
-      const { kid } = await service['addNewKey']();
-      const oldKey = { kid, ...service['keys'][kid] };
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const { kid } = await service.addNewKey();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const oldKey = { kid, ...service.keys[kid] };
       await new Promise((resolve) => setTimeout(resolve, 1));
-      await service['addNewKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      await service.addNewKey();
 
       // When
-      const newestKey = await service['getNewestKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const newestKey = await service.getNewestKey();
 
       // Then
       expect(newestKey).not.toEqual(oldKey);
@@ -111,13 +133,21 @@ describe('PasetoService', () => {
 
     it('should get newest key', async () => {
       // Given
-      await service['addNewKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      await service.addNewKey();
       await new Promise((resolve) => setTimeout(resolve, 1));
-      const { kid } = await service['addNewKey']();
-      const newKey = { kid, ...service['keys'][kid] };
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const { kid } = await service.addNewKey();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const newKey = { kid, ...service.keys[kid] };
 
       // When
-      const newestKey = await service['getNewestKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const newestKey = await service.getNewestKey();
 
       // Then
       expect(newestKey).toEqual(newKey);
@@ -125,12 +155,18 @@ describe('PasetoService', () => {
 
     it('should not get key wih old kid', async () => {
       // Given
-      const { kid } = await service['addNewKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const { kid } = await service.addNewKey();
       await new Promise((resolve) => setTimeout(resolve, 1));
-      await service['addNewKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      await service.addNewKey();
 
       // When
-      const newestKey = await service['getNewestKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const newestKey = await service.getNewestKey();
 
       // Then
       expect(newestKey).toEqual(expect.not.objectContaining({ kid }));
@@ -138,13 +174,21 @@ describe('PasetoService', () => {
 
     it('should get newest key', async () => {
       // Given
-      const newKey = await service['addNewKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const newKey = await service.addNewKey();
       await new Promise((resolve) => setTimeout(resolve, 1));
-      const anotherKey = await service['addNewKey']();
-      service['keys'][anotherKey.kid] = { ...anotherKey, expires: 1 };
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const anotherKey = await service.addNewKey();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      service.keys[anotherKey.kid] = { ...anotherKey, expires: 1 };
 
       // When
-      const newestKey = await service['getNewestKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const newestKey = await service.getNewestKey();
 
       // Then
       expect(newestKey).toEqual(expect.objectContaining(newKey));
@@ -154,7 +198,9 @@ describe('PasetoService', () => {
       const addNewKeySpy = jest.spyOn(service as any, 'addNewKey');
 
       // When
-      await service['getNewestKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      await service.getNewestKey();
 
       // Then
       expect(addNewKeySpy).toHaveBeenCalled();
@@ -164,11 +210,15 @@ describe('PasetoService', () => {
       const addNewKeySpy = jest.spyOn(service as any, 'addNewKey');
 
       // Given
-      const newKey = service['keys'][(await service['addNewKey']()).kid];
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const newKey = service.keys[(await service.addNewKey()).kid];
       if (newKey) newKey.expires = new Date().getTime() - 1;
 
       // When
-      await service['getNewestKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      await service.getNewestKey();
 
       // Then
       expect(addNewKeySpy).toHaveBeenCalled();
@@ -178,21 +228,29 @@ describe('PasetoService', () => {
   describe('getKeyByKid', () => {
     it('should get key by kid', async () => {
       // Given
-      const { kid } = await service['addNewKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const { kid } = await service.addNewKey();
 
       // When
-      const key = await service['getKeyByKid'](kid);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const key = service.getKeyByKid(kid);
 
       // Then
-      expect(key).toEqual(service['keys'][kid]?.key);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      expect(key).toEqual(service.keys[kid]?.key);
     });
 
-    it('should throw error if key does not exist', async () => {
+    it('should throw error if key does not exist', () => {
       // When
-      const promise = service['getKeyByKid']('??');
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const promise = () => service.getKeyByKid('??');
 
       // Then
-      await expect(promise).rejects.toThrow();
+      expect(promise).toThrow();
     });
   });
 
@@ -205,7 +263,7 @@ describe('PasetoService', () => {
   describe('createToken', () => {
     it('should create a token that can be decoded by paseto', async () => {
       // When
-      const token = await service['createToken'](minimalPayload);
+      const token = await service.createToken(minimalPayload);
 
       // Then
       expect(decode(token)).toBeTruthy();
@@ -213,7 +271,7 @@ describe('PasetoService', () => {
 
     it('should create a token with correct payload', async () => {
       // When
-      const token = await service['createToken'](minimalPayload);
+      const token = await service.createToken(minimalPayload);
 
       // Then
       expect(decode(token).payload).toEqual(
@@ -223,11 +281,13 @@ describe('PasetoService', () => {
 
     it('should return token that can be decoded with provided kid', async () => {
       // Given
-      const token = await service['createToken'](minimalPayload);
+      const token = await service.createToken(minimalPayload);
       const { kid } = decode(token).payload as PasetoPayload;
 
       // When
-      const key = await service['getKeyByKid'](kid);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const key = service.getKeyByKid(kid);
 
       // Then
       expect(await V4.verify(token, key)).toEqual(
@@ -247,11 +307,13 @@ describe('PasetoService', () => {
   describe('verifyToken', () => {
     it('should verify a token created by paseto with existing key', async () => {
       // Given
-      const { kid, key } = await service['getNewestKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const { kid, key } = await service.getNewestKey();
       const token = await V4.sign(completePayload(kid), key);
 
       // When
-      const payload = await service['verifyToken'](token);
+      const payload = await service.verifyToken(token);
 
       // Then
       expect(payload).toEqual(expect.objectContaining(minimalPayload));
@@ -259,12 +321,14 @@ describe('PasetoService', () => {
 
     it('should throw error if audience does not match', async () => {
       // Given
-      const { kid, key } = await service['getNewestKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const { kid, key } = await service.getNewestKey();
       const payload = { ...completePayload(kid), aud: '??' };
       const token = await V4.sign(payload, key);
 
       // When
-      const promise = service['verifyToken'](token);
+      const promise = service.verifyToken(token);
 
       // Then
       await expect(promise).rejects.toThrow();
@@ -272,12 +336,14 @@ describe('PasetoService', () => {
 
     it('should throw error if issuer does not match', async () => {
       // Given
-      const { kid, key } = await service['getNewestKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const { kid, key } = await service.getNewestKey();
       const payload = { ...completePayload(kid), iss: '??' };
       const token = await V4.sign(payload, key);
 
       // When
-      const promise = service['verifyToken'](token);
+      const promise = service.verifyToken(token);
 
       // Then
       await expect(promise).rejects.toThrow();
@@ -285,12 +351,14 @@ describe('PasetoService', () => {
 
     it('should throw error if kid does not exist', async () => {
       // Given
-      const { key } = await service['getNewestKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const { key } = await service.getNewestKey();
       const payload = { ...completePayload('??') };
       const token = await V4.sign(payload, key);
 
       // When
-      const promise = service['verifyToken'](token);
+      const promise = service.verifyToken(token);
 
       // Then
       await expect(promise).rejects.toThrow();
@@ -298,12 +366,14 @@ describe('PasetoService', () => {
 
     it('should throw error if signature does not match kid', async () => {
       // Given
-      const { kid } = await service['getNewestKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const { kid } = await service.getNewestKey();
       const payload = { ...completePayload(kid) };
       const token = await V4.sign(payload, await V4.generateKey('public'));
 
       // When
-      const promise = service['verifyToken'](token);
+      const promise = service.verifyToken(token);
 
       // Then
       await expect(promise).rejects.toThrow();
@@ -311,12 +381,14 @@ describe('PasetoService', () => {
 
     it('should throw error if token does not contain expiry claim', async () => {
       // Given
-      const { kid, key } = await service['getNewestKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const { kid, key } = await service.getNewestKey();
       const payload = { ...completePayload(kid), exp: undefined };
       const token = await V4.sign(payload, key);
 
       // When
-      const promise = service['verifyToken'](token);
+      const promise = service.verifyToken(token);
 
       // Then
       await expect(promise).rejects.toThrow();
@@ -324,7 +396,9 @@ describe('PasetoService', () => {
 
     it('should throw error if token is expired', async () => {
       // Given
-      const { kid, key } = await service['getNewestKey']();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const { kid, key } = await service.getNewestKey();
       const payload = {
         ...completePayload(kid),
         exp: new Date(Date.now() - 1000 * 60 * 60),
@@ -332,7 +406,7 @@ describe('PasetoService', () => {
       const token = await V4.sign(payload, key);
 
       // When
-      const promise = service['verifyToken'](token);
+      const promise = service.verifyToken(token);
 
       // Then
       await expect(promise).rejects.toThrow();

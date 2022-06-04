@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
-import {AuthService} from "../auth.service";
-import {environment} from "../../../../environments/environment";
+import { CanActivate, Router, UrlTree } from '@angular/router';
+import { AuthService } from '../auth.service';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +9,7 @@ import {environment} from "../../../../environments/environment";
 export class AuthGuard implements CanActivate {
   constructor(private readonly authService: AuthService, private readonly router: Router) {}
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): boolean | UrlTree {
+  canActivate(): UrlTree | boolean {
     let isAuthenticated: UrlTree | boolean = this.authService.isAuthenticated();
 
     if (!isAuthenticated) {

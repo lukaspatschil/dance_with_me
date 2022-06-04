@@ -1,4 +1,4 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { MongoMemoryServer } from 'mongodb-memory-server';
@@ -37,7 +37,7 @@ describe('PaymentController (e2e)', () => {
   it('/event (GET)', () => {
     return request(app.getHttpServer())
       .get('/payment')
-      .expect(200)
+      .expect(HttpStatus.OK)
       .expect('payment service is live');
   });
 });

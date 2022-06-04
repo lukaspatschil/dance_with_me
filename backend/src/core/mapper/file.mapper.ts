@@ -18,6 +18,7 @@ export class FileMapper {
       `${file.width}x${file.height}`,
     );
   }
+
   static mapFileToEntity(file: Express.Multer.File): FileEntity {
     return new FileEntity(
       file.buffer,

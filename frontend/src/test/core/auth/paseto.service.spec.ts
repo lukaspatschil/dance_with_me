@@ -9,7 +9,7 @@ import {
   tokenV2Public,
   tokenV3Public,
   tokenV5
-} from "./paseto.token";
+} from './paseto.token';
 
 describe('PasetoService', () => {
   let sut: PasetoService;
@@ -29,8 +29,9 @@ describe('PasetoService', () => {
   describe('decodeToken', () => {
     it('should throw an error if the token is not in PASETO format', () => {
       // When
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore - we are testing the error
-      const result = () => sut.decodeToken('not-a-token');
+      const result = (): void => sut.decodeToken('not-a-token');
 
       // Then
       expect(result).toThrowError('token is not a PASETO formatted value');
@@ -38,8 +39,9 @@ describe('PasetoService', () => {
 
     it('should throw an error when the version is not supported', () => {
       // When
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore - we are testing the error
-      const result = () => sut.decodeToken(tokenV5);
+      const result = (): void => sut.decodeToken(tokenV5);
 
       // Then
       expect(result).toThrowError('unsupported PASETO version');
@@ -47,8 +49,9 @@ describe('PasetoService', () => {
 
     it('should throw an error when the purpose is not supported', () => {
       // When
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore - we are testing the error
-      const result = () => sut.decodeToken(tokenDevelop);
+      const result = (): void => sut.decodeToken(tokenDevelop);
 
       // Then
       expect(result).toThrowError('unsupported PASETO purpose');
@@ -64,7 +67,7 @@ describe('PasetoService', () => {
         version: 'v2',
         purpose: 'local',
         payload: {}
-      }
+      };
       expect(result).toEqual(expectedResult);
     });
 
@@ -84,7 +87,7 @@ describe('PasetoService', () => {
         },
         purpose: 'public',
         version: 'v2'
-      }
+      };
       expect(result).toEqual(expectedResult);
     });
 
@@ -104,7 +107,7 @@ describe('PasetoService', () => {
         },
         purpose: 'public',
         version: 'v1'
-      }
+      };
       expect(result).toEqual(expectedResult);
     });
 
@@ -118,7 +121,7 @@ describe('PasetoService', () => {
         payload: {},
         purpose: 'local',
         version: 'v2'
-      }
+      };
       expect(result).toEqual(expectedResult);
     });
 
@@ -138,7 +141,7 @@ describe('PasetoService', () => {
         },
         purpose: 'public',
         version: 'v3'
-      }
+      };
       expect(result).toEqual(expectedResult);
     });
   });

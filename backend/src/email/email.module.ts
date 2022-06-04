@@ -10,7 +10,7 @@ import { join } from 'path';
     ConfigModule,
     MailerModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (config: ConfigService) => ({
+      useFactory: (config: ConfigService) => ({
         transport: {
           pool: true,
           host: config.get('MAIL_HOST'),

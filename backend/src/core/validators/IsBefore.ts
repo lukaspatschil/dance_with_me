@@ -4,6 +4,7 @@ import {
   ValidationArguments,
 } from 'class-validator';
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export function IsBefore(
   property: string,
   validationOptions?: ValidationOptions,

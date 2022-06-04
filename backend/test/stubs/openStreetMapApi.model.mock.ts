@@ -14,7 +14,7 @@ import {
 import { AddressEntity } from '../../src/core/entity/address.entity';
 
 export class OpenStreetMapApiModelMock {
-  getAddress = jest.fn(async (long: number, lang: number) => {
+  getAddress = jest.fn((long: number, lang: number) => {
     if (long === validLongitude && lang === validLatitude) {
       return getEventEntityWithAddressAndLocation().address;
     } else if (long === noCountryLongitude && lang === noCountryLatitude) {
@@ -23,7 +23,8 @@ export class OpenStreetMapApiModelMock {
       throw new InternalServerErrorException();
     }
   });
-  getLocationPoint = jest.fn(async (address: AddressEntity) => {
+
+  getLocationPoint = jest.fn((address: AddressEntity) => {
     if (address === validAddress) {
       return getEventEntityWithAddressAndLocation().location;
     } else if (address === invalidAddress) {

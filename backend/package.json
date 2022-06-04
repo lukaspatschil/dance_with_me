@@ -36,6 +36,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "cookie-parser": "^1.4.6",
+    "eslint-config-dance-with-me": "^1.0.0",
     "handlebars": "^4.7.7",
     "mongoose": "^6.2.10",
     "nest-winston": "^1.6.2",
@@ -103,7 +104,12 @@
     },
     "reporters": [
       "default",
-      ["jest-junit", {"outputDirectory": "reports"}]
+      [
+        "jest-junit",
+        {
+          "outputDirectory": "reports"
+        }
+      ]
     ],
     "collectCoverageFrom": [
       "**/*.(t|j)s",

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {loadStripe, Stripe, StripeCardElement} from "@stripe/stripe-js";
-import {environment} from "../../../environments/environment";
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {UserService} from "../../services/user.service";
-import {PaymentService} from "../../services/payment.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import { loadStripe, Stripe, StripeCardElement } from '@stripe/stripe-js';
+import { environment } from '../../../environments/environment';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserService } from '../../services/user.service';
+import { PaymentService } from '../../services/payment.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-payment',
@@ -13,11 +13,13 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class PaymentComponent implements OnInit {
   stripe!: Stripe | null;
+
   cardElement!: StripeCardElement;
 
   addressForm!: FormGroup;
 
   loading = false;
+
   error = false;
 
   constructor(
@@ -28,7 +30,7 @@ export class PaymentComponent implements OnInit {
     private readonly router: Router
   ) {}
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.addressForm = this.fb.group({
       name: ['', Validators.required],
       address: this.fb.group({
@@ -37,12 +39,12 @@ export class PaymentComponent implements OnInit {
         city: ['', Validators.required],
         housenumber: ['', [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],
         postalcode: ['', [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],
-        addition: [],
+        addition: []
       })
     });
 
     this.stripe = await loadStripe(environment.stripeKey);
-    await this.initStripeElements();
+    this.initStripeElements();
   }
 
   get name(): AbstractControl {
@@ -73,33 +75,33 @@ export class PaymentComponent implements OnInit {
     return this.addressForm.get(['address', 'addition'])!;
   }
 
-  private async initStripeElements() {
+  private initStripeElements(): void {
     if (this.stripe) {
       const elements = this.stripe.elements();
 
       // Set up Stripe.js and Elements to use in checkout form
       const style = {
         base: {
-          color: "#32325d",
+          color: '#32325d',
           fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-          fontSmoothing: "antialiased",
-          fontSize: "16px",
-          "::placeholder": {
-            color: "#aab7c4"
+          fontSmoothing: 'antialiased',
+          fontSize: '16px',
+          '::placeholder': {
+            color: '#aab7c4'
           }
         },
         invalid: {
-          color: "#fa755a",
-          iconColor: "#fa755a"
-        },
+          color: '#fa755a',
+          iconColor: '#fa755a'
+        }
       };
 
-      this.cardElement = elements.create('card', {style});
+      this.cardElement = elements.create('card', { style });
       this.cardElement.mount('#card-element');
     }
   }
 
-  async onSubmit() {
+  async onSubmit(): Promise<void> {
     if (this.addressForm.valid) {
       this.loading = true;
 
@@ -107,6 +109,7 @@ export class PaymentComponent implements OnInit {
         const result = await this.stripe.createPaymentMethod({
           type: 'card',
           card: this.cardElement,
+          // eslint-disable-next-line @typescript-eslint/naming-convention
           billing_details: {
             // Include any additional collected billing details.
             name: this.name.value,
@@ -115,10 +118,11 @@ export class PaymentComponent implements OnInit {
               line1: `${this.street.value} ${this.housenumber.value}`,
               line2: `${this.addition.value}`,
               city: this.city.value,
+              // eslint-disable-next-line @typescript-eslint/naming-convention
               postal_code: this.postalcode.value,
               country: this.country.value
             }
-          },
+          }
         });
 
         const eventId = this.route.snapshot.paramMap.get('id');

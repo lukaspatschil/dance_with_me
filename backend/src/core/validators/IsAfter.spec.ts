@@ -1,12 +1,15 @@
 import { Validator } from 'class-validator';
 import { IsAfter } from './IsAfter';
 
+/* @typescript-eslint/naming-convention: 0 */
+
 const validator = new Validator();
 
 describe('decorator with inline validation', () => {
   describe('correct type in the class', () => {
     class MyClass {
       firstDate!: Date;
+
       @IsAfter('firstDate', {
         message: '$property must be after $constraint1',
       })
@@ -92,6 +95,7 @@ describe('decorator with inline validation', () => {
   describe('wrong data types', () => {
     class MyClass {
       firstDate!: number;
+
       @IsAfter('firstDate', {
         message: '$property must be after $constraint1',
       })

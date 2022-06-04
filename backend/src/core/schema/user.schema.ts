@@ -5,6 +5,7 @@ import { RoleEnum } from './enum/role.enum';
 @Schema()
 export class UserDocument extends Document {
   @Prop({ required: true })
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   override _id!: string;
 
   @Prop({ required: true })

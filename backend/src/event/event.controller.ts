@@ -90,7 +90,7 @@ export class EventController {
       `Create participation for event ${eventId} by user ${user.id}`,
     );
 
-    return await this.eventService.createParticipation(eventId, user);
+    await this.eventService.createParticipation(eventId, user);
   }
 
   @Delete('/:id/participation')

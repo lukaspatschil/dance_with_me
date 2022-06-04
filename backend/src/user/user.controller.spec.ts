@@ -143,7 +143,7 @@ describe('UserController', () => {
         const result = await sut.getUser(userUser.id, userUser);
 
         // Then
-        await expect(result).toEqual(expectedValue);
+        expect(result).toEqual(expectedValue);
       });
 
       it('should call the service with different userId than the own user id and throw an exception', async () => {
@@ -166,7 +166,7 @@ describe('UserController', () => {
         const result = await sut.getUser(userAdmin.id, userAdmin);
 
         // Then
-        await expect(result).toEqual(expectedValue);
+        expect(result).toEqual(expectedValue);
       });
 
       it('should call the service with different userId than the own user id and should return an user', async () => {
@@ -178,7 +178,7 @@ describe('UserController', () => {
         const result = await sut.getUser(userUser.id, userAdmin);
 
         // Then
-        await expect(result).toEqual(expectedValue);
+        expect(result).toEqual(expectedValue);
       });
     });
   });

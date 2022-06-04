@@ -5,6 +5,8 @@ import { ExecutionContext } from '@nestjs/common';
 import { AuthUser } from './interfaces';
 import { RoleEnum } from '../core/schema/enum/role.enum';
 
+/* eslint @typescript-eslint/no-unsafe-return: 0 */
+
 describe('User decorator', function () {
   const mockUser: AuthUser = {
     id: '1',

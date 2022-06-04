@@ -8,11 +8,13 @@ describe('IdentityProviderGuard', () => {
   let guard: IdentityProviderGuard;
 
   class MockStrategy extends Strategy {
-    constructor(private shouldSucceed: boolean) {
+    constructor(private readonly shouldSucceed: boolean) {
       super();
     }
+
     public override authenticate() {
-      return this.shouldSucceed ? this.success({}) : this.error(false);
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      this.shouldSucceed ? this.success({}) : this.error(false);
     }
   }
 
@@ -38,7 +40,7 @@ describe('IdentityProviderGuard', () => {
     expect(() => guard.canActivate(context)).toThrowError(ForbiddenException);
   });
 
-  it('should pass on to provider guard', () => {
+  it('should pass on to provider guard', async () => {
     // Given
     const context = createMock<ExecutionContext>();
     passport.use('facebook', new MockStrategy(true));
@@ -52,7 +54,7 @@ describe('IdentityProviderGuard', () => {
     });
 
     // When
-    guard.canActivate(context);
+    await guard.canActivate(context);
 
     // Then
     expect(providerGuard.canActivate).toHaveBeenCalledWith(context);

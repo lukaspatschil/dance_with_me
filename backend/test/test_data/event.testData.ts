@@ -4,6 +4,8 @@ import { EventDto } from '../../src/core/dto/event.dto';
 import { GeolocationEnum } from '../../src/core/schema/enum/geolocation.enum';
 import { CategoryEnum } from '../../src/core/schema/enum/category.enum';
 
+/* eslint @typescript-eslint/naming-convention: 0 */
+
 export const validObjectId1 = new mongoose.Types.ObjectId();
 export const validObjectId2 = new mongoose.Types.ObjectId();
 export const validObjectId3 = new mongoose.Types.ObjectId();

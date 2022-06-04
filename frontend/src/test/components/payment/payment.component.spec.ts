@@ -1,27 +1,27 @@
-import {ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 jest.mock('@stripe/stripe-js', () => {
   return {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     __esModule: true,
-    loadStripe: (key: string) => ({createPaymentMethod: jest.fn().mockReturnValue({
-        paymentMethod: {
-          id: 'abc12'
-        }
-      })
+    loadStripe: () => ({ createPaymentMethod: jest.fn().mockReturnValue({
+      paymentMethod: {
+        id: 'abc12'
+      }
     })
-  }
+    })
+  };
 });
 
 import { PaymentComponent } from '../../../app/components/payment/payment.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {UserService} from '../../../app/services/user.service';
-import {UserServiceMock} from '../../mock/user.service.mock';
-import {RouterTestingModule} from '@angular/router/testing';
-import {PaymentService} from '../../../app/services/payment.service';
-import {TranslateModule} from '@ngx-translate/core';
-import {PaymentServiceMock} from '../../mock/payment.service.mock';
-import {Observable, of, throwError} from "rxjs";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { UserService } from '../../../app/services/user.service';
+import { UserServiceMock } from '../../mock/user.service.mock';
+import { RouterTestingModule } from '@angular/router/testing';
+import { PaymentService } from '../../../app/services/payment.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { PaymentServiceMock } from '../../mock/payment.service.mock';
 
 describe('PaymentComponent', () => {
   let sut: PaymentComponent;
@@ -34,12 +34,8 @@ describe('PaymentComponent', () => {
   let cityElement: HTMLInputElement;
   let countryElement: HTMLInputElement;
   let additionElement: HTMLInputElement;
-  let createButton: HTMLInputElement;
-  let cardElement: HTMLDivElement;
 
   let paymentService: PaymentService;
-  let userService: UserService;
-  let router: Router;
   let route: ActivatedRoute;
 
   beforeEach(async () => {
@@ -51,23 +47,21 @@ describe('PaymentComponent', () => {
         useValue: {
           snapshot: {
             paramMap: {
-              get: jest.fn().mockReturnValue('123'),
+              get: jest.fn().mockReturnValue('123')
             }
           }
         }
       },
-        {provide: UserService, useClass: UserServiceMock},
-        {provide: PaymentService, useClass: PaymentServiceMock}]
+      { provide: UserService, useClass: UserServiceMock },
+      { provide: PaymentService, useClass: PaymentServiceMock }]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PaymentComponent);
     sut = fixture.componentInstance;
     paymentService = TestBed.inject(PaymentService);
-    userService = TestBed.inject(UserService);
-    router = TestBed.inject(Router);
     route = TestBed.inject(ActivatedRoute);
     fixture.detectChanges();
   });
@@ -81,8 +75,6 @@ describe('PaymentComponent', () => {
     cityElement = fixture.debugElement.nativeElement.querySelector('#city');
     countryElement = fixture.debugElement.nativeElement.querySelector('#country');
     additionElement = fixture.debugElement.nativeElement.querySelector('#addition');
-    createButton = fixture.debugElement.nativeElement.querySelector('#create_button');
-    cardElement = fixture.debugElement.nativeElement.querySelector('#card-element');
   });
 
   it('should create', () => {
@@ -90,17 +82,17 @@ describe('PaymentComponent', () => {
   });
 
   describe('ngOnInit', () => {
-    it('should create the stipe components', async () => {
+    it('should create the stipe components', () => {
       // Then
       expect(sut.stripe).not.toBeNull();
     });
 
-    it('should create the stipe card', async () => {
+    it('should create the stipe card', () => {
       // Then
       expect(sut.cardElement).not.toBeNull();
     });
 
-    it('should create the form group', async () => {
+    it('should create the form group', () => {
       // Then
       expect(sut.addressForm).not.toBeNull();
     });
@@ -186,12 +178,14 @@ describe('PaymentComponent', () => {
 
       // Then
       const expected = {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         billing_details: {
           address: {
             city: 'city',
             country: 'country',
             line1: 'street 10',
             line2: 'addition',
+            // eslint-disable-next-line @typescript-eslint/naming-convention
             postal_code: '1020'
           },
           email: undefined,
@@ -199,7 +193,7 @@ describe('PaymentComponent', () => {
         },
         card: undefined,
         type: 'card'
-      }
+      };
       expect(sut.stripe?.createPaymentMethod).toHaveBeenCalledWith(expected);
     });
 
@@ -238,39 +232,41 @@ describe('PaymentComponent', () => {
     });
   });
 
-  function createValidInput() {
-    nameElement.value = 'name'
-    streetElement.value = 'street'
-    houseNrElement.value = String(10)
-    zipElement.value = String(1020)
-    cityElement.value = 'city'
-    countryElement.value = 'country'
-    additionElement.value = 'addition'
+  function createValidInput(): void {
+    nameElement.value = 'name';
+    streetElement.value = 'street';
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    houseNrElement.value = String(10);
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    zipElement.value = String(1020);
+    cityElement.value = 'city';
+    countryElement.value = 'country';
+    additionElement.value = 'addition';
 
-    nameElement.dispatchEvent(new Event('input'))
-    streetElement.dispatchEvent(new Event('input'))
-    houseNrElement.dispatchEvent(new Event('input'))
-    zipElement.dispatchEvent(new Event('input'))
-    cityElement.dispatchEvent(new Event('input'))
-    countryElement.dispatchEvent(new Event('input'))
-    additionElement.dispatchEvent(new Event('input'))
+    nameElement.dispatchEvent(new Event('input'));
+    streetElement.dispatchEvent(new Event('input'));
+    houseNrElement.dispatchEvent(new Event('input'));
+    zipElement.dispatchEvent(new Event('input'));
+    cityElement.dispatchEvent(new Event('input'));
+    countryElement.dispatchEvent(new Event('input'));
+    additionElement.dispatchEvent(new Event('input'));
   }
 
-  function createInvalidInput() {
-    nameElement.value = ''
-    streetElement.value = 'street'
-    houseNrElement.value = '1'
-    zipElement.value = '1020'
-    cityElement.value = 'city'
-    countryElement.value = 'country'
-    additionElement.value = 'addition'
+  function createInvalidInput(): void {
+    nameElement.value = '';
+    streetElement.value = 'street';
+    houseNrElement.value = '1';
+    zipElement.value = '1020';
+    cityElement.value = 'city';
+    countryElement.value = 'country';
+    additionElement.value = 'addition';
 
-    nameElement.dispatchEvent(new Event('input'))
-    streetElement.dispatchEvent(new Event('input'))
-    houseNrElement.dispatchEvent(new Event('input'))
-    zipElement.dispatchEvent(new Event('input'))
-    cityElement.dispatchEvent(new Event('input'))
-    countryElement.dispatchEvent(new Event('input'))
-    additionElement.dispatchEvent(new Event('input'))
+    nameElement.dispatchEvent(new Event('input'));
+    streetElement.dispatchEvent(new Event('input'));
+    houseNrElement.dispatchEvent(new Event('input'));
+    zipElement.dispatchEvent(new Event('input'));
+    cityElement.dispatchEvent(new Event('input'));
+    countryElement.dispatchEvent(new Event('input'));
+    additionElement.dispatchEvent(new Event('input'));
   }
 });

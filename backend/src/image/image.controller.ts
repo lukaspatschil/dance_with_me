@@ -37,10 +37,11 @@ export class ImageController {
   ): Promise<FileDto> {
     this.logger.log(`User with id: ${user.id} is uploading a image.`);
     const result = await this.imageService.uploadImage(
-      await FileMapper.mapFileToEntity(file),
+      FileMapper.mapFileToEntity(file),
     );
     return FileMapper.mapEntityToDto(result, user.id);
   }
+
   @Get('/:id')
   @Public()
   @Header('content-type', 'image/*')

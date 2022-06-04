@@ -15,6 +15,7 @@
         "createDefaultProgram": true
       },
       "extends": [
+        "eslint-config-dance-with-me",
         "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],

@@ -4,11 +4,12 @@ import { Test } from '@nestjs/testing';
 import { AppModule } from '../src/app.module';
 import { AccessTokenGuard } from '../src/auth/auth.guard';
 import { AuthGuardMock, mockedAuthHeader } from './stubs/auth.guard.mock';
-import { bufferMock, e2eValidFilename } from './test_data/image.testData';
 import { PutObjectRequest } from 'aws-sdk/clients/s3';
 import { ImageSizeEnum } from '../src/core/schema/enum/imageSize.enum';
 import request from 'supertest';
 import {
+  bufferMock,
+  e2eValidFilename,
   getDefaultUserImageTest,
   imageBuffer,
   validFileDtoAnyIdAndTimeStamps,
@@ -18,6 +19,9 @@ import {
 import { validObjectId1 } from './test_data/event.testData';
 import { RoleEnum } from '../src/core/schema/enum/role.enum';
 import * as AWS from 'aws-sdk';
+
+/* eslint @typescript-eslint/naming-convention: 0 */
+
 describe('ImageController (e2e)', () => {
   let app: INestApplication;
   let testDatabaseStub: MongoMemoryServer;
@@ -143,7 +147,7 @@ describe('ImageController (e2e)', () => {
       await s3.putObject(config).promise();
       return request(app.getHttpServer())
         .get('/image/5d6ede6a0ba62570afcedd3a.jpg?size=original')
-        .expect(200)
+        .expect(HttpStatus.OK)
         .expect((res) => {
           expect(res.body).toEqual(bufferMock());
           expect(res.headers['content-type']).toEqual('image/*');
@@ -152,12 +156,12 @@ describe('ImageController (e2e)', () => {
     it('should return 400 invalid size', async () => {
       return request(app.getHttpServer())
         .get('/image/5d6ede6a0ba62570afcedd3a.jpg?size=biggest')
-        .expect(400);
+        .expect(HttpStatus.BAD_REQUEST);
     });
     it('should return 404 the key does not exist', async () => {
       return request(app.getHttpServer())
         .get('/image/5d6ede6a0ba62570afcedd.jpg?size=original')
-        .expect(404);
+        .expect(HttpStatus.NOT_FOUND);
     });
   });
   async function resetAllBuckets() {
@@ -167,12 +171,13 @@ describe('ImageController (e2e)', () => {
         (process.env['STAGE'] ?? '');
       const enumObjects = await s3.listObjectsV2({ Bucket: bucket }).promise();
       if (enumObjects.Contents) {
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
         for (
           let content = 0;
           content < enumObjects.Contents.length;
           content++
         ) {
-          const typedContent: { Key: string } & any =
+          const typedContent: any & { Key: string } =
             enumObjects.Contents[content];
           await s3
             .deleteObject({ Bucket: bucket, Key: typedContent.Key })

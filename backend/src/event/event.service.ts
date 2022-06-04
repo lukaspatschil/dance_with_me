@@ -17,6 +17,10 @@ import { AuthUser } from '../auth/interfaces';
 import { NotYetParticipatedConflictError } from '../core/error/notYetParticipatedConflict.error';
 import { AlreadyParticipatedConflictError } from '../core/error/alreadyParticipatedConflict.error';
 
+const DEFAULT_TAKE = 50;
+const DEFAULT_SKIP = 0;
+const DEFAULT_RADIUS = 100;
+
 @Injectable()
 export class EventService {
   private readonly logger = new Logger(EventService.name);
@@ -28,9 +32,15 @@ export class EventService {
   ) {}
 
   async getEventsQueryDto(query: QueryDto): Promise<EventEntity[]> {
-    const take = Number.isFinite(query.take) ? (query.take as number) : 50;
-    const skip = Number.isFinite(query.skip) ? (query.skip as number) : 0;
-    const radius = Number.isFinite(query.radius) ? query.radius : 100;
+    const take = Number.isFinite(query.take)
+      ? (query.take as number)
+      : DEFAULT_TAKE;
+    const skip = Number.isFinite(query.skip)
+      ? (query.skip as number)
+      : DEFAULT_SKIP;
+    const radius = Number.isFinite(query.radius)
+      ? query.radius
+      : DEFAULT_RADIUS;
     const startDate: Date = query.startDate ? query.startDate : new Date();
     const dateQuery: PipelineStage.Match = {
       $match: {
@@ -97,7 +107,7 @@ export class EventService {
   async createEvent(eventEntity: EventEntity): Promise<Required<EventEntity>> {
     this.logger.log('Create new event: ' + JSON.stringify(eventEntity));
     let result;
-    if (eventEntity.location?.coordinates?.length === 2) {
+    if (eventEntity.location?.coordinates.length === 2) {
       eventEntity.address = await this.positionStackService.getAddress(
         ...eventEntity.location.coordinates,
       );
@@ -137,6 +147,7 @@ export class EventService {
 
   async deleteEvent(
     id: string,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
   ): Promise<(EventDocument & { _id: any }) | null> {
     this.logger.log(`Deleting event with id ${id}`);
 
@@ -217,9 +228,8 @@ export class EventService {
   async deleteUsersFromFutureEvents(userId: string): Promise<void> {
     this.logger.log(`Delete participation for future events by user ${userId}`);
 
-    let result;
     try {
-      result = await this.eventModel.updateMany(
+      await this.eventModel.updateMany(
         { participants: userId, startDateTime: { $gte: new Date() } },
         { $pull: { participants: userId } },
       );

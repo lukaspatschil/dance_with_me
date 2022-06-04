@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import {environment} from "../../../../environments/environment";
+import { environment } from '../../../../environments/environment';
 import { DOCUMENT } from '@angular/common';
 
 const AUTH_API = `${environment.baseUrl}/auth`;
@@ -13,11 +13,11 @@ export class LoginComponent {
 
   constructor(@Inject(DOCUMENT) private readonly document: Document) {}
 
-  public loginGoogle() {
+  public loginGoogle(): void {
     document.location.href = `${AUTH_API}/login_redirect/google`;
   }
 
-  public loginFacebook() {
+  public loginFacebook(): void {
     document.location.href = `${AUTH_API}/login_redirect/facebook`;
   }
 }

@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/no-magic-numbers: 0 */
 export const useSecureCookie = process.env['NODE_ENV'] !== 'development';
 /* istanbul ignore next */
 export const fingerPrintCookieName: string = useSecureCookie

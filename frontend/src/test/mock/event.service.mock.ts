@@ -1,6 +1,6 @@
-import {EventDto} from "../../app/dto/event.dto"
-import {Category} from "../../app/enums/category.enum";
-import {of} from "rxjs";
+import { EventDto } from '../../app/dto/event.dto';
+import { Category } from '../../app/enums/category.enum';
+import { of } from 'rxjs';
 
 
 export class EventServiceMock  {
@@ -21,11 +21,11 @@ export class EventServiceMock  {
     startDateTime: new Date('2022-04-24T10:00').toISOString(),
     endDateTime: new Date('2022-04-24T12:00').toISOString(),
     category: [Category.SALSA]
-  }
+  };
 
   createEvent = jest.fn().mockReturnValue(
     of(this.response)
-  )
+  );
 
   getEvents = jest.fn().mockReturnValue(
     of([{
@@ -34,7 +34,7 @@ export class EventServiceMock  {
       description: 'description',
       location: {
         longitude: 40.000,
-        latitude: 31.000,
+        latitude: 31.000
       },
       address: {
         country: 'country',
@@ -51,7 +51,7 @@ export class EventServiceMock  {
       endtime: '12:00',
       category: [Category.SALSA]
     }])
-  )
+  );
 
   getEvent = jest.fn().mockReturnValue(
     of({
@@ -60,7 +60,7 @@ export class EventServiceMock  {
       description: 'description',
       location: {
         longitude: 40.000,
-        latitude: 31.000,
+        latitude: 31.000
       },
       address: {
         country: 'country',
@@ -77,5 +77,5 @@ export class EventServiceMock  {
       endtime: '12:00',
       category: [Category.SALSA]
     })
-  )
+  );
 }

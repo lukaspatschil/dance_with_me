@@ -36,7 +36,7 @@ export class UserService {
   }
 
   async findAndUpdateOrCreate(
-    user: Required<Pick<UserEntity, 'id'>> & Omit<UserEntity, 'role'>,
+    user: Omit<UserEntity, 'role'> & Required<Pick<UserEntity, 'id'>>,
   ): Promise<UserEntity> {
     this.logger.log(`Find or create user with id: ${user.id}`);
     const { id: userId, ...userAttributes } = user;
@@ -50,6 +50,7 @@ export class UserService {
       return UserMapper.mapDocumentToEntity(userDoc);
     }
     const newUser: Omit<UserDocument, keyof Omit<Document, '_id'>> = {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       _id: userId,
       ...userAttributes,
       role: RoleEnum.USER,

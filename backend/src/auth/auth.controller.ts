@@ -9,6 +9,7 @@ import {
   HttpCode,
   Param,
   Query,
+  HttpStatus,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -30,8 +31,8 @@ export class AuthController {
   private readonly logger = new Logger(AuthController.name);
 
   constructor(
-    private authService: AuthService,
-    private configService: ConfigService,
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
   ) {}
 
   private authenticatedCookie(fingerPrint: string, res: Response) {
@@ -44,7 +45,7 @@ export class AuthController {
     });
   }
 
-  private static fragment(params: { [k: string]: string | number | null }) {
+  private static fragment(params: { [k: string]: number | string | null }) {
     return Object.entries(params)
       .filter(([, value]) => Boolean(value))
       .map(([key, value]) => `${key}=${value}`)
@@ -61,12 +62,15 @@ export class AuthController {
     const frontendUrl = this.configService.get('FRONTEND_URL');
     const loginCallbackPath = this.configService.get('FRONTEND_LOGIN_CALLBACK');
     const fragment = AuthController.fragment({
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       access_token: accessToken,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       refresh_token: refreshToken,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       expires_at: expiresAt,
       state,
     });
-    return this.authenticatedCookie(fingerPrint, res).redirect(
+    this.authenticatedCookie(fingerPrint, res).redirect(
       `${frontendUrl}${loginCallbackPath}#${fragment}`,
     );
   }
@@ -86,7 +90,7 @@ export class AuthController {
   @Public()
   @Get('login_redirect/:provider')
   @UseGuards(IdentityProviderGuard)
-  providerRedirect(@Param() provider: 'google' | 'facebook') {
+  providerRedirect(@Param() provider: 'facebook' | 'google') {
     this.logger.log(`Redirect to ${provider} login`);
   }
 
@@ -94,19 +98,19 @@ export class AuthController {
   @Get('authorization_code/:provider')
   @UseGuards(IdentityProviderGuard)
   async providerCallback(
-    @Param() provider: 'google' | 'facebook',
+    @Param() provider: 'facebook' | 'google',
     @Query('state') state: string | null,
     @Req() req: Request & { user: UserEntity },
     @Res() res: Response,
   ) {
     this.logger.log(`Received callback from ${provider} login`);
     const tokens = await this.authService.authenticateUser(req.user);
-    return this.authenticatedRedirect(tokens, res, state);
+    this.authenticatedRedirect(tokens, res, state);
   }
 
   @Public()
   @Post('refresh_token')
-  @HttpCode(200)
+  @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard('refreshToken'))
   async refreshToken(
     @Req() req: Request & { user: UserEntity },
@@ -119,7 +123,7 @@ export class AuthController {
 
   @Public()
   @Post('revoke')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(AuthGuard('refreshToken'))
   logout(@Req() req: Request & { user: UserEntity }, @Res() res: Response) {
     this.logger.log(`Revoking refresh token for user ${req.user.id}`);
@@ -127,7 +131,7 @@ export class AuthController {
   }
 
   @Post('force_logout')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   async forceLogout(@User() user: AuthUser, @Res() res: Response) {
     this.logger.log(`Forcing logout from all sessions for user ${user.id}`);
     await this.authService.forceLogout(user);

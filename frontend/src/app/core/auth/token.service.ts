@@ -5,9 +5,7 @@ const REFRESH_TOKEN_KEY = 'refreshToken';
   providedIn: 'root'
 })
 export class TokenStorageService {
-  constructor() {}
-
-  public saveRefreshToken(token: string) {
+  public saveRefreshToken(token: string): void {
     localStorage.removeItem(REFRESH_TOKEN_KEY);
     localStorage.setItem(REFRESH_TOKEN_KEY, token);
   }
@@ -16,7 +14,7 @@ export class TokenStorageService {
     return localStorage.getItem(REFRESH_TOKEN_KEY);
   }
 
-  public clearRefreshToken() {
+  public clearRefreshToken(): void {
     localStorage.removeItem(REFRESH_TOKEN_KEY);
   }
 }

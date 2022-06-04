@@ -1,5 +1,5 @@
 export class EventServiceForUserServiceMock {
-  deleteUsersFromFutureEvents = jest.fn((userId: string) => {
+  deleteUsersFromFutureEvents = jest.fn(() => {
     return Promise.resolve();
   });
 }

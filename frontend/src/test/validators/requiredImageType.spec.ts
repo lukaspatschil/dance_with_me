@@ -1,5 +1,5 @@
-import {requiredImageType} from "../../app/validators/requiredImageType";
-import {AbstractControl, FormControl, ValidationErrors} from "@angular/forms";
+import { requiredImageType } from '../../app/validators/requiredImageType';
+import { AbstractControl, FormControl, ValidationErrors } from '@angular/forms';
 
 describe('requiredImageType', () => {
   let sut: (control: AbstractControl) => ValidationErrors | null;

@@ -9,7 +9,7 @@ export class EmailService {
   private readonly logger = new Logger(EmailService.name);
 
   constructor(
-    private mailerService: MailerService,
+    private readonly mailerService: MailerService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -45,6 +45,7 @@ export class EmailService {
       this.logger.log(
         `Email ${mailResponse.messageId} sent: ${mailResponse.response}`,
       );
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return mailResponse;
     } catch (error: any) {
       this.logger.error(error.message, error.stack);

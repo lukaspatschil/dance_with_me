@@ -15,8 +15,8 @@ import { OpenStreetMapEntity } from '../core/entity/openStreetMap.entity';
 @Injectable()
 export class OpenStreetMapApiService {
   constructor(
-    private httpService: HttpService,
-    private configService: ConfigService,
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
   ) {}
 
   private readonly logger = new Logger(OpenStreetMapApiService.name);
@@ -41,8 +41,7 @@ export class OpenStreetMapApiService {
     }
     const response: OpenStreetMapEntity = promiseResponse.data;
     if (
-      response.address &&
-      response.address.country &&
+      response.address?.country &&
       response.address.postcode &&
       response.address.road
     ) {
@@ -75,15 +74,15 @@ export class OpenStreetMapApiService {
 
     try {
       promiseResponse = await lastValueFrom(
-        this.httpService.get<Array<OpenStreetMapEntity>>(url),
+        this.httpService.get<OpenStreetMapEntity[]>(url),
       );
     } catch (e) {
       this.logger.error(e);
       throw new InternalServerErrorException();
     }
-    const response: Array<OpenStreetMapEntity> = promiseResponse.data;
+    const response: OpenStreetMapEntity[] = promiseResponse.data;
 
-    if (response[0] && response[0].lat && response[0].lon) {
+    if (response[0]?.lat && response[0].lon) {
       return {
         type: GeolocationEnum.POINT,
         coordinates: [Number(response[0].lon), Number(response[0].lat)],

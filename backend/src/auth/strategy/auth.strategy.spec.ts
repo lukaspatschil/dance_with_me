@@ -8,7 +8,9 @@ import { fingerPrintCookieName } from '../constants';
 
 describe('AccessTokenStrategy', function () {
   const validToken = 'validMockToken';
-  const { fingerPrint, hash } = AuthService['generateFingerPrint']();
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const { fingerPrint, hash } = AuthService.generateFingerPrint();
   const validRequest: any = {
     headers: {
       authorization: `Bearer ${validToken}`,
@@ -22,6 +24,7 @@ describe('AccessTokenStrategy', function () {
     sub: '1234567890',
     aud: 'mockAudience',
     displayName: 'John Doe',
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     exp: Date.now() + 10000,
     fingerPrintHash: hash,
     iat: 0,
@@ -62,7 +65,7 @@ describe('AccessTokenStrategy', function () {
     expect(strategy).toBeDefined();
   });
 
-  it('should throw error if authorization header is not provided', () => {
+  it('should throw error if authorization header is not provided', async () => {
     // Given
     const request = { ...validRequest, headers: {} };
 
@@ -70,21 +73,22 @@ describe('AccessTokenStrategy', function () {
     const promise = strategy.validate(request);
 
     // Then
-    expect(promise).rejects.toThrowError();
+    await expect(promise).rejects.toThrowError();
   });
 
-  it('should throw error if fingerprint is not provided', () => {
+  it('should throw error if fingerprint is not provided', async () => {
     // Given
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     const { cookies: _, ...request } = validRequest;
 
     // When
     const promise = strategy.validate(request);
 
     // Then
-    expect(promise).rejects.toThrowError();
+    await expect(promise).rejects.toThrowError();
   });
 
-  it('should throw error if authorization header is not bearer', () => {
+  it('should throw error if authorization header is not bearer', async () => {
     // Given
     const request = {
       ...validRequest,
@@ -95,10 +99,10 @@ describe('AccessTokenStrategy', function () {
     const promise = strategy.validate(request);
 
     // Then
-    expect(promise).rejects.toThrowError();
+    await expect(promise).rejects.toThrowError();
   });
 
-  it('should throw error if access token cannot be verified', () => {
+  it('should throw error if access token cannot be verified', async () => {
     // Given
     const request = {
       ...validRequest,
@@ -109,16 +113,17 @@ describe('AccessTokenStrategy', function () {
     const promise = strategy.validate(request);
 
     // Then
-    expect(promise).rejects.toThrowError();
+    await expect(promise).rejects.toThrowError();
   });
 
-  it('should throw error if fingerprint does not match hash', () => {
+  it('should throw error if fingerprint does not match hash', async () => {
     // Given
     const request = {
       ...validRequest,
       cookies: {
-        [fingerPrintCookieName]:
-          AuthService['generateFingerPrint']().fingerPrint,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        [fingerPrintCookieName]: AuthService.generateFingerPrint().fingerPrint,
       },
     };
 
@@ -126,14 +131,14 @@ describe('AccessTokenStrategy', function () {
     const promise = strategy.validate(request);
 
     // Then
-    expect(promise).rejects.toThrowError();
+    await expect(promise).rejects.toThrowError();
   });
 
-  it('should return correct authUser if access token is valid and fingerprint matches', () => {
+  it('should return correct authUser if access token is valid and fingerprint matches', async () => {
     // When
     const promise = strategy.validate(validRequest);
 
     // Then
-    expect(promise).resolves.toEqual(user);
+    await expect(promise).resolves.toEqual(user);
   });
 });

@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 import { AuthService } from '../../../app/core/auth/auth.service';
-import {TokenStorageService} from "../../../app/core/auth/token.service";
-import {TokenStorageServiceMock} from "../../mock/token.service.mock";
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {RouterTestingModule} from "@angular/router/testing";
+import { TokenStorageService } from '../../../app/core/auth/token.service';
+import { TokenStorageServiceMock } from '../../mock/token.service.mock';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
-import {PasetoService} from "../../../app/core/auth/paseto.service";
+import { PasetoService } from '../../../app/core/auth/paseto.service';
 import { PasetoMockService } from '../../mock/paseto.service.mock';
-import {UserService} from "../../../app/services/user.service";
-import {UserServiceMock} from "../../mock/user.service.mock";
+import { UserService } from '../../../app/services/user.service';
+import { UserServiceMock } from '../../mock/user.service.mock';
 
 describe('AuthService', () => {
   let sut: AuthService;
@@ -25,12 +25,15 @@ describe('AuthService', () => {
 
   const accessToken = 'v1.local.cCvLxEWrOPnZ5WfnYVNKh61Peo_k-IuvF7oqFFqn1knwg4Sh8ry5dhpsB5k_qQ3ercZAHA1zowyt10SdPCa3OMF2RxD3zzMeedpVi8RQKSyKyghhTrC1HhFn1Z5p3WytaAK4HP81SuDK7LfianTv0do4J0in4fc2HWFTdIGxjE3Xx9N0wAhrQ_aM-ZF3_hI70nr-75xaku2cNxB9tmib8yp9OdjRXI_1oADHlj_Q9wuYkUGMzXew3RQPYJY6TzC1Idlfn4w.eyJraWQiOiJ0b2tlbi1kZXYtMTIzIn0';
 
+  // 15 minutes
+  const TIME = 900_000;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
         AuthService,
-        { provide: TokenStorageService, useClass: TokenStorageServiceMock},
+        { provide: TokenStorageService, useClass: TokenStorageServiceMock },
         { provide: PasetoService, useClass: PasetoMockService },
         { provide: UserService, useClass: UserServiceMock }
       ]
@@ -77,75 +80,75 @@ describe('AuthService', () => {
   });
 
   describe('setTokens', () => {
-    it('should set the _accessToken', async () => {
+    it('should set the _accessToken', () => {
       // Given
       const refreshToken = 'refreshToken';
 
       // When
-      await sut.setTokens(accessToken, refreshToken);
+      sut.setTokens(accessToken, refreshToken);
 
       // Then
       expect(sut.getToken).toBe(accessToken);
-      expect(userService.updateUser).toHaveBeenCalledTimes(1)
+      expect(userService.updateUser).toHaveBeenCalledTimes(1);
 
     });
 
-    it('should set the refreshToken in the storage', async () => {
+    it('should set the refreshToken in the storage', () => {
       // Given
       const refreshToken = 'refreshToken';
 
       // When
-      await sut.setTokens(accessToken, refreshToken);
+      sut.setTokens(accessToken, refreshToken);
 
       // Then
       expect(tokenService.saveRefreshToken).toHaveBeenCalledWith(refreshToken);
     });
 
-    it('should start the refresh loop after 14 minutes', async () => {
+    it('should start the refresh loop after 14 minutes', () => {
       // Given
-      pasetoService.decodeToken = jest.fn().mockReturnValue({payload: {}});
+      pasetoService.decodeToken = jest.fn().mockReturnValue({ payload: {} });
       const refreshToken = 'refreshToken';
 
       // When
-      await sut.setTokens(accessToken, refreshToken);
+      sut.setTokens(accessToken, refreshToken);
 
       // Then
-      expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 15 * 60 * 1000);
+      expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), TIME);
     });
 
-    it('should refresh tokens after 15 minutes', async () => {
+    it('should refresh tokens after 15 minutes', () => {
       jest.useFakeTimers('legacy');
       // Given
       const refreshSpy = jest.spyOn(sut, 'refreshAccessToken').mockImplementationOnce(() => Promise.resolve());
-      pasetoService.decodeToken = jest.fn().mockReturnValue({payload: {}});
+      pasetoService.decodeToken = jest.fn().mockReturnValue({ payload: {} });
       const refreshToken = 'refreshToken';
 
       // When
-      await sut.setTokens(accessToken, refreshToken);
-      jest.advanceTimersByTime(15 * 60 * 1000);
+      sut.setTokens(accessToken, refreshToken);
+      jest.advanceTimersByTime(TIME);
 
       // Then
       expect(refreshSpy).toHaveBeenCalledTimes(1);
       jest.useRealTimers();
     });
 
-    it('should decode the token with the PasetoService', async () => {
+    it('should decode the token with the PasetoService', () => {
       const refreshToken = 'refreshToken';
 
       // When
-      await sut.setTokens(accessToken, refreshToken);
+      sut.setTokens(accessToken, refreshToken);
 
       // Then
       expect(pasetoService.decodeToken).toHaveBeenCalledWith(accessToken);
     });
 
-    it('should clear the timeout when called again', async () => {
+    it('should clear the timeout when called again', () => {
       // Given
       const refreshToken = 'refreshToken';
 
       // When
-      await sut.setTokens(accessToken, refreshToken);
-      await sut.setTokens(accessToken, refreshToken);
+      sut.setTokens(accessToken, refreshToken);
+      sut.setTokens(accessToken, refreshToken);
 
       // Then
       expect(clearTimeout).toHaveBeenCalledTimes(1);
@@ -209,7 +212,7 @@ describe('AuthService', () => {
       sut.setTokens(accessToken, refreshToken);
 
       // When
-      sut.refreshAccessToken();
+      void sut.refreshAccessToken();
 
       // Then
       const req = httpMock.expectOne(`${environment.baseUrl}/auth/refresh_token`);
@@ -228,7 +231,7 @@ describe('AuthService', () => {
       sut.setTokens(accessToken, refreshToken);
 
       // When
-      sut.refreshAccessToken();
+      void sut.refreshAccessToken();
       const req = httpMock.expectOne(`${environment.baseUrl}/auth/refresh_token`);
       req.flush({
         accessToken: newAccessToken,

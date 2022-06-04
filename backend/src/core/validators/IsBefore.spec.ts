@@ -1,6 +1,8 @@
 import { Validator } from 'class-validator';
 import { IsBefore } from './IsBefore';
 
+/* @typescript-eslint/naming-convention: 0 */
+
 const validator = new Validator();
 
 describe('decorator with inline validation', () => {
@@ -10,6 +12,7 @@ describe('decorator with inline validation', () => {
         message: '$property must be before $constraint1',
       })
       firstDate!: Date;
+
       laterDate!: Date;
     }
 
@@ -95,6 +98,7 @@ describe('decorator with inline validation', () => {
         message: '$property must be before $constraint1',
       })
       firstDate!: number;
+
       laterDate!: number;
     }
 

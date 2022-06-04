@@ -4,6 +4,12 @@ import { getS3ConnectionToken, S3 } from 'nestjs-s3';
 import { MockS3Instance } from '../../test/stubs/s3.mock';
 import { ImageSizeEnum } from '../core/schema/enum/imageSize.enum';
 import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { ConfigMock } from '../../test/stubs/config.mock';
+import {
   bufferMock,
   invalidFilenameJPG,
   invalidFilenamePDF,
@@ -12,14 +18,6 @@ import {
   validFilenamePNG,
   validFilenamePNGReadable,
   validFilenamePNGString,
-} from '../../test/test_data/image.testData';
-import {
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { ConfigMock } from '../../test/stubs/config.mock';
-import {
   validFileConfigLarge,
   validFileConfigMedium,
   validFileConfigOriginal,
@@ -54,7 +52,7 @@ describe('ImageService', () => {
     s3 = module.get<S3>(getS3ConnectionToken('default'));
   });
 
-  afterEach(async () => {
+  afterEach(() => {
     jest.resetAllMocks();
   });
 
@@ -113,6 +111,7 @@ describe('ImageService', () => {
       await sut.uploadImage(validFile);
 
       //Then
+      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
       expect(s3.putObject).toBeCalledTimes(5);
     });
 
@@ -251,31 +250,31 @@ describe('ImageService', () => {
       expect(result).toEqual(stringAWSBinaryImageResponse());
     });
 
-    it('should call the service and throw a NotFoundException', () => {
+    it('should call the service and throw a NotFoundException', async () => {
       // When
       const result = async () =>
         await sut.getImage(notFoundFilenamePNG, ImageSizeEnum.MEDIUM);
 
       // Then
-      expect(result).rejects.toThrow(new NotFoundException());
+      await expect(result).rejects.toThrow(new NotFoundException());
     });
 
-    it('should call the service and throw an InternalServerErrorException', () => {
+    it('should call the service and throw an InternalServerErrorException', async () => {
       // When
       const result = async () =>
         await sut.getImage(invalidFilenameJPG, ImageSizeEnum.MEDIUM);
 
       // Then
-      expect(result).rejects.toThrow(new InternalServerErrorException());
+      await expect(result).rejects.toThrow(new InternalServerErrorException());
     });
 
-    it('should call the service and throw an InternalServerErrorException due s3 wrong type', () => {
+    it('should call the service and throw an InternalServerErrorException due s3 wrong type', async () => {
       // When
       const result = async () =>
         await sut.getImage(invalidFilenamePDF, ImageSizeEnum.MEDIUM);
 
       // Then
-      expect(result).rejects.toThrow(new InternalServerErrorException());
+      await expect(result).rejects.toThrow(new InternalServerErrorException());
     });
   });
 });

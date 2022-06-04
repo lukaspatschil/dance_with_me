@@ -1,10 +1,7 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginComponent } from '../../../../app/core/auth/login/login.component';
-import {environment} from "../../../../environments/environment";
-import {GoogleComponent} from "../../../../app/core/auth/login/google/google.component";
-import {FacebookComponent} from "../../../../app/core/auth/login/facebook/facebook.component";
-
-const AUTH_API = `${environment.baseUrl}/auth`;
+import { GoogleComponent } from '../../../../app/core/auth/login/google/google.component';
+import { FacebookComponent } from '../../../../app/core/auth/login/facebook/facebook.component';
 
 describe('LoginComponent', () => {
   let sut: LoginComponent;

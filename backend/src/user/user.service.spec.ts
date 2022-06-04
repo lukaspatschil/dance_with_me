@@ -18,6 +18,8 @@ import { NotFoundError } from '../core/error/notFound.error';
 import { EventService } from '../event/event.service';
 import { EventServiceForUserServiceMock } from '../../test/stubs/event.service.for.User.service.mock';
 
+/* eslint @typescript-eslint/naming-convention: 0 */
+
 describe('UserService', () => {
   let sut: UserService;
   let userDocumentMock: Model<UserDocument>;
@@ -172,7 +174,7 @@ describe('UserService', () => {
         await sut.getUser(throwADataBaseException.toString());
 
       // Then
-      expect(result).rejects.toThrow(InternalServerErrorException);
+      await expect(result).rejects.toThrow(InternalServerErrorException);
     });
 
     it('should call the service and the database does not find a user', async () => {
@@ -180,7 +182,7 @@ describe('UserService', () => {
       const result = async () => await sut.getUser(invalidObjectId.toString());
 
       // Then
-      expect(result).rejects.toThrow(NotFoundError);
+      await expect(result).rejects.toThrow(NotFoundError);
     });
   });
 });

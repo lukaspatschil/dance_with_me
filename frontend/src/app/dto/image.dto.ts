@@ -1,10 +1,16 @@
 export class ImageDto {
   id?: string;
+
   ownerId?: string;
+
   filename?: string;
+
   createdAt?: number;
+
   updatedAt?: number;
+
   size?: number;
+
   resolution?: string;
 
   constructor(id: string, ownerId: string, filename: string, createdAt: number, updatedAt: number, size: number, resolution: string) {

@@ -3,6 +3,8 @@ import { RoleEnum } from '../../src/core/schema/enum/role.enum';
 import { UserEntity } from '../../src/core/entity/user.entity';
 import { UserDto } from '../../src/core/dto/user.dto';
 
+/* eslint @typescript-eslint/naming-convention: 0 */
+
 export const validObjectId = new mongoose.Types.ObjectId();
 export const nonExistingObjectId = new mongoose.Types.ObjectId();
 export const throwADataBaseException = new mongoose.Types.ObjectId();
@@ -41,7 +43,7 @@ export const validUserDto: UserDto = {
 };
 
 export function createUserEntity(): UserEntity {
-  const validUserEntity: UserEntity = {
+  const validUserEntity2: UserEntity = {
     id: '',
     role: RoleEnum.USER,
     displayName: 'Testo1',
@@ -52,11 +54,11 @@ export function createUserEntity(): UserEntity {
     pictureUrl: 'http://test.com/image.png',
   };
 
-  return validUserEntity;
+  return validUserEntity2;
 }
 
 export function createUserDocument() {
-  const validUserDocument = {
+  const validUserDocument2 = {
     _id: '',
     role: RoleEnum.USER,
     displayName: 'Testo1',
@@ -67,11 +69,11 @@ export function createUserDocument() {
     pictureUrl: 'http://test.com/image.png',
   };
 
-  return validUserDocument;
+  return validUserDocument2;
 }
 
 export function createUserDto(): UserDto {
-  const validUserDto: UserDto = {
+  const validUserDto2: UserDto = {
     id: '',
     firstName: 'Tester',
     lastName: 'Tester',
@@ -80,5 +82,5 @@ export function createUserDto(): UserDto {
     role: RoleEnum.USER,
     pictureUrl: 'http://test.com/image.png',
   };
-  return validUserDto;
+  return validUserDto2;
 }

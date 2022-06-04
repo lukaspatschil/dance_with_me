@@ -9,7 +9,4 @@ import { Component } from '@angular/core';
 
 export class LegalPageComponent  {
   title = 'legal-page';
-
-  constructor() { }
-
 }

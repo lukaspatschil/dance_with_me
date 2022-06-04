@@ -83,6 +83,7 @@ export function validOpenStreetMapEntity(): OpenStreetMapEntity {
       state: validAddress.city,
       postcode: validAddress.postalcode,
       road: validAddress.street,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       house_number: validAddress.housenumber,
     },
   };

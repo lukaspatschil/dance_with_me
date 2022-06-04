@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
 import { PaymentService } from '../../app/services/payment.service';
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {environment} from "../../environments/environment";
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { environment } from '../../environments/environment';
 
 describe('PaymentService', () => {
   let sut: PaymentService;
@@ -19,7 +19,7 @@ describe('PaymentService', () => {
 
   afterEach(() => {
     httpMock.verify();
-  })
+  });
 
   it('should be created', () => {
     expect(sut).toBeTruthy();
@@ -49,7 +49,7 @@ describe('PaymentService', () => {
 
       // Then
       const req = httpMock.expectOne(`${environment.baseUrl}/payment`);
-      expect(req.request.body).toEqual({paymentMethodId, eventId});
+      expect(req.request.body).toEqual({ paymentMethodId, eventId });
     });
   });
 });

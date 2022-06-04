@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import {TokenStorageService} from "../../../app/core/auth/token.service";
+import { TokenStorageService } from '../../../app/core/auth/token.service';
 
 const REFRESH_TOKEN_KEY = 'refreshToken';
 
@@ -61,11 +61,12 @@ describe('TokenStorageService', () => {
     });
   });
 
-  function setUpLocalStorageMock() {
+  function setUpLocalStorageMock(): void {
     jest.spyOn(window.localStorage['__proto__'], 'removeItem');
     jest.spyOn(window.localStorage['__proto__'], 'setItem');
     jest.spyOn(window.localStorage['__proto__'], 'getItem');
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     window.localStorage['__proto__'].getItem = jest.fn().mockReturnValue('token');
   }
 });

@@ -10,8 +10,8 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
   private readonly logger = new Logger(FacebookStrategy.name);
 
   constructor(
-    private configService: ConfigService,
-    private authService: AuthService,
+    private readonly configService: ConfigService,
+    private readonly authService: AuthService,
   ) {
     super({
       clientID: configService.get('FACEBOOK_CLIENT_ID'),
@@ -48,7 +48,8 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
     const email = emails?.[0]?.value;
     if (!email) {
       this.logger.error('No email provided by Facebook');
-      return done(new Error('No email provided by Facebook'));
+      done(new Error('No email provided by Facebook'));
+      return;
     }
     const user = {
       id: `${provider}:${id}`,

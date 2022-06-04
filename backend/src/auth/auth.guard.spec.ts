@@ -11,11 +11,13 @@ describe('AccessTokenGuard', () => {
   const mockReflector = createMock<Reflector>();
 
   class MockStrategy extends Strategy {
-    constructor(private shouldSucceed: boolean) {
+    constructor(private readonly shouldSucceed: boolean) {
       super();
     }
+
     public override authenticate() {
-      return this.shouldSucceed ? this.success({}) : this.error(false);
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      this.shouldSucceed ? this.success({}) : this.error(false);
     }
   }
 
@@ -37,12 +39,12 @@ describe('AccessTokenGuard', () => {
     expect(sut).toBeDefined();
   });
 
-  it('should use reflector to check if route is public', () => {
+  it('should use reflector to check if route is public', async () => {
     // Given
     const context = createMock<ExecutionContext>();
 
     // When
-    sut.canActivate(context);
+    await sut.canActivate(context);
 
     // Then
     expect(mockReflector.getAllAndOverride).toHaveBeenCalledWith(
@@ -51,7 +53,7 @@ describe('AccessTokenGuard', () => {
     );
   });
 
-  it('should defer to parent AuthGuard if route is not public', () => {
+  it('should defer to parent AuthGuard if route is not public', async () => {
     // Given
     const context = createMock<ExecutionContext>();
     passport.use('accessToken', new MockStrategy(true));
@@ -60,7 +62,7 @@ describe('AccessTokenGuard', () => {
     mockReflector.getAllAndOverride.mockReturnValue(false);
 
     // When
-    sut.canActivate(context);
+    await sut.canActivate(context);
 
     // Then
     expect(authGuard.canActivate).toHaveBeenCalledWith(context);

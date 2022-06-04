@@ -1,15 +1,27 @@
+/* eslint @typescript-eslint/naming-convention: 0 */
 export class OpenStreetMapEntity {
   place_id?: number;
+
   licence?: string;
+
   osm_type?: string;
+
   osm_id?: number;
+
   boundingbox?: number[];
+
   lat?: string;
+
   lon?: string;
+
   display_name?: string;
+
   class?: string;
+
   type?: string;
+
   importance?: number;
+
   address?: {
     house_number?: string;
     road?: string;

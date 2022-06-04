@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { GlobalErrorHandler } from '../../../app/core/errors/global.error.handler';
-import { LoggerService } from "../../../app/core/logger/logger.service";
+import { LoggerService } from '../../../app/core/logger/logger.service';
 import { LoggerMockService } from '../../mock/logger.service.mock';
 
 describe('LoggerService', () => {

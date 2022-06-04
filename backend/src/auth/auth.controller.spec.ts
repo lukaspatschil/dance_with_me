@@ -184,23 +184,23 @@ describe('AuthController', () => {
   });
 
   describe('logout', () => {
-    it('should clear cookie', async () => {
+    it('should clear cookie', () => {
       // Given
       const mockRes = mockResponse();
 
       // When
-      await sut.logout(mockRequestWithUser, mockRes);
+      sut.logout(mockRequestWithUser, mockRes);
 
       // Then
       expect(mockRes.clearCookie).toHaveBeenCalledWith(fingerPrintCookieName);
     });
 
-    it('should send response', async () => {
+    it('should send response', () => {
       // Given
       const mockRes = mockResponse();
 
       // When
-      await sut.logout(mockRequestWithUser, mockRes);
+      sut.logout(mockRequestWithUser, mockRes);
 
       // Then
       expect(mockRes.send).toHaveBeenCalledTimes(1);

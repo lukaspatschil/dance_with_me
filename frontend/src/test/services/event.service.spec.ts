@@ -1,12 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 
 import { EventService } from '../../app/services/event.service';
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { CreateEventDto } from '../../app/dto/createEvent.dto'
-import { Category } from "../../app/enums/category.enum";
-import { EventDto } from "../../app/dto/event.dto";
+import { CreateEventDto } from '../../app/dto/createEvent.dto';
+import { Category } from '../../app/enums/category.enum';
+import { EventDto } from '../../app/dto/event.dto';
+import { environment } from '../../environments/environment';
 
+const URL_EVENT_BASE = `${environment.baseUrl}/event`;
 
 describe('EventService', () => {
   let eventService: EventService;
@@ -52,14 +54,15 @@ describe('EventService', () => {
         category: [Category.SALSA]
       };
 
-      eventService.createEvent(newEvent).subscribe((res) =>
-        expect(res).toEqual(newEvent)
+      eventService.createEvent(newEvent).subscribe((res) => {
+        expect(res).toEqual(newEvent);
+      }
       );
 
       // Then
-      const req = httpTestingController.expectOne({
+      httpTestingController.expectOne({
         method: 'POST',
-        url: eventService.URL_EVENT_BASE,
+        url: URL_EVENT_BASE
       });
     });
   });
@@ -73,7 +76,7 @@ describe('EventService', () => {
         description: 'description',
         location: {
           longitude: 40.000,
-          latitude: 31.000,
+          latitude: 31.000
         },
         address: {
           country: 'country',
@@ -88,17 +91,19 @@ describe('EventService', () => {
         startDateTime: new Date('2022-04-24T10:00').toISOString(),
         endDateTime: new Date('2022-04-24T12:00').toISOString(),
         category: [Category.SALSA]
-      }]
+      }];
 
       eventService.getEvents().subscribe(
-        events => expect(events).toEqual(expectedEvents)
-      )
+        events => {
+          expect(events).toEqual(expectedEvents);
+        }
+      );
 
       // Then
-      const req = httpTestingController.expectOne(eventService.URL_EVENT_BASE);
-      expect(req.request.method).toEqual('GET')
+      const req = httpTestingController.expectOne(URL_EVENT_BASE);
+      expect(req.request.method).toEqual('GET');
 
-      req.flush(expectedEvents)
+      req.flush(expectedEvents);
     });
   });
 
@@ -111,7 +116,7 @@ describe('EventService', () => {
         description: 'description',
         location: {
           longitude: 40.000,
-          latitude: 31.000,
+          latitude: 31.000
         },
         address: {
           country: 'country',
@@ -126,18 +131,20 @@ describe('EventService', () => {
         startDateTime: new Date('2022-04-24T10:00').toISOString(),
         endDateTime: new Date('2022-04-24T12:00').toISOString(),
         category: [Category.SALSA]
-      }]
+      }];
 
-      eventService.getEvent("1").subscribe(
-        events => expect(events).toEqual(expectedEvents)
-      )
+      eventService.getEvent('1').subscribe(
+        events => {
+          expect(events).toEqual(expectedEvents);
+        }
+      );
 
       // Then
-      const req = httpTestingController.expectOne(eventService.URL_EVENT_BASE + "/1");
-      expect(req.request.method).toEqual('GET')
+      const req = httpTestingController.expectOne(URL_EVENT_BASE + '/1');
+      expect(req.request.method).toEqual('GET');
 
-      req.flush(expectedEvents)
+      req.flush(expectedEvents);
     });
 
-  })
+  });
 });

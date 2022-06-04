@@ -12,6 +12,7 @@ export class EventServiceMock {
   createEvent = jest.fn(() => {
     return this.getEventEntity();
   });
+
   getEventById = jest.fn((id) => {
     if (id === '-1') {
       throw new Error('Test Error');
@@ -20,11 +21,13 @@ export class EventServiceMock {
     eventEntity.id = id;
     return eventEntity;
   });
+
   getEventsQueryDto = jest.fn(() => {
     const item1 = this.getEventEntity();
     item1.id = '1';
     return [item1, item1, item1];
   });
+
   getEventsByLocation = jest.fn(() => [
     this.getEventEntity(),
     this.getEventEntity(),
@@ -34,6 +37,7 @@ export class EventServiceMock {
   getEventEntity(): EventEntity {
     const locationEntity = new LocationEntity();
     locationEntity.type = GeolocationEnum.POINT;
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     locationEntity.coordinates = [-171.23794, 8.54529];
 
     const eventEntity = new EventEntity();
@@ -62,11 +66,11 @@ export class EventServiceMock {
     }
   });
 
-  createParticipation = jest.fn((id, user) => {
+  createParticipation = jest.fn(() => {
     return Promise.resolve();
   });
 
-  deleteParticipation = jest.fn((id, user) => {
+  deleteParticipation = jest.fn(() => {
     return Promise.resolve();
   });
 }

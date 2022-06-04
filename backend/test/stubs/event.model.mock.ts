@@ -7,6 +7,9 @@ import {
 } from '../test_data/event.testData';
 import { validAddress } from '../test_data/openStreetMapApi.testData';
 
+/* eslint @typescript-eslint/no-magic-numbers: 0 */
+/* eslint @typescript-eslint/naming-convention: 0 */
+
 export const NotFoundErrorId = '-1';
 export const DBErrorId = '-2';
 export const ParticipationAlreadyStored = '-3';
@@ -157,7 +160,7 @@ export class EventModelMock {
     }
   });
 
-  updateMany = jest.fn((filter: any, update: any) => {
+  updateMany = jest.fn(() => {
     return Promise.resolve();
   });
 }
@@ -181,6 +184,7 @@ function createEventDocument() {
     description: 'Test description',
     location: {
       type: GeolocationEnum.POINT,
+      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
       coordinates: [-171.23794, 8.54529],
     },
     price: 12.5,

@@ -1,12 +1,12 @@
-import {TestBed} from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
-import {RouterTestingModule} from "@angular/router/testing";
-import {ActivatedRouteSnapshot, Router, RouterStateSnapshot} from "@angular/router";
-import {environment} from "../../../../environments/environment";
-import {UserService} from "../../../../app/services/user.service";
-import {AdminGuard} from "../../../../app/core/auth/guards/admin.guard";
-import {UserServiceMock} from "../../../mock/user.service.mock";
-import {RoleEnum} from "../../../../app/enums/role.enum";
+import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
+import { environment } from '../../../../environments/environment';
+import { UserService } from '../../../../app/services/user.service';
+import { AdminGuard } from '../../../../app/core/auth/guards/admin.guard';
+import { UserServiceMock } from '../../../mock/user.service.mock';
+import { RoleEnum } from '../../../../app/enums/role.enum';
 
 describe('AdminGuard', () => {
 
@@ -36,11 +36,9 @@ describe('AdminGuard', () => {
       // Given
       jest.spyOn(router, 'parseUrl');
       jest.spyOn(userService, 'role', 'get').mockReturnValue(RoleEnum.ADMIN);
-      const route = {} as unknown as ActivatedRouteSnapshot;
-      const state = {} as RouterStateSnapshot;
 
       // When
-      const result = sut.canActivate(route, state);
+      const result = sut.canActivate();
 
       // Then
       expect(result).toBeTruthy();
@@ -49,11 +47,9 @@ describe('AdminGuard', () => {
     it('should redirect if the user is not Admin', () => {
       // Given
       jest.spyOn(router, 'parseUrl');
-      const route = {} as unknown as ActivatedRouteSnapshot;
-      const state = {} as RouterStateSnapshot;
 
       // When
-      sut.canActivate(route, state);
+      sut.canActivate();
 
       // Then
       expect(router.parseUrl).toHaveBeenCalledWith(environment.loginUrl);
@@ -62,11 +58,9 @@ describe('AdminGuard', () => {
     it('should return the UrlTree to redirect', () => {
       // Given
       jest.spyOn(router, 'parseUrl');
-      const route = {} as unknown as ActivatedRouteSnapshot;
-      const state = {} as RouterStateSnapshot;
 
       // When
-      const result = sut.canActivate(route, state);
+      const result = sut.canActivate();
 
       // Then
       const expectedUrl = router.parseUrl(environment.loginUrl);

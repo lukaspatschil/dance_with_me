@@ -5,6 +5,7 @@ import { GoogleStrategy } from './google.strategy';
 import { UserEntity } from '../../core/entity/user.entity';
 import { ConfigService } from '@nestjs/config';
 import { Strategy } from 'passport-google-oauth20';
+/* eslint @typescript-eslint/naming-convention: 0 */
 
 jest.mock('passport-google-oauth20');
 

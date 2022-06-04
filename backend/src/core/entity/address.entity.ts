@@ -7,5 +7,6 @@ export class AddressEntity {
   ) {}
 
   housenumber?: string;
+
   addition?: string;
 }

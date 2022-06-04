@@ -8,7 +8,4 @@ import { Component } from '@angular/core';
 
 export class PrivacyPageComponent{
   title = 'privacy-page';
-
-  constructor() { }
-
 }

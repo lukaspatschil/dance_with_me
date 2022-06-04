@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {TranslateService} from "@ngx-translate/core";
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-about-page',
@@ -11,7 +11,7 @@ export class AboutPageComponent  {
 
   constructor(public translate: TranslateService) {
     translate.addLangs(['en', 'de']);
-    translate.setDefaultLang('de')
+    translate.setDefaultLang('de');
   }
 
 }

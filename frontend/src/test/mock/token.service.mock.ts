@@ -1,4 +1,4 @@
-import {TokenStorageService} from "../../app/core/auth/token.service";
+import { TokenStorageService } from '../../app/core/auth/token.service';
 const REFRESH_TOKEN_KEY = 'refreshToken';
 
 export class TokenStorageServiceMock implements TokenStorageService{

@@ -1,37 +1,36 @@
 import { Injectable } from '@angular/core';
 
+// eslint-disable-next-line @typescript-eslint/no-magic-numbers
 export type PasetoToken = `v${1 | 2 | 3 | 4}.${'local' | 'public'}.${string}`;
 
-export type DecodedPasetoToken = {
-  footer?: string,
+export interface DecodedPasetoToken {
+  footer?: string;
   payload: {
-    name?: string,
-    exp?: string,
-    iat?: string,
-    admin?: boolean,
-    sub?: string,
-    [key: string]: any
-  },
-  version: string,
-  purpose: string
-};
+    name?: string;
+    exp?: string;
+    iat?: string;
+    admin?: boolean;
+    sub?: string;
+    [key: string]: unknown;
+  };
+  version: string;
+  purpose: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class PasetoService {
-
-  constructor() {}
-
   public decodeToken(token: PasetoToken): DecodedPasetoToken {
     const {
       0: version,
       1: purpose,
       2: payload,
       3: footer,
-      length,
+      length
     } = token.split('.');
 
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     if (length !== 3 && length !== 4) {
       throw new Error('token is not a PASETO formatted value');
     }
@@ -53,10 +52,11 @@ export class PasetoService {
       footer: footer ? PasetoService.urlSafeBase64Decode(footer) : undefined,
       payload: {},
       version,
-      purpose,
+      purpose
     };
 
     if (purpose !== 'local') {
+      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
       const sigLength = version === 'v1' ? 256 : version === 'v3' ? 96 : 64;
 
       let raw;
@@ -73,14 +73,16 @@ export class PasetoService {
     return atob(url.replace(/-/g, '+').replace(/_/g, '/'));
   }
 
-  private static rawPayloadToJson(raw: string): { [key: string]: any } {
+  private static rawPayloadToJson(raw: string): { [key: string]: unknown } {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return JSON.parse(
       decodeURIComponent(
         raw
           .split('')
+          // eslint-disable-next-line @typescript-eslint/no-magic-numbers
           .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-          .join(''),
-      ),
+          .join('')
+      )
     );
   }
 }

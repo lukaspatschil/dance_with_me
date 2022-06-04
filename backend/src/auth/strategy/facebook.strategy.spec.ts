@@ -5,7 +5,7 @@ import { FacebookStrategy } from './facebook.strategy';
 import { UserEntity } from '../../core/entity/user.entity';
 import { ConfigService } from '@nestjs/config';
 import { Strategy, Profile } from 'passport-facebook';
-
+/* eslint @typescript-eslint/naming-convention: 0 */
 jest.mock('passport-facebook');
 
 describe('FacebookStrategy', function () {
@@ -116,13 +116,14 @@ describe('FacebookStrategy', function () {
     );
   });
 
-  it('should call callback with error if email is missing', async () => {
+  it('should call callback with error if email is missing', () => {
     // Given
     const callback = jest.fn();
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     const { emails: _, ...profile } = facebookProfile;
 
     // When
-    await strategy.validate(
+    strategy.validate(
       'mock-access-token',
       'mock-refresh-token',
       profile,
@@ -138,6 +139,7 @@ describe('FacebookStrategy', function () {
     const callback = jest.fn();
 
     // When
+    // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression,@typescript-eslint/await-thenable
     await strategy.validate(
       'mock-access-token',
       'mock-refresh-token',
@@ -152,9 +154,11 @@ describe('FacebookStrategy', function () {
   it('should correctly transform minimal user profile without name property or photos', async () => {
     // Given
     const callback = jest.fn();
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     const { name: _, photos: _2, ...profile } = facebookProfile;
 
     // When
+    // eslint-disable-next-line @typescript-eslint/await-thenable,@typescript-eslint/no-confusing-void-expression
     await strategy.validate(
       'mock-access-token',
       'mock-refresh-token',
@@ -171,6 +175,7 @@ describe('FacebookStrategy', function () {
     const callback = jest.fn();
 
     // When
+    // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression,@typescript-eslint/await-thenable
     await strategy.validate(
       'mock-access-token',
       'mock-refresh-token',

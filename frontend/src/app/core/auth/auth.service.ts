@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {environment} from '../../../environments/environment';
-import {TokenStorageService} from "./token.service";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { TokenStorageService } from './token.service';
 import { Router } from '@angular/router';
-import {PasetoService, PasetoToken} from "./paseto.service";
-import {UserService} from "../../services/user.service";
+import { PasetoService, PasetoToken } from './paseto.service';
+import { UserService } from '../../services/user.service';
 
 const AUTH_API = `${environment.baseUrl}/auth`;
 const httpOptions = {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   withCredentials: true
 };
@@ -16,26 +17,29 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class AuthService {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   private _accessToken: string | null = null;
-  private refreshTimeout: any = null;
+
+  private refreshTimeout: number | null = null;
 
   constructor(
     private readonly http: HttpClient,
     private readonly tokenStorage: TokenStorageService,
     private readonly router: Router,
     private readonly paseto: PasetoService,
-    private readonly userService: UserService,
+    private readonly userService: UserService
   ) {}
 
-  private async getTimeoutTime(accessToken: PasetoToken): Promise<number> {
+  private getTimeoutTime(accessToken: PasetoToken): number {
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     let timeout = 15 * 60 * 1000;
-    const decoded = await this.paseto.decodeToken(accessToken);
-    let id = decoded.payload['sub'];
+    const decoded = this.paseto.decodeToken(accessToken);
+    let id = decoded.payload.sub;
     if (id != null) {
       this.userService.updateUser(id);
     }
-    if (decoded.payload['exp']) {
-      timeout = new Date(decoded.payload['exp']).getTime() - new Date().getTime();
+    if (decoded.payload.exp) {
+      timeout = new Date(decoded.payload.exp).getTime() - new Date().getTime();
     }
     return timeout;
   }
@@ -52,20 +56,21 @@ export class AuthService {
     return Boolean(this.getToken);
   }
 
-  async setTokens(accessToken: PasetoToken, refreshToken: string) {
+  setTokens(accessToken: PasetoToken, refreshToken: string): void {
     this.accessToken = accessToken;
     this.tokenStorage.saveRefreshToken(refreshToken);
 
     if (this.refreshTimeout) {
-      clearTimeout(this.refreshTimeout);
+      const timeoutId = this.refreshTimeout;
+      clearTimeout(timeoutId);
       this.refreshTimeout = null;
     }
 
-    const timeoutTime = await this.getTimeoutTime(accessToken);
-    this.refreshTimeout = setTimeout(() => this.refreshAccessToken(), timeoutTime);
+    const timeoutTime = this.getTimeoutTime(accessToken);
+    this.refreshTimeout = setTimeout((): void => void this.refreshAccessToken(), timeoutTime);
   }
 
-  logout() {
+  logout(): void {
     const refreshToken = this.tokenStorage.getRefreshToken();
     this.http.post(`${AUTH_API}/revoke`, { refreshToken }, httpOptions).subscribe(() => {
       this.tokenStorage.clearRefreshToken();
@@ -82,11 +87,15 @@ export class AuthService {
       if (refreshToken) {
         this.http.post(`${AUTH_API}/refresh_token`, { refreshToken }, httpOptions)
           .subscribe({
-            next: async (response: any) => {
-              await this.setTokens(response.accessToken, response.refreshToken);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            next: (response: any) => {
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+              this.setTokens(response.accessToken, response.refreshToken);
               resolve();
             },
-            error: err => reject(err)
+            error: err => {
+              reject(err);
+            }
           });
       } else {
         resolve();
