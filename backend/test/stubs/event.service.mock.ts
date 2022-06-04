@@ -8,6 +8,9 @@ import {
   validObjectId1,
 } from '../test_data/event.testData';
 
+export const USER_PARTICIPATES_IN_EVENT_USER_ID = '999';
+export const USER_PARTICIPATES_IN_EVENT_EVENT_ID = '998';
+
 export class EventServiceMock {
   createEvent = jest.fn(() => {
     return this.getEventEntity();
@@ -16,6 +19,12 @@ export class EventServiceMock {
   getEventById = jest.fn((id) => {
     if (id === '-1') {
       throw new Error('Test Error');
+    }
+    if (id === USER_PARTICIPATES_IN_EVENT_EVENT_ID) {
+      const eventEntity = this.getEventEntity();
+      eventEntity.id = USER_PARTICIPATES_IN_EVENT_EVENT_ID;
+      eventEntity.participants = [USER_PARTICIPATES_IN_EVENT_USER_ID];
+      return eventEntity;
     }
     const eventEntity = this.getEventEntity();
     eventEntity.id = id;

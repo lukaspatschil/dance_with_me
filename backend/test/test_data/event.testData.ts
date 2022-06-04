@@ -63,4 +63,5 @@ export const validEventDto: EventDto = {
   organizerId: '1',
   category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
   participants: 0,
+  userParticipates: false,
 };

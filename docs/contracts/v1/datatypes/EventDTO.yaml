@@ -39,6 +39,9 @@ properties:
   imageUrl:
     type: string
     example: https://example.com/eventImage.png
+  userParticipates:
+    type: boolean
+    example: true
 required:
   - id
   - name

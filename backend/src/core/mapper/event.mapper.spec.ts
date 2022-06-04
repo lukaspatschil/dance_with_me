@@ -65,11 +65,35 @@ describe('EventMapper', () => {
         ...getDefaultEventEntity(),
       };
 
+      const userId = '1';
+
       // When
-      const result = EventMapper.mapEntityToDto(eventEntity);
+      const result = EventMapper.mapEntityToDto(eventEntity, userId);
 
       // Then
       expect(result).toEqual(getDefaultEventDto());
+    });
+
+    it('should return correct Dto with positive user participation', () => {
+      // Given
+      const userId = '1';
+      const defaultEventEntity = getDefaultEventEntity();
+      defaultEventEntity.participants = [userId];
+
+      const eventEntity = {
+        id: '1',
+        ...defaultEventEntity,
+      };
+
+      const expectedValue = getDefaultEventDto();
+      expectedValue.userParticipates = true;
+      expectedValue.participants = 1;
+
+      // When
+      const result = EventMapper.mapEntityToDto(eventEntity, userId);
+
+      // Then
+      expect(result).toEqual(expectedValue);
     });
   });
 
@@ -199,6 +223,7 @@ describe('EventMapper', () => {
         housenumber: '4',
       },
       participants: 0,
+      userParticipates: false,
     };
   }
 

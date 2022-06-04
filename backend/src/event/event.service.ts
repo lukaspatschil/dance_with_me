@@ -198,11 +198,7 @@ export class EventService {
 
     const event = EventMapper.mapDocumentToEntity(result);
 
-    if (
-      !event.participants.find((participant) => {
-        return participant === user.id;
-      })
-    ) {
+    if (!event.participants.includes(user.id)) {
       this.logger.error(`User with id ${user.id} did not participate`);
       throw NotYetParticipatedConflictError;
     }
@@ -237,11 +233,7 @@ export class EventService {
 
     const event = EventMapper.mapDocumentToEntity(result);
 
-    if (
-      event.participants.find((participant) => {
-        return participant === user.id;
-      })
-    ) {
+    if (event.participants.includes(user.id)) {
       this.logger.error(`User with id ${user.id} already participates`);
       throw AlreadyParticipatedConflictError;
     }

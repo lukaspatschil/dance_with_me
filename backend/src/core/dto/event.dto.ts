@@ -74,4 +74,6 @@ export class EventDto {
   @IsNumber()
   @Min(0)
   participants!: number;
+
+  userParticipates!: boolean;
 }

@@ -37,7 +37,7 @@ export class RecommendationController {
     );
     this.logger.log('Result: ' + JSON.stringify(result));
     return result.map((item) =>
-      EventMapper.mapEntityToDto(item as Required<EventEntity>),
+      EventMapper.mapEntityToDto(item as Required<EventEntity>, user.id),
     );
   }
 }

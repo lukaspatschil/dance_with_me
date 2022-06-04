@@ -5,7 +5,11 @@ import { CreateEventDto } from '../core/dto/createEvent.dto';
 import { EventEntity } from '../core/entity/event.entity';
 import { GeolocationEnum } from '../core/schema/enum/geolocation.enum';
 import { EventDto } from '../core/dto/event.dto';
-import { EventServiceMock } from '../../test/stubs/event.service.mock';
+import {
+  EventServiceMock,
+  USER_PARTICIPATES_IN_EVENT_EVENT_ID,
+  USER_PARTICIPATES_IN_EVENT_USER_ID,
+} from '../../test/stubs/event.service.mock';
 import { NotFoundException } from '@nestjs/common';
 import { UserEntity } from '../core/entity/user.entity';
 import { RoleEnum } from '../core/schema/enum/role.enum';
@@ -44,7 +48,7 @@ describe('EventController', () => {
       const params = { id: '1' };
 
       // When
-      await sut.getEventById(params);
+      await sut.getEventById(params, getDefaultUser());
 
       // Then
       expect(eventService.getEventById).toHaveBeenCalled();
@@ -55,10 +59,29 @@ describe('EventController', () => {
       const params = { id: '-1' };
 
       // When
-      const result = async () => await sut.getEventById(params);
+      const result = async () =>
+        await sut.getEventById(params, getDefaultUser());
 
       // Then
       await expect(result).rejects.toThrow(NotFoundException);
+    });
+
+    it('should get an single event where the user participates and return a correct value for the userParticipates field', async () => {
+      // Given
+      const params = { id: USER_PARTICIPATES_IN_EVENT_EVENT_ID };
+      const user = getDefaultUser();
+      user.id = USER_PARTICIPATES_IN_EVENT_USER_ID;
+
+      // When
+      const data = await sut.getEventById(params, user);
+
+      const item1 = getEventDTO();
+      item1.id = USER_PARTICIPATES_IN_EVENT_EVENT_ID;
+      item1.userParticipates = true;
+      item1.participants = 1;
+
+      // Then
+      expect(data).toEqual(item1);
     });
   });
 
@@ -68,7 +91,7 @@ describe('EventController', () => {
       const query = { take: 1, skip: 0 };
 
       // When
-      await sut.getEvents(query);
+      await sut.getEvents(query, getDefaultUser());
 
       // Then
       expect(eventService.getEventsQueryDto).toBeCalledWith(query);
@@ -78,7 +101,7 @@ describe('EventController', () => {
       // Given
       const query = { take: 1, skip: 0, longitude: 1, latitude: 2 };
       // When
-      await sut.getEvents(query);
+      await sut.getEvents(query, getDefaultUser());
 
       // Then
       expect(eventService.getEventsQueryDto).toBeCalledWith(query);
@@ -88,7 +111,7 @@ describe('EventController', () => {
       // Given
       const query = {};
       // When
-      const data = await sut.getEvents(query);
+      const data = await sut.getEvents(query, getDefaultUser());
 
       const item1 = getEventDTO();
       item1.id = '1';
@@ -245,6 +268,7 @@ describe('EventController', () => {
         housenumber: '4',
       },
       participants: 0,
+      userParticipates: false,
     };
   }
 

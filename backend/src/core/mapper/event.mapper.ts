@@ -91,7 +91,10 @@ export class EventMapper {
     return newEvent;
   }
 
-  static mapEntityToDto(event: Required<EventEntity>): EventDto {
+  static mapEntityToDto(
+    event: Required<EventEntity>,
+    userid: string,
+  ): EventDto {
     const newEvent = new EventDto();
     newEvent.id = event.id;
     newEvent.name = event.name;
@@ -118,6 +121,7 @@ export class EventMapper {
     newEvent.organizerId = event.organizerId;
     newEvent.category = event.category;
     newEvent.participants = event.participants.length;
+    newEvent.userParticipates = event.participants.includes(userid);
 
     return newEvent;
   }

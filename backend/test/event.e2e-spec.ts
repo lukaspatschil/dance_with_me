@@ -341,6 +341,7 @@ describe('EventController (e2e)', () => {
           imageId: '1',
           organizerId: '1',
           participants: 0,
+          userParticipates: false,
           category: getCategory(),
           address: validAddressDTO,
         };
@@ -393,6 +394,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddressDTO,
           participants: 0,
+          userParticipates: false,
         };
 
         const event2 = new eventModel({
@@ -528,6 +530,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddressDTO,
           participants: 0,
+          userParticipates: false,
         };
 
         return request(app.getHttpServer())
@@ -643,6 +646,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddressDTO,
           participants: 0,
+          userParticipates: false,
         };
 
         return request(app.getHttpServer())
@@ -713,6 +717,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddressDTO,
           participants: 0,
+          userParticipates: false,
         };
 
         const event3 = new eventModel({
@@ -751,6 +756,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddressDTO,
           participants: 0,
+          userParticipates: false,
         };
 
         return request(app.getHttpServer())
@@ -802,6 +808,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddressDTO,
         participants: 0,
+        userParticipates: false,
       };
 
       const event2 = new eventModel({
@@ -840,6 +847,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddressDTO,
         participants: 0,
+        userParticipates: false,
       };
 
       return request(app.getHttpServer())
@@ -889,6 +897,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddressDTO,
         participants: 0,
+        userParticipates: false,
       };
 
       const event2 = new eventModel({
@@ -927,6 +936,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddressDTO,
         participants: 0,
+        userParticipates: false,
       };
 
       return request(app.getHttpServer())
@@ -977,6 +987,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         participants: 0,
+        userParticipates: false,
       };
 
       const event2 = new eventModel({
@@ -1045,6 +1056,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         participants: 0,
+        userParticipates: false,
       };
 
       const event2 = new eventModel({
@@ -1115,6 +1127,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddressDTO,
           participants: 0,
+          userParticipates: false,
         };
 
         const body = {
@@ -1168,6 +1181,7 @@ describe('EventController (e2e)', () => {
           participants: 0,
           category: getCategory(),
           address: validAddressDTO,
+          userParticipates: false,
         };
 
         const event2 = new eventModel({
@@ -1206,6 +1220,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddressDTO,
           participants: 0,
+          userParticipates: false,
         };
 
         const query = {
@@ -1263,6 +1278,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddressDTO,
           participants: 0,
+          userParticipates: false,
         };
 
         const event2 = new eventModel({
@@ -1301,6 +1317,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddressDTO,
           participants: 0,
+          userParticipates: false,
         };
 
         const body = {
@@ -1363,6 +1380,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddressDTO,
         participants: 0,
+        userParticipates: false,
       };
 
       return request(app.getHttpServer())
@@ -1605,6 +1623,7 @@ describe('EventController (e2e)', () => {
       category: getCategory(),
       address: validAddressDTO,
       participants: 1,
+      userParticipates: true,
     };
 
     // event 2
@@ -1646,6 +1665,7 @@ describe('EventController (e2e)', () => {
       category: getCategory(),
       address: validAddressDTO,
       participants: 0,
+      userParticipates: false,
     };
 
     //save user
@@ -1664,7 +1684,7 @@ describe('EventController (e2e)', () => {
       role: user.role,
     });
 
-    // add participations
+    // add participation
     await request(app.getHttpServer())
       .post('/event/' + validObjectId1.toString() + '/participation')
       .set('Authorization', authHeader)
@@ -1681,9 +1701,10 @@ describe('EventController (e2e)', () => {
       .set('Authorization', authHeader)
       .expect(HttpStatus.NO_CONTENT);
 
-    // check participations
+    // check participation
     await request(app.getHttpServer())
       .get('/event/' + validObjectId1.toString())
+      .set('Authorization', authHeader)
       .expect(HttpStatus.OK)
       .expect((res) => {
         expect(res.body).toEqual(event1Dto);
@@ -1691,10 +1712,13 @@ describe('EventController (e2e)', () => {
 
     await request(app.getHttpServer())
       .get('/event/' + validObjectId2.toString())
+      .set('Authorization', authHeader)
       .expect(HttpStatus.OK)
       .expect((res) => {
         expect(res.body).toEqual(event2Dto);
       });
+
+    //TODO: Why is this working?
   });
 
   function getDefaultEventDTO() {
@@ -1714,6 +1738,7 @@ describe('EventController (e2e)', () => {
       organizerId: '1',
       category: getCategory(),
       participants: 0,
+      userParticipates: false,
       address: {
         country: 'Österreich',
         city: 'Wien',

@@ -40,11 +40,15 @@ export class EventController {
     );
     return EventMapper.mapEntityToDto(
       await this.eventService.createEvent(eventEntity),
+      user.id,
     );
   }
 
   @Get('/:id')
-  async getEventById(@Param() params: any): Promise<EventDto> {
+  async getEventById(
+    @Param() params: any,
+    @User() user: AuthUser,
+  ): Promise<EventDto> {
     this.logger.log('Get Event with id: ' + params.id);
     let result;
     try {
@@ -53,16 +57,19 @@ export class EventController {
       this.logger.error(error);
       throw new NotFoundException('Can not find Event with id: ' + params.id);
     }
-    return EventMapper.mapEntityToDto(result as Required<EventEntity>);
+    return EventMapper.mapEntityToDto(result as Required<EventEntity>, user.id);
   }
 
   @Get()
-  async getEvents(@Query() query: QueryDto): Promise<EventDto[]> {
+  async getEvents(
+    @Query() query: QueryDto,
+    @User() user: AuthUser,
+  ): Promise<EventDto[]> {
     this.logger.log(`Get Events with query: ${JSON.stringify(query)}`);
     const result = await this.eventService.getEventsQueryDto(query);
     this.logger.log('Result: ' + JSON.stringify(result));
     return result.map((item) =>
-      EventMapper.mapEntityToDto(item as Required<EventEntity>),
+      EventMapper.mapEntityToDto(item as Required<EventEntity>, user.id),
     );
   }
 
