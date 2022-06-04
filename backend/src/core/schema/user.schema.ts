@@ -23,7 +23,7 @@ export class UserDocument extends Document {
   @Prop({ required: true, type: String })
   email!: string;
 
-  @Prop({ required: true, type: Boolean })
+  @Prop({ required: false, type: Boolean, default: false })
   emailVerified!: boolean;
 
   @Prop({ required: false, type: String })
