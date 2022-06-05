@@ -8,7 +8,6 @@ import { Category } from '../../app/enums/category.enum';
 import { EventDto } from '../../app/dto/event.dto';
 import { environment } from '../../environments/environment';
 
-const URL_EVENT_BASE = `${environment.baseUrl}/event`;
 
 describe('EventService', () => {
   let eventService: EventService;
@@ -62,7 +61,7 @@ describe('EventService', () => {
       // Then
       httpTestingController.expectOne({
         method: 'POST',
-        url: URL_EVENT_BASE
+        url: eventService.URL_EVENT_BASE
       });
     });
   });
@@ -93,14 +92,17 @@ describe('EventService', () => {
         category: [Category.SALSA]
       }];
 
-      eventService.getEvents().subscribe(
+      let long = 40.000;
+      let lat = 31.000;
+      let radius = 100;
+      eventService.getEvents(long, lat, radius).subscribe(
         events => {
           expect(events).toEqual(expectedEvents);
         }
       );
 
       // Then
-      const req = httpTestingController.expectOne(URL_EVENT_BASE);
+      const req = httpTestingController.expectOne(`${environment.baseUrl}/event?longitude=40&latitude=31&radius=100`);
       expect(req.request.method).toEqual('GET');
 
       req.flush(expectedEvents);
@@ -140,7 +142,7 @@ describe('EventService', () => {
       );
 
       // Then
-      const req = httpTestingController.expectOne(URL_EVENT_BASE + '/1');
+      const req = httpTestingController.expectOne(eventService.URL_EVENT_BASE + '/1');
       expect(req.request.method).toEqual('GET');
 
       req.flush(expectedEvents);

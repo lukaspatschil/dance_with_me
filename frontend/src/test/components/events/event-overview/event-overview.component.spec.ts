@@ -5,22 +5,28 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventService } from '../../../../app/services/event.service';
 import { EventServiceMock } from '../../../mock/event.service.mock';
 import { RouterTestingModule } from '@angular/router/testing';
+import { GeolocationService } from '@ng-web-apis/geolocation';
+import { of } from 'rxjs';
+
 
 describe('EventOverviewComponent', () => {
   let comp: EventOverviewComponent;
   let fixture: ComponentFixture<EventOverviewComponent>;
 
   let eventService: EventService;
+  let geoService: GeolocationService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ EventOverviewComponent ],
       imports: [ HttpClientTestingModule, RouterTestingModule],
-      providers: [{ provide: EventService, useClass: EventServiceMock }]
+      providers: [{ provide: EventService, useClass: EventServiceMock },
+        { provide: GeolocationService, useValue: of({ coords: { latitude: 1, longitude: 1 } }) }]
     })
       .compileComponents();
 
     eventService = TestBed.inject(EventService);
+    geoService = TestBed.inject(GeolocationService);
   });
 
   beforeEach(() => {
@@ -40,7 +46,15 @@ describe('EventOverviewComponent', () => {
       comp.getEvents();
 
       // Then
-      expect(eventService.getEvents).toHaveBeenCalledTimes(2);
+      expect(eventService.getEvents).toHaveBeenCalled();
+    });
+    it('should subscribe to user position',  () => {
+      //When
+      jest.spyOn(geoService, 'subscribe');
+      comp.getEvents();
+
+      // Then
+      expect(geoService.subscribe).toHaveBeenCalled();
     });
   });
 
