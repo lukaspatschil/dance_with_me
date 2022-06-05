@@ -22,6 +22,7 @@ import { CoreModule } from './core/core.module';
 import { EventDetailComponent } from './components/events/event-detail/event-detail.component';
 import { UserDetailComponent } from './components/user/user-detail/user-detail.component';
 import { PaymentComponent } from './components/payment/payment.component';
+import { EventOverviewMapComponent } from './components/events/event-overview-map/event-overview-map.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { PaymentComponent } from './components/payment/payment.component';
     CreateEventPageComponent,
     LandingComponent,
     EventOverviewComponent,
+    EventOverviewMapComponent,
     EventDetailComponent,
     ImageAccessorDirective,
     UserDetailComponent,

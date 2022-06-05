@@ -13,7 +13,6 @@ describe('EventService', () => {
   let eventService: EventService;
   let httpTestingController: HttpTestingController;
 
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
@@ -147,6 +146,5 @@ describe('EventService', () => {
 
       req.flush(expectedEvents);
     });
-
   });
 });

@@ -16,6 +16,9 @@ module.exports = {
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths || {}, {
     prefix: '<rootDir>/'
   }),
+  transformIgnorePatterns:  [
+     "/node_modules/(?!ol).+\.js$, node_modules/(?!(ol|ol\\\\-ext)/)\", \"node_modules/(?!(ol\\\\-ext)/)"
+  ],
   coverageThreshold: {
     global: {
       branches: 80,
