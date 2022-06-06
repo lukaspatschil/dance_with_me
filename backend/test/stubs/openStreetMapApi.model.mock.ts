@@ -7,10 +7,7 @@ import {
   validLatitude,
   validLongitude,
 } from '../test_data/openStreetMapApi.testData';
-import {
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { InternalServerErrorException } from '@nestjs/common';
 import { AddressEntity } from '../../src/core/entity/address.entity';
 import { NotFoundError } from '../../src/core/error/notFound.error';
 
