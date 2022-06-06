@@ -19,6 +19,7 @@ import {
 import { validObjectId1 } from './test_data/event.testData';
 import { RoleEnum } from '../src/core/schema/enum/role.enum';
 import * as AWS from 'aws-sdk';
+import { Neo4jService } from 'nest-neo4j/dist';
 
 /* eslint @typescript-eslint/naming-convention: 0 */
 
@@ -26,6 +27,7 @@ describe('ImageController (e2e)', () => {
   let app: INestApplication;
   let testDatabaseStub: MongoMemoryServer;
   let s3: AWS.S3;
+  let neo4J: Neo4jService;
 
   beforeEach(async () => {
     testDatabaseStub = await MongoMemoryServer.create();
@@ -53,11 +55,15 @@ describe('ImageController (e2e)', () => {
     app = moduleRef.createNestApplication();
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
+    neo4J = app.get(Neo4jService);
+    await neo4J.write('MATCH (n) DETACH DELETE (n)');
+
     await app.init();
   });
 
   afterEach(async () => {
     await testDatabaseStub.stop();
+    await neo4J.write('MATCH (n) DETACH DELETE (n)');
     await app.close();
   });
 

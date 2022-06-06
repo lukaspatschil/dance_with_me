@@ -6,13 +6,13 @@ import {
   Logger,
   Query,
 } from '@nestjs/common';
-import { QueryDto } from '../core/dto/query.dto';
 import { RecommendationService } from './recommendation.service';
 import { User } from '../auth/user.decorator';
 import { AuthUser } from '../auth/interfaces';
 import { EventDto } from '../core/dto/event.dto';
 import { EventMapper } from '../core/mapper/event.mapper';
 import { EventEntity } from '../core/entity/event.entity';
+import { RecommendationQueryDto } from '../core/dto/recommendationQuery.dto';
 
 @Controller('recommendation')
 export class RecommendationController {
@@ -23,13 +23,13 @@ export class RecommendationController {
   @Get()
   @HttpCode(HttpStatus.OK)
   async getRecommendations(
-    @Query() queryDto: QueryDto,
+    @Query() queryDto: RecommendationQueryDto,
     @User() user: AuthUser,
   ): Promise<EventDto[]> {
     this.logger.log(
-      'get recommendations for user {} with query: {}',
-      JSON.stringify(user),
-      JSON.stringify(queryDto),
+      `get recommendations for user ${JSON.stringify(
+        user,
+      )} with query: ${JSON.stringify(queryDto)}`,
     );
     const result = await this.recommendationService.getRecommendation(
       queryDto,

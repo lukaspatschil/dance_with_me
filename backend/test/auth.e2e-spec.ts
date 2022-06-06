@@ -12,6 +12,7 @@ import { interceptOauth } from './stubs/oauth.mock';
 import { fingerPrintCookieName } from '../src/auth/constants';
 import { AuthService } from '../src/auth/auth.service';
 import { UserMapper } from '../src/core/mapper/user.mapper';
+import { Neo4jService } from 'nest-neo4j/dist';
 
 /* eslint @typescript-eslint/naming-convention: 0 */
 
@@ -20,6 +21,7 @@ describe('AuthController (e2e)', () => {
   let app: INestApplication;
   let configService: ConfigService;
   let authService: AuthService;
+  let neo4J: Neo4jService;
 
   let testDatabaseStub: MongoMemoryServer;
   const userModel: Model<UserDocument> = model<UserDocument>(
@@ -58,10 +60,16 @@ describe('AuthController (e2e)', () => {
 
     configService = app.get<ConfigService>(ConfigService);
     authService = app.get<AuthService>(AuthService);
+
+    neo4J = app.get(Neo4jService);
+    await neo4J.write('MATCH (n) DETACH DELETE (n)');
+    await neo4J.write('MATCH (n) DELETE (n)');
   });
 
   afterAll(async () => {
     await disconnect();
+    await neo4J.write('MATCH (n) DETACH DELETE (n)');
+    await neo4J.write('MATCH (n) DELETE (n)');
     await testDatabaseStub.stop();
     await app.close();
   });

@@ -18,7 +18,7 @@ import { NotFoundError } from '../core/error/notFound.error';
 import { EventService } from '../event/event.service';
 import { EventServiceForUserServiceMock } from '../../test/stubs/event.service.for.User.service.mock';
 import { Neo4jService } from 'nest-neo4j/dist';
-import { Neo4jUserServiceMock } from '../../test/stubs/neo4j.user.service.mock';
+import { UserNeo4jServiceMock } from '../../test/stubs/user.neo4j.service.mock';
 
 /* eslint @typescript-eslint/naming-convention: 0 */
 
@@ -40,7 +40,7 @@ describe('UserService', () => {
         },
         {
           provide: Neo4jService,
-          useClass: Neo4jUserServiceMock,
+          useClass: UserNeo4jServiceMock,
         },
       ],
     }).compile();

@@ -60,15 +60,18 @@ describe('EventController (e2e)', () => {
 
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
-    neo4J = app.get(Neo4jService);
-
     await app.init();
+
+    neo4J = app.get(Neo4jService);
+    await neo4J.write('MATCH (n) DETACH DELETE (n)');
+    await neo4J.write('MATCH (n) DELETE (n)');
   });
 
   afterEach(async () => {
     await disconnect();
     await testDatabaseStub.stop();
-    await neo4J.write('MATCH (n) DETACH DELETE n');
+    await neo4J.write('MATCH (n) DETACH DELETE (n)');
+    await neo4J.write('MATCH (n) DELETE (n)');
     await app.close();
   });
 

@@ -15,12 +15,13 @@ import { AccessTokenGuard } from '../src/auth/auth.guard';
 import { AuthGuardMock, mockedAuthHeader } from './stubs/auth.guard.mock';
 import { AuthUser } from '../src/auth/interfaces';
 import { validObjectId2 } from './test_data/event.testData';
+import { Neo4jService } from 'nest-neo4j/dist';
 
 /* eslint @typescript-eslint/naming-convention: 0 */
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
-
+  let neo4J: Neo4jService;
   let testDatabaseStub: MongoMemoryServer;
   const userModel: Model<UserDocument> = model<UserDocument>(
     'userdocuments',
@@ -40,6 +41,7 @@ describe('UserController (e2e)', () => {
       .compile();
 
     app = moduleRef.createNestApplication();
+    neo4J = moduleRef.get(Neo4jService);
 
     app.useGlobalPipes(new ValidationPipe());
 
@@ -49,6 +51,7 @@ describe('UserController (e2e)', () => {
   afterEach(async () => {
     await disconnect();
     await testDatabaseStub.stop();
+    await neo4J.write('MATCH (n) DETACH DELETE (n)');
     await app.close();
   });
 

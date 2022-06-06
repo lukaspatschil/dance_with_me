@@ -5,9 +5,11 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import { Test } from '@nestjs/testing';
 import { AccessTokenGuard } from '../src/auth/auth.guard';
 import { AuthGuardMock } from './stubs/auth.guard.mock';
+import { Neo4jService } from 'nest-neo4j/dist';
 
 describe('PaymentController (e2e)', () => {
   let app: INestApplication;
+  let neo4J: Neo4jService;
 
   let testDatabaseStub: MongoMemoryServer;
 
@@ -27,10 +29,16 @@ describe('PaymentController (e2e)', () => {
     app.useGlobalPipes(new ValidationPipe());
 
     await app.init();
+
+    neo4J = app.get(Neo4jService);
+    await neo4J.write('MATCH (n) DETACH DELETE (n)');
+    await neo4J.write('MATCH (n) DELETE (n)');
   });
 
   afterEach(async () => {
     await testDatabaseStub.stop();
+    await neo4J.write('MATCH (n) DETACH DELETE (n)');
+    await neo4J.write('MATCH (n) DELETE (n)');
     await app.close();
   });
 

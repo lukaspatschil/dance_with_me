@@ -1,4 +1,4 @@
-export class Neo4jUserServiceMock {
+export class EventNeo4jServiceMock {
   write = jest.fn(() => {
     return Promise.resolve();
   });

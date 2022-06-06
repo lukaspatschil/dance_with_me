@@ -32,7 +32,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { NotFoundError } from '../core/error/notFound.error';
-import { LocationEntity } from '../core/entity//location.entity';
+import { LocationEntity } from '../core/entity/location.entity';
 import { CategoryEnum } from '../core/schema/enum/category.enum';
 import {
   invalidObjectId,
@@ -45,7 +45,7 @@ import { RoleEnum } from '../core/schema/enum/role.enum';
 import { AlreadyParticipatedConflictError } from '../core/error/alreadyParticipatedConflict.error';
 import { NotYetParticipatedConflictError } from '../core/error/notYetParticipatedConflict.error';
 import { Neo4jService } from 'nest-neo4j/dist';
-import { Neo4jEventServiceMock } from '../../test/stubs/neo4j.event.service.mock';
+import { EventNeo4jServiceMock } from '../../test/stubs/event.neo4j.service.mock';
 
 describe('EventService', () => {
   let sut: EventService;
@@ -65,7 +65,7 @@ describe('EventService', () => {
         },
         {
           provide: Neo4jService,
-          useClass: Neo4jEventServiceMock,
+          useClass: EventNeo4jServiceMock,
         },
       ],
     }).compile();
@@ -424,8 +424,6 @@ describe('EventService', () => {
       // Then
       await expect(result).rejects.toThrow(NotYetParticipatedConflictError);
     });
-
-    //TODO: add testcases
   });
 
   describe('deleteUsersFromFutureEvents', () => {
