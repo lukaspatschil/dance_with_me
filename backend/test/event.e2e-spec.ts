@@ -1744,6 +1744,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: [],
+        userParticipates: false,
       });
       await event1.save();
 
@@ -1764,6 +1765,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: 0,
+        userParticipates: false,
       };
 
       const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
@@ -1797,6 +1799,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: [],
+        userParticipates: false,
       });
       await event1.save();
 
@@ -1817,6 +1820,7 @@ describe('EventController (e2e)', () => {
         category: ['Merengue'],
         address: validAddress,
         participants: 0,
+        userParticipates: false,
       };
 
       const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
@@ -1852,6 +1856,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: [],
+        userParticipates: false,
       });
       await event1.save();
 
@@ -1872,6 +1877,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: 0,
+        userParticipates: false,
       };
 
       const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
@@ -1908,6 +1914,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: [],
+        userParticipates: false,
       });
       await event1.save();
 
@@ -1928,6 +1935,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validUpdateAddress,
         participants: 0,
+        userParticipates: false,
       };
 
       const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
@@ -1961,6 +1969,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: [],
+        userParticipates: false,
       });
       await event1.save();
 
@@ -1981,6 +1990,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: 0,
+        userParticipates: false,
       };
 
       const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
@@ -2013,6 +2023,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: [],
+        userParticipates: false,
       });
       await event1.save();
 
@@ -2033,6 +2044,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: 0,
+        userParticipates: false,
       };
 
       const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
@@ -2065,6 +2077,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: [],
+        userParticipates: false,
       });
       await event1.save();
 
@@ -2096,6 +2109,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: [],
+        userParticipates: false,
       });
       await event1.save();
 
@@ -2127,6 +2141,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: [],
+        userParticipates: false,
       });
       await event1.save();
 
@@ -2159,6 +2174,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: [],
+        userParticipates: false,
       });
       await event1.save();
 

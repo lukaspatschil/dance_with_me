@@ -52,13 +52,7 @@ export class EventController {
     @User() user: AuthUser,
   ): Promise<EventDto> {
     this.logger.log('Get Event with id: ' + params.id);
-    let result;
-    try {
-      result = await this.eventService.getEventById(params.id);
-    } catch (error) {
-      this.logger.error(error);
-      throw new NotFoundException('Can not find Event with id: ' + params.id);
-    }
+    const result = await this.eventService.getEventById(params.id);
     return EventMapper.mapEntityToDto(result as Required<EventEntity>, user.id);
   }
 

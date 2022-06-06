@@ -58,18 +58,6 @@ describe('EventController', () => {
       expect(eventServiceMock.getEventById).toHaveBeenCalled();
     });
 
-    it('should call getEventById and throw an NotFoundError', async () => {
-      // Given
-      const params = { id: '-1' };
-
-      // When
-      const result = async () =>
-        await sut.getEventById(params, getDefaultUser());
-
-      // Then
-      await expect(result).rejects.toThrow(NotFoundException);
-    });
-
     it('should get an single event where the user participates and return a correct value for the userParticipates field', async () => {
       // Given
       const params = { id: USER_PARTICIPATES_IN_EVENT_EVENT_ID };
