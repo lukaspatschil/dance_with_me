@@ -5,9 +5,3 @@ export class LocationEntity {
 
   coordinates!: [number, number];
 }
-
-export class UpdateLocationEntity {
-  type?: GeolocationEnum;
-  coordinates?: [number, number] | undefined;
-  //coordinates?: (number | undefined)[];
-}

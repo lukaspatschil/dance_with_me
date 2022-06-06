@@ -100,7 +100,7 @@ export class EventMapper {
     newEvent.startDateTime = event.startDateTime;
     newEvent.endDateTime = event.endDateTime;
     newEvent.location = new LocationEntity();
-    if (event.location && event.location.longitude && event.location.latitude) {
+    if (event.location?.longitude && event.location.latitude) {
       newEvent.location.type = GeolocationEnum.POINT;
       newEvent.location.coordinates = [
         event.location.longitude,
@@ -175,32 +175,6 @@ export class EventMapper {
     newEvent.category = event.category;
     newEvent.participants = event.participants.length;
     newEvent.userParticipates = event.participants.includes(userid);
-
-    return newEvent;
-  }
-
-  static mapEntityToDtoUpdate(
-    event: Required<UpdateEventEntity>,
-  ): UpdateEventDto {
-    const newEvent = new UpdateEventDto();
-    newEvent.name = event.name;
-    newEvent.description = event.description;
-    newEvent.startDateTime = event.startDateTime;
-    newEvent.endDateTime = event.endDateTime;
-    newEvent.location = new LocationDto();
-    if (event.location != null) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore currently not using the correct type
-      newEvent.location.latitude = event.location.coordinates[0];
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore currently not using the correct type
-      newEvent.location.longitude = event.location.coordinates[1];
-    }
-    newEvent.price = event.price;
-    newEvent.public = event.public;
-    newEvent.imageId = event.imageId;
-    newEvent.organizerId = event.organizerId;
-    newEvent.category = event.category;
 
     return newEvent;
   }

@@ -5,7 +5,6 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  InternalServerErrorException,
   Logger,
   NotFoundException,
   Param,
@@ -117,11 +116,12 @@ export class EventController {
     await this.eventService.deleteParticipation(eventId, user);
   }
 
-  @Patch(':id')
-  @HttpCode(200)
+  @Patch('/:id')
+  @HttpCode(HttpStatus.OK)
   async updateEvent(
     @Param('id') id: string,
     @Body() updateEventDto: UpdateEventDto,
+    @User() user: AuthUser,
   ) {
     this.logger.log(`Updating event with id ${id}`);
 
@@ -129,15 +129,7 @@ export class EventController {
       (updateEventDto.startDateTime && !updateEventDto.endDateTime) ||
       (!updateEventDto.startDateTime && updateEventDto.endDateTime)
     ) {
-      let requestedEvent;
-      try {
-        requestedEvent = await this.eventService.getEventById(id);
-      } catch (error) {
-        this.logger.error(error);
-        throw new NotFoundException(
-          'Can not find Event with id for location update: ' + id,
-        );
-      }
+      const requestedEvent = await this.eventService.getEventById(id);
 
       if (updateEventDto.startDateTime) {
         updateEventDto.endDateTime = requestedEvent.endDateTime;
@@ -151,6 +143,7 @@ export class EventController {
         id,
         EventMapper.mapDtoToEntityUpdate(updateEventDto),
       ),
+      user.id,
     );
   }
 }

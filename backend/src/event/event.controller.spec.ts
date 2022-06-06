@@ -16,15 +16,12 @@ import {
   validEventDto,
   validObjectId1,
   nonExistingObjectId,
-  validEventUpdateEntityStartDateTime,
-  validEventUpdateDtoStartDateTime,
-  validEventUpdateDtoEndDateTime,
-  validEventUpdateEntityEndDateTime,
 } from '../../test/test_data/event.testData';
 import { NotFoundException } from '@nestjs/common';
 import { UserEntity } from '../core/entity/user.entity';
 import { RoleEnum } from '../core/schema/enum/role.enum';
 import { CategoryEnum } from '../core/schema/enum/category.enum';
+import { UpdateEventDto } from '../core/dto/updateEvent.dto';
 
 describe('EventController', () => {
   let sut: EventController;
@@ -231,8 +228,15 @@ describe('EventController', () => {
 
   describe('updateEvent', () => {
     it('should call updateEvent', async () => {
-      //When
-      await sut.updateEvent(validObjectId1.toString(), validEventUpdateDto);
+      // Given
+      const user = getDefaultUser();
+
+      // When
+      await sut.updateEvent(
+        validObjectId1.toString(),
+        validEventUpdateDto,
+        user,
+      );
 
       //Then
       expect(eventServiceMock.updateEvent).toHaveBeenCalledWith(
@@ -243,31 +247,25 @@ describe('EventController', () => {
 
     it('should call the service and return updated event', async () => {
       // Given
-      const expectedUpdatedEventDto = validEventDto;
-      expectedUpdatedEventDto.id = validObjectId1.toString();
-      const updateEvent = validEventUpdateEntity;
-      if (updateEvent.name) {
-        expectedUpdatedEventDto.name = updateEvent.name;
-      }
-      if (updateEvent.description) {
-        expectedUpdatedEventDto.description = updateEvent.description;
-      }
-      if (updateEvent.price) {
-        expectedUpdatedEventDto.price = updateEvent.price;
-      }
-      if (updateEvent.imageId) {
-        expectedUpdatedEventDto.imageId = updateEvent.imageId;
-      }
-      if (updateEvent.organizerId) {
-        expectedUpdatedEventDto.organizerId = updateEvent.organizerId;
-      }
-      if (updateEvent.category) {
-        expectedUpdatedEventDto.category = updateEvent.category;
-      }
+      const user = getDefaultUser();
+
+      const tmp = validEventDto();
+      const expectedUpdatedEventDto = {
+        ...tmp,
+        id: validObjectId1.toString(),
+        name: validEventUpdateDto.name,
+        description: validEventUpdateDto.description,
+        price: validEventUpdateDto.price,
+        imageId: validEventUpdateDto.imageId,
+        organizerId: validEventUpdateDto.organizerId,
+        category: validEventUpdateDto.category,
+      };
+
       // When
       const response = await sut.updateEvent(
         validObjectId1.toString(),
         validEventUpdateDto,
+        user,
       );
 
       //Then
@@ -276,17 +274,15 @@ describe('EventController', () => {
 
     it('should call the service to update the startDateTime and return updated event', async () => {
       // Given
-      const expectedUpdatedEventDto = validEventDto;
+      const user = getDefaultUser();
+      const expectedUpdatedEventDto = validEventDto();
       expectedUpdatedEventDto.id = '-2';
-      const updateEvent = validEventUpdateEntityStartDateTime;
-      if (updateEvent.startDateTime) {
-        expectedUpdatedEventDto.startDateTime = updateEvent.startDateTime;
-      }
+      const updateEvent = new UpdateEventDto();
+      updateEvent.startDateTime = new Date('2023-01-01 11:00:00');
+      expectedUpdatedEventDto.startDateTime = new Date('2023-01-01 11:00:00');
+
       // When
-      const response = await sut.updateEvent(
-        '-2',
-        validEventUpdateDtoStartDateTime,
-      );
+      const response = await sut.updateEvent('-2', updateEvent, user);
 
       //Then
       expect(response).toEqual(expectedUpdatedEventDto);
@@ -294,17 +290,14 @@ describe('EventController', () => {
 
     it('should call the service to update the endDateTime and return updated event', async () => {
       // Given
-      const expectedUpdatedEventDto = validEventDto;
+      const user = getDefaultUser();
+      const expectedUpdatedEventDto = validEventDto();
       expectedUpdatedEventDto.id = '-2';
-      const updateEvent = validEventUpdateEntityEndDateTime;
-      if (updateEvent.endDateTime) {
-        expectedUpdatedEventDto.endDateTime = updateEvent.endDateTime;
-      }
+      const updateEvent = new UpdateEventDto();
+      updateEvent.endDateTime = new Date('2025-01-01 11:00:00');
+      expectedUpdatedEventDto.endDateTime = new Date('2025-01-01 11:00:00');
       // When
-      const response = await sut.updateEvent(
-        '-2',
-        validEventUpdateDtoEndDateTime,
-      );
+      const response = await sut.updateEvent('-2', updateEvent, user);
 
       //Then
       expect(response).toEqual(expectedUpdatedEventDto);

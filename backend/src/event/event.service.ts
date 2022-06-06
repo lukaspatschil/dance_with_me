@@ -16,8 +16,6 @@ import { OpenStreetMapApiService } from '../openStreetMapApi/openStreetMapApi.se
 import { AuthUser } from '../auth/interfaces';
 import { NotYetParticipatedConflictError } from '../core/error/notYetParticipatedConflict.error';
 import { AlreadyParticipatedConflictError } from '../core/error/alreadyParticipatedConflict.error';
-import { ValidationError } from 'class-validator';
-import { NotFoundError } from 'rxjs';
 import { Neo4jService } from 'nest-neo4j';
 
 const DEFAULT_TAKE = 50;

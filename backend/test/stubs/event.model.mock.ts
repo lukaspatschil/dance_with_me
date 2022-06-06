@@ -6,12 +6,11 @@ import {
   invalidObjectId,
   nonExistingObjectId,
 } from '../test_data/event.testData';
-import { QueryOptions } from 'mongoose';
+import { QueryOptions, UpdateQuery } from 'mongoose';
 import { validAddress } from '../test_data/openStreetMapApi.testData';
-import { internalErrorResponse } from '../test_data/httpResponse.testData';
 import { CategoryEnum } from '../../src/core/schema/enum/category.enum';
-import { UpdateQuery } from 'mongoose';
 import { EventDocument } from '../../src/core/schema/event.schema';
+import { InternalServerErrorException } from '@nestjs/common';
 
 /* eslint @typescript-eslint/no-magic-numbers: 0 */
 /* eslint @typescript-eslint/naming-convention: 0 */
@@ -121,17 +120,15 @@ export class EventModelMock {
             ];
           }
           if (dict['address']) {
-            event.address.country = dict['address']['country'] as string;
-            event.address.city = dict['address']['city'] as string;
-            event.address.postalcode = dict['address']['postalcode'] as string;
-            event.address.street = dict['address']['street'] as string;
+            event.address.country = dict['address'].country as string;
+            event.address.city = dict['address'].city as string;
+            event.address.postalcode = dict['address'].postalcode as string;
+            event.address.street = dict['address'].street as string;
             if (dict['address'].housenumber) {
-              event.address.housenumber = dict['address'][
-                'housenumber'
-              ] as string;
+              event.address.housenumber = dict['address'].housenumber as string;
             }
             if (dict['address'].addition) {
-              event.address.addition = dict['address']['addition'] as string;
+              event.address.addition = dict['address'].addition as string;
             }
           }
           if (dict['price']) {
@@ -154,7 +151,7 @@ export class EventModelMock {
           }
           return Promise.resolve(event);
         } else if (id === invalidObjectId.toString()) {
-          return Promise.resolve(internalErrorResponse);
+          throw new InternalServerErrorException();
         } else {
           return null;
         }
@@ -245,7 +242,7 @@ export class EventModelMock {
     return Promise.resolve(event);
   });
 
-  updateMany = jest.fn((filter: any, update: any) => {
+  updateMany = jest.fn(() => {
     return Promise.resolve();
   });
 }

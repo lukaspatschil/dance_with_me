@@ -1727,7 +1727,7 @@ describe('EventController (e2e)', () => {
   describe('/event (PATCH)', () => {
     it('should return 200 (change name of event)', async () => {
       // Give
-      const event1 = new Event({
+      const event1 = new eventModel({
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
@@ -1780,7 +1780,7 @@ describe('EventController (e2e)', () => {
 
     it('should return 200 (change multiple information of event)', async () => {
       // Give
-      const event1 = new Event({
+      const event1 = new eventModel({
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
@@ -1835,7 +1835,7 @@ describe('EventController (e2e)', () => {
 
     it('should return 200 (change location information of event)', async () => {
       // Give
-      const event1 = new Event({
+      const event1 = new eventModel({
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
@@ -1891,7 +1891,7 @@ describe('EventController (e2e)', () => {
 
     it('should return 200 (change address information of event)', async () => {
       // Give
-      const event1 = new Event({
+      const event1 = new eventModel({
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
@@ -1944,7 +1944,7 @@ describe('EventController (e2e)', () => {
 
     it('should return 200 (change startDateTime of event)', async () => {
       // Give
-      const event1 = new Event({
+      const event1 = new eventModel({
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
@@ -1996,7 +1996,7 @@ describe('EventController (e2e)', () => {
 
     it('should return 200 (change endDateTime of event)', async () => {
       // Give
-      const event1 = new Event({
+      const event1 = new eventModel({
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
@@ -2048,7 +2048,7 @@ describe('EventController (e2e)', () => {
 
     it('should return 400 (startDateTime after endDateTime of event)', async () => {
       // Give
-      const event1 = new Event({
+      const event1 = new eventModel({
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
@@ -2079,7 +2079,7 @@ describe('EventController (e2e)', () => {
 
     it('should return 400 (endDateTime before startDateTime of event)', async () => {
       // Give
-      const event1 = new Event({
+      const event1 = new eventModel({
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
@@ -2110,7 +2110,7 @@ describe('EventController (e2e)', () => {
 
     it('should return 400 (startDateTime after endDateTime of event, both given)', async () => {
       // Give
-      const event1 = new Event({
+      const event1 = new eventModel({
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',
@@ -2142,7 +2142,7 @@ describe('EventController (e2e)', () => {
 
     it('should return 400 (startDateTime in the past)', async () => {
       // Give
-      const event1 = new Event({
+      const event1 = new eventModel({
         _id: validObjectId1.toString(),
         name: 'test1',
         description: 'Test Event Description',

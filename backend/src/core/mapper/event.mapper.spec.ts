@@ -6,6 +6,8 @@ import { GeolocationEnum } from '../schema/enum/geolocation.enum';
 import { EventDto } from '../dto/event.dto';
 import { EventDocument } from '../schema/event.schema';
 import { CategoryEnum } from '../schema/enum/category.enum';
+import { UpdateEventDto } from '../dto/updateEvent.dto';
+import { UpdateEventEntity } from '../entity/updateEvent.entity';
 
 /* eslint @typescript-eslint/no-magic-numbers: 0 */
 
@@ -108,6 +110,30 @@ describe('EventMapper', () => {
 
       // Then
       expect(result).toEqual(getDefaultEventEntity());
+    });
+  });
+
+  describe('mapDtoToEntityUpdate', () => {
+    it('should return correct Entity on partial Update', () => {
+      // Given
+      const updateEventDto = getDefaultUpdateEventDtoPartial();
+
+      // When
+      const result = EventMapper.mapDtoToEntityUpdate(updateEventDto);
+
+      // Then
+      expect(result).toEqual(getDefaultUpdateEventEntityPartial());
+    });
+
+    it('should return correct Entity on complete Update', () => {
+      // Given
+      const updateEventDto = getDefaultUpdateEventDtoAll();
+
+      // When
+      const result = EventMapper.mapDtoToEntityUpdate(updateEventDto);
+
+      // Then
+      expect(result).toEqual(getDefaultUpdateEventEntityAll());
     });
   });
 
@@ -296,5 +322,87 @@ describe('EventMapper', () => {
 
   function getDefaultOrganizerId(): string {
     return '1';
+  }
+
+  function getDefaultUpdateEventDtoAll(): UpdateEventDto {
+    return {
+      name: 'Updated Test Name',
+      description: 'Updated Test description',
+      startDateTime: new Date('2020-01-01 10:00'),
+      endDateTime: new Date('2020-01-01 12:00'),
+      location: {
+        longitude: -171.23794,
+        latitude: 8.54529,
+      },
+      price: 21.5,
+      public: true,
+      imageId: '2',
+      organizerId: '2',
+      category: [CategoryEnum.BACHATA],
+      address: {
+        country: 'Deutschland',
+        city: 'Hamburg',
+        postalcode: '20357',
+        street: 'Schulterblatt',
+        housenumber: '71',
+      },
+    };
+  }
+
+  function getDefaultUpdateEventDtoPartial(): UpdateEventDto {
+    return {
+      name: 'Updated Test Name',
+      description: 'Updated Test description',
+      startDateTime: undefined,
+      endDateTime: undefined,
+      location: undefined,
+      price: undefined,
+      public: undefined,
+      imageId: undefined,
+      organizerId: undefined,
+      category: undefined,
+      address: undefined,
+    };
+  }
+
+  function getDefaultUpdateEventEntityPartial(): UpdateEventEntity {
+    return {
+      name: 'Updated Test Name',
+      description: 'Updated Test description',
+      startDateTime: undefined,
+      endDateTime: undefined,
+      location: undefined,
+      price: 21.5,
+      public: undefined,
+      imageId: undefined,
+      organizerId: undefined,
+      category: undefined,
+      address: undefined,
+    };
+  }
+
+  function getDefaultUpdateEventEntityAll(): UpdateEventEntity {
+    return {
+      name: 'Updated Test Name',
+      description: 'Updated Test description',
+      startDateTime: new Date('2020-01-01 10:00'),
+      endDateTime: new Date('2020-01-01 12:00'),
+      location: {
+        type: GeolocationEnum.POINT,
+        coordinates: [-171.23794, 8.54529],
+      },
+      price: 21.5,
+      public: true,
+      imageId: '2',
+      organizerId: '2',
+      category: [CategoryEnum.BACHATA],
+      address: {
+        country: 'Deutschland',
+        city: 'Hamburg',
+        postalcode: '20357',
+        street: 'Schulterblatt',
+        housenumber: '71',
+      },
+    };
   }
 });

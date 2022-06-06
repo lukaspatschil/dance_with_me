@@ -35,8 +35,6 @@ import {
   validEventUpdateEntity,
   invalidObjectId,
   validEventDocument,
-  invalidEventUpdateEntity1,
-  invalidEventUpdateEntity2,
 } from '../../test/test_data/event.testData';
 import {
   BadRequestException,
@@ -49,6 +47,7 @@ import { UserEntity } from '../core/entity/user.entity';
 import { RoleEnum } from '../core/schema/enum/role.enum';
 import { AlreadyParticipatedConflictError } from '../core/error/alreadyParticipatedConflict.error';
 import { NotYetParticipatedConflictError } from '../core/error/notYetParticipatedConflict.error';
+import { UpdateEventEntity } from '../core/entity/updateEvent.entity';
 import { Neo4jService } from 'nest-neo4j/dist';
 import { Neo4jEventServiceMock } from '../../test/stubs/neo4j.event.service.mock';
 
@@ -297,27 +296,17 @@ describe('EventService', () => {
 
     it('should call the service and update an event', async () => {
       // Given
-      const expectedUpdatedEvent = validEventEntity;
-      expectedUpdatedEvent.id = validObjectId1.toString();
       const updateEvent = validEventUpdateEntity;
-      if (updateEvent.name) {
-        expectedUpdatedEvent.name = updateEvent.name;
-      }
-      if (updateEvent.description) {
-        expectedUpdatedEvent.description = updateEvent.description;
-      }
-      if (updateEvent.price) {
-        expectedUpdatedEvent.price = updateEvent.price;
-      }
-      if (updateEvent.imageId) {
-        expectedUpdatedEvent.imageId = updateEvent.imageId;
-      }
-      if (updateEvent.organizerId) {
-        expectedUpdatedEvent.organizerId = updateEvent.organizerId;
-      }
-      if (updateEvent.category) {
-        expectedUpdatedEvent.category = updateEvent.category;
-      }
+      const expectedUpdatedEvent = {
+        ...validEventEntity(),
+        id: validObjectId1.toString(),
+        name: updateEvent.name,
+        description: updateEvent.description,
+        price: updateEvent.price,
+        imageId: updateEvent.imageId,
+        organizerId: updateEvent.organizerId,
+        category: updateEvent.category,
+      };
 
       // When
       const response = await sut.updateEvent(
@@ -341,7 +330,7 @@ describe('EventService', () => {
       await expect(response).rejects.toThrow(NotFoundError);
     });
 
-    it('should return an internal error when requesting a malformed id', async () => {
+    it('should return a not found error when requesting a malformed id', async () => {
       // When
       const response = async () =>
         await sut.updateEvent(
@@ -353,13 +342,15 @@ describe('EventService', () => {
       await expect(response).rejects.toThrow(NotFoundError);
     });
 
-    it('should return an internal error when trying to set a startDateTime later than the endDateTime', async () => {
+    it('should return an bad request error when trying to set a startDateTime later than the endDateTime', async () => {
+      // Given
+      const updateEvent = new UpdateEventEntity();
+      updateEvent.startDateTime = new Date('2023-01-01 18:00:00');
+      updateEvent.endDateTime = new Date('2023-01-01 12:00:00');
+
       // When
       const response = async () =>
-        await sut.updateEvent(
-          validObjectId1.toString(),
-          invalidEventUpdateEntity1,
-        );
+        await sut.updateEvent(validObjectId1.toString(), updateEvent);
 
       // Then
       await expect(response).rejects.toThrow(
@@ -367,19 +358,35 @@ describe('EventService', () => {
       );
     });
 
-    it('should return an internal error when trying to set a startDateTime earlier than the current Time', async () => {
+    it('should return an bad request error when trying to set a startDateTime earlier than the current Time', async () => {
+      // Given
+      const updateEvent = new UpdateEventEntity();
+      updateEvent.startDateTime = new Date('2020-01-01 18:00:00');
+      updateEvent.endDateTime = new Date('2023-01-01 12:00:00');
+
       // When
       const response = async () =>
-        await sut.updateEvent(
-          validObjectId1.toString(),
-          invalidEventUpdateEntity2,
-        );
+        await sut.updateEvent(validObjectId1.toString(), updateEvent);
 
       // Then
       await expect(response).rejects.toThrow(
         new BadRequestException(
           'startDateTime must be before the current time',
         ),
+      );
+    });
+
+    it('should return an internal error if event couldnt be updated', async () => {
+      // When
+      const response = async () =>
+        await sut.updateEvent(
+          invalidObjectId.toString(),
+          validEventUpdateEntity,
+        );
+
+      // Then
+      await expect(response).rejects.toThrow(
+        new InternalServerErrorException(),
       );
     });
   });
