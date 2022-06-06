@@ -356,7 +356,7 @@ describe('EventMapper', () => {
       startDateTime: undefined,
       endDateTime: undefined,
       location: undefined,
-      price: undefined,
+      price: 21.5,
       public: undefined,
       imageId: undefined,
       organizerId: undefined,
