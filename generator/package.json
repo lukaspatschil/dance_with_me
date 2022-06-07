@@ -1,0 +1,21 @@
+{
+  "name": "generator",
+  "version": "1.0.0",
+  "description": "Data generator creating events and users",
+  "main": "index.js",
+  "scripts": {
+    "generate": "node index.js",
+    "participate": "node participate.js "
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://reset.inso.tuwien.ac.at/repo/2022ss-ase-pr-group/22ss-ase-pr-inso-02.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@faker-js/faker": "^7.1.0",
+    "mongodb": "^4.6.0",
+    "neo4j-driver": "^4.4.5"
+  }
+}

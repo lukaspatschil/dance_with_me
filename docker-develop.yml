@@ -42,6 +42,12 @@ services:
       - mongodb_data_container:/data/db
     networks:
       - dev-internal
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo dev-database:27017/test --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
 
   mongo-express:
     image: mongo-express
@@ -52,6 +58,23 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://dev-database:27017/
     networks:
       - dev-internal
+
+  data-generator:
+    build:
+      context: .
+      dockerfile: ./generator/Dockerfile
+    depends_on:
+      dev-database:
+        condition: service_healthy
+      dev-neo4j:
+        condition: service_healthy
+    networks:
+      - dev-internal
+    environment:
+      MONGO_URL: mongodb://dev-database:27017/
+      NEO4J_USERNAME: neo4j
+      NEO4J_PASSWORD: dancewithme
+      NEO4J_ENDPOINT: bolt://dev-neo4j:7687
 
   minio-server:
     container_name: minio-server
@@ -82,6 +105,12 @@ services:
     env_file:
       - ./develop.env
     restart: always
+    healthcheck:
+      test: wget http://localhost:7474 || exit 1
+      interval: 1s
+      timeout: 10s
+      retries: 20
+      start_period: 3s
 
 volumes:
   mongodb_data_container:
