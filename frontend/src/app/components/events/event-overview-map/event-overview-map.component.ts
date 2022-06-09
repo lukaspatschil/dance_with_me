@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { EventService } from '../../../services/event.service';
 import { EventEntity } from '../../../entities/event.entity';
 import { GeolocationService } from '@ng-web-apis/geolocation';
-import { take } from 'rxjs';
+import { first } from 'rxjs';
 import { Feature, Map, Overlay, View } from 'ol';
 import * as layer from 'ol/layer';
 import * as source from 'ol/source';
@@ -40,7 +40,10 @@ export class EventOverviewMapComponent implements OnInit {
 
   getEvents(long: number, lat: number): void {
     let radius = 10000;
-    this.eventService.getEvents(long, lat, radius).subscribe((data) => this.events = data);
+    this.eventService.getEvents(long, lat, radius).subscribe((data) => {
+      this.events = data;
+      this.initializeMap(lat, long);
+    });
   }
 
   initializeMap(currLat: number, currLng: number): void{
@@ -68,6 +71,7 @@ export class EventOverviewMapComponent implements OnInit {
         }
       }
     }
+    this.addUserPositionPoint();
   }
 
   addUserPositionPoint(): void{
@@ -110,7 +114,7 @@ export class EventOverviewMapComponent implements OnInit {
       source: new source.Vector({
         features: [
           new Feature({
-            geometry: new geom.Point(proj.fromLonLat([lat, lng])),
+            geometry: new geom.Point(proj.fromLonLat([lng, lat])),
             event: eventEntity
           })]
       }),
@@ -160,11 +164,9 @@ export class EventOverviewMapComponent implements OnInit {
   }
 
   getPosition(): void {
-    this.geolocation$.pipe(take(1)).subscribe(position => {
-      this.getEvents(position.coords.latitude, position.coords.longitude);
-      this.initializeMap(position.coords.latitude, position.coords.longitude);
-      this.addUserPositionPoint();
-    }
-    );
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    this.geolocation$.pipe(first(position => position !== null)).subscribe((position) => {
+      this.getEvents(position.coords.longitude, position.coords.latitude);
+    });
   }
 }

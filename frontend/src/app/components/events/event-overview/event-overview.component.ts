@@ -26,7 +26,8 @@ export class EventOverviewComponent implements OnInit{
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     this.geolocation$.pipe(first(position => position !== null)).subscribe((position) => {
       let radius = 10000;
-      this.eventService.getEvents(position.coords.latitude, position.coords.longitude, radius).subscribe((data) => this.events = data);
+      this.eventService.getEvents(position.coords.longitude, position.coords.latitude, radius).subscribe((data) => this.events = data);
     });
   }
+
 }
