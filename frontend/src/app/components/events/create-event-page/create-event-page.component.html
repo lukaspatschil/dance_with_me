@@ -212,7 +212,7 @@
           placeholder="{{'create.price' | translate }}"
         />
         <div translate
-             *ngIf="(price?.touched || price?.dirty)">
+             *ngIf="(price?.touched)">
           <label translate
                  *ngIf="price?.hasError('required')"
                  class="block uppercase text-red-600 text-xs font-bold mb-2">
