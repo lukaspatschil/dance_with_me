@@ -112,6 +112,7 @@ export function getEventEntityWithoutAddress(): EventEntity {
     public: true,
     imageId: '1',
     organizerId: '1',
+    organizerName: 'Smitty Werben',
     category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
     participants: [],
   };
@@ -128,6 +129,7 @@ export function getEventEntityWithoutLocation(): EventEntity {
     public: true,
     imageId: '1',
     organizerId: '1',
+    organizerName: 'Smitty Werben',
     category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
     address: validAddress,
     participants: [],
@@ -148,6 +150,7 @@ export function getEventEntityWithAddressAndLocation(): EventEntity {
     public: true,
     imageId: '1',
     organizerId: '1',
+    organizerName: 'Smitty Werben',
     category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
     address: validAddress,
     participants: [],

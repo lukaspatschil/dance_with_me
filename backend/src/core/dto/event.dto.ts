@@ -66,6 +66,9 @@ export class EventDto {
   organizerId!: string;
 
   @IsNotEmpty()
+  organizerName!: string;
+
+  @IsNotEmpty()
   @IsArray()
   @IsEnum(CategoryEnum, { each: true })
   @ArrayMinSize(1)

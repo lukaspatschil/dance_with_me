@@ -33,6 +33,7 @@ export const validEventDocument = {
   public: true,
   imageId: '1',
   organizerId: '1',
+  organizerName: 'Smitty Werben',
   category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
   participants: ['Mike', 'Pete'],
 };
@@ -60,6 +61,7 @@ export function validEventEntity(): EventEntity {
     public: true,
     imageId: '1',
     organizerId: '1',
+    organizerName: 'Smitty Werben',
     category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
     participants: ['Mike', 'Pete'],
   };
@@ -80,6 +82,7 @@ export function validEventDto(): EventDto {
     public: true,
     imageId: '1',
     organizerId: '1',
+    organizerName: 'Smitty Werben',
     category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
     participants: 2,
     address: {

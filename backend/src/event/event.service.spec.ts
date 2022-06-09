@@ -590,6 +590,7 @@ describe('EventService', () => {
     eventEntity.public = true;
     eventEntity.imageId = '1';
     eventEntity.organizerId = '1';
+    eventEntity.organizerName = 'Smitty Werben';
     eventEntity.category = [CategoryEnum.SALSA, CategoryEnum.ZOUK];
     eventEntity.address = validAddress;
     eventEntity.participants = [];
@@ -612,6 +613,7 @@ describe('EventService', () => {
       public: true,
       imageId: '1',
       organizerId: '1',
+      organizerName: 'Smitty Werben',
       category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: validAddress,
       participants: [],

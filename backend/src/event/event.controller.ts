@@ -39,6 +39,7 @@ export class EventController {
     const eventEntity = EventMapper.mapCreateDtoToEntity(
       createEventDto,
       user.id,
+      user.displayName,
     );
     return EventMapper.mapEntityToDto(
       await this.eventService.createEvent(eventEntity),
