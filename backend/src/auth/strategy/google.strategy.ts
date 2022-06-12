@@ -33,7 +33,12 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   async validate(
     accessToken: string,
     refreshToken: string,
-    profile: Profile & { emails: NonEmpty<Profile['emails']> },
+    profile: Profile & {
+      emails: NonEmpty<
+        // the types provided by the library are not correct
+        { value: string; verified: boolean }[] | Profile['emails']
+      >;
+    },
     done: VerifyCallback,
   ): Promise<void> {
     const { id, displayName, name, emails, photos, provider } = profile;
@@ -43,7 +48,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       firstName: name?.givenName,
       lastName: name?.familyName,
       email: emails[0].value,
-      emailVerified: emails[0].verified === 'true',
+      emailVerified:
+        emails[0].verified === true || emails[0].verified === 'true',
       pictureUrl: photos?.[0]?.value,
     };
     try {

@@ -23,6 +23,7 @@ export class UserMapper {
     userDto.firstName = user.firstName;
     userDto.lastName = user.lastName;
     userDto.email = user.email;
+    userDto.emailVerified = user.emailVerified;
     userDto.displayName = user.displayName;
     userDto.role = user.role;
     userDto.pictureUrl = user.pictureUrl;

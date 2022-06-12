@@ -15,6 +15,8 @@ export class UserDto {
   @IsEmail()
   email!: string;
 
+  emailVerified = false;
+
   @IsNotEmpty()
   displayName!: string;
 

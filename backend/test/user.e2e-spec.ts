@@ -176,6 +176,7 @@ describe('UserController (e2e)', () => {
           firstName: 'Tester',
           lastName: 'Tester',
           email: 'test@test.com',
+          emailVerified: false,
           pictureUrl: 'http://test.com/image.png',
         };
 
@@ -249,6 +250,7 @@ describe('UserController (e2e)', () => {
           firstName: 'Tester',
           lastName: 'Tester',
           email: 'test@test.com',
+          emailVerified: false,
           pictureUrl: 'http://test.com/image.png',
         };
 
