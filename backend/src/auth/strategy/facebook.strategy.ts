@@ -39,8 +39,8 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
   }
 
   validate: VerifyFunction = async (
-    accessToken: string,
-    refreshToken: string,
+    _accessToken: string,
+    _refreshToken: string,
     profile: Profile,
     done,
   ) => {

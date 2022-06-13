@@ -121,15 +121,11 @@ export class ImageService implements OnApplicationBootstrap {
         widthString = this.configService.get('SMALL_SIZE_WIDTH', '300');
         heightString = this.configService.get('SMALL_SIZE_HEIGHT', '300');
         break;
-      case ImageSizeEnum.MEDIUM:
-        widthString = this.configService.get('MEDIUM_SIZE_WIDTH', '500');
-        heightString = this.configService.get('MEDIUM_SIZE_HEIGHT', '500');
-        break;
       case ImageSizeEnum.LARGE:
         widthString = this.configService.get('LARGE_SIZE_WIDTH', '800');
         heightString = this.configService.get('LARGE_SIZE_HEIGHT', '800');
         break;
-      default:
+      default: // medium has the same size
         widthString = this.configService.get('MEDIUM_SIZE_WIDTH', '500');
         heightString = this.configService.get('MEDIUM_SIZE_HEIGHT', '500');
         break;

@@ -49,7 +49,6 @@ export class AuthService {
     const refreshToken = AuthService.generateRefreshToken();
 
     await this.refreshTokenModel.create({
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       _id: refreshToken,
       fingerprint: fingerPrint,
       user: user.id,
@@ -74,12 +73,12 @@ export class AuthService {
   }
 
   async forceLogout(user: AuthUser): Promise<void> {
-    await this.refreshTokenModel.deleteMany({ user: user.id });
+    await this.refreshTokenModel.deleteMany({ user: user.id }).exec();
     this.logger.log(`User ${user.id} logged out from all devices`);
   }
 
   async validateProviderUser(user: AuthProviderUser): Promise<UserEntity> {
-    return await this.userService.findAndUpdateOrCreate(user);
+    return this.userService.findAndUpdateOrCreate(user);
   }
 
   async checkAndDeleteRefreshToken(
@@ -88,7 +87,8 @@ export class AuthService {
   ): Promise<UserEntity | null> {
     const token = await this.refreshTokenModel
       .findByIdAndDelete(tokenId)
-      .populate('user');
+      .populate('user')
+      .exec();
     this.logger.log(`Refresh token found: ${token}`);
     if (!token) {
       this.logger.log('Refresh token could not be not found');

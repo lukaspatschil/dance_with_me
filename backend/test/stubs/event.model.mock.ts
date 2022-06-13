@@ -15,6 +15,17 @@ export const DBErrorId = '-2';
 export const ParticipationAlreadyStored = '-3';
 export const ParticipationNotAlreadyStored = '-4';
 
+function execWrap<T>(val: T) {
+  return {
+    exec: jest.fn(() => {
+      if (val instanceof Error) {
+        throw val;
+      }
+      return val;
+    }),
+  };
+}
+
 export class EventModelMock {
   create = jest.fn((eventEntity: EventEntity) => {
     if (eventEntity.id === '-2') {
@@ -47,12 +58,12 @@ export class EventModelMock {
 
   findById = jest.fn((id) => {
     if (id === '-1') {
-      return null;
+      return execWrap(null);
     }
     if (id === '-2') {
-      throw new Error('Random DB Error');
+      return execWrap(new Error('Random DB Error'));
     }
-    return Promise.resolve(createEventDocument());
+    return execWrap(Promise.resolve(createEventDocument()));
   });
 
   aggregate = jest.fn((pipeline) => {
@@ -65,7 +76,7 @@ export class EventModelMock {
       if (
         Object.keys(near).length === 0 ||
         Object.keys(near.near).length === 0 ||
-        near.spherical != true ||
+        !near.spherical ||
         near.near.coordinates.length != 2
       ) {
         throw new Error('Invalid pipeline');
@@ -111,7 +122,7 @@ export class EventModelMock {
       value.push(item3);
     }
 
-    return Promise.resolve(value);
+    return execWrap(Promise.resolve(value));
   });
 
   findByIdAndDelete = jest.fn((id: string) => {
@@ -119,21 +130,21 @@ export class EventModelMock {
       id === invalidObjectId.toString() ||
       id === nonExistingObjectId.toString()
     ) {
-      return Promise.resolve(null);
+      return execWrap(null);
     } else if (id === '-2') {
-      throw new Error('Random DB Error');
+      return execWrap(new Error('Random DB Error'));
     }
     const event = validEventDocument;
     event._id = id;
-    return Promise.resolve(event);
+    return execWrap(Promise.resolve(event));
   });
 
   findByIdAndUpdate = jest.fn((id: string, update: any) => {
     if (id === NotFoundErrorId) {
-      return null;
+      return execWrap(null);
     }
     if (id === DBErrorId) {
-      throw new Error('Random DB error');
+      return execWrap(new Error('Random DB error'));
     }
 
     if (update.$addToSet) {
@@ -143,9 +154,9 @@ export class EventModelMock {
         // the user already set the participation in the event
         const eventDocument = createEventDocument();
         eventDocument.participants.push(userId);
-        return eventDocument;
+        return execWrap(eventDocument);
       } else {
-        return createEventDocument();
+        return execWrap(createEventDocument());
       }
     } else {
       const userId: string = update.$pull.participants;
@@ -153,15 +164,15 @@ export class EventModelMock {
       if (id == ParticipationAlreadyStored) {
         const eventDocument = createEventDocument();
         eventDocument.participants.push(userId);
-        return eventDocument;
+        return execWrap(eventDocument);
       } else {
-        return createEventDocument();
+        return execWrap(createEventDocument());
       }
     }
   });
 
   updateMany = jest.fn(() => {
-    return Promise.resolve();
+    return execWrap(Promise.resolve());
   });
 }
 

@@ -1,7 +1,7 @@
 import { EventEntity } from '../../src/core/entity/event.entity';
 import { LocationEntity } from '../../src/core/entity/location.entity';
 import { GeolocationEnum } from '../../src/core/schema/enum/geolocation.enum';
-import { validAddress } from '../../test/test_data/openStreetMapApi.testData';
+import { validAddress } from '../test_data/openStreetMapApi.testData';
 import { CategoryEnum } from '../../src/core/schema/enum/category.enum';
 import {
   validEventDocument,
@@ -20,14 +20,14 @@ export class EventServiceMock {
     if (id === '-1') {
       throw new Error('Test Error');
     }
+
+    const eventEntity = this.getEventEntity();
     if (id === USER_PARTICIPATES_IN_EVENT_EVENT_ID) {
-      const eventEntity = this.getEventEntity();
       eventEntity.id = USER_PARTICIPATES_IN_EVENT_EVENT_ID;
       eventEntity.participants = [USER_PARTICIPATES_IN_EVENT_USER_ID];
-      return eventEntity;
+    } else {
+      eventEntity.id = id;
     }
-    const eventEntity = this.getEventEntity();
-    eventEntity.id = id;
     return eventEntity;
   });
 

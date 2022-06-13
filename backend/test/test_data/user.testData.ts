@@ -44,7 +44,7 @@ export const validUserDto: UserDto = {
 };
 
 export function createUserEntity(): UserEntity {
-  const validUserEntity2: UserEntity = {
+  return {
     id: '',
     role: RoleEnum.USER,
     displayName: 'Testo1',
@@ -54,12 +54,10 @@ export function createUserEntity(): UserEntity {
     emailVerified: false,
     pictureUrl: 'http://test.com/image.png',
   };
-
-  return validUserEntity2;
 }
 
 export function createUserDocument() {
-  const validUserDocument2 = {
+  return {
     _id: '',
     role: RoleEnum.USER,
     displayName: 'Testo1',
@@ -69,12 +67,10 @@ export function createUserDocument() {
     emailVerified: false,
     pictureUrl: 'http://test.com/image.png',
   };
-
-  return validUserDocument2;
 }
 
 export function createUserDto(): UserDto {
-  const validUserDto2: UserDto = {
+  return {
     id: '',
     firstName: 'Tester',
     lastName: 'Tester',
@@ -84,5 +80,4 @@ export function createUserDto(): UserDto {
     role: RoleEnum.USER,
     pictureUrl: 'http://test.com/image.png',
   };
-  return validUserDto2;
 }

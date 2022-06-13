@@ -98,7 +98,7 @@ export class EventService {
 
     let result;
     try {
-      const data = await this.eventModel.aggregate(aggregatePipe);
+      const data = await this.eventModel.aggregate(aggregatePipe).exec();
       result = data.map<EventEntity>(EventMapper.mapDocumentToEntity);
     } catch (e) {
       this.logger.error(e);
@@ -141,7 +141,7 @@ export class EventService {
     let event;
     try {
       this.logger.log('Get Event: ' + id.toString());
-      event = await this.eventModel.findById(id);
+      event = await this.eventModel.findById(id).exec();
     } catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException(error);
@@ -162,7 +162,7 @@ export class EventService {
 
     let result;
     try {
-      result = await this.eventModel.findByIdAndDelete(id);
+      result = await this.eventModel.findByIdAndDelete(id).exec();
       await this.neo4jService.write(`MATCH (e:Event {id: '${id}'}) DELETE e;`);
     } catch (error) {
       this.logger.error(error);
@@ -178,9 +178,11 @@ export class EventService {
 
     let result;
     try {
-      result = await this.eventModel.findByIdAndUpdate(eventId, {
-        $pull: { participants: user.id },
-      });
+      result = await this.eventModel
+        .findByIdAndUpdate(eventId, {
+          $pull: { participants: user.id },
+        })
+        .exec();
 
       const neo4jResult = await this.neo4jService.write(
         `MATCH (u:User {id: '${user.id}'})-[r:${this.PARTICIPATES_RELATIONSHIP}]->(e:Event {id: '${eventId}'}) DELETE r;`,
@@ -202,7 +204,6 @@ export class EventService {
       this.logger.error(`User with id ${user.id} did not participate`);
       throw NotYetParticipatedConflictError;
     }
-    return;
   }
 
   async createParticipation(eventId: string, user: AuthUser) {
@@ -213,9 +214,11 @@ export class EventService {
     let result;
 
     try {
-      result = await this.eventModel.findByIdAndUpdate(eventId, {
-        $addToSet: { participants: user.id },
-      });
+      result = await this.eventModel
+        .findByIdAndUpdate(eventId, {
+          $addToSet: { participants: user.id },
+        })
+        .exec();
 
       const neo4jResult = await this.neo4jService.write(
         `Match (e:Event {id: '${eventId}'}), (u:User {id: '${user.id}'}) CREATE (u)-[p:${this.PARTICIPATES_RELATIONSHIP}]->(e)`,
@@ -243,10 +246,12 @@ export class EventService {
     this.logger.log(`Delete participation for future events by user ${userId}`);
 
     try {
-      await this.eventModel.updateMany(
-        { participants: userId, startDateTime: { $gte: new Date() } },
-        { $pull: { participants: userId } },
-      );
+      await this.eventModel
+        .updateMany(
+          { participants: userId, startDateTime: { $gte: new Date() } },
+          { $pull: { participants: userId } },
+        )
+        .exec();
     } catch (e) {
       this.logger.error(e);
       throw new InternalServerErrorException();

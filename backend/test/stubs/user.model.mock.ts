@@ -7,16 +7,27 @@ import {
 
 /* eslint @typescript-eslint/naming-convention: 0 */
 
+function execWrap<T>(val: T) {
+  return {
+    exec: jest.fn(() => {
+      if (val instanceof Error) {
+        throw val;
+      }
+      return val;
+    }),
+  };
+}
+
 export class UserModelMock {
   findByIdAndDelete = jest.fn((id: string) => {
     if (id === validObjectId.toString()) {
       const user = validUserDocument;
       user._id = id;
-      return Promise.resolve(user);
+      return execWrap(Promise.resolve(user));
     } else if (id === throwADataBaseException.toString()) {
-      throw new Error('Random Database Error');
+      return execWrap(new Error('Random Database Error'));
     } else {
-      return Promise.resolve(null);
+      return execWrap(Promise.resolve(null));
     }
   });
 
@@ -27,9 +38,9 @@ export class UserModelMock {
         ...$set,
         _id: id,
       };
-      return Promise.resolve(options?.new ? user : validUserDocument);
+      return execWrap(Promise.resolve(options?.new ? user : validUserDocument));
     } else {
-      return Promise.resolve(null);
+      return execWrap(Promise.resolve(null));
     }
   });
 
@@ -41,11 +52,11 @@ export class UserModelMock {
     if (id === validObjectId.toString()) {
       const user = createUserDocument();
       user._id = id;
-      return Promise.resolve(user);
+      return execWrap(Promise.resolve(user));
     } else if (id === throwADataBaseException.toString()) {
-      throw new Error('Database error');
+      return execWrap(new Error('Database error'));
     } else {
-      return Promise.resolve(null);
+      return execWrap(Promise.resolve(null));
     }
   });
 }

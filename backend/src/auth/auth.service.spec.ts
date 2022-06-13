@@ -51,7 +51,7 @@ describe('AuthService', () => {
           provide: getModelToken(RefreshTokenDocument.name),
           useValue: {
             create: jest.fn(),
-            deleteMany: jest.fn(),
+            deleteMany: jest.fn(() => ({ exec: jest.fn() })),
             findByIdAndDelete: jest.fn((id) => {
               if (id === tokens.refreshToken) {
                 const doc = {
@@ -65,11 +65,15 @@ describe('AuthService', () => {
                 return {
                   ...doc,
                   user: doc.user._id,
-                  populate: jest.fn(() => Promise.resolve(doc)),
+                  populate: jest.fn(() => ({
+                    exec: jest.fn(() => Promise.resolve(doc)),
+                  })),
                 };
               }
               return {
-                populate: jest.fn(() => Promise.resolve(null)),
+                populate: jest.fn(() => ({
+                  exec: jest.fn(() => Promise.resolve(null)),
+                })),
               };
             }),
           },

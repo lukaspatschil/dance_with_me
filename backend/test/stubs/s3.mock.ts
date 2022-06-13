@@ -74,30 +74,18 @@ export class MockS3Instance {
     switch (this._functionCalled) {
       case 'getObject':
         if (this._buffer) {
-          return new Promise((resolve) => {
-            resolve({ Body: bufferMock() });
-          });
+          return Promise.resolve({ Body: bufferMock() });
         } else if (this._readable) {
-          return new Promise((resolve) => {
-            resolve({ Body: Readable.from(bufferMock()) });
-          });
+          return Promise.resolve({ Body: Readable.from(bufferMock()) });
         } else if (this._string) {
-          return new Promise((resolve) => {
-            resolve({ Body: stringAWSBinaryImageResponse() });
-          });
+          return Promise.resolve({ Body: stringAWSBinaryImageResponse() });
         } else {
-          return new Promise((resolve) => {
-            resolve({ Body: undefined });
-          });
+          return Promise.resolve({ Body: undefined });
         }
       case 'putObject':
-        return new Promise((resolve) => {
-          resolve({ Body: bufferMock() });
-        });
+        return Promise.resolve({ Body: bufferMock() });
       default:
-        return new Promise((resolve) => {
-          resolve(undefined);
-        });
+        return Promise.resolve(undefined);
     }
   });
 }

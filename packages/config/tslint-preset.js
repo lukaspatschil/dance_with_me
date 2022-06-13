@@ -31,7 +31,7 @@ module.exports = {
         "@typescript-eslint/lines-between-class-members": ["error"],
         "@typescript-eslint/member-delimiter-style": "error",
         "@typescript-eslint/method-signature-style": "error",
-        "@typescript-eslint/naming-convention": ["error", {selector: "default", format: ["camelCase", "PascalCase", "UPPER_CASE"]}],
+        "@typescript-eslint/naming-convention": ["error", {selector: "default", format: ["camelCase", "PascalCase", "UPPER_CASE"], "leadingUnderscore": 'allow'}],
         "no-array-constructor": "off",
         "@typescript-eslint/no-array-constructor": ["error"],
         "@typescript-eslint/no-confusing-non-null-assertion": "error",

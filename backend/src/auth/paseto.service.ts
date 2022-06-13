@@ -50,7 +50,7 @@ export class PasetoService implements OnModuleInit {
       { kid: '', key: {} as KeyObject, expires: 0 },
     );
 
-    return newestKey.expires > Date.now() ? newestKey : await this.addNewKey();
+    return newestKey.expires > Date.now() ? newestKey : this.addNewKey();
   }
 
   private getKeyByKid(kid: string): KeyObject {

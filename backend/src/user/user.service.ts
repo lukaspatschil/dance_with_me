@@ -28,7 +28,7 @@ export class UserService {
     this.logger.log(`Delete user with id: ${userId}`);
     let result;
     try {
-      result = await this.userModel.findByIdAndDelete(userId);
+      result = await this.userModel.findByIdAndDelete(userId).exec();
       await this.eventService.deleteUsersFromFutureEvents(userId);
     } catch (e) {
       this.logger.error(e);
@@ -42,11 +42,9 @@ export class UserService {
   ): Promise<UserEntity> {
     this.logger.log(`Find or create user with id: ${user.id}`);
     const { id: userId, ...userAttributes } = user;
-    const userDoc = await this.userModel.findByIdAndUpdate(
-      userId,
-      { $set: userAttributes },
-      { new: true },
-    );
+    const userDoc = await this.userModel
+      .findByIdAndUpdate(userId, { $set: userAttributes }, { new: true })
+      .exec();
     if (userDoc) {
       this.logger.log(`Found user with id: ${user.id}`);
       return UserMapper.mapDocumentToEntity(userDoc);
@@ -80,7 +78,7 @@ export class UserService {
     this.logger.log(`Get user with id: ${id}`);
     let user;
     try {
-      user = await this.userModel.findById(id);
+      user = await this.userModel.findById(id).exec();
     } catch (e) {
       this.logger.error(e);
       throw new InternalServerErrorException();
