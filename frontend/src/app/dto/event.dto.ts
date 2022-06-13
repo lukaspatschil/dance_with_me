@@ -22,4 +22,6 @@ export class EventDto {
   endDateTime?: string;
 
   category?: Category[];
+
+  userParticipates?: boolean;
 }

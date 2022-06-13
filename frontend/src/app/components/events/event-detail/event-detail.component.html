@@ -1,7 +1,12 @@
 <div *ngIf="event$ | async as event" class="ml-5 flex flex-col space-y-2 h-screen font-poppins ">
-  <h1 class="text-l mb-2 font-light text-gray-900 truncate">
-    {{event?.name}}
-  </h1>
+  <div class="grid grid-cols-5 gap-4">
+    <h1 class="col-span-4 text-l mb-2 font-light text-gray-900">
+      {{event?.name}}
+    </h1>
+    <span *ngIf="userParticipates" class="material-symbols-outlined inline-block align-top text-m pt-0 mr-5 attend " (click)="onAttendClicked(event)">event_available</span>
+    <span *ngIf="!userParticipates" class="material-symbols-outlined inline-block align-top text-m pt-0 mr-5" (click)="onAttendClicked(event)">calendar_add_on</span>
+  </div>
+
   <div class="flex mt-4 space-x-2 ">
     <span class="small material-icons-outlined text-gray-400">location_on</span>
     <p class="inline-flex text-sm text-gray-800 truncate dark:text-gray-700">

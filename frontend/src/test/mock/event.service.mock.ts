@@ -74,7 +74,8 @@ export class EventServiceMock  {
       date: '2022-04-24',
       starttime: '10:00',
       endtime: '12:00',
-      category: [Category.SALSA]
+      category: [Category.SALSA],
+      userParticipate: true
     }])
   );
 
@@ -97,10 +98,16 @@ export class EventServiceMock  {
       },
       price: 1,
       public: true,
-      date: '2022-04-24',
-      starttime: '10:00',
-      endtime: '12:00',
-      category: [Category.SALSA]
+      startDateTime: new Date('2022-04-24T10:00'),
+      endDateTime: new Date('2022-04-24T10:00'),
+      category: [Category.SALSA],
+      userParticipates: true
     })
   );
+
+  participateOnEvent = jest.fn().mockReturnValue(
+    of({ status: 204 }));
+
+  deleteParticipateOnEvent = jest.fn().mockReturnValue(
+    of({ status: 204 }));
 }

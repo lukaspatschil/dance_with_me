@@ -5,6 +5,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventService } from '../../../../app/services/event.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { EventServiceMock } from '../../../mock/event.service.mock';
+import { EventEntity } from '../../../../app/entities/event.entity';
+import { Category } from '../../../../app/enums/category.enum';
 
 describe('EventDetailComponent', () => {
   let comp: EventDetailComponent;
@@ -42,7 +44,77 @@ describe('EventDetailComponent', () => {
 
       // Then
       expect(eventService.getEvent).toHaveBeenCalled();
+    });
+  });
 
+  describe('onAttendClicked', () => {
+    it('should delete a participation', async () => {
+      // When
+      await fixture.whenStable();
+      comp.userParticipates = true;
+      comp.onAttendClicked(eventEntity);
+
+      // Then
+      expect(eventService.deleteParticipateOnEvent).toHaveBeenCalledWith(eventEntity.id);
+    });
+
+    it('should post an participation', async () => {
+      // When
+      await fixture.whenStable();
+      comp.userParticipates = false;
+      comp.onAttendClicked(eventEntityNoParticipation);
+
+      // Then
+      expect(eventService.participateOnEvent).toHaveBeenCalledWith(eventEntity.id);
     });
   });
 });
+
+const eventEntity: EventEntity = {
+  id: '1',
+  name: 'name',
+  description: 'description',
+  location: {
+    longitude: 40.000,
+    latitude: 31.000
+  },
+  address: {
+    country: 'country',
+    street: 'street',
+    city: 'city',
+    housenumber: '10',
+    postalcode: '1020',
+    addition: 'addition'
+  },
+  price: 1,
+  public: true,
+  startDateTime: new Date('2022-04-24T10:00'),
+  endDateTime: new Date('2022-04-24T10:00'),
+  category: [Category.SALSA],
+  userParticipates: true
+};
+
+const eventEntityNoParticipation: EventEntity = {
+  id: '1',
+  name: 'name',
+  description: 'description',
+  location: {
+    longitude: 40.000,
+    latitude: 31.000
+  },
+  address: {
+    country: 'country',
+    street: 'street',
+    city: 'city',
+    housenumber: '10',
+    postalcode: '1020',
+    addition: 'addition'
+  },
+  price: 1,
+  public: true,
+  startDateTime: new Date('2022-04-24T10:00'),
+  endDateTime: new Date('2022-04-24T10:00'),
+  category: [Category.SALSA],
+  userParticipates: false
+};
+

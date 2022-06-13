@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { EventEntity } from '../../../entities/event.entity';
 import { EventService } from '../../../services/event.service';
+import { HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'app-event-detail',
@@ -13,12 +14,43 @@ export class EventDetailComponent implements OnInit {
 
   event$!: Observable<EventEntity | null>;
 
+  userParticipates = false;
+
+  private id!: string;
+
+
   constructor(private readonly route: ActivatedRoute,
-    private readonly service: EventService) {}
+    private readonly eventService: EventService) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id')!;
+    this.id = this.route.snapshot.paramMap.get('id')!;
 
-    this.event$ = this.service.getEvent(id);
+    this.event$ = this.eventService.getEvent(this.id);
+
+    this.event$.pipe(take(1)).subscribe(event => {
+      if (event !== null) {
+        this.userParticipates = event.userParticipates;
+      }
+    });
+  }
+
+  onAttendClicked(event: EventEntity): void{
+    if (!this.userParticipates){
+      this.eventService.participateOnEvent(event.id).subscribe({
+        next: resp => {
+          if (resp.status == HttpStatusCode.NoContent) {
+            this.userParticipates = true;
+          }
+        }
+      });
+    } else {
+      this.eventService.deleteParticipateOnEvent(event.id).subscribe({
+        next: resp => {
+          if (resp.status == HttpStatusCode.NoContent) {
+            this.userParticipates = false;
+          }
+        }
+      });
+    }
   }
 }

@@ -45,6 +45,8 @@ export class EventMapper {
         new Date(entry.endDateTime),
         entry.category);
 
+      event.userParticipates = entry.userParticipates ?? false;
+
       return event;
     } else {
       return null;

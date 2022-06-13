@@ -3,6 +3,7 @@ import { EventService } from '../../../services/event.service';
 import { EventEntity } from '../../../entities/event.entity';
 import { GeolocationService } from '@ng-web-apis/geolocation';
 import { first } from 'rxjs';
+import { HttpStatusCode } from '@angular/common/http';
 
 
 @Component({
@@ -14,6 +15,8 @@ export class EventOverviewComponent implements OnInit{
   title = 'events';
 
   events: EventEntity[] = [];
+
+  userParticipates = false;
 
   constructor(private readonly eventService: EventService,
     private readonly geolocation$: GeolocationService){}
@@ -30,4 +33,23 @@ export class EventOverviewComponent implements OnInit{
     });
   }
 
+  onAttendClicked(event: EventEntity): void{
+    if (!event.userParticipates){
+      this.eventService.participateOnEvent(event.id).subscribe({
+        next: resp => {
+          if (resp.status == HttpStatusCode.NoContent) {
+            this.userParticipates = true;
+          }
+        }
+      });
+    } else {
+      this.eventService.deleteParticipateOnEvent(event.id).subscribe({
+        next: resp => {
+          if (resp.status == HttpStatusCode.NoContent) {
+            this.userParticipates = false;
+          }
+        }
+      });
+    }
+  }
 }

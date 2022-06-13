@@ -69,8 +69,6 @@ describe('UserDetailComponent', () => {
     it('should logout after deleting', async () => {
       // When
       await fixture.whenStable();
-
-      // When
       comp.deleteUser();
 
       // Then

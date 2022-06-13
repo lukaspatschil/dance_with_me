@@ -33,6 +33,7 @@ export class EventService {
       }));
   }
 
+
   getEvents(longitude: number, latitude: number, radius: number): Observable<EventEntity[]> {
     const params = new HttpParams()
       .set('longitude', longitude)
@@ -50,4 +51,17 @@ export class EventService {
     );
   }
 
+
+  participateOnEvent(eventId: string): Observable<HttpResponse<EventDto>> {
+    return this.http.post<HttpResponse<EventDto>>(`${environment.baseUrl}/event/${eventId}/participation`, {
+      observe: 'response'
+    });
+  }
+
+
+  deleteParticipateOnEvent(eventId: string): Observable<HttpResponse<EventDto>> {
+    return this.http.delete(`${environment.baseUrl}/event/${eventId}/participation`, {
+      observe: 'response'
+    });
+  }
 }

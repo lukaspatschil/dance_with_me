@@ -7,6 +7,7 @@ import { CreateEventDto } from '../../app/dto/createEvent.dto';
 import { Category } from '../../app/enums/category.enum';
 import { EventDto } from '../../app/dto/event.dto';
 import { environment } from '../../environments/environment';
+import { EventEntity } from '../../app/entities/event.entity';
 
 
 describe('EventService', () => {
@@ -135,8 +136,8 @@ describe('EventService', () => {
       }];
 
       eventService.getEvent('1').subscribe(
-        events => {
-          expect(events).toEqual(expectedEvents);
+        event => {
+          expect(event).toEqual(expectedEvents);
         }
       );
 
@@ -147,4 +148,130 @@ describe('EventService', () => {
       req.flush(expectedEvents);
     });
   });
+
+  describe('participateOnEvent', () => {
+    it('should return 204 when request was successfully', () => {
+      // When
+      const id = 'google:12345';
+      const status = 204;
+
+      eventService.participateOnEvent(id).subscribe(
+        resp => {
+          expect(resp.status).toEqual(status);
+        }
+      );
+
+      // Then
+      const req = httpTestingController.expectOne(`${environment.baseUrl}/event/${id}/participation`);
+      expect(req.request.method).toEqual('POST');
+    });
+
+    it('should add participation to event', () => {
+      // When
+      const id = 'google:12345';
+
+      eventService.participateOnEvent(id).subscribe(() => {});
+
+      // Then
+      const req = httpTestingController.expectOne(`${environment.baseUrl}/event/${id}/participation`);
+      expect(req.request.method).toEqual('POST');
+
+      eventService.getEvent(id).subscribe(
+        resp => {
+          expect(resp).toEqual(event);
+        }
+      );
+
+      const post = httpTestingController.expectOne(`${environment.baseUrl}/event/${id}`);
+      post.flush(event);
+
+    });
+
+  });
+
+  describe('deleteParticipateOnEvent', () => {
+    it('should return 204 when request was successfully', () => {
+      // When
+      const id = 'google:12345';
+      const status = 204;
+
+      eventService.deleteParticipateOnEvent(id).subscribe(
+        resp => {
+          expect(resp.status).toEqual(status);
+        }
+      );
+
+      // Then
+      const req = httpTestingController.expectOne(eventService.URL_EVENT_BASE + '/' + id + '/participation');
+      expect(req.request.method).toEqual('DELETE');
+    });
+    it('should delete participation from event', () => {
+      // When
+      const id = 'google:12345';
+
+      eventService.deleteParticipateOnEvent(id).subscribe(() => {});
+
+      // Then
+      const req = httpTestingController.expectOne(`${environment.baseUrl}/event/${id}/participation`);
+      expect(req.request.method).toEqual('DELETE');
+
+      eventService.getEvent(id).subscribe(
+        resp => {
+          expect(resp).toEqual(eventNoParticipation);
+        }
+      );
+
+      const post = httpTestingController.expectOne(`${environment.baseUrl}/event/${id}`);
+      post.flush(eventNoParticipation);
+    });
+
+  });
 });
+
+const event: EventEntity = {
+  id: '1',
+  name: 'name',
+  description: 'description',
+  location: {
+    longitude: 40.000,
+    latitude: 31.000
+  },
+  address: {
+    country: 'country',
+    street: 'street',
+    city: 'city',
+    housenumber: '10',
+    postalcode: '1020',
+    addition: 'addition'
+  },
+  price: 1,
+  public: true,
+  startDateTime: new Date('2022-04-24T10:00'),
+  endDateTime: new Date('2022-04-24T10:00'),
+  category: [Category.SALSA],
+  userParticipates: true
+};
+
+const eventNoParticipation: EventEntity = {
+  id: '1',
+  name: 'name',
+  description: 'description',
+  location: {
+    longitude: 40.000,
+    latitude: 31.000
+  },
+  address: {
+    country: 'country',
+    street: 'street',
+    city: 'city',
+    housenumber: '10',
+    postalcode: '1020',
+    addition: 'addition'
+  },
+  price: 1,
+  public: true,
+  startDateTime: new Date('2022-04-24T10:00'),
+  endDateTime: new Date('2022-04-24T10:00'),
+  category: [Category.SALSA],
+  userParticipates: false
+};
