@@ -39,6 +39,7 @@ import {
   nonExistingObjectId,
   validEventDocument,
   validObjectId1,
+  validObjectId2,
 } from '../../test/test_data/event.testData';
 import { UserEntity } from '../core/entity/user.entity';
 import { RoleEnum } from '../core/schema/enum/role.enum';
@@ -283,9 +284,25 @@ describe('EventService', () => {
       await sut.deleteEvent(validObjectId1.toString());
 
       // Then
-      expect(eventDocumentMock.findByIdAndDelete).toHaveBeenCalledWith(
+      expect(eventDocumentMock.findOneAndDelete).toHaveBeenCalledWith({
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        _id: validObjectId1.toString(),
+      });
+    });
+
+    it('should filter by organizerId when provided', async () => {
+      // When
+      await sut.deleteEvent(
         validObjectId1.toString(),
+        validObjectId2.toString(),
       );
+
+      // Then
+      expect(eventDocumentMock.findOneAndDelete).toHaveBeenCalledWith({
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        _id: validObjectId1.toString(),
+        organizerId: validObjectId2.toString(),
+      });
     });
 
     it('should call the service and delete an event', async () => {

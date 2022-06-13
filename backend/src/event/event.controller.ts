@@ -20,6 +20,7 @@ import { QueryDto } from '../core/dto/query.dto';
 import { User } from '../auth/user.decorator';
 import { AuthUser } from '../auth/interfaces';
 import { Organizer } from '../auth/role.guard';
+import { RoleEnum } from '../core/schema/enum/role.enum';
 
 @Controller('event')
 export class EventController {
@@ -73,11 +74,18 @@ export class EventController {
     );
   }
 
+  @Organizer()
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteEvent(@Param('id') id: string): Promise<void> {
+  async deleteEvent(
+    @Param('id') id: string,
+    @User() user: AuthUser,
+  ): Promise<void> {
     this.logger.log(`Deleting event with id ${id}`);
-    const event = await this.eventService.deleteEvent(id);
+    const event =
+      user.role === RoleEnum.ADMIN
+        ? await this.eventService.deleteEvent(id)
+        : await this.eventService.deleteEvent(id, user.id);
 
     if (!event) {
       this.logger.error(`Event with id ${id} not found`);

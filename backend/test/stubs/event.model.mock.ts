@@ -125,17 +125,18 @@ export class EventModelMock {
     return execWrap(Promise.resolve(value));
   });
 
-  findByIdAndDelete = jest.fn((id: string) => {
+  findOneAndDelete = jest.fn(({ _id, organizerId }) => {
+    const event = { ...validEventDocument };
     if (
-      id === invalidObjectId.toString() ||
-      id === nonExistingObjectId.toString()
+      _id === invalidObjectId.toString() ||
+      _id === nonExistingObjectId.toString() ||
+      organizerId === validEventDocument.organizerId
     ) {
       return execWrap(null);
-    } else if (id === '-2') {
+    } else if (_id === '-2') {
       return execWrap(new Error('Random DB Error'));
     }
-    const event = validEventDocument;
-    event._id = id;
+    event._id = _id;
     return execWrap(Promise.resolve(event));
   });
 

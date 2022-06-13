@@ -1397,6 +1397,12 @@ describe('EventController (e2e)', () => {
 
   describe('/event (Delete)', () => {
     it('should return 204', async () => {
+      const authHeader = mockedAuthHeader({
+        id: '1',
+        displayName: 'Oscar Organized',
+        role: RoleEnum.ORGANISER,
+      });
+
       const event = new eventModel({
         _id: validObjectId1.toString(),
         name: 'test1',
@@ -1418,14 +1424,22 @@ describe('EventController (e2e)', () => {
 
       return request(app.getHttpServer())
         .delete(`/event/${event._id}`)
+        .set('Authorization', authHeader)
         .send()
         .expect(HttpStatus.NO_CONTENT)
         .expect(deleteResponse);
     });
 
     it('should return 404', async () => {
+      const authHeader = mockedAuthHeader({
+        id: '1',
+        displayName: 'Oscar Organized',
+        role: RoleEnum.ADMIN,
+      });
+
       return request(app.getHttpServer())
         .delete(`/event/${nonExistingObjectId.toString()}`)
+        .set('Authorization', authHeader)
         .send()
         .expect(HttpStatus.NOT_FOUND);
     });

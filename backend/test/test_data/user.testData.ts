@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { RoleEnum } from '../../src/core/schema/enum/role.enum';
 import { UserEntity } from '../../src/core/entity/user.entity';
 import { UserDto } from '../../src/core/dto/user.dto';
+import { AuthUser } from '../../src/auth/interfaces';
 
 /* eslint @typescript-eslint/naming-convention: 0 */
 
@@ -81,3 +82,15 @@ export function createUserDto(): UserDto {
     pictureUrl: 'http://test.com/image.png',
   };
 }
+
+export const adminAuthUser: Readonly<AuthUser> = {
+  id: '',
+  role: RoleEnum.ADMIN,
+  displayName: 'Admin User',
+};
+
+export const organizerAuthUser: Readonly<AuthUser> = {
+  id: '',
+  role: RoleEnum.ORGANISER,
+  displayName: 'Organizer User',
+};

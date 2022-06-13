@@ -5,7 +5,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, PipelineStage } from 'mongoose';
+import { FilterQuery, Model, PipelineStage } from 'mongoose';
 import { EventDocument } from '../core/schema/event.schema';
 import { EventMapper } from '../core/mapper/event.mapper';
 import { EventEntity } from '../core/entity/event.entity';
@@ -154,15 +154,15 @@ export class EventService {
     return EventMapper.mapDocumentToEntity(event);
   }
 
-  async deleteEvent(
-    id: string,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-  ): Promise<(EventDocument & { _id: any }) | null> {
+  async deleteEvent(id: string, organizerId?: string) {
     this.logger.log(`Deleting event with id ${id}`);
 
     let result;
     try {
-      result = await this.eventModel.findByIdAndDelete(id).exec();
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      const filter: FilterQuery<EventDocument> = { _id: id };
+      if (organizerId) filter.organizerId = organizerId;
+      result = await this.eventModel.findOneAndDelete(filter).exec();
       await this.neo4jService.write(`MATCH (e:Event {id: '${id}'}) DELETE e;`);
     } catch (error) {
       this.logger.error(error);

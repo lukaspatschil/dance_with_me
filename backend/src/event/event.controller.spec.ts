@@ -18,6 +18,10 @@ import {
   nonExistingObjectId,
   validObjectId1,
 } from '../../test/test_data/event.testData';
+import {
+  adminAuthUser,
+  organizerAuthUser,
+} from '../../test/test_data/user.testData';
 
 describe('EventController', () => {
   let sut: EventController;
@@ -151,7 +155,7 @@ describe('EventController', () => {
       const idDto = validObjectId1.toString();
 
       //When
-      await sut.deleteEvent(idDto);
+      await sut.deleteEvent(idDto, adminAuthUser);
 
       //Then
       expect(eventService.deleteEvent).toHaveBeenCalledWith(
@@ -159,10 +163,26 @@ describe('EventController', () => {
       );
     });
 
+    it('should pass userId to service if user is not admin', async () => {
+      // Given
+      const organizerId = validObjectId1.toString();
+      const authUser = { ...organizerAuthUser, id: organizerId };
+      const idDto = validObjectId1.toString();
+
+      //When
+      await sut.deleteEvent(idDto, authUser);
+
+      //Then
+      expect(eventService.deleteEvent).toHaveBeenCalledWith(
+        validObjectId1.toString(),
+        organizerId,
+      );
+    });
+
     it('should call deleteEvent and throw a NotFoundError', async () => {
       // When
       const result = async () => {
-        await sut.deleteEvent(nonExistingObjectId.toString());
+        await sut.deleteEvent(nonExistingObjectId.toString(), adminAuthUser);
       };
 
       //Then
