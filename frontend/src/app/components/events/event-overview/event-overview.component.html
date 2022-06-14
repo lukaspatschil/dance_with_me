@@ -1,6 +1,9 @@
 <div class="m-0 fixed justify-center flex space-x-2 bg-white w-full">
-  <span class="material-symbols-outlined icon-big">tune</span>
-  <span [routerLink]="'/map'" class="material-symbols-outlined icon-big ">map</span>
+  <span *ngIf="recommendation; else noRecommendation" class="material-symbols-outlined icon-big-recommend" (click)="getEvents()" >tune</span>
+  <ng-template #noRecommendation>
+    <span class="material-symbols-outlined icon-big" (click)="getRecommendation()">tune</span>
+  </ng-template>
+  <span [routerLink]="'/map'" class="material-symbols-outlined icon-big">map</span>
 </div>
 
 <div class="font-poppins w-full mt-5">

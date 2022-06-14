@@ -16,6 +16,8 @@ export class EventOverviewComponent implements OnInit{
 
   events: EventEntity[] = [];
 
+  recommendation = false;
+
   userParticipates = false;
 
   constructor(private readonly eventService: EventService,
@@ -26,10 +28,23 @@ export class EventOverviewComponent implements OnInit{
   }
 
   getEvents(): void {
+    this.recommendation = false;
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     this.geolocation$.pipe(first(position => position !== null)).subscribe((position) => {
       let radius = 10000;
       this.eventService.getEvents(position.coords.longitude, position.coords.latitude, radius).subscribe((data) => this.events = data);
+    });
+  }
+
+  getRecommendation(): void {
+    this.recommendation = true;
+
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    this.geolocation$.pipe(first(position => position !== null)).subscribe((position) => {
+      let radius = 10000;
+      this.eventService.getRecommendation(position.coords.longitude, position.coords.latitude, radius).subscribe((data) => {
+        this.events = data;
+      });
     });
   }
 

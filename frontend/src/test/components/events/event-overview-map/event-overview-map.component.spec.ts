@@ -146,21 +146,15 @@ describe('EventOverviewMapComponent', () => {
   describe('getEvents', () => {
     it('should fetch events from API ', () => {
       // When
-      let long = 40.000;
-      let lat = 31.000;
-      comp.getEvents(long, lat);
+      comp.getEvents();
 
       // Then
       expect(eventService.getEvents).toHaveBeenCalled();
-
     });
-  });
-
-  describe('getPosition', () => {
     it('should subscribe to user position', () => {
       //When
       jest.spyOn(geoService, 'subscribe');
-      comp.getPosition();
+      comp.getEvents();
 
       // Then
       expect(geoService.subscribe).toHaveBeenCalled();

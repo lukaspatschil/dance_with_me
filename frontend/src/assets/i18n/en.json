@@ -51,7 +51,8 @@
     "Zouk": "Zouk"
   },
   "events": {
-    "events": "Events"
+    "events": "Events",
+    "show_list": "Show list"
   },
   "legal_link": "Legal",
   "login": {

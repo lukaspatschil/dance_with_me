@@ -61,6 +61,25 @@ describe('EventOverviewComponent', () => {
     });
   });
 
+  describe('getRecommendation', () => {
+    it('should fetch events from API ', async () => {
+      // When
+      await fixture.whenStable();
+      comp.getRecommendation();
+
+      // Then
+      expect(eventService.getRecommendation).toHaveBeenCalled();
+    });
+    it('should subscribe to user position',  () => {
+      //When
+      jest.spyOn(geoService, 'subscribe');
+      comp.getRecommendation();
+
+      // Then
+      expect(geoService.subscribe).toHaveBeenCalled();
+    });
+  });
+
   describe('ngOnInit', () => {
     it('should fetch events from API ', async () => {
       // When

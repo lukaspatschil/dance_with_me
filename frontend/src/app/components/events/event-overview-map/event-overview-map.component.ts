@@ -31,18 +31,25 @@ export class EventOverviewMapComponent implements OnInit {
 
   eventEntity?: EventEntity;
 
+  recommendation = false;
+
   constructor(private readonly eventService: EventService,
     private readonly geolocation$: GeolocationService) {}
 
   ngOnInit(): void {
-    this.getPosition();
+    this.getEvents();
   }
 
-  getEvents(long: number, lat: number): void {
-    let radius = 10000;
-    this.eventService.getEvents(long, lat, radius).subscribe((data) => {
-      this.events = data;
-      this.initializeMap(lat, long);
+  getEvents(): void {
+    this.recommendation = true;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    this.geolocation$.pipe(first(position => position !== null)).subscribe((position) => {
+
+      let radius = 10000;
+      this.eventService.getEvents(position.coords.longitude, position.coords.latitude, radius).subscribe((data) => {
+        this.events = data;
+        this.initializeMap(position.coords.latitude, position.coords.longitude);
+      });
     });
   }
 
@@ -72,6 +79,7 @@ export class EventOverviewMapComponent implements OnInit {
       }
     }
     this.addUserPositionPoint();
+
   }
 
   addUserPositionPoint(): void{
@@ -163,10 +171,4 @@ export class EventOverviewMapComponent implements OnInit {
     });
   }
 
-  getPosition(): void {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    this.geolocation$.pipe(first(position => position !== null)).subscribe((position) => {
-      this.getEvents(position.coords.longitude, position.coords.latitude);
-    });
-  }
 }

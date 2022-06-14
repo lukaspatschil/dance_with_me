@@ -68,33 +68,12 @@ describe('EventService', () => {
 
   describe('getEvents', () => {
     it('should fetch all events', () => {
-      // When
-      const expectedEvents: EventDto[] = [{
-        id: '1',
-        name: 'name',
-        description: 'description',
-        location: {
-          longitude: 40.000,
-          latitude: 31.000
-        },
-        address: {
-          country: 'country',
-          street: 'street',
-          city: 'city',
-          housenumber: '10',
-          postalcode: '1020',
-          addition: 'addition'
-        },
-        price: 1,
-        public: true,
-        startDateTime: new Date('2022-04-24T10:00').toISOString(),
-        endDateTime: new Date('2022-04-24T12:00').toISOString(),
-        category: [Category.SALSA]
-      }];
-
+      // Given
       let long = 40.000;
       let lat = 31.000;
       let radius = 100;
+
+      // When
       eventService.getEvents(long, lat, radius).subscribe(
         events => {
           expect(events).toEqual(expectedEvents);
@@ -112,37 +91,36 @@ describe('EventService', () => {
   describe('getEvent', () => {
     it('should fetch event with id 1', () => {
       // When
-      const expectedEvents: EventDto[] = [{
-        id: '1',
-        name: 'name',
-        description: 'description',
-        location: {
-          longitude: 40.000,
-          latitude: 31.000
-        },
-        address: {
-          country: 'country',
-          street: 'street',
-          city: 'city',
-          housenumber: '10',
-          postalcode: '1020',
-          addition: 'addition'
-        },
-        price: 1,
-        public: true,
-        startDateTime: new Date('2022-04-24T10:00').toISOString(),
-        endDateTime: new Date('2022-04-24T12:00').toISOString(),
-        category: [Category.SALSA]
-      }];
-
       eventService.getEvent('1').subscribe(
-        event => {
-          expect(event).toEqual(expectedEvents);
+        events => {
+          expect(events).toEqual(expectedEvents);
         }
       );
 
       // Then
       const req = httpTestingController.expectOne(eventService.URL_EVENT_BASE + '/1');
+      expect(req.request.method).toEqual('GET');
+
+      req.flush(expectedEvents);
+    });
+  });
+
+  describe('getRecommendation', () => {
+    it('should fetch all events', () => {
+      // Given
+      let long = 40.000;
+      let lat = 31.000;
+      let radius = 100;
+
+      // When
+      eventService.getRecommendation(long, lat, radius).subscribe(
+        events => {
+          expect(events).toEqual(expectedEvents);
+        }
+      );
+
+      // Then
+      const req = httpTestingController.expectOne(`${environment.baseUrl}/recommendation?longitude=40&latitude=31&radius=100`);
       expect(req.request.method).toEqual('GET');
 
       req.flush(expectedEvents);
@@ -224,7 +202,6 @@ describe('EventService', () => {
       const post = httpTestingController.expectOne(`${environment.baseUrl}/event/${id}`);
       post.flush(eventNoParticipation);
     });
-
   });
 });
 
@@ -275,3 +252,26 @@ const eventNoParticipation: EventEntity = {
   category: [Category.SALSA],
   userParticipates: false
 };
+
+const expectedEvents: EventDto[] = [{
+  id: '1',
+  name: 'name',
+  description: 'description',
+  location: {
+    longitude: 40.000,
+    latitude: 31.000
+  },
+  address: {
+    country: 'country',
+    street: 'street',
+    city: 'city',
+    housenumber: '10',
+    postalcode: '1020',
+    addition: 'addition'
+  },
+  price: 1,
+  public: true,
+  startDateTime: new Date('2022-04-24T10:00').toISOString(),
+  endDateTime: new Date('2022-04-24T12:00').toISOString(),
+  category: [Category.SALSA]
+}];

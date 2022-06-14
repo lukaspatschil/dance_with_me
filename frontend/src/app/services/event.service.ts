@@ -33,7 +33,6 @@ export class EventService {
       }));
   }
 
-
   getEvents(longitude: number, latitude: number, radius: number): Observable<EventEntity[]> {
     const params = new HttpParams()
       .set('longitude', longitude)
@@ -41,6 +40,23 @@ export class EventService {
       .set('radius', radius);
 
     return this.http.get<EventDto[]>(this.URL_EVENT_BASE, { params: params }).pipe(
+      map((eventData) => {
+        let events: EventEntity[] = [];
+        events = eventData
+          .map((entry: EventDto) => EventMapper.mapEventDtoToEntity(entry))
+          .filter((event: EventEntity | null): event is EventEntity => event !== null);
+        return events;
+      })
+    );
+  }
+
+  getRecommendation(longitude: number, latitude: number, radius: number): Observable<EventEntity[]> {
+    const params = new HttpParams()
+      .set('longitude', longitude)
+      .set('latitude', latitude)
+      .set('radius', radius);
+
+    return this.http.get<EventDto[]>(`${environment.baseUrl}/recommendation`, { params: params }).pipe(
       map((eventData) => {
         let events: EventEntity[] = [];
         events = eventData

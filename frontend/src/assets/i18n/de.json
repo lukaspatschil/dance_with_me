@@ -51,7 +51,8 @@
     "Zouk": "Zouk"
   },
   "events": {
-    "events": "Veranstalltungen"
+    "events": "Veranstalltungen",
+    "show_list": "Liste anzeigen"
   },
   "legal_link": "Rechtliches",
   "login": {
