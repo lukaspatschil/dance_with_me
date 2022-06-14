@@ -12,6 +12,7 @@ import { MissingPermissionError } from '../core/error/missingPermission.error';
 
 export const ALLOWED_ROLES_KEY = 'allowedRoles';
 
+// Stryker disable all
 export const Admin = () =>
   applyDecorators(SetMetadata(ALLOWED_ROLES_KEY, []), UseGuards(RoleGuard));
 
@@ -20,6 +21,7 @@ export const Organizer = () =>
     SetMetadata(ALLOWED_ROLES_KEY, [RoleEnum.ORGANISER]),
     UseGuards(RoleGuard),
   );
+// Stryker restore all
 
 @Injectable()
 export class RoleGuard implements CanActivate {

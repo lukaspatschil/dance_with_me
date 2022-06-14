@@ -232,6 +232,17 @@ describe('EventService', () => {
       expect(eventDocumentMock.aggregate).toHaveBeenCalled();
     });
 
+    it('should call the database using the date parameter and find 1 element in the database', async () => {
+      // Given
+      const param = { startDate: new Date('2023-01-01'), take: 1 };
+
+      // When
+      const result = await sut.getEventsQueryDto(param);
+
+      // Then
+      expect(result).toEqual([createEventEntity()]);
+    });
+
     it('should call the database using the take: 1 parameter and find 1 element in the database', async () => {
       // Given
       const param = { take: 1 };
@@ -482,6 +493,19 @@ describe('EventService', () => {
       // When
       await sut.deleteUsersFromFutureEvents(userId);
     });
+
+    it('should call the database and throw an interal exception', async () => {
+      // Given
+      const userId = invalidObjectId.toString();
+
+      // When
+      const result = async () => {
+        await sut.deleteUsersFromFutureEvents(userId);
+      };
+
+      // Then
+      await expect(result).rejects.toThrow(InternalServerErrorException);
+    });
   });
 
   function getDefaultUser(): UserEntity {
@@ -498,7 +522,7 @@ describe('EventService', () => {
     const location = new LocationEntity();
     location.type = GeolocationEnum.POINT;
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-    location.coordinates = [-171.23794, 8.54529];
+    location.coordinates = [validLongitude, validLatitude];
 
     const eventEntity = new EventEntity();
     eventEntity.id = '1';
@@ -519,7 +543,7 @@ describe('EventService', () => {
   }
 
   function getEventEntity(): EventEntity {
-    const eventEntity: EventEntity = {
+    return {
       id: '1',
       name: 'Test name',
       description: 'Test description',
@@ -537,7 +561,5 @@ describe('EventService', () => {
       address: validAddress,
       participants: [],
     };
-
-    return eventEntity;
   }
 });

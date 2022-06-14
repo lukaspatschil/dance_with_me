@@ -7,9 +7,11 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 
+// Stryker disable all
 @Injectable()
 export class IdentityProviderGuard extends AuthGuard(['google', 'facebook']) {
   private readonly logger = new Logger(IdentityProviderGuard.name);
+  // Stryker restore all
 
   override canActivate(
     context: ExecutionContext,
@@ -18,7 +20,9 @@ export class IdentityProviderGuard extends AuthGuard(['google', 'facebook']) {
 
     if (provider !== 'google' && provider !== 'facebook') {
       this.logger.error(`Provider ${provider} is not supported`);
+      // Stryker disable all
       throw new ForbiddenException({ error: 'provider_not_supported' });
+      // Stryker restore all
     }
 
     const Guard = AuthGuard(provider);

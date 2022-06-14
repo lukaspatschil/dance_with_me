@@ -5,7 +5,11 @@ import {
   invalidObjectId,
   nonExistingObjectId,
 } from '../test_data/event.testData';
-import { validAddress } from '../test_data/openStreetMapApi.testData';
+import {
+  validAddress,
+  validLatitude,
+  validLongitude,
+} from '../test_data/openStreetMapApi.testData';
 
 /* eslint @typescript-eslint/no-magic-numbers: 0 */
 /* eslint @typescript-eslint/naming-convention: 0 */
@@ -29,7 +33,7 @@ function execWrap<T>(val: T) {
 export class EventModelMock {
   create = jest.fn((eventEntity: EventEntity) => {
     if (eventEntity.id === '-2') {
-      throw new Error('Random DB Error');
+      return execWrap(new Error('Random DB Error'));
     }
 
     const eventDocument = {
@@ -172,7 +176,10 @@ export class EventModelMock {
     }
   });
 
-  updateMany = jest.fn(() => {
+  updateMany = jest.fn((filter) => {
+    if (filter.participants === invalidObjectId.toString()) {
+      return execWrap(new Error('Random Exception'));
+    }
     return execWrap(Promise.resolve());
   });
 }
@@ -197,7 +204,7 @@ function createEventDocument() {
     location: {
       type: GeolocationEnum.POINT,
       // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-      coordinates: [-171.23794, 8.54529],
+      coordinates: [validLongitude, validLatitude],
     },
     price: 12.5,
     organizerId: '1',
