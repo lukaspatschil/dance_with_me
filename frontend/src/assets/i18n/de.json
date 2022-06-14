@@ -7,22 +7,22 @@
     "addition": "Zusätzliche Information",
     "cancel": "Abbrechen",
     "category": "Kategorie",
-    "category_error": "Veranstalltungskategorie wird benötigt.",
+    "category_error": "Veranstaltungskategorie wird benötigt.",
     "city": "Stadt",
     "city_error": "Stadt wird benötigt.",
     "city_placeholder": "Stadt",
     "country": "Land",
     "country_error": "Land wird benötigt.",
     "country_placeholder": "Land",
-    "create_button": "Veranstalltung erstellen",
-    "create_event": "Veranstalltung erstellen",
+    "create_button": "Veranstaltung erstellen",
+    "create_event": "Veranstaltung erstellen",
     "date": "Datum",
     "date_error": "Datum wird benötigt.",
     "description": "Beschreibung",
     "description_error": "Beschreibung wird benötigt.",
     "endtime": "Endzeit",
-    "event_name": "Name der Veranstalltung",
-    "event_name_error": "Name der Veranstalltung wird benötigt.",
+    "event_name": "Name der Veranstaltung",
+    "event_name_error": "Name der Veranstaltung wird benötigt.",
     "housenumber": "Hausnummer",
     "housenumber_error": "Hausnummer wird benötigt.",
     "image": "Bild",
@@ -54,7 +54,7 @@
     "search": "Suche"
   },
   "events": {
-    "events": "Veranstalltungen",
+    "events": "Veranstaltungen",
     "show_list": "Liste anzeigen"
   },
   "legal_link": "Rechtliches",
@@ -65,8 +65,8 @@
     "welcome": "Willkommen"
   },
   "navbar": {
-    "create_event": "Veranstalltung erstellen",
-    "events": "Veranstalltungen",
+    "create_event": "Veranstaltung erstellen",
+    "events": "Veranstaltungen",
     "login": "Anmelden",
     "logout": "Abmelden",
     "profile": "Profil"
