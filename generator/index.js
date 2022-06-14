@@ -1,7 +1,8 @@
-const { MongoClient } = require('mongodb');
+const {MongoClient} = require('mongodb');
 const neo4j = require('neo4j-driver');
-const { generateEvents } = require("./event");
-const { generateUsers } = require("./user")
+const MeiliSearch = require('meilisearch')
+const {generateEvents} = require("./event");
+const {generateUsers} = require("./user")
 
 const PARTICIPATES_RELATIONSHIP = 'PARTICIPATES';
 const usersAmount = 20;
@@ -12,7 +13,7 @@ const users = generateUsers(usersAmount);
 const events = generateEvents(eventsAmount);
 
 let mongoUrl = process.env['MONGO_URL']
-if(!mongoUrl){
+if (!mongoUrl) {
   mongoUrl = 'mongodb://localhost:27017';
 }
 console.log(`MongoDb: Connecting to ${mongoUrl}`);
@@ -20,16 +21,16 @@ const client = new MongoClient(mongoUrl);
 const databaseName = 'test'
 
 let neo4jUrl = process.env['NEO4J_ENDPOINT']
-if(!neo4jUrl){
+if (!neo4jUrl) {
   neo4jUrl = 'neo4j://localhost:7687';
 }
 
 let neo4jUsername = process.env['NEO4J_USERNAME']
-if(!neo4jUsername){
+if (!neo4jUsername) {
   neo4jUsername = 'neo4j';
 }
 let neo4jPassword = process.env['NEO4J_PASSWORD']
-if(!neo4jPassword){
+if (!neo4jPassword) {
   neo4jPassword = 'dancewithme';
 }
 
@@ -39,6 +40,15 @@ const driver = neo4j.driver(
   neo4j.auth.basic(neo4jUsername, neo4jPassword),
 )
 let session;
+
+let meilisearchUrl = process.env['MEILI_SEARCH_HOST'] ?? 'http://localhost:7700';
+let meilisearchAPIKey = process.env['MEILI_SEARCH_API_KEY'] ?? 'masterKey';
+
+console.log(`MeiliSearch: Connecting to ${meilisearchUrl}`);
+const meiliSearch = new MeiliSearch.MeiliSearch({
+  host: meilisearchUrl,
+  apiKey: meilisearchAPIKey,
+})
 
 async function main() {
   await mongoSeeder();
@@ -54,7 +64,7 @@ async function log4jSeeder() {
 
   for (let index = 0; index < events.length; index++) {
     await session.run(`CREATE (e:Event {id: '${events[index]._id}'})`)
-    for(let userIndex = 0; userIndex < events[index].participants.length; userIndex++){
+    for (let userIndex = 0; userIndex < events[index].participants.length; userIndex++) {
       await session.run(`Match (e:Event {id: '${events[index]._id}'}), (u:User {id: '${events[index].participants[userIndex]}'}) CREATE (u)-[p:${PARTICIPATES_RELATIONSHIP}]->(e)`)
     }
   }
@@ -72,18 +82,31 @@ async function mongoSeeder() {
   for (let index = 0; index < usersAmount; index++) {
     const randomLower = Math.floor(Math.random() * eventsAmount)
     const randomUpper = Math.floor(Math.random() * (eventsAmount - randomLower)) + randomLower;
-    for(let indexEvent = 0; indexEvent < eventsAmount; indexEvent++){
-      if(
+    for (let indexEvent = 0; indexEvent < eventsAmount; indexEvent++) {
+      if (
         (index * base) <= indexEvent && indexEvent <= ((index + 1) * base) ||
         randomLower <= indexEvent && indexEvent <= randomUpper
-      ){
+      ) {
         events[indexEvent]['participants'].push(resultUsers.insertedIds[index]);
       }
     }
   }
-  const resultEvents = await eventCollection.insertMany(events);
-}
+  const resultEvents = await eventCollection.insertMany(events, {rawResult: true});
 
+  const eventDocuments = [];
+  for (let index = 0; index < resultEvents.insertedCount; index++) {
+    const tempID = resultEvents.insertedIds[index];
+    const tempEvent = await eventCollection.findOne({_id: tempID});
+    eventDocuments.push(tempEvent)
+  }
+
+  await meiliSearch
+    .index('events')
+    .addDocuments(eventDocuments)
+    .catch(() => {
+      console.error('Error while adding events to meili search');
+    });
+}
 
 
 main()
@@ -91,7 +114,7 @@ main()
   .catch(console.error)
   .finally(() => {
     client.close();
-    if(session)
+    if (session)
       session.close();
     driver.close();
   });
