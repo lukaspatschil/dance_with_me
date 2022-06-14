@@ -47,10 +47,14 @@ import { AlreadyParticipatedConflictError } from '../core/error/alreadyParticipa
 import { NotYetParticipatedConflictError } from '../core/error/notYetParticipatedConflict.error';
 import { Neo4jService } from 'nest-neo4j/dist';
 import { EventNeo4jServiceMock } from '../../test/stubs/event.neo4j.service.mock';
+import { MeiliSearchMock } from '../../test/stubs/meilisearch.mock';
+import { MeiliSearch } from 'meilisearch';
+import { MEILI_CLIENT } from 'nestjs-meilisearch';
 
 describe('EventService', () => {
   let sut: EventService;
   let eventDocumentMock: Model<EventDocument>;
+  let meiliSearchMock: MeiliSearch;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -68,6 +72,10 @@ describe('EventService', () => {
           provide: Neo4jService,
           useClass: EventNeo4jServiceMock,
         },
+        {
+          provide: MEILI_CLIENT,
+          useClass: MeiliSearchMock,
+        },
       ],
     }).compile();
 
@@ -76,6 +84,7 @@ describe('EventService', () => {
     eventDocumentMock = module.get<Model<EventDocument>>(
       getModelToken(EventDocument.name),
     );
+    meiliSearchMock = module.get<MeiliSearch>(MEILI_CLIENT);
   });
 
   it('should be defined', () => {
@@ -162,6 +171,17 @@ describe('EventService', () => {
 
       // Then
       await expect(result).rejects.toThrow(new InternalServerErrorException());
+    });
+
+    it('should create a new document on meili search', async () => {
+      // Given
+      const eventEntity = getEventEntity();
+
+      // When
+      await sut.createEvent(eventEntity);
+
+      // Then
+      expect(meiliSearchMock.index('events').addDocuments).toHaveBeenCalled();
     });
   });
 

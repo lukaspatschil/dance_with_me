@@ -25,6 +25,8 @@
     "event_name_error": "Name der Veranstalltung wird benötigt.",
     "housenumber": "Hausnummer",
     "housenumber_error": "Hausnummer wird benötigt.",
+    "image": "Bild",
+    "image_type": "Das Bild muss ein JPEG oder PNG sein.",
     "number_error": "Muss eine Nummer sein.",
     "price": "Preis",
     "price_error": "Preis darf nicht negativ sein.",
@@ -39,9 +41,7 @@
     "wrong_time_error": "Startzeit muss vor Endzeit liegen.",
     "zip": "Postleitzahl",
     "zip_error": "Postleitzahl wird benötigt.",
-    "zip_placeholder": "PLZ",
-    "image": "Bild",
-    "image_type": "Das Bild muss ein JPEG oder PNG sein."
+    "zip_placeholder": "PLZ"
   },
   "eventCategory": {
     "Bachata": "Bachata",
@@ -49,6 +49,9 @@
     "Reggeaton": "Reggeaton",
     "Salsa": "Salsa",
     "Zouk": "Zouk"
+  },
+  "eventOverview": {
+    "search": "Suche"
   },
   "events": {
     "events": "Veranstalltungen",

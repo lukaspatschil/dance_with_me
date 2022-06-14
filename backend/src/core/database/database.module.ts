@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Neo4jModule } from 'nest-neo4j';
+import { MeiliSearchModule } from 'nestjs-meilisearch';
 
 @Module({
   imports: [
@@ -20,6 +21,14 @@ import { Neo4jModule } from 'nest-neo4j';
         port: configService.get('NEO4J_PORT'),
         username: configService.get('NEO4J_USERNAME'),
         password: configService.get('NEO4J_PASSWORD'),
+      }),
+      inject: [ConfigService],
+    }),
+    MeiliSearchModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        host: configService.get('MEILI_SEARCH_HOST', 'http://localhost:7700'),
+        apiKey: configService.get('MEILI_SEARCH_API_KEY', 'masterKey'),
       }),
       inject: [ConfigService],
     }),

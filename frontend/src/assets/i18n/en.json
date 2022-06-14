@@ -25,6 +25,8 @@
     "event_name_error": "Name is required.",
     "housenumber": "House number",
     "housenumber_error": "House number is required.",
+    "image": "Image",
+    "image_type": "The image needs to be of type jpeg or png.",
     "number_error": "Only numbers.",
     "price": "Price",
     "price_error": "Price must not be negative.",
@@ -39,9 +41,7 @@
     "wrong_time_error": "Start time needs to be before end time..",
     "zip": "ZIP code",
     "zip_error": "ZIP code is required.",
-    "zip_placeholder": "ZIP",
-    "image": "Image",
-    "image_type": "The image needs to be of type jpeg or png."
+    "zip_placeholder": "ZIP"
   },
   "eventCategory": {
     "Bachata": "Bachata",
@@ -49,6 +49,9 @@
     "Reggeaton": "Reggeaton",
     "Salsa": "Salsa",
     "Zouk": "Zouk"
+  },
+  "eventOverview": {
+    "search": "Search"
   },
   "events": {
     "events": "Events",

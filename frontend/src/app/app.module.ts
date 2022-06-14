@@ -22,6 +22,8 @@ import { CoreModule } from './core/core.module';
 import { EventDetailComponent } from './components/events/event-detail/event-detail.component';
 import { UserDetailComponent } from './components/user/user-detail/user-detail.component';
 import { PaymentComponent } from './components/payment/payment.component';
+import { NgAisModule } from 'angular-instantsearch';
+import { EventSearchComponent } from './components/events/event-search/event-search.component';
 import { EventOverviewMapComponent } from './components/events/event-overview-map/event-overview-map.component';
 
 @NgModule({
@@ -37,7 +39,8 @@ import { EventOverviewMapComponent } from './components/events/event-overview-ma
     EventDetailComponent,
     ImageAccessorDirective,
     UserDetailComponent,
-    PaymentComponent
+    PaymentComponent,
+    EventSearchComponent
   ],
   imports: [
     AppRoutingModule,
@@ -50,6 +53,7 @@ import { EventOverviewMapComponent } from './components/events/event-overview-ma
         deps: [HttpClient]
       }
     }),
+    NgAisModule.forRoot(),
     AuthModule,
     FormsModule,
     ReactiveFormsModule,

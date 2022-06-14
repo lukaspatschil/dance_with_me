@@ -68,7 +68,15 @@ services:
       retries: 20
       start_period: 3s
 
+  local-meiliseach:
+    image: getmeili/meilisearch:v0.27.1
+    ports:
+      - '7700:7700'
+    volumes:
+      - meilisearch-data-local:/data
+
 volumes:
   mongodb-data-container-local:
   minio-data-local:
   neo4j-data-local:
+  meilisearch-data-local:

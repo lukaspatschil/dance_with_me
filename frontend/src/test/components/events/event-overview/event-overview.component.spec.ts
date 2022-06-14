@@ -2,13 +2,13 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EventOverviewComponent } from '../../../../app/components/events/event-overview/event-overview.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { EventService } from '../../../../app/services/event.service';
-import { EventServiceMock } from '../../../mock/event.service.mock';
 import { RouterTestingModule } from '@angular/router/testing';
 import { GeolocationService } from '@ng-web-apis/geolocation';
 import { of } from 'rxjs';
 import { EventEntity } from '../../../../app/entities/event.entity';
 import { Category } from '../../../../app/enums/category.enum';
+import { EventService } from '../../../../app/services/event.service';
+import { EventServiceMock } from '../../../mock/event.service.mock';
 
 
 

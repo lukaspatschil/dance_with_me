@@ -20,7 +20,8 @@ export class AuthService {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   private _accessToken: string | null = null;
 
-  private refreshTimeout: number | null = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private refreshTimeout: any = null;
 
   constructor(
     private readonly http: HttpClient,

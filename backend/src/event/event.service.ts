@@ -17,6 +17,8 @@ import { AuthUser } from '../auth/interfaces';
 import { NotYetParticipatedConflictError } from '../core/error/notYetParticipatedConflict.error';
 import { AlreadyParticipatedConflictError } from '../core/error/alreadyParticipatedConflict.error';
 import { Neo4jService } from 'nest-neo4j';
+import { InjectMeiliSearch } from 'nestjs-meilisearch';
+import { MeiliSearch } from 'meilisearch';
 
 const DEFAULT_TAKE = 50;
 const DEFAULT_SKIP = 0;
@@ -33,6 +35,7 @@ export class EventService {
     private readonly eventModel: Model<EventDocument>,
     private readonly positionStackService: OpenStreetMapApiService,
     private readonly neo4jService: Neo4jService,
+    @InjectMeiliSearch() private readonly meiliSearch: MeiliSearch,
   ) {}
 
   async getEventsQueryDto(query: QueryDto): Promise<EventEntity[]> {
@@ -134,6 +137,17 @@ export class EventService {
       this.logger.error(error);
       throw new InternalServerErrorException(error);
     }
+
+    if (result.public) {
+      this.logger.log('Add event to meili search: ' + JSON.stringify(result));
+      await this.meiliSearch
+        .index('events')
+        .addDocuments([result])
+        .catch(() => {
+          this.logger.error('Error while adding event to meili search');
+        });
+    }
+
     return result;
   }
 

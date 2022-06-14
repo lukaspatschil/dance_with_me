@@ -27,3 +27,6 @@ process.env.NEO4J_PASSWORD = 'dancewithme';
 process.env.NEO4J_PORT = 7687;
 process.env.NEO4J_ENDPOINT = 'neo4j://localhost:7687';
 process.env.NEO4J_AUTH = 'neo4j/dancewithme';
+
+process.env.MEILI_SEARCH_HOST = 'http://localhost:7700';
+process.env.MEILI_SEARCH_API_KEY = 'masterKey';

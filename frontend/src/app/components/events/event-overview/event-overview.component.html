@@ -1,9 +1,10 @@
 <div class="m-0 fixed justify-center flex space-x-2 bg-white w-full">
-  <span *ngIf="recommendation; else noRecommendation" class="material-symbols-outlined icon-big-recommend" (click)="getEvents()" >tune</span>
+  <span *ngIf="recommendation; else noRecommendation" class="material-symbols-outlined icon-big-recommend cursor-pointer" (click)="getEvents()" >tune</span>
   <ng-template #noRecommendation>
-    <span class="material-symbols-outlined icon-big" (click)="getRecommendation()">tune</span>
+    <span class="material-symbols-outlined icon-big cursor-pointer" (click)="getRecommendation()">tune</span>
   </ng-template>
-  <span [routerLink]="'/map'" class="material-symbols-outlined icon-big">map</span>
+  <span [routerLink]="'/map'" class="material-symbols-outlined icon-big cursor-pointer">map</span>
+  <span [routerLink]="'/search'" class="material-symbols-outlined icon-big cursor-pointer">search</span>
 </div>
 
 <div class="font-poppins w-full mt-5">
