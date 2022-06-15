@@ -1,11 +1,11 @@
 {
-  "name": "dance-with-me-pwa",
-  "short_name": "dance-with-me",
-  "theme_color": "#7F1D1D",
+  "name": "dance-with-me-web-client",
+  "short_name": "dance-with-me-web-client",
+  "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "./",
-  "start_url": "./",
+  "start_url": "/",
   "icons": [
     {
       "src": "assets/icons/logo.png",

@@ -2,6 +2,7 @@ import { Component, HostBinding } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from './core/auth/auth.service';
 import { UserService } from './services/user.service';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,11 @@ export class AppComponent {
   ) {
     translate.addLangs(['en', 'de']);
     translate.setDefaultLang('de');
+  }
+
+  ngOnInit() {
+    console.log(environment.baseUrl);
+    console.log(environment.loginCallback);
   }
 
   toggleNavbar(): void {

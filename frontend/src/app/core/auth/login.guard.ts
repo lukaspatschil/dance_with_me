@@ -13,6 +13,7 @@ export class LoginGuard implements CanActivate {
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot): UrlTree | boolean {
+    console.log('Route', route);
     const fragments = this.parseFragment(route.fragment);
     const accessToken = fragments.get('access_token') as PasetoToken | undefined;
     const refreshToken = fragments.get('refresh_token');

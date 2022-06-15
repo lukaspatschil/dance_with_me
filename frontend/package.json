@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start-pwa": "ng build --prod && http-server -o -c-1 dist/dance-with-me-web-client",
     "build": "ng build",
     "build:prod": "ng build --configuration=production",
     "watch": "ng build --watch --configuration development",
@@ -35,7 +36,6 @@
     "@ngx-translate/http-loader": "^7.0.0",
     "@popperjs/core": "^2.10.2",
     "@stripe/stripe-js": "^1.29.0",
-    "eslint-config-dance-with-me": "^1.0.0",
     "express": "^4.15.2",
     "material-icons": "^1.10.9",
     "ol": "^6.14.1",
