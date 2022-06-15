@@ -14,6 +14,7 @@ export class LoginComponent {
   constructor(@Inject(DOCUMENT) private readonly document: Document) {}
 
   public loginGoogle(): void {
+    console.log(environment.baseUrl);
     document.location.href = `${AUTH_API}/login_redirect/google`;
   }
 

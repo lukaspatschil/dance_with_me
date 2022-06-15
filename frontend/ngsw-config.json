@@ -1,11 +1,26 @@
 {
   "$schema": "./node_modules/@angular/service-worker/config/schema.json",
   "index": "/index.html",
+  "dataGroups": [{
+    "name": "api",
+    "installMode": "prefetch",
+    "urls": [
+      "http://localhost:3000/*"
+    ],
+    "cacheConfig": {
+      "maxSize": 10000,
+      "maxAge": "3d",
+      "strategy": "performance"
+    }
+  }],
   "assetGroups": [
     {
       "name": "app",
       "installMode": "prefetch",
       "resources": {
+        "urls": [
+          "http://localhost:3000/event"
+        ],
         "files": [
           "/favicon.ico",
           "/index.html",
