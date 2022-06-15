@@ -5,6 +5,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ImageAccessorDirective } from './directives/image.directive';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 // Language selection
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -25,6 +27,7 @@ import { PaymentComponent } from './components/payment/payment.component';
 import { NgAisModule } from 'angular-instantsearch';
 import { EventSearchComponent } from './components/events/event-search/event-search.component';
 import { EventOverviewMapComponent } from './components/events/event-overview-map/event-overview-map.component';
+
 
 @NgModule({
   declarations: [
@@ -57,7 +60,13 @@ import { EventOverviewMapComponent } from './components/events/event-overview-ma
     AuthModule,
     FormsModule,
     ReactiveFormsModule,
-    CoreModule
+    CoreModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
