@@ -101,5 +101,16 @@
     "mail": "Mail",
     "name": "Name",
     "verified_tooltip": "E-Mail verifiziert"
+  },
+  "landingPage": {
+    "joinNow": "Jetzt anmelden!",
+    "firstHeader": "Auf der Suche nach einem Tanzevent?",
+    "header": "Finde das Tanzevent, das zu dir passt!",
+    "title": "Vorteile",
+    "sub1": "Tanze überall mit deinen Freunden",
+    "sub1Text": "Nimm mit deinen Freunden an Tanzevents teil und triff neue Menschen.",
+    "sub2": "Vernetze dich weltweit",
+    "sub2Text": "Finde Tanzenvents in deiner Nähe auf der ganzen Welt.",
+    "footer": "Finde noch heute eine Tanzveranstaltung in deiner Nähe!"
   }
 }

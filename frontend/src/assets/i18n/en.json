@@ -101,5 +101,16 @@
     "mail": "Mail",
     "name": "Name",
     "verified_tooltip": "Mail is verified"
+  },
+  "landingPage": {
+    "joinNow": "Join now!",
+    "firstHeader": "Looking for a dancing event?",
+    "header": "Find the dancing event which fits the most for you!",
+    "title": "Advantages",
+    "sub1": "Dance anywhere with your friends",
+    "sub1Text": "Take place with your friends in dance events and meet new people.",
+    "sub2": "Connect world wide",
+    "sub2Text": "Find dance events all over the world which are close to you.",
+    "footer": "Find a dancing event in you area today!"
   }
 }
