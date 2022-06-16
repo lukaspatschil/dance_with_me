@@ -1,13 +1,22 @@
-<div class="m-0 fixed justify-center flex space-x-2 bg-white w-full">
-  <span *ngIf="recommendation; else noRecommendation" class="material-symbols-outlined icon-big-recommend cursor-pointer" (click)="getEvents()" >tune</span>
-  <ng-template #noRecommendation>
-    <span class="material-symbols-outlined icon-big cursor-pointer" (click)="getRecommendation()">tune</span>
-  </ng-template>
-  <span [routerLink]="'/map'" class="material-symbols-outlined icon-big cursor-pointer">map</span>
-  <span [routerLink]="'/search'" class="material-symbols-outlined icon-big cursor-pointer">search</span>
+<div class="m-0 fixed justify-center flex flex-col gap-2 space-x-2 bg-white w-full">
+  <div class="m-0 justify-center flex space-x-2 w-full">
+    <span *ngIf="recommendation; else noRecommendation"
+          class="material-symbols-outlined icon-big-recommend cursor-pointer" (click)="getEvents()">tune</span>
+    <ng-template #noRecommendation>
+      <span class="material-symbols-outlined icon-big cursor-pointer" (click)="getRecommendation()">tune</span>
+    </ng-template>
+    <span [routerLink]="'/map'" class="material-symbols-outlined icon-big cursor-pointer">map</span>
+    <span [routerLink]="'/search'" class="material-symbols-outlined icon-big cursor-pointer">search</span>
+  </div>
+  <div class="justify-center flex space-x-2 w-full">
+    <label for="radius" class="block text-sm font-medium text-gray-900 dark:text-gray-300">Radius {{this.radius / 1000}}km
+    </label>
+    <input type="range" min="1" max="100" value="10" class="slider" id="radius" (change)=radiusChanged($event)>
+  </div>
 </div>
 
-<div class="font-poppins w-full mt-5">
+
+<div class="font-poppins w-full mt-10">
   <ul class="text-gray-900">
     <li class="py-5 border-b border-gray-200" *ngFor="let event of events">
 
@@ -18,31 +27,36 @@
             <p class="col-span-3 inline-flex text-m mb-2 font-medium text-gray-900 ">
               {{event.name}}
             </p>
-            <span *ngIf="event?.userParticipates" class="material-symbols-outlined col-span-1 inline-flex text-m pt-0 place-self-top attend" (click)="onAttendClicked(event)">event_available</span>
-            <span *ngIf="!event?.userParticipates" class="material-symbols-outlined text-m mt-0 mr-0 place-self-start" (click)="onAttendClicked(event)">calendar_add_on</span>
+            <span *ngIf="event?.userParticipates"
+                  class="material-symbols-outlined col-span-1 inline-flex text-m pt-0 place-self-top attend"
+                  (click)="onAttendClicked(event)">event_available</span>
+            <span *ngIf="!event?.userParticipates" class="material-symbols-outlined text-m mt-0 mr-0 place-self-start"
+                  (click)="onAttendClicked(event)">calendar_add_on</span>
           </div>
 
           <div class="flex mt-4 space-x-2 ">
             <span class="small material-icons-outlined">location_on</span>
             <p class="inline-flex text-sm text-gray-500 truncate dark:text-gray-400">
-              {{event.address?.street}} {{event.address?.housenumber}}, {{event.address?.postalcode}} {{event.address?.city}}
+              {{event.address?.street}} {{event.address?.housenumber}}
+              , {{event.address?.postalcode}} {{event.address?.city}}
             </p>
           </div>
 
-            <div class="flex mt-4 space-x-2 ">
-              <span class="material-icons-outlined">schedule</span>
-              <p class="inline-flex text-sm text-gray-500 truncate dark:text-gray-400">
-                {{event.startDateTime?.toLocaleString()}}
-              </p>
-            </div>
+          <div class="flex mt-4 space-x-2 ">
+            <span class="material-icons-outlined">schedule</span>
+            <p class="inline-flex text-sm text-gray-500 truncate dark:text-gray-400">
+              {{event.startDateTime?.toLocaleString()}}
+            </p>
+          </div>
 
-            <ul class="mt-10">
-              <li  *ngFor="let singleCategory of event.category" class="inline-block px-0.5 mt-2">
-                <span translate class="px-2 py-1 rounded-full border border-gray-300 text-gray-500 text-sm align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease">
+          <ul class="mt-10">
+            <li *ngFor="let singleCategory of event.category" class="inline-block px-0.5 mt-2">
+                <span translate
+                      class="px-2 py-1 rounded-full border border-gray-300 text-gray-500 text-sm align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease">
                     eventCategory.{{singleCategory}}
                 </span>
-              </li>
-            </ul>
+            </li>
+          </ul>
         </div>
       </div>
     </li>

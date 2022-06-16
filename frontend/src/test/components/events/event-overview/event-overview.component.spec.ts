@@ -19,12 +19,16 @@ describe('EventOverviewComponent', () => {
   let eventService: EventService;
   let geoService: GeolocationService;
 
+  let radiusSlider: HTMLInputElement;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ EventOverviewComponent ],
       imports: [ HttpClientTestingModule, RouterTestingModule],
-      providers: [{ provide: EventService, useClass: EventServiceMock },
-        { provide: GeolocationService, useValue: of({ coords: { latitude: 1, longitude: 1 } }) }]
+      providers: [
+        { provide: EventService, useClass: EventServiceMock },
+        { provide: GeolocationService, useValue: of({ coords: { latitude: 1, longitude: 1 } }) }
+      ]
     })
       .compileComponents();
 
@@ -36,6 +40,11 @@ describe('EventOverviewComponent', () => {
     fixture = TestBed.createComponent(EventOverviewComponent);
     comp = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  beforeEach(async () => {
+    await fixture.whenStable();
+    radiusSlider = fixture.debugElement.nativeElement.querySelector('#radius');
   });
 
   it('should create', () => {
@@ -108,6 +117,28 @@ describe('EventOverviewComponent', () => {
 
       // Then
       expect(eventService.participateOnEvent).toHaveBeenCalledWith(eventEntity.id);
+    });
+  });
+
+  describe('radiusChanged', () => {
+    it('should call getEvents', async () => {
+      // When
+      await fixture.whenStable();
+      comp.recommendation = false;
+      radiusSlider.dispatchEvent(new Event('change'));
+
+      // Then
+      expect(eventService.getEvents).toHaveBeenCalled();
+    });
+
+    it('should call getRecommendation', async () => {
+      // When
+      await fixture.whenStable();
+      comp.recommendation = true;
+      radiusSlider.dispatchEvent(new Event('change'));
+
+      // Then
+      expect(eventService.getRecommendation).toHaveBeenCalled();
     });
   });
 });

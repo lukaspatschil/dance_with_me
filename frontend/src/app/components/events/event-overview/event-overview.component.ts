@@ -20,6 +20,9 @@ export class EventOverviewComponent implements OnInit{
 
   userParticipates = false;
 
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+  radius = 10000;
+
   constructor(private readonly eventService: EventService,
     private readonly geolocation$: GeolocationService){}
 
@@ -31,8 +34,7 @@ export class EventOverviewComponent implements OnInit{
     this.recommendation = false;
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     this.geolocation$.pipe(first(position => position !== null)).subscribe((position) => {
-      let radius = 10000;
-      this.eventService.getEvents(position.coords.longitude, position.coords.latitude, radius).subscribe((data) => this.events = data);
+      this.eventService.getEvents(position.coords.longitude, position.coords.latitude, this.radius).subscribe((data) => this.events = data);
     });
   }
 
@@ -41,8 +43,7 @@ export class EventOverviewComponent implements OnInit{
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     this.geolocation$.pipe(first(position => position !== null)).subscribe((position) => {
-      let radius = 10000;
-      this.eventService.getRecommendation(position.coords.longitude, position.coords.latitude, radius).subscribe((data) => {
+      this.eventService.getRecommendation(position.coords.longitude, position.coords.latitude, this.radius).subscribe((data) => {
         this.events = data;
       });
     });
@@ -66,5 +67,18 @@ export class EventOverviewComponent implements OnInit{
         }
       });
     }
+  }
+
+  radiusChanged(event: Event): void {
+    const element = event.target as HTMLInputElement;
+
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    this.radius = parseInt(element.value) * 1000;
+    if (this.recommendation){
+      this.getRecommendation();
+    } else {
+      this.getEvents();
+    }
+
   }
 }
