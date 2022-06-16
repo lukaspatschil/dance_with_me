@@ -9,21 +9,20 @@
   "routing": {
   		"index": "/index.html",
   		"routes": {
-  			"/": {
-  				"prefix": false
-  			},
-  			"/route": {
-  				"prefix": true
-  			}
-  		}
+          "/": {
+          "match": "exact"
+          },
+          "/about": {
+          "match": "exact"
+          },
+          "/legal": {
+          "match": "exact"
+          },
+          "/privacy": {
+          "match": "prefix"
+          }
+      }
   	},
-
-      "url_handlers": [
-        {
-          "origin": "http://localhost:8080/about"
-        }
-      ]
-    },
   "icons": [
     {
       "src": "assets/icons/logo.png",

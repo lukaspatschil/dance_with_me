@@ -23,10 +23,10 @@
         "files": [
           "/favicon.ico",
           "/index.html",
-          "/assets/i18n/de.json",
           "/manifest.webmanifest",
           "/*.css",
-          "/*.js"
+          "/*.js",
+          "/**/*.html"
         ]
       }
     },
@@ -40,6 +40,26 @@
           "/*.(json|svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"
         ]
       }
+    },
+    {
+      "name": "app",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/components/**",
+          "/*.(json|svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"
+        ]
+      }
     }
+  ],
+  "navigationUrls": [
+    "/**",
+    "!/**/*.*",
+    "!/**/*__*",
+    "!/**/*__*/**",
+    "!/bypass/service/worker",
+    "!/account/bypass-service-worker**",
+    "!/bypass-service-worker**"
   ]
 }
