@@ -7,10 +7,12 @@
     <span *ngIf="!userParticipates" class="material-symbols-outlined inline-block align-top text-m pt-0 mr-5" (click)="onAttendClicked(event)">calendar_add_on</span>
   </div>
 
-  <div class="flex mt-4 space-x-2 ">
+  <div class="flex mt-4 space-x-2">
     <span class="small material-icons-outlined text-gray-400">location_on</span>
     <p class="inline-flex text-sm text-gray-800 truncate dark:text-gray-700">
-      {{event?.address?.street}} {{event?.address?.housenumber}}, {{event?.address?.postalcode}} {{event?.address?.city}}
+      <a href="https://www.google.com/maps/search/?api=1&query={{event.location.latitude}}%2C{{event.location.longitude}}" class="underline">
+        {{event?.address?.street}} {{event?.address?.housenumber}}, {{event?.address?.postalcode}} {{event?.address?.city}}
+      </a>
     </p>
   </div>
 
