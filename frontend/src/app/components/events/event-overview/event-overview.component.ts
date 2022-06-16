@@ -32,6 +32,7 @@ export class EventOverviewComponent implements OnInit{
 
   getEvents(): void {
     this.recommendation = false;
+    this.events = [];
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     this.geolocation$.pipe(first(position => position !== null)).subscribe((position) => {
       this.eventService.getEvents(position.coords.longitude, position.coords.latitude, this.radius).subscribe((data) => this.events = data);
@@ -40,7 +41,7 @@ export class EventOverviewComponent implements OnInit{
 
   getRecommendation(): void {
     this.recommendation = true;
-
+    this.events = [];
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     this.geolocation$.pipe(first(position => position !== null)).subscribe((position) => {
       this.eventService.getRecommendation(position.coords.longitude, position.coords.latitude, this.radius).subscribe((data) => {
