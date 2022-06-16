@@ -44,6 +44,7 @@ import { EventOverviewMapComponent } from './components/events/event-overview-ma
     UserDetailComponent,
     PaymentComponent,
     EventSearchComponent
+    PaymentComponent
   ],
   imports: [
     AppRoutingModule,

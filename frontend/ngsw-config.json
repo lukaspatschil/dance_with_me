@@ -3,9 +3,8 @@
   "index": "/index.html",
   "dataGroups": [{
     "name": "api",
-    "installMode": "prefetch",
     "urls": [
-      "http://localhost:3000/*"
+      "http://localhost:3000/event"
     ],
     "cacheConfig": {
       "maxSize": 10000,
