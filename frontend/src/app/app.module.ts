@@ -27,7 +27,6 @@ import { PaymentComponent } from './components/payment/payment.component';
 import { NgAisModule } from 'angular-instantsearch';
 import { EventSearchComponent } from './components/events/event-search/event-search.component';
 import { EventOverviewMapComponent } from './components/events/event-overview-map/event-overview-map.component';
-import { RedirectComponent } from './components/redirect/redirect/redirect.component';
 
 
 @NgModule({
@@ -44,7 +43,7 @@ import { RedirectComponent } from './components/redirect/redirect/redirect.compo
     ImageAccessorDirective,
     UserDetailComponent,
     PaymentComponent,
-    EventSearchComponent
+    EventSearchComponent,
     PaymentComponent
   ],
   imports: [
