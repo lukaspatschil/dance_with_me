@@ -5,6 +5,7 @@ import { UserDocument, UserSchema } from '../core/schema/user.schema';
 import { UserController } from './user.controller';
 import { DatabaseModule } from '../core/database/database.module';
 import { EventModule } from '../event/event.module';
+import { ValidationModule } from '../validation/validation.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { EventModule } from '../event/event.module';
     ]),
     DatabaseModule,
     EventModule,
+    ValidationModule,
   ],
   providers: [UserService],
   controllers: [UserController],

@@ -6,6 +6,13 @@ import { FileEntity } from '../../src/core/entity/file.entity';
 
 export class ImageServiceMock {
   getImage = jest.fn(() => {
+    return {
+      body: bufferMock,
+      contentType: 'image/png',
+    };
+  });
+
+  getImageWithSize = jest.fn(() => {
     return bufferMock;
   });
 

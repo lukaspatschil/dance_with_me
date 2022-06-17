@@ -2,7 +2,6 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
-  NotFoundException,
   OnApplicationBootstrap,
 } from '@nestjs/common';
 import { PutObjectRequest, GetObjectRequest } from 'aws-sdk/clients/s3';
@@ -15,6 +14,7 @@ import mongoose from 'mongoose';
 import { extname } from 'path';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 import sharp = require('sharp');
+import { NotFoundError } from '../core/error/notFound.error';
 
 /* eslint @typescript-eslint/naming-convention: 0 */
 
@@ -27,38 +27,57 @@ export class ImageService implements OnApplicationBootstrap {
     private readonly configService: ConfigService,
   ) {}
 
-  async getImage(id: string, imageSize: ImageSizeEnum): Promise<Readable> {
+  async getImageWithSize(
+    id: string,
+    imageSize: ImageSizeEnum,
+  ): Promise<Readable> {
+    const key = `${imageSize.toLowerCase()}/${id}`;
+    const { body } = await this.getImage(key);
+    return body;
+  }
+
+  async getImage(path: string) {
     const bucketName =
       this.configService.get('BUCKET_NAME_PREFIX') +
       this.configService.get('STAGE');
-    const key = `${imageSize.toLowerCase()}/${id}`;
-    this.logger.log(`Get File with Key: ${id} from Bucket: ${imageSize}.`);
+    this.logger.log(`Get File with Key: ${path} from Bucket: ${bucketName}.`);
     const config: GetObjectRequest = {
       Bucket: bucketName,
-      Key: key,
+      Key: path,
     };
-    let response;
     try {
-      response = await this.s3.getObject(config).promise();
+      const { Body, ContentType } = await this.s3.getObject(config).promise();
+
+      // convert body to readable stream if necessary
+      if (Body instanceof Buffer) {
+        return {
+          body: Readable.from(Body),
+          contentType: ContentType,
+        };
+      } else if (typeof Body === 'string') {
+        return {
+          body: Readable.from([Body]),
+          contentType: ContentType,
+        };
+      } else if (Body instanceof Readable) {
+        return {
+          body: Body,
+          contentType: ContentType,
+        };
+      }
     } catch (error) {
       if (error instanceof Error) {
         if (error.name === 'NoSuchKey') {
-          this.logger.error(`Bucket ${imageSize} doesn't contain key ${id}.`);
-          throw new NotFoundException();
+          this.logger.error(
+            `Bucket ${bucketName} doesn't contain key ${path}.`,
+          );
+          throw NotFoundError;
         }
       }
       this.logger.error(`Unknown s3 error ${error}.`);
       throw new InternalServerErrorException();
     }
-    if (response.Body instanceof Readable) {
-      return response.Body;
-    }
-    if (response.Body instanceof Buffer) {
-      return Readable.from(response.Body);
-    }
-    if (typeof response.Body === 'string') {
-      return Readable.from([response.Body]);
-    }
+
     this.logger.error(
       'S3 response was not a valid format, jpg and png are normally a buffer.',
     );

@@ -12,6 +12,7 @@ import { RoleEnum } from '../core/schema/enum/role.enum';
 import { NotFoundError } from '../core/error/notFound.error';
 import { Neo4jService } from 'nest-neo4j';
 import { EventService } from '../event/event.service';
+import { ValidationService } from '../validation/validation.service';
 
 @Injectable()
 export class UserService {
@@ -19,6 +20,7 @@ export class UserService {
 
   constructor(
     private readonly eventService: EventService,
+    private readonly validationService: ValidationService,
     @InjectModel(UserDocument.name)
     private readonly userModel: Model<UserDocument>,
     private readonly neo4jService: Neo4jService,
@@ -28,6 +30,7 @@ export class UserService {
     this.logger.log(`Delete user with id: ${userId}`);
     let result;
     try {
+      await this.validationService.deleteValidationsByUser(userId);
       result = await this.userModel.findByIdAndDelete(userId).exec();
       await this.eventService.deleteUsersFromFutureEvents(userId);
     } catch (e) {

@@ -205,10 +205,10 @@ describe('ImageService', () => {
       await expect(result).rejects.toThrow(new InternalServerErrorException());
     });
   });
-  describe('getImage', () => {
+  describe('getImageWithSize', () => {
     it('should call the getObject on S3', async () => {
       // When
-      await sut.getImage(validFilenamePNG, ImageSizeEnum.MEDIUM);
+      await sut.getImageWithSize(validFilenamePNG, ImageSizeEnum.MEDIUM);
 
       // Then
       expect(s3.getObject).toHaveBeenCalled();
@@ -216,7 +216,7 @@ describe('ImageService', () => {
 
     it('should call the getObject on S3 and return a buffer', async () => {
       // When
-      const readable = await sut.getImage(
+      const readable = await sut.getImageWithSize(
         validFilenamePNG,
         ImageSizeEnum.MEDIUM,
       );
@@ -228,7 +228,7 @@ describe('ImageService', () => {
 
     it('should call the getObject on S3 and return a readable', async () => {
       // When
-      const readable = await sut.getImage(
+      const readable = await sut.getImageWithSize(
         validFilenamePNGReadable,
         ImageSizeEnum.MEDIUM,
       );
@@ -240,7 +240,7 @@ describe('ImageService', () => {
 
     it('should call the getObject on S3 and return a string', async () => {
       // When
-      const readable = await sut.getImage(
+      const readable = await sut.getImageWithSize(
         validFilenamePNGString,
         ImageSizeEnum.MEDIUM,
       );
@@ -253,16 +253,16 @@ describe('ImageService', () => {
     it('should call the service and throw a NotFoundException', async () => {
       // When
       const result = async () =>
-        await sut.getImage(notFoundFilenamePNG, ImageSizeEnum.MEDIUM);
+        await sut.getImageWithSize(notFoundFilenamePNG, ImageSizeEnum.MEDIUM);
 
       // Then
-      await expect(result).rejects.toThrow(new NotFoundException());
+      await expect(result).rejects.toThrow(NotFoundException);
     });
 
     it('should call the service and throw an InternalServerErrorException', async () => {
       // When
       const result = async () =>
-        await sut.getImage(invalidFilenameJPG, ImageSizeEnum.MEDIUM);
+        await sut.getImageWithSize(invalidFilenameJPG, ImageSizeEnum.MEDIUM);
 
       // Then
       await expect(result).rejects.toThrow(new InternalServerErrorException());
@@ -271,7 +271,7 @@ describe('ImageService', () => {
     it('should call the service and throw an InternalServerErrorException due s3 wrong type', async () => {
       // When
       const result = async () =>
-        await sut.getImage(invalidFilenamePDF, ImageSizeEnum.MEDIUM);
+        await sut.getImageWithSize(invalidFilenamePDF, ImageSizeEnum.MEDIUM);
 
       // Then
       await expect(result).rejects.toThrow(new InternalServerErrorException());

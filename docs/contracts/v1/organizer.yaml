@@ -6,14 +6,16 @@ ValidationRequestOperations:
     description: Users can request validation from admins to become organizers.
     requestBody:
       content:
-        image/png:
+        multipart/form-data:
           schema:
-            type: string
-            format: binary
-        image/jpeg:
-          schema:
-            type: string
-            format: binary
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+          encoding:
+            file:
+              contentType: image/png, image/jpeg
     responses:
       '201':
         description: Image uploaded successfully

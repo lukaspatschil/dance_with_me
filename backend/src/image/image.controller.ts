@@ -50,7 +50,7 @@ export class ImageController {
     @Query() imageSize: ImageSizeDto,
   ) {
     this.logger.log('Get Picture with id: ' + id);
-    const result = await this.imageService.getImage(id, imageSize.size);
+    const result = await this.imageService.getImageWithSize(id, imageSize.size);
     return new StreamableFile(result);
   }
 }

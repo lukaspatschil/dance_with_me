@@ -19,6 +19,8 @@ import { EventService } from '../event/event.service';
 import { EventServiceForUserServiceMock } from '../../test/stubs/event.service.for.User.service.mock';
 import { Neo4jService } from 'nest-neo4j/dist';
 import { UserNeo4jServiceMock } from '../../test/stubs/user.neo4j.service.mock';
+import { ValidationService } from '../validation/validation.service';
+import { ValidationServiceMock } from '../../test/stubs/validation.service.mock';
 
 /* eslint @typescript-eslint/naming-convention: 0 */
 
@@ -41,6 +43,10 @@ describe('UserService', () => {
         {
           provide: Neo4jService,
           useClass: UserNeo4jServiceMock,
+        },
+        {
+          provide: ValidationService,
+          useClass: ValidationServiceMock,
         },
       ],
     }).compile();

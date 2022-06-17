@@ -4,7 +4,7 @@ import {
   invalidFilenamePDF,
   notFoundFilenamePNG,
   stringAWSBinaryImageResponse,
-  validFileName,
+  validFileKey,
   validFilenameJPG,
   validFilenamePNG,
   validFilenamePNGReadable,
@@ -59,7 +59,7 @@ export class MockS3Instance {
   putObject = jest.fn((putObjectRequest: any) => {
     this._functionCalled = 'putObject';
     const config: PutObjectRequest = putObjectRequest;
-    if (config.Key.includes(validFileName)) {
+    if (config.Key.includes(validFileKey.toString())) {
       return this;
     } else {
       throw new Error();
@@ -69,6 +69,8 @@ export class MockS3Instance {
   createBucket = jest.fn().mockReturnThis();
 
   headBucket = jest.fn().mockReturnThis();
+
+  deleteObject = jest.fn().mockReturnThis();
 
   promise = jest.fn(() => {
     switch (this._functionCalled) {
