@@ -3,6 +3,13 @@
     "about_link": "About",
     "about_text": "We at \"Dance with me\" have the goal to unite people in dancing. Our app is designed to help dance enthusiasts find their events quickly and easily and thus live out their passion."
   },
+  "admin": {
+    "accept": "Accept",
+    "comment": "Comment:",
+    "name": "Name: ",
+    "reject": "Reject",
+    "status": "Status: "
+  },
   "create": {
     "addition": "Addition",
     "cancel": "Cancel",
@@ -57,6 +64,17 @@
     "events": "Events",
     "show_list": "Show list"
   },
+  "landingPage": {
+    "firstHeader": "Looking for a dancing event?",
+    "footer": "Find a dancing event in you area today!",
+    "header": "Find the dancing event which fits the most for you!",
+    "joinNow": "Join now!",
+    "sub1": "Dance anywhere with your friends",
+    "sub1Text": "Take place with your friends in dance events and meet new people.",
+    "sub2": "Connect world wide",
+    "sub2Text": "Find dance events all over the world which are close to you.",
+    "title": "Advantages"
+  },
   "legal_link": "Legal",
   "login": {
     "description": "Sign in and start dancing!",
@@ -65,6 +83,7 @@
     "welcome": "Welcome"
   },
   "navbar": {
+    "admin": "Admin panel",
     "create_event": "Create event",
     "events": "Events",
     "login": "Login",
@@ -101,16 +120,5 @@
     "mail": "Mail",
     "name": "Name",
     "verified_tooltip": "Mail is verified"
-  },
-  "landingPage": {
-    "joinNow": "Join now!",
-    "firstHeader": "Looking for a dancing event?",
-    "header": "Find the dancing event which fits the most for you!",
-    "title": "Advantages",
-    "sub1": "Dance anywhere with your friends",
-    "sub1Text": "Take place with your friends in dance events and meet new people.",
-    "sub2": "Connect world wide",
-    "sub2Text": "Find dance events all over the world which are close to you.",
-    "footer": "Find a dancing event in you area today!"
   }
 }

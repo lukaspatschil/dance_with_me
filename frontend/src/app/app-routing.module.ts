@@ -17,6 +17,8 @@ import { UserDetailComponent } from './components/user/user-detail/user-detail.c
 import { OrganiserGuard } from './core/auth/guards/organiser.guard';
 import { RefreshGuard } from './core/auth/guards/refresh.guard';
 import { PaymentComponent } from './components/payment/payment.component';
+import { AdminComponent } from './components/admin/admin.component';
+import { AdminGuard } from './core/auth/guards/admin.guard';
 import { EventSearchComponent } from './components/events/event-search/event-search.component';
 
 const routes: Routes = [
@@ -29,7 +31,8 @@ const routes: Routes = [
       { path: 'map', component: EventOverviewMapComponent },
       { path: 'search', component: EventSearchComponent },
       { path: 'user', component: UserDetailComponent },
-      { path: 'payment/:id', component: PaymentComponent }
+      { path: 'payment/:id', component: PaymentComponent },
+      { path: 'admin', canActivate: [AdminGuard], component: AdminComponent }
     ] },
     { path: 'about', component: AboutPageComponent },
     { path: 'legal', component: LegalPageComponent },

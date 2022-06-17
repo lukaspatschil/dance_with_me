@@ -23,6 +23,9 @@
   <ul class="align-content-center leading-10 font-poppins text-red-900">
     <div *ngIf="authService.isAuthenticated(); then thenBlock; else elseBlock"></div>
     <ng-template #thenBlock>
+      <li *ngIf="userService.role === 'Admin'" class="text-center">
+        <a class="nav-link" [routerLink]="'/admin'" (click)="toggleNavbar()">{{'navbar.admin' | translate}}</a>
+      </li>
       <li *ngIf="userService.role === 'Organiser' || userService.role === 'Admin'" class="text-center">
         <a class="nav-link" [routerLink]="'/create'" (click)="toggleNavbar()">{{'navbar.create_event' | translate}}</a>
       </li>

@@ -21,10 +21,13 @@ export class UserService {
   constructor(private readonly http: HttpClient) {}
 
 
-  updateUser(userId: string): void {
-    this.http.get<UserDto>(`${environment.baseUrl}/user/${userId}`).subscribe(user => {
-      const userEntity = UserMapper.dtoToEntity(user);
-      this._user.next(userEntity);
+  updateUser(userId: string): Promise<void> {
+    return new Promise((resolve) => {
+      this.http.get<UserDto>(`${environment.baseUrl}/user/${userId}`).subscribe(user => {
+        const userEntity = UserMapper.dtoToEntity(user);
+        this._user.next(userEntity);
+        resolve();
+      });
     });
   }
 

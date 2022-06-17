@@ -80,12 +80,12 @@ describe('AuthService', () => {
   });
 
   describe('setTokens', () => {
-    it('should set the _accessToken', () => {
+    it('should set the _accessToken', async () => {
       // Given
       const refreshToken = 'refreshToken';
 
       // When
-      sut.setTokens(accessToken, refreshToken);
+      await sut.setTokens(accessToken, refreshToken);
 
       // Then
       expect(sut.getToken).toBe(accessToken);
@@ -93,30 +93,30 @@ describe('AuthService', () => {
 
     });
 
-    it('should set the refreshToken in the storage', () => {
+    it('should set the refreshToken in the storage', async () => {
       // Given
       const refreshToken = 'refreshToken';
 
       // When
-      sut.setTokens(accessToken, refreshToken);
+      await sut.setTokens(accessToken, refreshToken);
 
       // Then
       expect(tokenService.saveRefreshToken).toHaveBeenCalledWith(refreshToken);
     });
 
-    it('should start the refresh loop after 14 minutes', () => {
+    it('should start the refresh loop after 14 minutes', async () => {
       // Given
       pasetoService.decodeToken = jest.fn().mockReturnValue({ payload: {} });
       const refreshToken = 'refreshToken';
 
       // When
-      sut.setTokens(accessToken, refreshToken);
+      await sut.setTokens(accessToken, refreshToken);
 
       // Then
       expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), TIME);
     });
 
-    it('should refresh tokens after 15 minutes', () => {
+    it('should refresh tokens after 15 minutes', async () => {
       jest.useFakeTimers('legacy');
       // Given
       const refreshSpy = jest.spyOn(sut, 'refreshAccessToken').mockImplementationOnce(() => Promise.resolve());
@@ -124,7 +124,7 @@ describe('AuthService', () => {
       const refreshToken = 'refreshToken';
 
       // When
-      sut.setTokens(accessToken, refreshToken);
+      await sut.setTokens(accessToken, refreshToken);
       jest.advanceTimersByTime(TIME);
 
       // Then
@@ -132,23 +132,23 @@ describe('AuthService', () => {
       jest.useRealTimers();
     });
 
-    it('should decode the token with the PasetoService', () => {
+    it('should decode the token with the PasetoService', async () => {
       const refreshToken = 'refreshToken';
 
       // When
-      sut.setTokens(accessToken, refreshToken);
+      await sut.setTokens(accessToken, refreshToken);
 
       // Then
       expect(pasetoService.decodeToken).toHaveBeenCalledWith(accessToken);
     });
 
-    it('should clear the timeout when called again', () => {
+    it('should clear the timeout when called again', async () => {
       // Given
       const refreshToken = 'refreshToken';
 
       // When
-      sut.setTokens(accessToken, refreshToken);
-      sut.setTokens(accessToken, refreshToken);
+      await sut.setTokens(accessToken, refreshToken);
+      await sut.setTokens(accessToken, refreshToken);
 
       // Then
       expect(clearTimeout).toHaveBeenCalledTimes(1);
@@ -176,10 +176,10 @@ describe('AuthService', () => {
       expect(tokenService.clearRefreshToken).toHaveBeenCalled();
     });
 
-    it('should clear the access token', () => {
+    it('should clear the access token', async () => {
       // Given
       const refreshToken = 'refreshToken';
-      sut.setTokens(accessToken, refreshToken);
+      await sut.setTokens(accessToken, refreshToken);
       expect(sut.getToken).toBe(accessToken);
 
       // When
@@ -206,10 +206,10 @@ describe('AuthService', () => {
   });
 
   describe('refreshAccessToken', () => {
-    it('should request a new refresh token and access token', () => {
+    it('should request a new refresh token and access token', async () => {
       // Given
       const refreshToken = 'refreshToken';
-      sut.setTokens(accessToken, refreshToken);
+      await sut.setTokens(accessToken, refreshToken);
 
       // When
       void sut.refreshAccessToken();
@@ -223,12 +223,12 @@ describe('AuthService', () => {
       });
     });
 
-    it('should request update with new tokens', () => {
+    it('should request update with new tokens', async () => {
       // Given
       const newAccessToken = 'v2.local.kGYy2o6_e0jo4wnxHHGBrIBPAgKP8pInGLmn0A-bgLfSdBvr2LILo9AuNMfArUeqO4fPdTjxyaVlk85GVT6gIUyXXOsd_8ysI0-Z1eU66UUZuguS5m2bxMNgFOZEHKTEYH4G8JDF6m7tDnLxFrvxVX2ts7rRdH0cxxxNyQQzmxB5aJqnJiU94ll34RzxOkod0gsnWVfnP24-awvk8A.eyJraWQiOiJ0b2tlbi1kZXYtMTIzIn0';
       jest.spyOn(sut, 'setTokens');
       const refreshToken = 'refreshToken';
-      sut.setTokens(accessToken, refreshToken);
+      await sut.setTokens(accessToken, refreshToken);
 
       // When
       void sut.refreshAccessToken();

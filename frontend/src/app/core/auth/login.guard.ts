@@ -19,7 +19,7 @@ export class LoginGuard implements CanActivate {
     let loginFailure: UrlTree | boolean = true;
 
     if (accessToken && refreshToken) {
-      this.authService.setTokens(accessToken, refreshToken);
+      void this.authService.setTokens(accessToken, refreshToken);
       loginFailure = this.router.parseUrl('/');
     }
 

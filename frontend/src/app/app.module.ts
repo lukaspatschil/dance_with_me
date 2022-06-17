@@ -25,6 +25,7 @@ import { PaymentComponent } from './components/payment/payment.component';
 import { NgAisModule } from 'angular-instantsearch';
 import { EventSearchComponent } from './components/events/event-search/event-search.component';
 import { EventOverviewMapComponent } from './components/events/event-overview-map/event-overview-map.component';
+import { AdminComponent } from './components/admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { EventOverviewMapComponent } from './components/events/event-overview-ma
     ImageAccessorDirective,
     UserDetailComponent,
     PaymentComponent,
-    EventSearchComponent
+    EventSearchComponent,
+    AdminComponent
   ],
   imports: [
     AppRoutingModule,

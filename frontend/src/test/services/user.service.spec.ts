@@ -34,7 +34,7 @@ describe('UserService', () => {
       const id = 'test-id';
 
       // When
-      sut.updateUser(id);
+      void sut.updateUser(id);
 
       // Then
       const req = httpMock.expectOne(`${environment.baseUrl}/user/${id}`);
@@ -47,7 +47,7 @@ describe('UserService', () => {
       const id = 'google:12345';
 
       // When
-      sut.updateUser(id);
+      void sut.updateUser(id);
 
       // Then
       sut.user$.subscribe(user => {
@@ -62,7 +62,7 @@ describe('UserService', () => {
     it('should reset the user', () => {
       // Given
       const id = 'google:12345';
-      sut.updateUser(id);
+      void sut.updateUser(id);
       const req = httpMock.expectOne(`${environment.baseUrl}/user/${id}`);
       req.flush(userDto);
 
@@ -88,7 +88,7 @@ describe('UserService', () => {
     it('should return the role of the user', () => {
       // Given
       const id = 'google:12345';
-      sut.updateUser(id);
+      void sut.updateUser(id);
       const req = httpMock.expectOne(`${environment.baseUrl}/user/${id}`);
       req.flush(userDto);
       sut.user$.subscribe(() => {});
@@ -113,7 +113,7 @@ describe('UserService', () => {
     it('should return the user', () => {
       // Given
       const id = 'google:12345';
-      sut.updateUser(id);
+      void sut.updateUser(id);
       const req = httpMock.expectOne(`${environment.baseUrl}/user/${id}`);
       req.flush(userDto);
       sut.user$.subscribe(() => {});
@@ -130,7 +130,7 @@ describe('UserService', () => {
     it('should delete the user', () => {
       // Given
       const id = 'google:12345';
-      sut.updateUser(id);
+      void sut.updateUser(id);
       const pre = httpMock.expectOne(`${environment.baseUrl}/user/${id}`);
       pre.flush(userDto);
       sut.user$.subscribe(() => {});
@@ -144,7 +144,7 @@ describe('UserService', () => {
       req.flush(userDto);
     });
 
-    it('should delete the user', () => {
+    it('should delete the user undefined', () => {
       // When
       const result = sut.deleteUser();
 

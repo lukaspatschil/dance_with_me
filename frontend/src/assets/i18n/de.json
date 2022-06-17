@@ -3,6 +3,13 @@
     "about_link": "Über uns",
     "about_text": "Wir von \"Dance with me\" haben das Ziel, Menschen beim Tanzen zu vereinen. Unsere App soll Tanzbegeisterten helfen, ihre Veranstaltungen schnell und einfach zu finden und so ihre Leidenschaft auszuleben."
   },
+  "admin": {
+    "accept": "Akzeptieren",
+    "comment": "Kommentar:",
+    "name": "Name: ",
+    "reject": "Ablehnen",
+    "status": "Status: "
+  },
   "create": {
     "addition": "Zusätzliche Information",
     "cancel": "Abbrechen",
@@ -57,6 +64,17 @@
     "events": "Veranstaltungen",
     "show_list": "Liste anzeigen"
   },
+  "landingPage": {
+    "firstHeader": "Auf der Suche nach einem Tanzevent?",
+    "footer": "Finde noch heute eine Tanzveranstaltung in deiner Nähe!",
+    "header": "Finde das Tanzevent, das zu dir passt!",
+    "joinNow": "Jetzt anmelden!",
+    "sub1": "Tanze überall mit deinen Freunden",
+    "sub1Text": "Nimm mit deinen Freunden an Tanzevents teil und triff neue Menschen.",
+    "sub2": "Vernetze dich weltweit",
+    "sub2Text": "Finde Tanzenvents in deiner Nähe auf der ganzen Welt.",
+    "title": "Vorteile"
+  },
   "legal_link": "Rechtliches",
   "login": {
     "description": "Anmelden und tanzen!",
@@ -65,6 +83,7 @@
     "welcome": "Willkommen"
   },
   "navbar": {
+    "admin": "Admin Panel",
     "create_event": "Veranstaltung erstellen",
     "events": "Veranstaltungen",
     "login": "Anmelden",
@@ -101,16 +120,5 @@
     "mail": "Mail",
     "name": "Name",
     "verified_tooltip": "E-Mail verifiziert"
-  },
-  "landingPage": {
-    "joinNow": "Jetzt anmelden!",
-    "firstHeader": "Auf der Suche nach einem Tanzevent?",
-    "header": "Finde das Tanzevent, das zu dir passt!",
-    "title": "Vorteile",
-    "sub1": "Tanze überall mit deinen Freunden",
-    "sub1Text": "Nimm mit deinen Freunden an Tanzevents teil und triff neue Menschen.",
-    "sub2": "Vernetze dich weltweit",
-    "sub2Text": "Finde Tanzenvents in deiner Nähe auf der ganzen Welt.",
-    "footer": "Finde noch heute eine Tanzveranstaltung in deiner Nähe!"
   }
 }

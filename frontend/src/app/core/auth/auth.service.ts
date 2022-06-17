@@ -31,13 +31,13 @@ export class AuthService {
     private readonly userService: UserService
   ) {}
 
-  private getTimeoutTime(accessToken: PasetoToken): number {
+  private async getTimeoutTime(accessToken: PasetoToken): Promise<number> {
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     let timeout = 15 * 60 * 1000;
     const decoded = this.paseto.decodeToken(accessToken);
     let id = decoded.payload.sub;
     if (id != null) {
-      this.userService.updateUser(id);
+      await this.userService.updateUser(id);
     }
     if (decoded.payload.exp) {
       timeout = new Date(decoded.payload.exp).getTime() - new Date().getTime();
@@ -57,7 +57,7 @@ export class AuthService {
     return Boolean(this.getToken);
   }
 
-  setTokens(accessToken: PasetoToken, refreshToken: string): void {
+  async setTokens(accessToken: PasetoToken, refreshToken: string): Promise<void> {
     this.accessToken = accessToken;
     this.tokenStorage.saveRefreshToken(refreshToken);
 
@@ -67,7 +67,7 @@ export class AuthService {
       this.refreshTimeout = null;
     }
 
-    const timeoutTime = this.getTimeoutTime(accessToken);
+    const timeoutTime = await this.getTimeoutTime(accessToken);
     this.refreshTimeout = setTimeout((): void => void this.refreshAccessToken(), timeoutTime);
   }
 
@@ -89,9 +89,9 @@ export class AuthService {
         this.http.post(`${AUTH_API}/refresh_token`, { refreshToken }, httpOptions)
           .subscribe({
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            next: (response: any) => {
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-              this.setTokens(response.accessToken, response.refreshToken);
+            next: async (response: any) => {
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-confusing-void-expression
+              await this.setTokens(response.accessToken, response.refreshToken);
               resolve();
             },
             error: err => {
