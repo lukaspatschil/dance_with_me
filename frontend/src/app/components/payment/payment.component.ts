@@ -131,7 +131,7 @@ export class PaymentComponent implements OnInit {
           this.paymentService.finalizePayment(result.paymentMethod.id, eventId).subscribe({
             next: () => {
               this.loading = false;
-              this.router.parseUrl('/events');
+              void this.router.navigate(['/events']);
             }, error: () => {
               this.loading = false;
               this.error = true;
