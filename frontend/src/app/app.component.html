@@ -1,5 +1,5 @@
-<div class="flex flex-col">
-<header class="sticky top-0 left-0 right-0 ">
+<div class="flex flex-col h-screen justify-between">
+<header>
   <nav class="flex items-center justify-between flex-wrap bg-white p-6 font-poppins">
 
       <div class="flex items-center flex-shrink-0 text-red-900 mr-6 cursor-pointer">
@@ -48,12 +48,12 @@
 </header>
 
 
-<main class="flex-1">
+<main class="mb-auto">
   <router-outlet></router-outlet>
 </main>
 
 
-<footer class="bottom-0 text-center bg-gray-900 text-white font-poppins">
+<footer class=" text-center bg-gray-900 text-white font-poppins">
   <div class="p-6 flex items-center flex-shrink-0 mr-6">
     <span class="text-xl tracking-tight" [routerLink]="'.'">dance with me</span>
   </div>
