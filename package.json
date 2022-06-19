@@ -1,6 +1,6 @@
 {
   "name": "dance-with-me",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Dance with me is an modern web app for event finding",
   "private": true,
   "workspaces": [
