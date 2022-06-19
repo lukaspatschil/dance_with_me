@@ -60,6 +60,10 @@
   "eventOverview": {
     "search": "Search"
   },
+  "eventDetail": {
+    "share": "Share event",
+    "copied": "Copied to clipboard"
+  },
   "events": {
     "events": "Events",
     "show_list": "Show list"

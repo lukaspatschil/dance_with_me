@@ -60,6 +60,10 @@
   "eventOverview": {
     "search": "Suche"
   },
+  "eventDetail": {
+    "share": "Event teilen",
+    "copied": "In Zwischenablage kopiert"
+  },
   "events": {
     "events": "Veranstaltungen",
     "show_list": "Liste anzeigen"

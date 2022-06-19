@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ImageAccessorDirective } from './directives/image.directive';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Language selection
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -59,7 +60,9 @@ import { AdminComponent } from './components/admin/admin.component';
     AuthModule,
     FormsModule,
     ReactiveFormsModule,
-    CoreModule
+    CoreModule,
+    BrowserAnimationsModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]

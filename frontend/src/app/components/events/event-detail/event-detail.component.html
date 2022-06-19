@@ -1,4 +1,12 @@
-<div *ngIf="event$ | async as event" class="ml-5 flex flex-col space-y-2 h-screen font-poppins ">
+<div *ngIf="event$ | async as event" class="m-5 flex flex-col space-y-2 h-full font-poppins ">
+
+  <div class="relative" >
+    <div @moveIn *ngIf="showAlert" class="absolute top-0 left-0 right-0 bg-blue-100 border-blue-500 text-blue-700 px-4 py-3 m-auto inline-flex" role="alert">
+      <span class="material-icons text-blue-400 text-3xl mr-2">info</span>
+      <span class="font-bold text-blue-400 mt-auto mb-auto" translate >eventDetail.copied</span>
+    </div>
+  </div>
+
   <div class="grid grid-cols-5 gap-4">
     <h1 class="col-span-4 text-l mb-2 font-light text-gray-900">
       {{event?.name}}
@@ -44,5 +52,12 @@
       </span>
     </li>
   </ul>
+
+
+  <button (click)="copyMessage()"
+          translate
+          class="bg-transparent border-white hover:bg-red-900 text-red-900 font-semibold hover:text-white py-2 px-4 border hover:border-transparent rounded">
+    eventDetail.share
+  </button>
 
 </div>

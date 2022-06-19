@@ -7,22 +7,27 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { EventServiceMock } from '../../../mock/event.service.mock';
 import { EventEntity } from '../../../../app/entities/event.entity';
 import { Category } from '../../../../app/enums/category.enum';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { ClipboardMock } from '../../../mock/clipboard.mock';
 
 describe('EventDetailComponent', () => {
   let comp: EventDetailComponent;
   let fixture: ComponentFixture<EventDetailComponent>;
 
   let eventService: EventService;
+  let copyService: Clipboard;
+
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ EventDetailComponent ],
       imports: [ HttpClientTestingModule, RouterTestingModule],
-      providers: [{ provide: EventService, useClass: EventServiceMock }]
+      providers: [{ provide: EventService, useClass: EventServiceMock }, { provide: Clipboard, useClass: ClipboardMock }]
     })
       .compileComponents();
 
     eventService = TestBed.inject(EventService);
+    copyService = TestBed.inject(Clipboard);
   });
 
   beforeEach(() => {
@@ -66,6 +71,17 @@ describe('EventDetailComponent', () => {
 
       // Then
       expect(eventService.participateOnEvent).toHaveBeenCalledWith(eventEntity.id);
+    });
+  });
+  describe('opyMessage', () => {
+    it('should copy current url to clipboard', async () => {
+      // When
+      await fixture.whenStable();
+      comp.showAlert = false;
+      await comp.copyMessage();
+
+      // Then
+      expect(copyService.copy).toHaveBeenCalledWith(window.location.href);
     });
   });
 });
