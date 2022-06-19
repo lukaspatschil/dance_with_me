@@ -123,6 +123,15 @@
     "delete_button": "Delete profile",
     "mail": "Mail",
     "name": "Name",
-    "verified_tooltip": "Mail is verified"
+    "verified_tooltip": "Mail is verified",
+    "upgrade_button": "Become organiser",
+    "cancel_button": "Cancel",
+    "submit_button": "Upload",
+    "validation_text": "Please upload a picture of your passport for verification",
+    "passport_text": "Passport",
+    "validation_status": "Validation",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "pending": "Pending"
   }
 }

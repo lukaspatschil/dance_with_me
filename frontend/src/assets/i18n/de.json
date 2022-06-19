@@ -123,6 +123,15 @@
     "delete_button": "Profil löschen",
     "mail": "Mail",
     "name": "Name",
-    "verified_tooltip": "E-Mail verifiziert"
+    "verified_tooltip": "E-Mail verifiziert",
+    "upgrade_button": "Veranstallter werden",
+    "cancel_button": "Abbrechen",
+    "submit_button": "Hochladen",
+    "validation_text": "Bitte laden Sie ein Bild ihres Ausweises zur Verifizierung hoch",
+    "passport_text": "Ausweis",
+    "validation_status": "Validierung",
+    "approved": "Akzeptiert",
+    "rejected": "Abgeleht",
+    "pending": "Ausstehend"
   }
 }
