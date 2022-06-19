@@ -27,6 +27,7 @@ export const validEventDocument = {
   imageId: '1',
   organizerId: '1',
   category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
+  paid: true,
 };
 
 export const validEventEntity: EventEntity = {
@@ -45,6 +46,7 @@ export const validEventEntity: EventEntity = {
   organizerId: '1',
   category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
   participants: [],
+  paid: true,
 };
 
 export const validEventDto: EventDto = {

@@ -1,5 +1,16 @@
-import { Controller, Get, Logger } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Logger,
+  Post,
+} from '@nestjs/common';
 import { PaymentService } from './payment.service';
+import { Organizer } from '../auth/role.guard';
+import { CreatePaymentDto } from '../core/dto/createPayment.dto';
+import { User } from '../auth/user.decorator';
+import { AuthUser } from '../auth/interfaces';
 
 @Controller('payment')
 export class PaymentController {
@@ -7,8 +18,13 @@ export class PaymentController {
 
   constructor(private readonly paymentService: PaymentService) {}
 
-  @Get()
-  getHello(): string {
-    return 'payment service is live';
+  @Organizer()
+  @Post()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async createPayment(
+    @Body() { paymentMethodId, eventId }: CreatePaymentDto,
+    @User() user: AuthUser,
+  ) {
+    await this.paymentService.createPayment(user.id, paymentMethodId, eventId);
   }
 }

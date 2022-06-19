@@ -135,6 +135,7 @@ describe('EventMapper', () => {
         housenumber: '4',
       },
       participants: [] as string[],
+      paid: false,
     } as EventDocument;
   }
 
@@ -246,6 +247,7 @@ describe('EventMapper', () => {
         housenumber: '4',
       },
       participants: [],
+      paid: false,
     };
   }
 
@@ -265,6 +267,7 @@ describe('EventMapper', () => {
       organizerId: '1',
       category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       participants: [],
+      paid: false,
     };
   }
 
@@ -291,6 +294,7 @@ describe('EventMapper', () => {
         housenumber: '4',
       },
       participants: [],
+      paid: false,
     };
   }
 

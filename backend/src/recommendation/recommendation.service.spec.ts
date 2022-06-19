@@ -157,6 +157,7 @@ function createEventEntity(): EventEntity {
   eventEntity.category = [CategoryEnum.SALSA, CategoryEnum.ZOUK];
   eventEntity.address = validAddress;
   eventEntity.participants = [];
+  eventEntity.paid = true;
 
   return eventEntity;
 }

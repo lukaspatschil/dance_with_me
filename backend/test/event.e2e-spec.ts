@@ -327,6 +327,7 @@ describe('EventController (e2e)', () => {
           participants: [],
           category: getCategory(),
           address: validAddress,
+          paid: true,
         });
         await event.save();
         const eventDto = {
@@ -378,6 +379,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddress,
           participants: [],
+          paid: true,
         });
         await event1.save();
         const event1Dto = {
@@ -417,6 +419,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddress,
           participants: [],
+          paid: true,
         });
         await event2.save();
 
@@ -494,6 +497,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddress,
           participants: [],
+          paid: true,
         });
         await event1.save();
 
@@ -514,6 +518,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddress,
           participants: [],
+          paid: true,
         });
         await event2.save();
         const event2Dto = {
@@ -610,6 +615,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddress,
           participants: [],
+          paid: true,
         });
         await event1.save();
 
@@ -630,6 +636,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddress,
           participants: [],
+          paid: true,
         });
         await event2.save();
         const event2Dto = {
@@ -681,6 +688,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddress,
           participants: [],
+          paid: true,
         });
         await event1.save();
 
@@ -701,6 +709,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddress,
           participants: [],
+          paid: true,
         });
         await event2.save();
         const event2Dto = {
@@ -740,6 +749,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddress,
           participants: [],
+          paid: true,
         });
         await event3.save();
         const event3Dto = {
@@ -792,6 +802,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: [],
+        paid: true,
       });
       await event1.save();
       const event1Dto = {
@@ -831,6 +842,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: [],
+        paid: true,
       });
       await event2.save();
       const event2Dto = {
@@ -881,6 +893,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: [],
+        paid: true,
       });
       await event1.save();
       const event1Dto = {
@@ -920,6 +933,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: [],
+        paid: true,
       });
       await event2.save();
       const event2Dto = {
@@ -971,6 +985,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         participants: [],
+        paid: true,
       });
       await event1.save();
       const event1Dto = {
@@ -1010,6 +1025,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         participants: [],
+        paid: true,
       });
       await event2.save();
 
@@ -1040,6 +1056,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         participants: [],
+        paid: true,
       });
       await event1.save();
       const event1Dto = {
@@ -1079,6 +1096,7 @@ describe('EventController (e2e)', () => {
         organizerId: '1',
         category: getCategory(),
         participants: [],
+        paid: true,
       });
       await event2.save();
 
@@ -1111,6 +1129,7 @@ describe('EventController (e2e)', () => {
           organizerId: '1',
           category: getCategory(),
           participants: [],
+          paid: true,
         });
         await event1.save();
         const event1Dto = {
@@ -1165,6 +1184,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddress,
           participants: [],
+          paid: true,
         });
         await event1.save();
         const event1Dto = {
@@ -1204,6 +1224,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddress,
           participants: [],
+          paid: true,
         });
         await event2.save();
         const event2Dto = {
@@ -1262,6 +1283,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddress,
           participants: [],
+          paid: true,
         });
         await event1.save();
         const event1Dto = {
@@ -1301,6 +1323,7 @@ describe('EventController (e2e)', () => {
           category: getCategory(),
           address: validAddress,
           participants: [],
+          paid: true,
         });
         await event2.save();
         const event2Dto = {
@@ -1364,6 +1387,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: [],
+        paid: true,
       });
       await event1.save();
       const event1Dto = {
@@ -1531,6 +1555,7 @@ describe('EventController (e2e)', () => {
         category: getCategory(),
         address: validAddress,
         participants: [],
+        paid: true,
       });
       await event.save();
 

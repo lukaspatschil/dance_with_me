@@ -316,6 +316,7 @@ describe('EventController', () => {
         housenumber: '4',
       },
       participants: [],
+      paid: false,
     };
   }
 

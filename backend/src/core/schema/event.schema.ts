@@ -44,6 +44,9 @@ export class EventDocument extends Document {
     type: [{ type: String, ref: UserDocument.name }],
   })
   participants!: string[];
+
+  @Prop({ type: Boolean, default: false })
+  paid!: boolean;
 }
 
 export const EventSchema = SchemaFactory.createForClass(EventDocument).index({

@@ -508,6 +508,46 @@ describe('EventService', () => {
     });
   });
 
+  describe('markEventAsPaid', () => {
+    it('should call the database and update the paid attribute to true', async () => {
+      // Given
+      const eventId = validObjectId1.toString();
+
+      // When
+      await sut.markEventAsPaid(eventId);
+
+      // Then
+      expect(eventDocumentMock.findByIdAndUpdate).toHaveBeenCalledWith(
+        eventId,
+        {
+          $set: {
+            paid: true,
+          },
+        },
+      );
+    });
+
+    it('should call the database and throw an interal exception', async () => {
+      // When
+      const result = async () => {
+        await sut.markEventAsPaid(DBErrorId);
+      };
+
+      // Then
+      await expect(result).rejects.toThrow(InternalServerErrorException);
+    });
+
+    it('should throw NotFoundError when the event does not exist', async () => {
+      // When
+      const result = async () => {
+        await sut.markEventAsPaid(NotFoundErrorId);
+      };
+
+      // Then
+      await expect(result).rejects.toThrow(NotFoundError);
+    });
+  });
+
   function getDefaultUser(): UserEntity {
     return {
       id: '1',
@@ -538,6 +578,7 @@ describe('EventService', () => {
     eventEntity.category = [CategoryEnum.SALSA, CategoryEnum.ZOUK];
     eventEntity.address = validAddress;
     eventEntity.participants = [];
+    eventEntity.paid = true;
 
     return eventEntity;
   }
@@ -560,6 +601,7 @@ describe('EventService', () => {
       category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: validAddress,
       participants: [],
+      paid: false,
     };
   }
 });

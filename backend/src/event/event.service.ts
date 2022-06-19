@@ -57,6 +57,9 @@ export class EventService {
               $gte: startDate,
             },
           },
+          {
+            paid: true,
+          },
         ],
       },
     };
@@ -271,5 +274,22 @@ export class EventService {
       throw new InternalServerErrorException();
     }
     return Promise.resolve();
+  }
+
+  async markEventAsPaid(eventId: string) {
+    this.logger.log(`Mark event ${eventId} as paid`);
+
+    try {
+      const event = await this.eventModel
+        .findByIdAndUpdate(eventId, {
+          $set: { paid: true },
+        })
+        .exec();
+      if (event) return EventMapper.mapDocumentToEntity(event);
+    } catch (e) {
+      this.logger.error(e);
+      throw new InternalServerErrorException();
+    }
+    throw NotFoundError;
   }
 }

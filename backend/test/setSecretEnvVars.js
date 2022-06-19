@@ -30,3 +30,5 @@ process.env.NEO4J_AUTH = 'neo4j/dancewithme';
 
 process.env.MEILI_SEARCH_HOST = 'http://localhost:7700';
 process.env.MEILI_SEARCH_API_KEY = 'masterKey';
+
+process.env.STRIPE_SECRET_KEY = 'sk_test_TyMeY76Ef4pXsM1rA5rznKax';

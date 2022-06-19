@@ -41,6 +41,7 @@ export class EventMapper {
     newEvent.organizerId = event.organizerId;
     newEvent.category = event.category;
     newEvent.participants = event.participants;
+    newEvent.paid = event.paid;
 
     return newEvent as Required<EventEntity>;
   }

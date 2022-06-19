@@ -71,5 +71,6 @@ function createEventDocument() {
     public: true,
     address: validAddress,
     participants: [] as string[],
+    paid: true,
   };
 }

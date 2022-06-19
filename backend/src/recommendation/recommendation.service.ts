@@ -105,6 +105,7 @@ export class RecommendationService {
               _id: {
                 $in: ids,
               },
+              paid: true,
             },
           ],
         },

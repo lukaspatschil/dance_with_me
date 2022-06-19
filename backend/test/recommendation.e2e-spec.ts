@@ -307,6 +307,7 @@ describe('Recommendation (e2e)', () => {
       participants: [],
       category: getCategory(),
       address: validAddress,
+      paid: true,
     });
     await event.save();
     return {

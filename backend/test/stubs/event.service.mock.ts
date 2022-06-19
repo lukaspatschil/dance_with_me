@@ -82,4 +82,8 @@ export class EventServiceMock {
   deleteParticipation = jest.fn(() => {
     return Promise.resolve();
   });
+
+  markEventAsPaid = jest.fn(() => {
+    return Promise.resolve();
+  });
 }

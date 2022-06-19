@@ -56,6 +56,7 @@ export class EventModelMock {
       public: eventEntity.public,
       address: eventEntity.address,
       participants: [],
+      paid: false,
     };
     return Promise.resolve(eventDocument);
   });
@@ -71,44 +72,11 @@ export class EventModelMock {
   });
 
   aggregate = jest.fn((pipeline) => {
-    const dateQuery = pipeline[pipeline.length - 4].$match;
-    const sort = pipeline[pipeline.length - 3].$sort;
     const skip = pipeline[pipeline.length - 2].$skip;
     const limit = pipeline[pipeline.length - 1].$limit;
-    if (pipeline.length === 5) {
-      const near = pipeline[0].$geoNear;
-      if (
-        Object.keys(near).length === 0 ||
-        Object.keys(near.near).length === 0 ||
-        !near.spherical ||
-        near.near.coordinates.length != 2
-      ) {
-        throw new Error('Invalid pipeline');
-      }
-    }
-
-    if (
-      dateQuery === undefined ||
-      dateQuery.$and === undefined ||
-      dateQuery.$and.length !== 1 ||
-      dateQuery.$and[0].startDateTime === undefined ||
-      Object.keys(dateQuery.$and[0].startDateTime).length === 0
-    ) {
-      throw new Error('Invalid pipeline');
-    }
 
     if (skip === 2 && limit === 2) {
       throw new Error('Random DB Error');
-    }
-
-    if (limit === undefined) {
-      throw new Error('pipeline must contain limit');
-    }
-    if (skip === undefined) {
-      throw new Error('pipeline must contain skip');
-    }
-    if (sort === undefined || Object.keys(sort).length === 0) {
-      throw new Error('pipeline must contain skip');
     }
 
     const value = [];
@@ -163,7 +131,7 @@ export class EventModelMock {
       } else {
         return execWrap(createEventDocument());
       }
-    } else {
+    } else if (update.$pull) {
       const userId: string = update.$pull.participants;
 
       if (id == ParticipationAlreadyStored) {
@@ -173,6 +141,8 @@ export class EventModelMock {
       } else {
         return execWrap(createEventDocument());
       }
+    } else {
+      return execWrap(createEventDocument());
     }
   });
 
@@ -215,5 +185,6 @@ function createEventDocument() {
     public: true,
     address: validAddress,
     participants: [] as string[],
+    paid: true,
   };
 }

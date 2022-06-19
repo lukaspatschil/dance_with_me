@@ -28,4 +28,6 @@ export class EventEntity {
   category!: CategoryEnum[];
 
   participants!: string[];
+
+  paid = false;
 }

@@ -55,6 +55,7 @@ const createEvent = () => {
     organizerId: organiser[Math.floor(Math.random() * organiser.length)],
     category: categoryArray,
     participants: [],
+    paid: true,
   }
   return event
 }
