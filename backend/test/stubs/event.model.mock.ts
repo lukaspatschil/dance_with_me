@@ -2,14 +2,18 @@ import { GeolocationEnum } from '../../src/core/schema/enum/geolocation.enum';
 import { EventEntity } from '../../src/core/entity/event.entity';
 import {
   validEventDocument,
+  validObjectId1,
   invalidObjectId,
   nonExistingObjectId,
 } from '../test_data/event.testData';
+import { QueryOptions, UpdateQuery } from 'mongoose';
 import {
   validAddress,
   validLatitude,
   validLongitude,
 } from '../test_data/openStreetMapApi.testData';
+import { CategoryEnum } from '../../src/core/schema/enum/category.enum';
+import { EventDocument } from '../../src/core/schema/event.schema';
 
 /* eslint @typescript-eslint/no-magic-numbers: 0 */
 /* eslint @typescript-eslint/naming-convention: 0 */
@@ -71,6 +75,105 @@ export class EventModelMock {
     return execWrap(Promise.resolve(createEventDocument()));
   });
 
+  findByIdAndUpdate = jest.fn(
+    (id: string, dict: UpdateQuery<EventDocument>, opt?: QueryOptions) => {
+      if (id === NotFoundErrorId) {
+        return execWrap(null);
+      }
+      if (id === DBErrorId) {
+        throw new Error('Random DB error');
+      }
+      if (dict.$addToSet) {
+        const userId: string = dict.$addToSet.participants;
+
+        if (id == ParticipationAlreadyStored) {
+          // the user already set the participation in the event
+          const eventDocument = createEventDocument();
+          eventDocument.participants.push(userId);
+          return execWrap(eventDocument);
+        } else {
+          return execWrap(createEventDocument());
+        }
+      } else if (dict.$pull) {
+        const userId: string = dict.$pull.participants;
+
+        if (id == ParticipationAlreadyStored) {
+          const eventDocument = createEventDocument();
+          eventDocument.participants.push(userId);
+          return eventDocument;
+        } else {
+          return execWrap(createEventDocument());
+        }
+      }
+      if (opt?.new === false) {
+        const event = validEventDocument;
+        event._id = id;
+        return Promise.resolve(event);
+      }
+      if (id === validObjectId1.toString()) {
+        const event = validEventDocument;
+
+        if (dict['id']) {
+          event._id = dict['id'];
+        } else {
+          event._id = validObjectId1.toString();
+        }
+        if (dict['name']) {
+          event.name = dict['name'];
+        }
+        if (dict['description']) {
+          event.description = dict['description'];
+        }
+        if (dict['startDateTime']) {
+          event.startDateTime = dict['startDateTime'];
+        }
+        if (dict['endDateTime']) {
+          event.endDateTime = dict['endDateTime'];
+        }
+        if (dict['location']) {
+          event.location.type = GeolocationEnum.POINT;
+          event.location.coordinates = [
+            dict['location'].longitude,
+            dict['location'].latitude,
+          ];
+        }
+        if (dict['address']) {
+          event.address.country = dict['address'].country as string;
+          event.address.city = dict['address'].city as string;
+          event.address.postalcode = dict['address'].postalcode as string;
+          event.address.street = dict['address'].street as string;
+          if (dict['address'].housenumber) {
+            event.address.housenumber = dict['address'].housenumber as string;
+          }
+          if (dict['address'].addition) {
+            event.address.addition = dict['address'].addition as string;
+          }
+        }
+        if (dict['price']) {
+          event.price = dict['price'] as number;
+        }
+        if (dict['public']) {
+          event.public = dict['public'] as boolean;
+        }
+        if (dict['imageId']) {
+          event.imageId = dict['imageId'] as string;
+        }
+        if (dict['organizerId']) {
+          event.organizerId = dict['organizerId'] as string;
+        }
+        if (dict['category']) {
+          event.category = dict['category'] as CategoryEnum[];
+        }
+        if (dict['participants']) {
+          event.participants = dict['participants'] as string[];
+        }
+        return execWrap(event);
+      } else {
+        return execWrap(createEventDocument());
+      }
+    },
+  );
+
   aggregate = jest.fn((pipeline) => {
     const skip = pipeline[pipeline.length - 2].$skip;
     const limit = pipeline[pipeline.length - 1].$limit;
@@ -112,40 +215,6 @@ export class EventModelMock {
     return execWrap(Promise.resolve(event));
   });
 
-  findByIdAndUpdate = jest.fn((id: string, update: any) => {
-    if (id === NotFoundErrorId) {
-      return execWrap(null);
-    }
-    if (id === DBErrorId) {
-      return execWrap(new Error('Random DB error'));
-    }
-
-    if (update.$addToSet) {
-      const userId: string = update.$addToSet.participants;
-
-      if (id == ParticipationAlreadyStored) {
-        // the user already set the participation in the event
-        const eventDocument = createEventDocument();
-        eventDocument.participants.push(userId);
-        return execWrap(eventDocument);
-      } else {
-        return execWrap(createEventDocument());
-      }
-    } else if (update.$pull) {
-      const userId: string = update.$pull.participants;
-
-      if (id == ParticipationAlreadyStored) {
-        const eventDocument = createEventDocument();
-        eventDocument.participants.push(userId);
-        return execWrap(eventDocument);
-      } else {
-        return execWrap(createEventDocument());
-      }
-    } else {
-      return execWrap(createEventDocument());
-    }
-  });
-
   updateMany = jest.fn((filter) => {
     if (filter.participants === invalidObjectId.toString()) {
       return execWrap(new Error('Random Exception'));
@@ -178,10 +247,11 @@ function createEventDocument() {
     },
     price: 12.5,
     organizerId: '1',
+    organizerName: 'Test Organizer',
     imageId: '1',
     category: ['Salsa', 'Zouk'],
-    startDateTime: new Date('2020-01-01 00:10:00'),
-    endDateTime: new Date('2020-01-01 00:12:00'),
+    startDateTime: new Date('2023-01-01 11:00:00'),
+    endDateTime: new Date('2023-01-01 12:00:00'),
     public: true,
     address: validAddress,
     participants: [] as string[],

@@ -10,14 +10,18 @@ import {
   USER_PARTICIPATES_IN_EVENT_EVENT_ID,
   USER_PARTICIPATES_IN_EVENT_USER_ID,
 } from '../../test/stubs/event.service.mock';
+import {
+  validEventUpdateDto,
+  validEventUpdateEntity,
+  validEventDto,
+  validObjectId1,
+  nonExistingObjectId,
+} from '../../test/test_data/event.testData';
 import { NotFoundException } from '@nestjs/common';
 import { UserEntity } from '../core/entity/user.entity';
 import { RoleEnum } from '../core/schema/enum/role.enum';
 import { CategoryEnum } from '../core/schema/enum/category.enum';
-import {
-  nonExistingObjectId,
-  validObjectId1,
-} from '../../test/test_data/event.testData';
+import { UpdateEventDto } from '../core/dto/updateEvent.dto';
 import {
   adminAuthUser,
   organizerAuthUser,
@@ -25,7 +29,7 @@ import {
 
 describe('EventController', () => {
   let sut: EventController;
-  let eventService: EventService;
+  let eventServiceMock: EventService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -39,7 +43,7 @@ describe('EventController', () => {
     }).compile();
 
     sut = module.get<EventController>(EventController);
-    eventService = module.get<EventService>(EventService);
+    eventServiceMock = module.get<EventService>(EventService);
   });
 
   it('should be defined', () => {
@@ -55,19 +59,7 @@ describe('EventController', () => {
       await sut.getEventById(params, getDefaultUser());
 
       // Then
-      expect(eventService.getEventById).toHaveBeenCalled();
-    });
-
-    it('should call getEventById and throw an NotFoundError', async () => {
-      // Given
-      const params = { id: '-1' };
-
-      // When
-      const result = async () =>
-        await sut.getEventById(params, getDefaultUser());
-
-      // Then
-      await expect(result).rejects.toThrow(NotFoundException);
+      expect(eventServiceMock.getEventById).toHaveBeenCalled();
     });
 
     it('should get an single event where the user participates and return a correct value for the userParticipates field', async () => {
@@ -98,7 +90,7 @@ describe('EventController', () => {
       await sut.getEvents(query, getDefaultUser());
 
       // Then
-      expect(eventService.getEventsQueryDto).toBeCalledWith(query);
+      expect(eventServiceMock.getEventsQueryDto).toBeCalledWith(query);
     });
 
     it('should call getEventsByLocation`', async () => {
@@ -108,7 +100,7 @@ describe('EventController', () => {
       await sut.getEvents(query, getDefaultUser());
 
       // Then
-      expect(eventService.getEventsQueryDto).toBeCalledWith(query);
+      expect(eventServiceMock.getEventsQueryDto).toBeCalledWith(query);
     });
 
     it('should return a array of eventDtos', async () => {
@@ -133,7 +125,9 @@ describe('EventController', () => {
       await sut.createEvent(createEventDto, getDefaultUser());
 
       //Then
-      expect(eventService.createEvent).toHaveBeenCalledWith(getEventEntity());
+      expect(eventServiceMock.createEvent).toHaveBeenCalledWith(
+        getEventEntity(),
+      );
     });
 
     it('should return correct EventEntity', async () => {
@@ -158,7 +152,7 @@ describe('EventController', () => {
       await sut.deleteEvent(idDto, adminAuthUser);
 
       //Then
-      expect(eventService.deleteEvent).toHaveBeenCalledWith(
+      expect(eventServiceMock.deleteEvent).toHaveBeenCalledWith(
         validObjectId1.toString(),
       );
     });
@@ -173,7 +167,7 @@ describe('EventController', () => {
       await sut.deleteEvent(idDto, authUser);
 
       //Then
-      expect(eventService.deleteEvent).toHaveBeenCalledWith(
+      expect(eventServiceMock.deleteEvent).toHaveBeenCalledWith(
         validObjectId1.toString(),
         organizerId,
       );
@@ -196,7 +190,7 @@ describe('EventController', () => {
       await sut.createParticipation('1', getDefaultUser());
 
       // Then
-      expect(eventService.createParticipation).toHaveBeenCalled();
+      expect(eventServiceMock.createParticipation).toHaveBeenCalled();
     });
 
     it('should call the add participation to an event with the correct parameters', async () => {
@@ -208,7 +202,7 @@ describe('EventController', () => {
       await sut.createParticipation(eventId, user);
 
       // Then
-      expect(eventService.createParticipation).toHaveBeenCalledWith(
+      expect(eventServiceMock.createParticipation).toHaveBeenCalledWith(
         eventId,
         user,
       );
@@ -221,7 +215,7 @@ describe('EventController', () => {
       await sut.deleteParticipation('1', getDefaultUser());
 
       // Then
-      expect(eventService.deleteParticipation).toHaveBeenCalled();
+      expect(eventServiceMock.deleteParticipation).toHaveBeenCalled();
     });
 
     it('should call the delete participation to an event with the correct parameters', async () => {
@@ -233,10 +227,87 @@ describe('EventController', () => {
       await sut.deleteParticipation(eventId, user);
 
       // Then
-      expect(eventService.deleteParticipation).toHaveBeenCalledWith(
+      expect(eventServiceMock.deleteParticipation).toHaveBeenCalledWith(
         eventId,
         user,
       );
+    });
+  });
+
+  describe('updateEvent', () => {
+    it('should call updateEvent', async () => {
+      // Given
+      const user = getDefaultUser();
+
+      // When
+      await sut.updateEvent(
+        validObjectId1.toString(),
+        validEventUpdateDto,
+        user,
+      );
+
+      //Then
+      expect(eventServiceMock.updateEvent).toHaveBeenCalledWith(
+        validObjectId1.toString(),
+        validEventUpdateEntity,
+      );
+    });
+
+    it('should call the service and return updated event', async () => {
+      // Given
+      const user = getDefaultUser();
+
+      const tmp = validEventDto();
+      const expectedUpdatedEventDto = {
+        ...tmp,
+        id: validObjectId1.toString(),
+        name: validEventUpdateDto.name,
+        description: validEventUpdateDto.description,
+        price: validEventUpdateDto.price,
+        imageId: validEventUpdateDto.imageId,
+        category: validEventUpdateDto.category,
+      };
+
+      // When
+      const response = await sut.updateEvent(
+        validObjectId1.toString(),
+        validEventUpdateDto,
+        user,
+      );
+
+      //Then
+      expect(response).toEqual(expectedUpdatedEventDto);
+    });
+
+    it('should call the service to update the startDateTime and return updated event', async () => {
+      // Given
+      const user = getDefaultUser();
+      const expectedUpdatedEventDto = validEventDto();
+      expectedUpdatedEventDto.id = '-2';
+      const updateEvent = new UpdateEventDto();
+      updateEvent.startDateTime = new Date('2023-01-01 11:00:00');
+      expectedUpdatedEventDto.startDateTime = new Date('2023-01-01 11:00:00');
+
+      // When
+      const response = await sut.updateEvent('-2', updateEvent, user);
+
+      //Then
+      expect(response).toEqual(expectedUpdatedEventDto);
+    });
+
+    it('should call the service to update the endDateTime and return updated event', async () => {
+      // Given
+      const user = getDefaultUser();
+      const expectedUpdatedEventDto = validEventDto();
+      expectedUpdatedEventDto.id = '-2';
+      const updateEvent = new UpdateEventDto();
+      updateEvent.endDateTime = new Date('2025-01-01 11:00:00');
+      expectedUpdatedEventDto.endDateTime = new Date('2025-01-01 11:00:00');
+      // When
+      const response = await sut.updateEvent('-2', updateEvent, user);
+
+      //Then
+      expect(response).toEqual(expectedUpdatedEventDto);
     });
   });
 
@@ -269,8 +340,8 @@ describe('EventController', () => {
       id: '1',
       name: 'Test name',
       description: 'Test description',
-      startDateTime: new Date('2020-01-01 00:10:00'),
-      endDateTime: new Date('2020-01-01 00:12:00'),
+      startDateTime: new Date('2023-01-01 10:00:00'),
+      endDateTime: new Date('2023-01-01 12:00:00'),
       location: {
         longitude: -171.23794,
         latitude: 8.54529,

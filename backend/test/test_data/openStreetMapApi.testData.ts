@@ -21,6 +21,14 @@ export const validAddress: AddressEntity = {
   housenumber: '4',
 };
 
+export const validUpdateAddress: AddressEntity = {
+  country: 'Österreich',
+  city: 'Wien',
+  postalcode: '1020',
+  street: 'Robertgasse',
+  housenumber: '1',
+};
+
 export const validAddressDTO: AddressDto = {
   country: 'Österreich',
   city: 'Wien',

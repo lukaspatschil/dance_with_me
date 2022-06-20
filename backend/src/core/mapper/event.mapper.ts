@@ -1,9 +1,11 @@
 import { EventDocument } from '../schema/event.schema';
 import { EventEntity } from '../entity/event.entity';
+import { UpdateEventEntity } from '../entity/updateEvent.entity';
 import { CreateEventDto } from '../dto/createEvent.dto';
 import { GeolocationEnum } from '../schema/enum/geolocation.enum';
 import { LocationEntity } from '../entity/location.entity';
 import { EventDto } from '../dto/event.dto';
+import { UpdateEventDto } from '../dto/updateEvent.dto';
 import { LocationDto } from '../dto/location.dto';
 import { AddressEntity } from '../entity/address.entity';
 import { AddressDto } from '../dto/address.dto';
@@ -91,6 +93,56 @@ export class EventMapper {
     newEvent.organizerName = organizerName;
     newEvent.category = event.category;
     newEvent.participants = [];
+
+    return newEvent;
+  }
+
+  static mapDtoToEntityUpdate(event: UpdateEventDto): UpdateEventEntity {
+    const newEvent = new UpdateEventEntity();
+    newEvent.name = event.name;
+    newEvent.description = event.description;
+    newEvent.startDateTime = event.startDateTime;
+    newEvent.endDateTime = event.endDateTime;
+    newEvent.location = new LocationEntity();
+    if (event.location?.longitude && event.location.latitude) {
+      newEvent.location.type = GeolocationEnum.POINT;
+      newEvent.location.coordinates = [
+        event.location.longitude,
+        event.location.latitude,
+      ];
+    } else {
+      //newEvent.location.type = undefined;
+      //newEvent.location.coordinates = undefined;
+      newEvent.location = undefined;
+    }
+    if (event.address) {
+      if (
+        event.address.country &&
+        event.address.city &&
+        event.address.postalcode &&
+        event.address.street
+      ) {
+        newEvent.address = new AddressEntity(
+          event.address.country,
+          event.address.city,
+          event.address.postalcode,
+          event.address.street,
+        );
+
+        if (event.address.housenumber) {
+          newEvent.address.housenumber = event.address.housenumber;
+        }
+        if (event.address.addition) {
+          newEvent.address.addition = event.address.addition;
+        }
+      }
+    } else {
+      newEvent.address = undefined;
+    }
+    newEvent.price = event.price;
+    newEvent.public = event.public;
+    newEvent.imageId = event.imageId;
+    newEvent.category = event.category;
 
     return newEvent;
   }

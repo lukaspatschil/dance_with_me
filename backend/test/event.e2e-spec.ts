@@ -3,10 +3,12 @@ import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { Test } from '@nestjs/testing';
-import { AccessTokenGuard } from '../src/auth/auth.guard';
-import { AuthGuardMock, mockedAuthHeader } from './stubs/auth.guard.mock';
+import { deleteResponse } from './test_data/httpResponse.testData';
 import { connect, disconnect, model, Model } from 'mongoose';
 import { EventDocument, EventSchema } from '../src/core/schema/event.schema';
+import { UpdateEventDto } from '../src/core/dto/updateEvent.dto';
+import { AccessTokenGuard } from '../src/auth/auth.guard';
+import { AuthGuardMock, mockedAuthHeader } from './stubs/auth.guard.mock';
 import { GeolocationEnum } from '../src/core/schema/enum/geolocation.enum';
 import {
   nonExistingObjectId,
@@ -14,14 +16,15 @@ import {
   validObjectId2,
   validObjectId3,
 } from './test_data/event.testData';
-import { deleteResponse } from './test_data/httpResponse.testData';
 import {
   validAddress,
   validAddressDTO,
+  validUpdateAddress,
 } from './test_data/openStreetMapApi.testData';
 import { RoleEnum } from '../src/core/schema/enum/role.enum';
 import { validObjectId } from './test_data/user.testData';
 import { UserDocument, UserSchema } from '../src/core/schema/user.schema';
+import { CategoryEnum } from '../src/core/schema/enum/category.enum';
 import { Neo4jService } from 'nest-neo4j/dist';
 
 /* eslint @typescript-eslint/no-magic-numbers: 0 */
@@ -1813,6 +1816,515 @@ describe('EventController (e2e)', () => {
       });
 
     //TODO: Why is this working?
+  });
+
+  describe('/event (PATCH)', () => {
+    it('should return 200 (change name of event)', async () => {
+      // Give
+      const event1 = new eventModel({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        organizerName: 'Smitty Werben',
+        category: getCategory(),
+        address: validAddress,
+        participants: [],
+        userParticipates: false,
+      });
+      await event1.save();
+
+      const event1Dto = {
+        id: validObjectId1.toString(),
+        name: 'EventNameNeu',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+        endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
+        location: {
+          longitude: 0,
+          latitude: 0,
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        organizerName: 'Smitty Werben',
+        category: getCategory(),
+        address: validAddress,
+        participants: 0,
+        userParticipates: false,
+      };
+
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.name = 'EventNameNeu';
+
+      return request(app.getHttpServer())
+        .patch(`/event/${event1._id}`)
+        .send(eventUpdateDto)
+        .expect(HttpStatus.OK)
+        .expect((res) => {
+          expect(res.body).toEqual(event1Dto);
+        });
+    });
+
+    it('should return 200 (change multiple information of event)', async () => {
+      // Give
+      const event1 = new eventModel({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        organizerName: 'Smitty Werben',
+        category: getCategory(),
+        address: validAddress,
+        participants: [],
+        userParticipates: false,
+      });
+      await event1.save();
+
+      const event1DtoUpdated = {
+        id: validObjectId1.toString(),
+        name: 'EventNameNeu',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+        endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
+        location: {
+          longitude: 0,
+          latitude: 0,
+        },
+        price: 20.0,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        organizerName: 'Smitty Werben',
+        category: ['Merengue'],
+        address: validAddress,
+        participants: 0,
+        userParticipates: false,
+      };
+
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.name = 'EventNameNeu';
+      eventUpdateDto.price = 20.0;
+      eventUpdateDto.category = [CategoryEnum.MERENGUE];
+
+      return request(app.getHttpServer())
+        .patch(`/event/${event1._id}`)
+        .send(eventUpdateDto)
+        .expect(HttpStatus.OK)
+        .expect((res) => {
+          expect(res.body).toEqual(event1DtoUpdated);
+        });
+    });
+
+    it('should return 200 (change location information of event)', async () => {
+      // Give
+      const event1 = new eventModel({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        organizerName: 'Smitty Werben',
+        category: getCategory(),
+        address: validAddress,
+        participants: [],
+        userParticipates: false,
+      });
+      await event1.save();
+
+      const event1DtoUpdated = {
+        id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+        endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
+        location: {
+          longitude: 20,
+          latitude: 20,
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        organizerName: 'Smitty Werben',
+        category: getCategory(),
+        address: validAddress,
+        participants: 0,
+        userParticipates: false,
+      };
+
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.location = {
+        longitude: 20,
+        latitude: 20,
+      };
+
+      return request(app.getHttpServer())
+        .patch(`/event/${event1._id}`)
+        .send(eventUpdateDto)
+        .expect(HttpStatus.OK)
+        .expect((res) => {
+          expect(res.body).toEqual(event1DtoUpdated);
+        });
+    });
+
+    it('should return 200 (change address information of event)', async () => {
+      // Give
+      const event1 = new eventModel({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        organizerName: 'Smitty Werben',
+        category: getCategory(),
+        address: validAddress,
+        participants: [],
+        userParticipates: false,
+      });
+      await event1.save();
+
+      const event1DtoUpdated = {
+        id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00').toISOString(),
+        endDateTime: new Date('2023-01-01 12:00:00').toISOString(),
+        location: {
+          longitude: 0,
+          latitude: 0,
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        organizerName: 'Smitty Werben',
+        category: getCategory(),
+        address: validUpdateAddress,
+        participants: 0,
+        userParticipates: false,
+      };
+
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.address = validUpdateAddress;
+
+      return request(app.getHttpServer())
+        .patch(`/event/${event1._id}`)
+        .send(eventUpdateDto)
+        .expect(HttpStatus.OK)
+        .expect((res) => {
+          expect(res.body).toEqual(event1DtoUpdated);
+        });
+    });
+
+    it('should return 200 (change startDateTime of event)', async () => {
+      // Give
+      const event1 = new eventModel({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 09:00:00'),
+        endDateTime: new Date('2023-01-02 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        organizerName: 'Smitty Werben',
+        category: getCategory(),
+        address: validAddress,
+        participants: [],
+        userParticipates: false,
+      });
+      await event1.save();
+
+      const event1DtoUpdated = {
+        id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 11:00:00').toISOString(),
+        endDateTime: new Date('2023-01-02 12:00:00').toISOString(),
+        location: {
+          longitude: 0,
+          latitude: 0,
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        organizerName: 'Smitty Werben',
+        category: getCategory(),
+        address: validAddress,
+        participants: 0,
+        userParticipates: false,
+      };
+
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.startDateTime = new Date('2023-01-01 11:00:00');
+
+      return request(app.getHttpServer())
+        .patch(`/event/${event1._id}`)
+        .send(eventUpdateDto)
+        .expect((res) => {
+          expect(res.body).toEqual(event1DtoUpdated);
+        });
+    });
+
+    it('should return 200 (change endDateTime of event)', async () => {
+      // Give
+      const event1 = new eventModel({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 09:00:00'),
+        endDateTime: new Date('2023-01-02 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        organizerName: 'Smitty Werben',
+        category: getCategory(),
+        address: validAddress,
+        participants: [],
+        userParticipates: false,
+      });
+      await event1.save();
+
+      const event1DtoUpdated = {
+        id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 09:00:00').toISOString(),
+        endDateTime: new Date('2023-01-01 11:30:00').toISOString(),
+        location: {
+          longitude: 0,
+          latitude: 0,
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        organizerName: 'Smitty Werben',
+        category: getCategory(),
+        address: validAddress,
+        participants: 0,
+        userParticipates: false,
+      };
+
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.endDateTime = new Date('2023-01-01 11:30:00');
+
+      return request(app.getHttpServer())
+        .patch(`/event/${event1._id}`)
+        .send(eventUpdateDto)
+        .expect((res) => {
+          expect(res.body).toEqual(event1DtoUpdated);
+        });
+    });
+
+    it('should return 400 (startDateTime after endDateTime of event)', async () => {
+      // Give
+      const event1 = new eventModel({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        organizerName: 'Smitty Werben',
+        category: getCategory(),
+        address: validAddress,
+        participants: [],
+        userParticipates: false,
+      });
+      await event1.save();
+
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.startDateTime = new Date('2023-01-01 15:00:00');
+
+      return request(app.getHttpServer())
+        .patch(`/event/${validObjectId1.toString()}`)
+        .send(eventUpdateDto)
+        .expect(HttpStatus.BAD_REQUEST);
+    });
+
+    it('should return 400 (endDateTime before startDateTime of event)', async () => {
+      // Give
+      const event1 = new eventModel({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        organizerName: 'Smitty Werben',
+        category: getCategory(),
+        address: validAddress,
+        participants: [],
+        userParticipates: false,
+      });
+      await event1.save();
+
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.endDateTime = new Date('2023-01-01 09:00:00');
+
+      return request(app.getHttpServer())
+        .patch(`/event/${validObjectId1.toString()}`)
+        .send(eventUpdateDto)
+        .expect(HttpStatus.BAD_REQUEST);
+    });
+
+    it('should return 400 (startDateTime after endDateTime of event, both given)', async () => {
+      // Give
+      const event1 = new eventModel({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        organizerName: 'Smitty Werben',
+        category: getCategory(),
+        address: validAddress,
+        participants: [],
+        userParticipates: false,
+      });
+      await event1.save();
+
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.startDateTime = new Date('2023-01-01 15:00:00');
+      eventUpdateDto.endDateTime = new Date('2023-01-01 13:00:00');
+
+      return request(app.getHttpServer())
+        .patch(`/event/${validObjectId1.toString()}`)
+        .send(eventUpdateDto)
+        .expect(HttpStatus.BAD_REQUEST);
+    });
+
+    it('should return 400 (startDateTime in the past)', async () => {
+      // Give
+      const event1 = new eventModel({
+        _id: validObjectId1.toString(),
+        name: 'test1',
+        description: 'Test Event Description',
+        startDateTime: new Date('2023-01-01 10:00:00'),
+        endDateTime: new Date('2023-01-01 12:00:00'),
+        location: {
+          type: GeolocationEnum.POINT,
+          coordinates: [0, 0],
+        },
+        price: 12.5,
+        public: true,
+        imageId: '1',
+        organizerId: '1',
+        organizerName: 'Smitty Werben',
+        category: getCategory(),
+        address: validAddress,
+        participants: [],
+        userParticipates: false,
+      });
+      await event1.save();
+
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.startDateTime = new Date('2021-01-01 15:00:00');
+
+      return request(app.getHttpServer())
+        .patch(`/event/${validObjectId1.toString()}`)
+        .send(eventUpdateDto)
+        .expect(HttpStatus.BAD_REQUEST);
+    });
+
+    it('should return 400 (malformed price)', async () => {
+      // Give
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.price = -12345;
+
+      return request(app.getHttpServer())
+        .patch(`/event/${validObjectId1.toString()}`)
+        .send(eventUpdateDto)
+        .expect(HttpStatus.BAD_REQUEST);
+    });
+
+    it('should return 400 (empty name)', async () => {
+      // Give
+      const eventUpdateDto: UpdateEventDto = new UpdateEventDto();
+      eventUpdateDto.name = '';
+
+      return request(app.getHttpServer())
+        .patch(`/event/${validObjectId1.toString()}`)
+        .send(eventUpdateDto)
+        .expect(HttpStatus.BAD_REQUEST);
+    });
+
+    it('should return 404 (non existing Object Id)', async () => {
+      return request(app.getHttpServer())
+        .patch(`/event/${nonExistingObjectId.toString()}`)
+        .send()
+        .expect(HttpStatus.NOT_FOUND);
+    });
   });
 
   function getDefaultEventDTO() {

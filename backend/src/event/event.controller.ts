@@ -8,12 +8,14 @@ import {
   Logger,
   NotFoundException,
   Param,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from '../core/dto/createEvent.dto';
 import { EventDto } from '../core/dto/event.dto';
+import { UpdateEventDto } from '../core/dto/updateEvent.dto';
 import { EventMapper } from '../core/mapper/event.mapper';
 import { EventEntity } from '../core/entity/event.entity';
 import { QueryDto } from '../core/dto/query.dto';
@@ -52,13 +54,7 @@ export class EventController {
     @User() user: AuthUser,
   ): Promise<EventDto> {
     this.logger.log('Get Event with id: ' + params.id);
-    let result;
-    try {
-      result = await this.eventService.getEventById(params.id);
-    } catch (error) {
-      this.logger.error(error);
-      throw new NotFoundException('Can not find Event with id: ' + params.id);
-    }
+    const result = await this.eventService.getEventById(params.id);
     return EventMapper.mapEntityToDto(result as Required<EventEntity>, user.id);
   }
 
@@ -121,5 +117,36 @@ export class EventController {
       user.id,
     );
     await this.eventService.deleteParticipation(eventId, user);
+  }
+
+  @Patch('/:id')
+  @HttpCode(HttpStatus.OK)
+  async updateEvent(
+    @Param('id') id: string,
+    @Body() updateEventDto: UpdateEventDto,
+    @User() user: AuthUser,
+  ) {
+    this.logger.log(`Updating event with id ${id}`);
+
+    if (
+      (updateEventDto.startDateTime && !updateEventDto.endDateTime) ||
+      (!updateEventDto.startDateTime && updateEventDto.endDateTime)
+    ) {
+      const requestedEvent = await this.eventService.getEventById(id);
+
+      if (updateEventDto.startDateTime) {
+        updateEventDto.endDateTime = requestedEvent.endDateTime;
+      } else {
+        updateEventDto.startDateTime = requestedEvent.startDateTime;
+      }
+    }
+
+    return EventMapper.mapEntityToDto(
+      await this.eventService.updateEvent(
+        id,
+        EventMapper.mapDtoToEntityUpdate(updateEventDto),
+      ),
+      user.id,
+    );
   }
 }

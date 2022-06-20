@@ -28,23 +28,27 @@ import {
   validLongitude,
 } from '../../test/test_data/openStreetMapApi.testData';
 import {
+  nonExistingObjectId,
+  validEventDocument,
+  validObjectId1,
+  validEventEntity,
+  updateOptions,
+  validEventUpdateEntity,
+  invalidObjectId,
+  validObjectId2,
+} from '../../test/test_data/event.testData';
+import {
+  BadRequestException,
   InternalServerErrorException,
-  NotFoundException,
 } from '@nestjs/common';
 import { NotFoundError } from '../core/error/notFound.error';
 import { LocationEntity } from '../core/entity/location.entity';
 import { CategoryEnum } from '../core/schema/enum/category.enum';
-import {
-  invalidObjectId,
-  nonExistingObjectId,
-  validEventDocument,
-  validObjectId1,
-  validObjectId2,
-} from '../../test/test_data/event.testData';
 import { UserEntity } from '../core/entity/user.entity';
 import { RoleEnum } from '../core/schema/enum/role.enum';
 import { AlreadyParticipatedConflictError } from '../core/error/alreadyParticipatedConflict.error';
 import { NotYetParticipatedConflictError } from '../core/error/notYetParticipatedConflict.error';
+import { UpdateEventEntity } from '../core/entity/updateEvent.entity';
 import { Neo4jService } from 'nest-neo4j/dist';
 import { EventNeo4jServiceMock } from '../../test/stubs/event.neo4j.service.mock';
 import { MeiliSearchMock } from '../../test/stubs/meilisearch.mock';
@@ -127,7 +131,7 @@ describe('EventService', () => {
       const result = async () => await sut.createEvent(eventEntity);
 
       // Then
-      await expect(result).rejects.toThrow(new NotFoundException());
+      await expect(result).rejects.toThrow(NotFoundError);
     });
 
     it('should call the service and throw a NotFoundException from openStreetMap getLocation', async () => {
@@ -141,7 +145,7 @@ describe('EventService', () => {
       const result = async () => await sut.createEvent(eventEntity);
 
       // Then
-      await expect(result).rejects.toThrow(new NotFoundException());
+      await expect(result).rejects.toThrow(NotFoundError);
     });
 
     it('should call the service and throw a InternalServerErrorException from openStreetMap getAddress', async () => {
@@ -306,6 +310,97 @@ describe('EventService', () => {
 
       // Then
       expect(eventDocumentMock.aggregate).toHaveBeenCalled();
+    });
+  });
+
+  describe('updateEvent', () => {
+    it('should call the database', async () => {
+      // When
+      await sut.updateEvent(validObjectId1.toString(), validEventUpdateEntity);
+
+      // Then
+      expect(eventDocumentMock.findByIdAndUpdate).toHaveBeenCalledWith(
+        validObjectId1.toString(),
+        validEventUpdateEntity,
+        updateOptions,
+      );
+    });
+
+    it('should call the service and update an event', async () => {
+      // Given
+      const updateEvent = validEventUpdateEntity;
+      const expectedUpdatedEvent = {
+        ...validEventEntity(),
+        id: validObjectId1.toString(),
+        name: updateEvent.name,
+        description: updateEvent.description,
+        price: updateEvent.price,
+        imageId: updateEvent.imageId,
+        category: updateEvent.category,
+      };
+
+      // When
+      const response = await sut.updateEvent(
+        validObjectId1.toString(),
+        validEventUpdateEntity,
+      );
+      // Then
+      expect(response).toEqual(expectedUpdatedEvent);
+      expect(eventDocumentMock.findByIdAndUpdate).toHaveBeenCalled();
+    });
+
+    it('should throw a NotFoundException when updating a non existing event', async () => {
+      // When
+      const response = sut.updateEvent(
+        NotFoundErrorId.toString(),
+        validEventUpdateEntity,
+      );
+
+      // Then
+      await expect(response).rejects.toThrow(NotFoundError);
+    });
+
+    it('should return an bad request error when trying to set a startDateTime later than the endDateTime', async () => {
+      // Given
+      const updateEvent = new UpdateEventEntity();
+      updateEvent.startDateTime = new Date('2023-01-01 18:00:00');
+      updateEvent.endDateTime = new Date('2023-01-01 12:00:00');
+
+      // When
+      const response = sut.updateEvent(validObjectId1.toString(), updateEvent);
+
+      // Then
+      await expect(response).rejects.toThrow(
+        new BadRequestException('startDateTime must be before endDateTime'),
+      );
+    });
+
+    it('should return an bad request error when trying to set a startDateTime earlier than the current Time', async () => {
+      // Given
+      const updateEvent = new UpdateEventEntity();
+      updateEvent.startDateTime = new Date('2020-01-01 18:00:00');
+      updateEvent.endDateTime = new Date('2023-01-01 12:00:00');
+
+      // When
+      const response = sut.updateEvent(validObjectId1.toString(), updateEvent);
+
+      // Then
+      await expect(response).rejects.toThrow(
+        new BadRequestException(
+          'startDateTime must be before the current time',
+        ),
+      );
+    });
+
+    it("should return an internal error if event couldn't be updated", async () => {
+      // When
+      const response = sut.updateEvent(
+        DBErrorId.toString(),
+        validEventUpdateEntity,
+      );
+
+      // Then
+      await expect(response).rejects.toThrow(InternalServerErrorException);
     });
   });
 
@@ -511,7 +606,7 @@ describe('EventService', () => {
   describe('markEventAsPaid', () => {
     it('should call the database and update the paid attribute to true', async () => {
       // Given
-      const eventId = validObjectId1.toString();
+      const eventId = validObjectId2.toString();
 
       // When
       await sut.markEventAsPaid(eventId);
@@ -568,13 +663,14 @@ describe('EventService', () => {
     eventEntity.id = '1';
     eventEntity.name = 'Test name';
     eventEntity.description = 'Test description';
-    eventEntity.startDateTime = new Date('2020-01-01 00:10:00');
-    eventEntity.endDateTime = new Date('2020-01-01 00:12:00');
+    eventEntity.startDateTime = new Date('2023-01-01 11:00:00');
+    eventEntity.endDateTime = new Date('2023-01-01 12:00:00');
     eventEntity.location = location;
     eventEntity.price = 12.5;
     eventEntity.public = true;
     eventEntity.imageId = '1';
     eventEntity.organizerId = '1';
+    eventEntity.organizerName = 'Test Organizer';
     eventEntity.category = [CategoryEnum.SALSA, CategoryEnum.ZOUK];
     eventEntity.address = validAddress;
     eventEntity.participants = [];
@@ -588,8 +684,8 @@ describe('EventService', () => {
       id: '1',
       name: 'Test name',
       description: 'Test description',
-      startDateTime: new Date('2020-01-01 00:10:00'),
-      endDateTime: new Date('2020-01-01 00:12:00'),
+      startDateTime: new Date('2023-01-01 11:00:00'),
+      endDateTime: new Date('2023-01-01 12:00:00'),
       location: {
         type: GeolocationEnum.POINT,
         coordinates: [validLongitude, validLatitude],

@@ -55,7 +55,7 @@ describe('EmailService', () => {
       // When
       await sut.sendInvoice(
         validUserEntity,
-        validEventEntity,
+        validEventEntity(),
         'test-invoice-id',
         // eslint-disable-next-line @typescript-eslint/no-magic-numbers
         10,
@@ -84,7 +84,7 @@ describe('EmailService', () => {
       const total = 10;
       await sut.sendInvoice(
         validUserEntity,
-        { ...validEventEntity, id: eventId },
+        { ...validEventEntity(), id: eventId },
         invoiceId,
         total,
       );
@@ -100,8 +100,8 @@ describe('EmailService', () => {
             eventUrl: expect.stringContaining(
               `mock-frontend-url/event/${eventId}`,
             ),
-            eventName: validEventEntity.name,
-            eventDate: validEventEntity.startDateTime.toDateString(),
+            eventName: validEventEntity().name,
+            eventDate: validEventEntity().startDateTime.toDateString(),
             invoiceId,
             total,
             currency: 'EUR',
@@ -122,7 +122,7 @@ describe('EmailService', () => {
       // When
       const res = await sut.sendInvoice(
         validUserEntity,
-        validEventEntity,
+        validEventEntity(),
         'test-invoice-id',
         // eslint-disable-next-line @typescript-eslint/no-magic-numbers
         10,

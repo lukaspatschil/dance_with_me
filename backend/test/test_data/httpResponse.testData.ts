@@ -23,3 +23,7 @@ export function axiosResponse401(url: string) {
     statusText: 'Unauthorized',
   } as AxiosResponse;
 }
+export const internalErrorResponse = {
+  statusCode: 500,
+  message: 'Internal Server Error',
+};

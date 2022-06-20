@@ -9,9 +9,9 @@ import { FilterQuery, Model, PipelineStage } from 'mongoose';
 import { EventDocument } from '../core/schema/event.schema';
 import { EventMapper } from '../core/mapper/event.mapper';
 import { EventEntity } from '../core/entity/event.entity';
+import { UpdateEventEntity } from '../core/entity/updateEvent.entity';
 import { GeolocationEnum } from '../core/schema/enum/geolocation.enum';
 import { QueryDto } from '../core/dto/query.dto';
-import { NotFoundError } from '../core/error/notFound.error';
 import { OpenStreetMapApiService } from '../openStreetMapApi/openStreetMapApi.service';
 import { AuthUser } from '../auth/interfaces';
 import { NotYetParticipatedConflictError } from '../core/error/notYetParticipatedConflict.error';
@@ -23,6 +23,7 @@ import { MeiliSearch } from 'meilisearch';
 const DEFAULT_TAKE = 50;
 const DEFAULT_SKIP = 0;
 const DEFAULT_RADIUS = 100;
+import { NotFoundError } from '../core/error/notFound.error';
 
 @Injectable()
 export class EventService {
@@ -152,6 +153,46 @@ export class EventService {
     }
 
     return result;
+  }
+
+  async updateEvent(
+    eventId: string,
+    eventEntity: UpdateEventEntity,
+  ): Promise<Required<EventEntity>> {
+    this.logger.log(`Update event with id: ${eventId}`);
+    if (eventEntity.startDateTime && eventEntity.endDateTime) {
+      if (eventEntity.startDateTime > eventEntity.endDateTime) {
+        const err = new BadRequestException(
+          'startDateTime must be before endDateTime',
+        );
+        this.logger.error(err);
+        throw err;
+      }
+      if (eventEntity.startDateTime <= new Date()) {
+        const err = new BadRequestException(
+          'startDateTime must be before the current time',
+        );
+        this.logger.error(err);
+        throw err;
+      }
+    }
+    const { ...query } = eventEntity;
+    let event = null;
+    try {
+      event = await this.eventModel
+        .findByIdAndUpdate(eventId, query, {
+          new: true,
+        })
+        .exec();
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException(error);
+    }
+    if (event === null) {
+      throw NotFoundError;
+    }
+
+    return EventMapper.mapDocumentToEntity(event);
   }
 
   async getEventById(id: string): Promise<EventEntity> {

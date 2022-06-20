@@ -1,10 +1,12 @@
 import { EventEntity } from '../../src/core/entity/event.entity';
+import { UpdateEventEntity } from '../../src/core/entity/updateEvent.entity';
 import { LocationEntity } from '../../src/core/entity/location.entity';
 import { GeolocationEnum } from '../../src/core/schema/enum/geolocation.enum';
 import { validAddress } from '../test_data/openStreetMapApi.testData';
 import { CategoryEnum } from '../../src/core/schema/enum/category.enum';
 import {
   validEventDocument,
+  validEventEntity,
   validObjectId1,
 } from '../test_data/event.testData';
 
@@ -52,8 +54,8 @@ export class EventServiceMock {
     const eventEntity = new EventEntity();
     eventEntity.name = 'Test name';
     eventEntity.description = 'Test description';
-    eventEntity.startDateTime = new Date('2020-01-01 00:10:00');
-    eventEntity.endDateTime = new Date('2020-01-01 00:12:00');
+    eventEntity.startDateTime = new Date('2023-01-01 10:00:00');
+    eventEntity.endDateTime = new Date('2023-01-01 12:00:00');
     eventEntity.location = locationEntity;
     eventEntity.price = 12.5;
     eventEntity.public = true;
@@ -68,8 +70,43 @@ export class EventServiceMock {
 
   deleteEvent = jest.fn((id: string) => {
     if (id === validObjectId1.toString()) {
-      const event = validEventDocument;
-      event._id = id;
+      return Promise.resolve(validEventDocument);
+    } else {
+      return Promise.resolve(null);
+    }
+  });
+
+  updateEvent = jest.fn((id: string, eventEntity: UpdateEventEntity) => {
+    if (id === validObjectId1.toString() || id === '-2') {
+      const event = validEventEntity();
+      event.id = id;
+      if (eventEntity.name) {
+        event.name = eventEntity.name;
+      }
+      if (eventEntity.description) {
+        event.description = eventEntity.description;
+      }
+      if (eventEntity.startDateTime) {
+        event.startDateTime = eventEntity.startDateTime;
+      }
+      if (eventEntity.endDateTime) {
+        event.endDateTime = eventEntity.endDateTime;
+      }
+      if (eventEntity.location && event.location) {
+        event.location.coordinates = eventEntity.location.coordinates;
+      }
+      if (eventEntity.price) {
+        event.price = eventEntity.price;
+      }
+      if (eventEntity.public) {
+        event.public = eventEntity.public;
+      }
+      if (eventEntity.imageId) {
+        event.imageId = eventEntity.imageId;
+      }
+      if (eventEntity.category) {
+        event.category = eventEntity.category;
+      }
       return Promise.resolve(event);
     } else {
       return Promise.resolve(null);

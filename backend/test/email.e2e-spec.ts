@@ -34,7 +34,7 @@ describe('EmailService (e2e)', () => {
     it('should send email to correct recipient', async () => {
       const message = await emailService.sendInvoice(
         validUserEntity,
-        validEventEntity,
+        validEventEntity(),
         'test-invoice-id',
         // eslint-disable-next-line @typescript-eslint/no-magic-numbers
         10,
