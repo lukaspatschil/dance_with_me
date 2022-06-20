@@ -279,6 +279,7 @@ describe('EventController', () => {
       public: true,
       imageId: '1',
       organizerId: '1',
+      organizerName: 'Smitty Werben',
       category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: {
         country: 'Österreich',
@@ -307,6 +308,7 @@ describe('EventController', () => {
       public: true,
       imageId: '1',
       organizerId: '1',
+      organizerName: 'Smitty Werben',
       category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: {
         country: 'Österreich',
@@ -323,8 +325,8 @@ describe('EventController', () => {
   function getDefaultUser(): UserEntity {
     return {
       id: '1',
-      email: 'john.doe@example.com',
-      displayName: 'John Doe',
+      email: 'smitty.werben@example.com',
+      displayName: 'Smitty Werben',
       emailVerified: true,
       role: RoleEnum.ADMIN,
     };

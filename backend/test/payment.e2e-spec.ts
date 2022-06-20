@@ -90,6 +90,7 @@ describe('PaymentController (e2e)', () => {
         public: true,
         imageId: '1',
         organizerId: user.id,
+        organizerName: user.displayName,
         participants: [],
         category: ['Salsa', 'Zouk'],
         address: validAddress,

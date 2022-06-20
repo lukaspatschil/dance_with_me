@@ -39,6 +39,7 @@ export class EventMapper {
     newEvent.public = event.public;
     newEvent.imageId = event.imageId;
     newEvent.organizerId = event.organizerId;
+    newEvent.organizerName = event.organizerName;
     newEvent.category = event.category;
     newEvent.participants = event.participants;
     newEvent.paid = event.paid;
@@ -49,6 +50,7 @@ export class EventMapper {
   static mapCreateDtoToEntity(
     event: CreateEventDto,
     organizerId: EventEntity['organizerId'],
+    organizerName: EventEntity['organizerName'],
   ): EventEntity {
     const newEvent = new EventEntity();
     newEvent.name = event.name;
@@ -86,6 +88,7 @@ export class EventMapper {
     newEvent.public = event.public;
     newEvent.imageId = event.imageId;
     newEvent.organizerId = organizerId;
+    newEvent.organizerName = organizerName;
     newEvent.category = event.category;
     newEvent.participants = [];
 
@@ -120,6 +123,7 @@ export class EventMapper {
     newEvent.public = event.public;
     newEvent.imageId = event.imageId;
     newEvent.organizerId = event.organizerId;
+    newEvent.organizerName = event.organizerName;
     newEvent.category = event.category;
     newEvent.participants = event.participants.length;
     newEvent.userParticipates = event.participants.includes(userid);

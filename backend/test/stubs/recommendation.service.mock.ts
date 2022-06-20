@@ -35,6 +35,7 @@ export class RecommendationServiceMock {
     eventEntity.price = 10;
     eventEntity.public = true;
     eventEntity.organizerId = '1';
+    eventEntity.organizerName = 'Smitty Werben';
     eventEntity.category = [CategoryEnum.SALSA];
     eventEntity.participants = ['1234'];
 

@@ -4,7 +4,6 @@ import { EventEntity } from '../../src/core/entity/event.entity';
 import { GeolocationEnum } from '../../src/core/schema/enum/geolocation.enum';
 import { AddressDto } from '../../src/core/dto/address.dto';
 import { CategoryEnum } from '../../src/core/schema/enum/category.enum';
-
 export const validLatitude = 48.208176;
 export const validLongitude = 16.373819;
 
@@ -104,6 +103,7 @@ export function getEventEntityWithoutAddress(): EventEntity {
     public: true,
     imageId: '1',
     organizerId: '1',
+    organizerName: 'Smitty Werben',
     category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
     participants: [],
     paid: true,
@@ -121,6 +121,7 @@ export function getEventEntityWithoutLocation(): EventEntity {
     public: true,
     imageId: '1',
     organizerId: '1',
+    organizerName: 'Smitty Werben',
     category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
     address: validAddress,
     participants: [],
@@ -142,6 +143,7 @@ export function getEventEntityWithAddressAndLocation(): EventEntity {
     public: true,
     imageId: '1',
     organizerId: '1',
+    organizerName: 'Smitty Werben',
     category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
     address: validAddress,
     participants: [],

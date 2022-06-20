@@ -59,6 +59,7 @@ export class EventServiceMock {
     eventEntity.public = true;
     eventEntity.imageId = '1';
     eventEntity.organizerId = '1';
+    eventEntity.organizerName = 'Smitty Werben';
     eventEntity.category = [CategoryEnum.SALSA, CategoryEnum.ZOUK];
     eventEntity.address = validAddress;
     eventEntity.participants = [];

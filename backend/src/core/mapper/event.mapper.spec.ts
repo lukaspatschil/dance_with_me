@@ -19,6 +19,7 @@ describe('EventMapper', () => {
       const result = EventMapper.mapCreateDtoToEntity(
         createEventDto,
         getDefaultOrganizerId(),
+        getDefaultOrganizerName(),
       );
 
       // Then
@@ -34,6 +35,7 @@ describe('EventMapper', () => {
       const result = EventMapper.mapCreateDtoToEntity(
         createEventDto,
         getDefaultOrganizerId(),
+        getDefaultOrganizerName(),
       );
 
       // Then
@@ -49,6 +51,7 @@ describe('EventMapper', () => {
       const result = EventMapper.mapCreateDtoToEntity(
         createEventDto,
         getDefaultOrganizerId(),
+        getDefaultOrganizerName(),
       );
 
       // Then
@@ -126,6 +129,7 @@ describe('EventMapper', () => {
       public: true,
       imageId: '1',
       organizerId: '1',
+      organizerName: 'Smitty Werben',
       category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: {
         country: 'Österreich',
@@ -215,6 +219,7 @@ describe('EventMapper', () => {
       public: true,
       imageId: '1',
       organizerId: '1',
+      organizerName: 'Smitty Werben',
       category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: {
         country: 'Österreich',
@@ -238,6 +243,7 @@ describe('EventMapper', () => {
       public: true,
       imageId: '1',
       organizerId: '1',
+      organizerName: 'Smitty Werben',
       category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: {
         country: 'Österreich',
@@ -265,6 +271,7 @@ describe('EventMapper', () => {
       public: true,
       imageId: '1',
       organizerId: '1',
+      organizerName: 'Smitty Werben',
       category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       participants: [],
       paid: false,
@@ -285,6 +292,7 @@ describe('EventMapper', () => {
       public: true,
       imageId: '1',
       organizerId: '1',
+      organizerName: 'Smitty Werben',
       category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: {
         country: 'Österreich',
@@ -300,5 +308,9 @@ describe('EventMapper', () => {
 
   function getDefaultOrganizerId(): string {
     return '1';
+  }
+
+  function getDefaultOrganizerName(): string {
+    return 'Smitty Werben';
   }
 });

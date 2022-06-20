@@ -37,6 +37,9 @@ export class EventDocument extends Document {
   @Prop({ required: true })
   organizerId!: string;
 
+  @Prop({ required: true })
+  organizerName!: string;
+
   @Prop({ type: [String], required: true })
   category!: CategoryEnum[];
 

@@ -26,6 +26,7 @@ export const validEventDocument = {
   isPublic: true,
   imageId: '1',
   organizerId: '1',
+  organizerName: 'Smitty Werben',
   category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
   paid: true,
 };
@@ -44,6 +45,7 @@ export const validEventEntity: EventEntity = {
   public: true,
   imageId: '1',
   organizerId: '1',
+  organizerName: 'Smitty Werben',
   category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
   participants: [],
   paid: true,
@@ -63,6 +65,7 @@ export const validEventDto: EventDto = {
   public: true,
   imageId: '1',
   organizerId: '1',
+  organizerName: 'Smitty Werben',
   category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
   participants: 0,
   userParticipates: false,

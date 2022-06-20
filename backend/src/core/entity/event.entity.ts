@@ -25,6 +25,8 @@ export class EventEntity {
 
   organizerId!: string;
 
+  organizerName!: string;
+
   category!: CategoryEnum[];
 
   participants!: string[];

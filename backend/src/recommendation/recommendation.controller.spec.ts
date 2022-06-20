@@ -68,8 +68,8 @@ describe('RecommendationController', () => {
   function getDefaultUser(): UserEntity {
     return {
       id: '1',
-      email: 'john.doe@example.com',
-      displayName: 'John Doe',
+      email: 'smitty.werben@example.com',
+      displayName: 'Smitty Werben',
       emailVerified: true,
       role: RoleEnum.USER,
     };
@@ -97,6 +97,7 @@ describe('RecommendationController', () => {
       price: 10,
       public: true,
       organizerId: '1',
+      organizerName: 'Smitty Werben',
       category: [CategoryEnum.SALSA],
       participants: 1,
       userParticipates: false,

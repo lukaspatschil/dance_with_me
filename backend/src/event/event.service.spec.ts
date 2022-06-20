@@ -598,6 +598,7 @@ describe('EventService', () => {
       public: true,
       imageId: '1',
       organizerId: '1',
+      organizerName: 'Smitty Werben',
       category: [CategoryEnum.SALSA, CategoryEnum.ZOUK],
       address: validAddress,
       participants: [],
