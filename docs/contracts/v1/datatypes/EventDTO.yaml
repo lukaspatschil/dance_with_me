@@ -42,8 +42,13 @@ properties:
   userParticipates:
     type: boolean
     example: true
+  organizerId:
+    type: string
+  organizerName:
+    type: string
+    example: John Doe
 required:
-  - id
+  - idf
   - name
   - description
   - price

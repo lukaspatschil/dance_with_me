@@ -107,7 +107,8 @@ const eventEntity: EventEntity = {
   startDateTime: new Date('2022-04-24T10:00'),
   endDateTime: new Date('2022-04-24T10:00'),
   category: [Category.SALSA],
-  userParticipates: true
+  userParticipates: true,
+  organizerName: 'organizerName'
 };
 
 const eventEntityNoParticipation: EventEntity = {
@@ -131,6 +132,7 @@ const eventEntityNoParticipation: EventEntity = {
   startDateTime: new Date('2022-04-24T10:00'),
   endDateTime: new Date('2022-04-24T10:00'),
   category: [Category.SALSA],
-  userParticipates: false
+  userParticipates: false,
+  organizerName: 'organizerName'
 };
 

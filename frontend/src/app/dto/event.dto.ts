@@ -24,4 +24,6 @@ export class EventDto {
   category?: Category[];
 
   userParticipates?: boolean;
+
+  organizerName?: string;
 }

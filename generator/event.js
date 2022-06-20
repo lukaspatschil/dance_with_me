@@ -53,6 +53,7 @@ const createEvent = () => {
     public: true,
     imageId: `${faker.database.mongodbObjectId()}.png`,
     organizerId: organiser[Math.floor(Math.random() * organiser.length)],
+    organizerName: faker.name.findName(),
     category: categoryArray,
     participants: [],
     paid: true,

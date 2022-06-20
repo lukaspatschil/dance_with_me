@@ -25,7 +25,21 @@ export class EventEntity {
 
   userParticipates = false;
 
-  constructor(id: string, name: string, description: string, location: LocationEntity, address: AddressEntity, price: number, isPublic: boolean, startDateTime: Date, endDateTime: Date, category: Category[]){
+  organizerName: string;
+
+  constructor(
+    id: string,
+    name: string,
+    description: string,
+    location: LocationEntity,
+    address: AddressEntity,
+    price: number,
+    isPublic: boolean,
+    startDateTime: Date,
+    endDateTime: Date,
+    category: Category[],
+    organizerName: string
+  ) {
     this.id = id;
     this.name = name;
     this.description = description;
@@ -36,5 +50,6 @@ export class EventEntity {
     this.startDateTime = startDateTime;
     this.endDateTime = endDateTime;
     this.category = category;
+    this.organizerName = organizerName;
   }
 }

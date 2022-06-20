@@ -19,6 +19,7 @@ export class EventMapper {
       entry.address.city &&
       entry.address.country &&
       entry.address.postalcode &&
+      entry.organizerName &&
       typeof entry.location?.longitude === 'number' &&
       typeof entry.location.latitude === 'number') {
       const location = new LocationEntity(
@@ -43,7 +44,9 @@ export class EventMapper {
         entry.public,
         new Date(entry.startDateTime),
         new Date(entry.endDateTime),
-        entry.category);
+        entry.category,
+        entry.organizerName
+      );
 
       event.userParticipates = entry.userParticipates ?? false;
 

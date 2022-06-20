@@ -32,7 +32,8 @@ describe('EventMapper', () => {
         startDateTime: new Date('2022-04-24T10:00').toISOString(),
         endDateTime: new Date('2022-04-24T12:00').toISOString(),
         category: [Category.SALSA],
-        userParticipates: false
+        userParticipates: false,
+        organizerName: 'organizerName'
       };
 
       // When
@@ -72,7 +73,8 @@ describe('EventMapper', () => {
           housenumber: '10',
           postalcode: '1020',
           addition: 'addition'
-        }
+        },
+        organizerName: 'organizerName'
       };
 
       // When
@@ -93,7 +95,8 @@ describe('EventMapper', () => {
         startDateTime: new Date('2022-04-24T10:00').toISOString(),
         endDateTime: new Date('2022-04-24T12:00').toISOString(),
         category: [Category.SALSA],
-        userParticipates: true
+        userParticipates: true,
+        organizerName: 'organizerName'
       };
 
       // When
@@ -120,7 +123,8 @@ describe('EventMapper', () => {
       true,
       new Date('2022-04-24T10:00'),
       new Date('2022-04-24T12:00'),
-      [Category.SALSA]
+      [Category.SALSA],
+      'organizerName'
     );
   }
 });
