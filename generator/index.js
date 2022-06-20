@@ -3,7 +3,6 @@ const neo4j = require('neo4j-driver');
 const MeiliSearch = require('meilisearch')
 const {generateEvents} = require("./event");
 const {generateUsers} = require("./user")
-
 const PARTICIPATES_RELATIONSHIP = 'PARTICIPATES';
 const usersAmount = 20;
 const eventsAmount = 500;
@@ -70,6 +69,35 @@ async function log4jSeeder() {
   }
 }
 
+function mapToEventDto(tempEvent) {
+  return {
+    id: tempEvent._id.toString(),
+    name: tempEvent.name,
+    description: tempEvent.description,
+    startDateTime: tempEvent.startDateTime,
+    endDateTime: tempEvent.endDateTime,
+    location: {
+      type: tempEvent.location.type,
+      coordinates: tempEvent.location.coordinates,
+    },
+    address: {
+      country: tempEvent.address.country,
+      city: tempEvent.address.city,
+      postalcode: tempEvent.address.postalcode,
+      street: tempEvent.address.street,
+      housenumber: tempEvent.address.housenumber,
+    },
+    price: tempEvent.price,
+    public: tempEvent.public,
+    imageId: tempEvent.imageId,
+    organizerId: tempEvent.organizerId,
+    organizerName: tempEvent.organizerName,
+    category: tempEvent.category,
+    participants: tempEvent.participants,
+    paid: tempEvent.paid,
+  };
+}
+
 async function mongoSeeder() {
   // Use connect method to connect to the server
   await client.connect();
@@ -97,7 +125,8 @@ async function mongoSeeder() {
   for (let index = 0; index < resultEvents.insertedCount; index++) {
     const tempID = resultEvents.insertedIds[index];
     const tempEvent = await eventCollection.findOne({_id: tempID});
-    eventDocuments.push(tempEvent)
+    const eventEntity = mapToEventDto(tempEvent);
+    eventDocuments.push(eventEntity);
   }
 
   await meiliSearch
