@@ -142,23 +142,22 @@ describe('EventOverviewMapComponent', () => {
     expect(comp).toBeTruthy();
   });
 
-  it('should subscribe to user position', () => {
-    //When
-    jest.spyOn(geoService, 'subscribe');
-    comp.ngOnInit();
 
-    // Then
-    expect(geoService.subscribe).toHaveBeenCalled();
-  });
-
-
-  describe('renderEvents', () => {
+  describe('getEvents', () => {
     it('should fetch events from API ', () => {
       // When
-      comp.renderEvents(0, 0, 0);
+      comp.getEvents();
 
       // Then
       expect(eventService.getEvents).toHaveBeenCalled();
+    });
+    it('should subscribe to user position', () => {
+      //When
+      jest.spyOn(geoService, 'subscribe');
+      comp.getEvents();
+
+      // Then
+      expect(geoService.subscribe).toHaveBeenCalled();
     });
   });
 });

@@ -3,14 +3,14 @@ import { EventService } from '../../../services/event.service';
 import { EventEntity } from '../../../entities/event.entity';
 import { GeolocationService } from '@ng-web-apis/geolocation';
 import { first } from 'rxjs';
-import { Feature, Map, MapEvent, Overlay, View } from 'ol';
+import { Feature, Map, Overlay, View } from 'ol';
+import * as layer from 'ol/layer';
+import * as source from 'ol/source';
+import * as geom from 'ol/geom';
+import * as proj from 'ol/proj';
+import * as style from 'ol/style';
 import Geolocation from 'ol/Geolocation';
 import Point from 'ol/geom/Point';
-import { Vector as VectorLayer, Tile as TileLayer } from 'ol/layer';
-import { fromLonLat, transform, transformExtent } from 'ol/proj';
-import { Vector, OSM } from 'ol/source';
-import { getDistance } from 'ol/sphere';
-import { Style, Icon } from 'ol/style';
 
 
 @Component({
@@ -24,42 +24,32 @@ export class EventOverviewMapComponent implements OnInit {
 
   @ViewChild('popup') popupElement!: ElementRef;
 
-  map!: Map;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  map!: any;
 
-  eventsLayer = new VectorLayer({
-    style: new Style({
-      image: new Icon({
-        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-        anchor: [0.5, 0.5],
-        anchorXUnits: 'fraction',
-        anchorYUnits: 'fraction',
-        src: 'assets/img/marker.svg'
-      })
-    })
-  });
+  events: EventEntity[] | null = [];
 
   eventEntity?: EventEntity;
+
+  recommendation = false;
 
   constructor(private readonly eventService: EventService,
     private readonly geolocation$: GeolocationService) {}
 
   ngOnInit(): void {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    this.geolocation$.pipe(first(position => position !== null)).subscribe((position) => {
-      this.initializeMap(position.coords.latitude, position.coords.longitude);
-    });
+    this.getEvents();
   }
 
-  renderEvents(longitude: number, latitude: number, radius: number): void {
-    this.eventService.getEvents(longitude, latitude, radius).subscribe((events) => {
-      this.eventsLayer.setSource(new Vector({
-        features: events.map(event =>
-          new Feature({
-            geometry: new Point(fromLonLat([event.location.longitude, event.location.latitude])),
-            event: event
-          })
-        )
-      }));
+  getEvents(): void {
+    this.recommendation = true;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    this.geolocation$.pipe(first(position => position !== null)).subscribe((position) => {
+      this.events = [];
+      let radius = 10000;
+      this.eventService.getEvents(position.coords.longitude, position.coords.latitude, radius).subscribe((data) => {
+        this.events = data;
+        this.initializeMap(position.coords.latitude, position.coords.longitude);
+      });
     });
   }
 
@@ -67,40 +57,29 @@ export class EventOverviewMapComponent implements OnInit {
     this.map = new Map({
       target: 'map',
       layers: [
-        new TileLayer({
-          source:  new OSM({
+        new layer.Tile({
+          source:  new source.OSM({
             url: 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
           })
-        }),
-        this.eventsLayer
+        })
       ],
       view: new View({
-        center: fromLonLat([currLng, currLat]),
+        center: proj.fromLonLat([currLng, currLat]),
         zoom: 15
       })
     });
 
+    // add marker for all events
+    if (this.events !== null) {
+      for (let i in this.events) {
+        let event = this.events[i];
+        if (event !== undefined) {
+          this.addPoint(event.location.latitude, event.location.longitude, event);
+        }
+      }
+    }
     this.addUserPositionPoint();
 
-    this.map.on('moveend', (mapEvent: MapEvent) => {
-      const size = mapEvent.map.getSize();
-      const center = <[number, number]>mapEvent.map.getView().getCenter();
-      const sourceProj = mapEvent.map.getView().getProjection();
-      const extent = mapEvent.map.getView().calculateExtent(size);
-
-      const [minX, minY, maxX, maxY] = transformExtent(extent, sourceProj, 'EPSG:4326');
-      const transformedCenter = <[number, number]>transform(center, sourceProj, 'EPSG:4326');
-
-      const centerToMinXY = getDistance(transformedCenter, [minX, minY]);
-      const centerToMaxXY = getDistance(transformedCenter, [maxX, maxY]);
-
-      const maxRadius = Math.max(centerToMinXY, centerToMaxXY);
-      const [longitude, latitude] = transformedCenter;
-
-      this.renderEvents(longitude, latitude, maxRadius);
-    });
-
-    this.onEventSelected();
   }
 
   addUserPositionPoint(): void{
@@ -115,12 +94,12 @@ export class EventOverviewMapComponent implements OnInit {
 
     let markerFeature = new Feature();
 
-    let vectorLayer = new VectorLayer({
-      source: new Vector({
+    let vectorLayer = new layer.Vector({
+      source: new source.Vector({
         features: [markerFeature]
       }),
-      style: new Style({
-        image: new Icon({
+      style: new style.Style({
+        image: new style.Icon({
           // eslint-disable-next-line @typescript-eslint/no-magic-numbers
           anchor: [0.5, 0.5],
           anchorXUnits: 'fraction',
@@ -138,6 +117,32 @@ export class EventOverviewMapComponent implements OnInit {
     });
   }
 
+  addPoint(lat: number, lng: number, eventEntity: EventEntity): void {
+    let vectorLayer = new layer.Vector({
+      source: new source.Vector({
+        features: [
+          new Feature({
+            geometry: new geom.Point(proj.fromLonLat([lng, lat])),
+            event: eventEntity
+          })]
+      }),
+      style: new style.Style({
+        image: new style.Icon({
+          // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+          anchor: [0.5, 0.5],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'fraction',
+          src: 'assets/img/marker.svg'
+        })
+      })
+    });
+
+    this.onEventSelected();
+
+    this.map.addLayer(vectorLayer);
+  }
+
+
   onEventSelected(): void{
     let popup = new Overlay({
       element: this.popupElement.nativeElement,
@@ -148,14 +153,18 @@ export class EventOverviewMapComponent implements OnInit {
     });
     this.map.addOverlay(popup);
 
-    this.map.on('singleclick', (event) => {
-      const pixel = this.map.getEventPixel(event.originalEvent);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.map.on('singleclick', (e: { originalEvent: any; coordinate: unknown;  feature: Feature }) => {
+      const pixel = this.map.getEventPixel(e.originalEvent);
       const hit = this.map.hasFeatureAtPixel(pixel);
       if (hit){
-        const [feature] = this.map.getFeaturesAtPixel(pixel);
+        let feature = this.map.getFeaturesAtPixel(pixel);
 
-        popup.setPosition(event.coordinate);
-        this.eventEntity = feature?.get('event');
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        popup.setPosition(e.coordinate);
+        this.eventEntity = feature[0].get('event');
       } else {
         popup.setPosition(undefined);
       }
