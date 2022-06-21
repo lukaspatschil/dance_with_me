@@ -117,13 +117,14 @@
         </div>
       </div>
       <div class="w-full sm:w-1/4 px-3 mb-3 md:mb-0">
-        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="city">
+        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="country">
           {{'payment.country' | translate}} *
         </label>
         <input
           type="text" required
+          pattern="[A-Z]{2}"
           formControlName="country"
-          name="city"
+          name="country"
           class="appearance-none block w-full text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-red-900" id="country" type="text" placeholder="{{'payment.country_placeholder' | translate }}">
         <div translate
              *ngIf="(country?.touched)">

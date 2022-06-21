@@ -34,7 +34,7 @@ export class PaymentComponent implements OnInit {
     this.addressForm = this.fb.group({
       name: ['', Validators.required],
       address: this.fb.group({
-        country: ['', Validators.required],
+        country: ['', [Validators.required, Validators.pattern(/^[A-Z]{2}$/)]],
         street: ['', Validators.required],
         city: ['', Validators.required],
         housenumber: ['', [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],

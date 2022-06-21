@@ -182,7 +182,7 @@ describe('PaymentComponent', () => {
         billing_details: {
           address: {
             city: 'city',
-            country: 'country',
+            country: 'AT',
             line1: 'street 10',
             line2: 'addition',
             // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -240,7 +240,7 @@ describe('PaymentComponent', () => {
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     zipElement.value = String(1020);
     cityElement.value = 'city';
-    countryElement.value = 'country';
+    countryElement.value = 'AT';
     additionElement.value = 'addition';
 
     nameElement.dispatchEvent(new Event('input'));
