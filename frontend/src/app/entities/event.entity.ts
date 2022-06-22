@@ -1,6 +1,7 @@
 import { LocationEntity } from './location.entity';
 import { Category } from '../enums/category.enum';
 import { AddressEntity } from './address.entity';
+import { SafeUrl } from '@angular/platform-browser';
 
 export class EventEntity {
   id: string;
@@ -22,6 +23,10 @@ export class EventEntity {
   endDateTime: Date;
 
   category: Category[];
+
+  imageId?: string;
+
+  image?: SafeUrl;
 
   userParticipates = false;
 

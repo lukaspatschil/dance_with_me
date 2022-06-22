@@ -23,7 +23,12 @@ export class EventDto {
 
   category?: Category[];
 
+
   userParticipates?: boolean;
+
+  imageId?: string;
+
+  image?: string;
 
   organizerName?: string;
 }

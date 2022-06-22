@@ -48,6 +48,7 @@ export class EventMapper {
         entry.organizerName
       );
 
+      event.imageId = entry.imageId;
       event.userParticipates = entry.userParticipates ?? false;
 
       return event;

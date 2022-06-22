@@ -52,4 +52,16 @@ describe('ImageService', () => {
       expect(req.request.body).toEqual(expectedFormData);
     });
   });
+
+  describe('get image', () => {
+    it('should return the image', () => {
+      // When
+      const id = '1';
+      sut.getImage(id).subscribe(() => {});
+
+      // Then
+      const req = httpTestingController.expectOne(`${environment.baseUrl}/image/${id}`);
+      expect(req.request.method).toBe('GET');
+    });
+  });
 });

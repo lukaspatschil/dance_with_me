@@ -18,11 +18,15 @@
 
 <div class="font-poppins w-full mt-10">
   <ul class="text-gray-900">
-    <li class="py-5 border-b border-gray-200" *ngFor="let event of events">
+    <li class="py-0.5 border-b border-gray-200" *ngFor="let event of events">
+      <div [routerLink]="['/event', event.id]" class="flex items-center space-x-4 grid grid-cols-6 gap-1">
 
-      <div [routerLink]="['/event', event.id]" class="flex items-center space-x-4 grid grid-cols-6 gap-4">
+        <img *ngIf="event.imageId !== undefined; else noPicture" class="col-span-2 mt-0.25 object-fill h-full w-full" [src]="event.image" referrerpolicy="no-referrer">
+        <ng-template #noPicture>
+          <img class="col-span-2 mt-0.25 object-fill h-full w-full " src="assets/img/dance.jpg">
+        </ng-template>
 
-        <div class="ml-5 flex col-span-6 flex-col space-y-0.5 ">
+        <div class="ml-5 mt-5 mb-3 flex col-span-4 flex-col space-y-0.5 ">
           <div class="grid grid-cols-4 gap-4">
             <p class="col-span-3 inline-flex text-m mb-2 font-medium text-gray-900 ">
               {{event.name}}
@@ -34,11 +38,10 @@
                   (click)="onAttendClicked(event)">calendar_add_on</span>
           </div>
 
-          <div class="flex mt-4 space-x-2 ">
+          <div class="flex mt-4 mr-2 space-x-2 ">
             <span class="small material-icons-outlined">location_on</span>
-            <p class="inline-flex text-sm text-gray-500 truncate dark:text-gray-400">
-              {{event.address?.street}} {{event.address?.housenumber}}
-              , {{event.address?.postalcode}} {{event.address?.city}}
+            <p class="inline-block text-sm text-gray-500 dark:text-gray-400">
+              {{event.address?.street}} {{event.address?.housenumber}}, {{event.address?.postalcode}} {{event.address?.city}}
             </p>
           </div>
 
@@ -49,10 +52,9 @@
             </p>
           </div>
 
-          <ul class="mt-10">
-            <li *ngFor="let singleCategory of event.category" class="inline-block px-0.5 mt-2">
-                <span translate
-                      class="px-2 py-1 rounded-full border border-gray-300 text-gray-500 text-sm align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease">
+            <ul class="mt-10 mb-5">
+              <li  *ngFor="let singleCategory of event.category" class="inline-block px-0.5 mt-2">
+                <span translate class="px-2 py-1 rounded-full border border-gray-300 text-gray-500 text-sm align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease">
                     eventCategory.{{singleCategory}}
                 </span>
             </li>

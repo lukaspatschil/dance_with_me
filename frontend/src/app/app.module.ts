@@ -17,7 +17,6 @@ import { LegalPageComponent } from './components/legal-page/legal-page.component
 import { PrivacyPageComponent } from './components/privacy-page/privacy-page.component';
 import { AuthModule } from './core/auth/auth.module';
 import { LandingComponent } from './components/landing/landing.component';
-import { EventOverviewComponent } from './components/events/event-overview/event-overview.component';
 import { CreateEventPageComponent } from './components/events/create-event-page/create-event-page.component';
 import { CoreModule } from './core/core.module';
 import { EventDetailComponent } from './components/events/event-detail/event-detail.component';
@@ -25,6 +24,7 @@ import { UserDetailComponent } from './components/user/user-detail/user-detail.c
 import { PaymentComponent } from './components/payment/payment.component';
 import { NgAisModule } from 'angular-instantsearch';
 import { EventSearchComponent } from './components/events/event-search/event-search.component';
+import { EventOverviewComponent } from './components/events/event-overview/event-overview.component';
 import { EventOverviewMapComponent } from './components/events/event-overview-map/event-overview-map.component';
 import { AdminComponent } from './components/admin/admin.component';
 

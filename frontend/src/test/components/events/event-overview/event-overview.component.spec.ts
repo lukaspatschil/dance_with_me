@@ -5,11 +5,12 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { GeolocationService } from '@ng-web-apis/geolocation';
 import { of } from 'rxjs';
+import { ImageService } from '../../../../app/services/image.service';
+import { ImageServiceMock } from '../../../mock/image.service.mock';
 import { EventEntity } from '../../../../app/entities/event.entity';
 import { Category } from '../../../../app/enums/category.enum';
 import { EventService } from '../../../../app/services/event.service';
 import { EventServiceMock } from '../../../mock/event.service.mock';
-
 
 
 describe('EventOverviewComponent', () => {
@@ -18,6 +19,7 @@ describe('EventOverviewComponent', () => {
 
   let eventService: EventService;
   let geoService: GeolocationService;
+  let imageService: ImageService;
 
   let radiusSlider: HTMLInputElement;
 
@@ -25,15 +27,15 @@ describe('EventOverviewComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ EventOverviewComponent ],
       imports: [ HttpClientTestingModule, RouterTestingModule],
-      providers: [
-        { provide: EventService, useClass: EventServiceMock },
-        { provide: GeolocationService, useValue: of({ coords: { latitude: 1, longitude: 1 } }) }
-      ]
+      providers: [{ provide: EventService, useClass: EventServiceMock },
+        { provide: ImageService, useClass: ImageServiceMock },
+        { provide: GeolocationService, useValue: of({ coords: { latitude: 1, longitude: 1 } }) }]
     })
       .compileComponents();
 
     eventService = TestBed.inject(EventService);
     geoService = TestBed.inject(GeolocationService);
+    imageService = TestBed.inject(ImageService);
   });
 
   beforeEach(() => {
@@ -51,6 +53,17 @@ describe('EventOverviewComponent', () => {
     expect(comp).toBeTruthy();
   });
 
+  describe('ngOnInit', () => {
+    it('should fetch events from API ', async () => {
+      // When
+      await fixture.whenStable();
+      comp.ngOnInit();
+
+      // Then
+      expect(eventService.getEvents).toHaveBeenCalledTimes(2);
+    });
+  });
+
   describe('getEvents', () => {
     it('should fetch events from API ', async () => {
       // When
@@ -60,13 +73,25 @@ describe('EventOverviewComponent', () => {
       // Then
       expect(eventService.getEvents).toHaveBeenCalled();
     });
-    it('should subscribe to user position',  () => {
+
+    it('should subscribe to user position', () => {
       //When
       jest.spyOn(geoService, 'subscribe');
       comp.getEvents();
 
       // Then
       expect(geoService.subscribe).toHaveBeenCalled();
+    });
+  });
+
+  describe('getImage', () => {
+    it('should get the Image for a event', async () => {
+      await fixture.whenStable();
+      // When
+      comp.getImage(eventEntity);
+
+      // Then
+      expect(imageService.getImage).toHaveBeenCalled();
     });
   });
 
@@ -93,10 +118,12 @@ describe('EventOverviewComponent', () => {
     it('should fetch events from API ', async () => {
       // When
       await fixture.whenStable();
-      comp.ngOnInit();
+
+      // When
+      comp.getImage(eventEntity);
 
       // Then
-      expect(eventService.getEvents).toHaveBeenCalledTimes(2);
+      expect(imageService.getImage).toHaveBeenCalled();
     });
   });
 
@@ -161,6 +188,7 @@ const eventEntity: EventEntity = {
   },
   price: 1,
   public: true,
+  imageId: '123.jpg',
   startDateTime: new Date('2022-04-24T10:00'),
   endDateTime: new Date('2022-04-24T10:00'),
   category: [Category.SALSA],
@@ -192,4 +220,3 @@ const eventEntityNoParticipation: EventEntity = {
   userParticipates: false,
   organizerName: 'organizerName'
 };
-

@@ -5,6 +5,8 @@ import { GeolocationService } from '@ng-web-apis/geolocation';
 import { first } from 'rxjs';
 import { HttpStatusCode } from '@angular/common/http';
 
+import { ImageService } from '../../../services/image.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-event-overview',
@@ -24,6 +26,8 @@ export class EventOverviewComponent implements OnInit{
   radius = 10000;
 
   constructor(private readonly eventService: EventService,
+    private readonly imageService: ImageService,
+    private readonly sanitizer: DomSanitizer,
     private readonly geolocation$: GeolocationService){}
 
   ngOnInit(): void {
@@ -35,8 +39,30 @@ export class EventOverviewComponent implements OnInit{
     this.events = [];
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     this.geolocation$.pipe(first(position => position !== null)).subscribe((position) => {
-      this.eventService.getEvents(position.coords.longitude, position.coords.latitude, this.radius).subscribe((data) => this.events = data);
+      this.eventService.getEvents(position.coords.longitude, position.coords.latitude, this.radius).subscribe((data) => {
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises,@typescript-eslint/require-await
+        data.forEach(async entry => {
+          this.getImage(entry);
+        });
+
+        this.events = data;
+      });
     });
+  }
+
+  getImage(event: EventEntity): void {
+    if (event.imageId){
+      this.imageService.getImage(event.imageId).subscribe(image => {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (image !== null){
+          event.image = this.transform(URL.createObjectURL(image));
+        }
+      });
+    }
+  }
+
+  transform(url: string): SafeUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
   getRecommendation(): void {
@@ -50,8 +76,8 @@ export class EventOverviewComponent implements OnInit{
     });
   }
 
-  onAttendClicked(event: EventEntity): void{
-    if (!event.userParticipates){
+  onAttendClicked(event: EventEntity): void {
+    if (!event.userParticipates) {
       this.eventService.participateOnEvent(event.id).subscribe({
         next: resp => {
           if (resp.status == HttpStatusCode.NoContent) {

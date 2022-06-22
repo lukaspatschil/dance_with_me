@@ -4,8 +4,10 @@ import { Observable, take } from 'rxjs';
 import { EventEntity } from '../../../entities/event.entity';
 import { EventService } from '../../../services/event.service';
 import { HttpStatusCode } from '@angular/common/http';
+import { ImageService } from '../../../services/image.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { moveIn } from '../../../core/animations/moveIn.animation';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-event-detail',
@@ -17,6 +19,13 @@ export class EventDetailComponent implements OnInit {
 
   event$!: Observable<EventEntity | null>;
 
+  event: EventEntity | null = null;
+
+  hasPicture = false;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  picture: any;
+
   userParticipates = false;
 
   private id!: string;
@@ -25,18 +34,43 @@ export class EventDetailComponent implements OnInit {
 
 
   constructor(private readonly route: ActivatedRoute,
-    private readonly eventService: EventService, private readonly clipboard: Clipboard) {}
+    private readonly eventService: EventService,
+    private readonly clipboard: Clipboard,
+    private readonly sanitizer: DomSanitizer,
+    private readonly imageService: ImageService) {}
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')!;
 
     this.event$ = this.eventService.getEvent(this.id);
 
+    this.eventService.getEvent(this.id).subscribe(event => {
+      this.event = event;
+      this.getImage();
+    });
+
     this.event$.pipe(take(1)).subscribe(event => {
       if (event !== null) {
         this.userParticipates = event.userParticipates;
       }
     });
+  }
+
+
+  getImage(): void {
+    if (this.event?.imageId){
+      this.imageService.getImage(this.event.imageId).subscribe(image => {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (image !== null){
+          this.picture = this.transform(URL.createObjectURL(image));
+          this.hasPicture = true;
+        }
+      });
+    }
+  }
+
+  transform(url: string): SafeUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
   onAttendClicked(event: EventEntity): void{

@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { firstValueFrom, Observable } from 'rxjs';
 import { ImageDto } from '../dto/image.dto';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +17,10 @@ export class ImageService {
     formData.append('file', file, file.name);
 
     return this.http.post<ImageDto>(`${environment.baseUrl}/image`, formData);
+  }
+
+  getImage(imageId: string): Observable<Blob> {
+    return this.http.get(`${environment.baseUrl}/image/${imageId}`, { responseType: 'blob' });
   }
 
   getValidationImage(id: string): Promise<Blob> {

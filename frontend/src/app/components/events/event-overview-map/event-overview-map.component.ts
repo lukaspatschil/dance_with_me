@@ -11,6 +11,8 @@ import * as proj from 'ol/proj';
 import * as style from 'ol/style';
 import Geolocation from 'ol/Geolocation';
 import Point from 'ol/geom/Point';
+import { ImageService } from '../../../services/image.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 @Component({
@@ -34,6 +36,8 @@ export class EventOverviewMapComponent implements OnInit {
   recommendation = false;
 
   constructor(private readonly eventService: EventService,
+    private readonly imageService: ImageService,
+    protected sanitizer: DomSanitizer,
     private readonly geolocation$: GeolocationService) {}
 
   ngOnInit(): void {

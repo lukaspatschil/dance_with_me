@@ -7,6 +7,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { EventServiceMock } from '../../../mock/event.service.mock';
 import { GeolocationService } from '@ng-web-apis/geolocation';
 import { of } from 'rxjs';
+import { ImageService } from '../../../../app/services/image.service';
+import { ImageServiceMock } from '../../../mock/image.service.mock';
 
 
 jest.mock('ol', () => {
@@ -107,12 +109,12 @@ describe('EventOverviewMapComponent', () => {
   let eventService: EventService;
   let geoService: GeolocationService;
 
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ EventOverviewMapComponent ],
       imports: [ HttpClientTestingModule, RouterTestingModule],
       providers: [
+        { provide: ImageService, useClass: ImageServiceMock },
         { provide: EventService, useClass: EventServiceMock },
         { provide: GeolocationService, useValue: of({ coords: { latitude: 0, longitude: 0 } }) }
       ]
@@ -160,4 +162,5 @@ describe('EventOverviewMapComponent', () => {
       expect(geoService.subscribe).toHaveBeenCalled();
     });
   });
+
 });
