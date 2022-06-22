@@ -1,6 +1,6 @@
-<img *ngIf="hasPicture; else noImageFound" class="object-fill h-60 w-full " [src]="picture">
+<img *ngIf="hasPicture; else noImageFound" class="object-fill h-60 w-full " [src]="picture" alt="image of the event">
 <ng-template #noImageFound>
-  <img class="object-top object-cover h-60 w-full " src="assets/img/dance.jpg">
+  <img class="object-top object-cover h-60 w-full " src="assets/img/dance.jpg" alt="dancing woman - default image">
 </ng-template>
 
 <div *ngIf="event$ | async as event" class="m-5 flex flex-col space-y-2 h-full font-poppins ">
