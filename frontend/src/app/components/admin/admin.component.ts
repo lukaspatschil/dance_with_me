@@ -7,8 +7,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-overview',
-  templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.scss']
+  templateUrl: './admin.component.html'
 })
 export class AdminComponent implements OnInit {
   validationRequests: ValidationRequestEntity[] = [];

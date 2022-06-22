@@ -99,7 +99,7 @@ export class ValidationService {
         .exec();
       return response
         .map<ValidationEntity>(ValidationMapper.mapDocumentToEntity)
-        .map(({ comment, ...rest }) => rest);
+        .map(({ comment: _, ...rest }) => rest);
     } catch (error) {
       throw new InternalServerErrorException();
     }

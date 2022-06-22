@@ -10,7 +10,7 @@ export class RefreshGuard implements CanActivate {
 
   async canActivate(): Promise<boolean> {
     if (!this.authService.isAuthenticated()) {
-      await this.authService.refreshAccessToken().catch(() => {});
+      await this.authService.refreshAccessToken().catch(() => console.error);
     }
 
     return true;

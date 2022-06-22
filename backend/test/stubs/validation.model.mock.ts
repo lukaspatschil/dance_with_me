@@ -6,7 +6,6 @@ import {
   userId1,
   userId2,
   validationId1,
-  validationId2,
   validValidationDocument1,
   validValidationDocumentList,
 } from '../test_data/validation.testData';
@@ -131,7 +130,7 @@ export class ValidationModelMock {
   });
 
   findById = jest.fn((id: string) => {
-    if (id === validationId1 || id === validationId2) {
+    if (id === validationId1) {
       return execWrap(Promise.resolve(validValidationDocument1()));
     } else if (id === invalidValidationId) {
       return execWrap(Promise.resolve(invalidValidationDocument()));
@@ -142,7 +141,7 @@ export class ValidationModelMock {
     }
   });
 
-  findByIdAndUpdate = jest.fn((id: string, {}, {}) => {
+  findByIdAndUpdate = jest.fn((id: string) => {
     if (id === validationId1) {
       this._findAndUpdateUserValid = true;
       return this;

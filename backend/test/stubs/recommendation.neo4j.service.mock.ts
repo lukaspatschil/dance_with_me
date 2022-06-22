@@ -26,8 +26,7 @@ class ResultObject {
     this.data = data;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public get(index: string) {
+  public get = jest.fn(() => {
     return this.data;
-  }
+  });
 }

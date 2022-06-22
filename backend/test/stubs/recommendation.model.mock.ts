@@ -3,6 +3,17 @@ import { GeolocationEnum } from '../../src/core/schema/enum/geolocation.enum';
 import { validAddress } from '../test_data/openStreetMapApi.testData';
 import { eventId1, eventId2 } from './recommendation.neo4j.service.mock';
 
+function execWrap<T>(val: T) {
+  return {
+    exec: jest.fn(() => {
+      if (val instanceof Error) {
+        throw val;
+      }
+      return val;
+    }),
+  };
+}
+
 export class RecommendationModelMock {
   aggregate = jest.fn((pipe) => {
     const geoStage = pipe[0];
@@ -16,7 +27,7 @@ export class RecommendationModelMock {
       // eslint-disable-next-line @typescript-eslint/no-magic-numbers
       Object.keys(near).length != 4 ||
       Object.keys(near.near).length != 2 ||
-      near.spherical != true
+      !near.spherical
     ) {
       throw new Error('not correctly formed');
     }
@@ -47,7 +58,7 @@ export class RecommendationModelMock {
     const item2 = createEventDocument();
     item2._id = eventId2;
 
-    return [item1, item2];
+    return execWrap([item1, item2]);
   });
 }
 

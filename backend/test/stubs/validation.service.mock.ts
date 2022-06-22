@@ -11,7 +11,7 @@ import {
 import { Readable } from 'stream';
 
 export class ValidationServiceMock {
-  createValidation = jest.fn((file: FileEntity, userId: string) => {
+  createValidation = jest.fn((_file: FileEntity, userId: string) => {
     if (userId === getDefaultUserValidationTest1().id) {
       return Promise.resolve(validObjectId.toString());
     }

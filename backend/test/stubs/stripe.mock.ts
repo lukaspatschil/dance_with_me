@@ -1,3 +1,11 @@
+class StripeCardError extends Error {
+  public type = 'StripeCardError';
+
+  constructor(message: string, public code: string) {
+    super(message);
+  }
+}
+
 export const StripeMock = {
   paymentIntents: {
     create: jest.fn((params) => {
@@ -14,11 +22,10 @@ export const StripeMock = {
           },
         };
       } else if (params.payment_method === 'declined_card') {
-        throw {
-          type: 'StripeCardError',
-          code: 'card_declined',
-          message: 'There are insufficient funds on your card.',
-        } as any;
+        throw new StripeCardError(
+          'There are insufficient funds on your card.',
+          'card_declined',
+        );
       } else {
         throw Error('Unexpected payment method');
       }

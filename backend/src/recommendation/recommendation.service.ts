@@ -119,7 +119,7 @@ export class RecommendationService {
         takeStage,
       ];
 
-      const data = await this.eventModel.aggregate(aggregatePipe);
+      const data = await this.eventModel.aggregate(aggregatePipe).exec();
       const events = data.map<EventEntity>(EventMapper.mapDocumentToEntity);
       return this.sortEvents(events, ids);
     } catch (e) {

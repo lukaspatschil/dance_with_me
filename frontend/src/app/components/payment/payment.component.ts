@@ -8,8 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-payment',
-  templateUrl: './payment.component.html',
-  styleUrls: ['./payment.component.scss']
+  templateUrl: './payment.component.html'
 })
 export class PaymentComponent implements OnInit {
   stripe!: Stripe | null;
