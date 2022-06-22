@@ -2,7 +2,6 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { EventService } from '../../../services/event.service';
 import { EventEntity } from '../../../entities/event.entity';
 import { GeolocationService } from '@ng-web-apis/geolocation';
-import { first } from 'rxjs';
 import { Feature, Map, Overlay, View } from 'ol';
 import * as layer from 'ol/layer';
 import * as source from 'ol/source';
@@ -35,6 +34,8 @@ export class EventOverviewMapComponent implements OnInit {
 
   recommendation = false;
 
+  init = false;
+
   constructor(private readonly eventService: EventService,
     private readonly imageService: ImageService,
     protected sanitizer: DomSanitizer,
@@ -47,13 +48,16 @@ export class EventOverviewMapComponent implements OnInit {
   getEvents(): void {
     this.recommendation = true;
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    this.geolocation$.pipe(first(position => position !== null)).subscribe((position) => {
-      this.events = [];
-      let radius = 10000;
-      this.eventService.getEvents(position.coords.longitude, position.coords.latitude, radius).subscribe((data) => {
-        this.events = data;
-        this.initializeMap(position.coords.latitude, position.coords.longitude);
-      });
+    this.geolocation$.pipe().subscribe((position) => {
+      if (!this.init) {
+        this.init = true;
+        this.events = [];
+        let radius = 10000;
+        this.eventService.getEvents(position.coords.longitude, position.coords.latitude, radius).subscribe((data) => {
+          this.events = data;
+          this.initializeMap(position.coords.latitude, position.coords.longitude);
+        });
+      }
     });
   }
 
