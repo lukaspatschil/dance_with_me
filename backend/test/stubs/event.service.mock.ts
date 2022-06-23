@@ -78,35 +78,10 @@ export class EventServiceMock {
 
   updateEvent = jest.fn((id: string, eventEntity: UpdateEventEntity) => {
     if (id === validObjectId1.toString() || id === '-2') {
-      const event = validEventEntity();
-      event.id = id;
-      if (eventEntity.name) {
-        event.name = eventEntity.name;
-      }
-      if (eventEntity.description) {
-        event.description = eventEntity.description;
-      }
-      if (eventEntity.startDateTime) {
-        event.startDateTime = eventEntity.startDateTime;
-      }
-      if (eventEntity.endDateTime) {
-        event.endDateTime = eventEntity.endDateTime;
-      }
-      if (eventEntity.location && event.location) {
-        event.location.coordinates = eventEntity.location.coordinates;
-      }
-      if (eventEntity.price) {
-        event.price = eventEntity.price;
-      }
-      if (eventEntity.public) {
-        event.public = eventEntity.public;
-      }
-      if (eventEntity.imageId) {
-        event.imageId = eventEntity.imageId;
-      }
-      if (eventEntity.category) {
-        event.category = eventEntity.category;
-      }
+      const nonNullFields = Object.fromEntries(
+        Object.entries(eventEntity).filter(([, value]) => value),
+      );
+      const event = { ...validEventEntity(), ...nonNullFields, id };
       return Promise.resolve(event);
     } else {
       return Promise.resolve(null);

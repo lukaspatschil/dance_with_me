@@ -57,11 +57,9 @@ export class EventService {
 
     return this.http.get<EventDto[]>(`${environment.baseUrl}/recommendation`, { params: params }).pipe(
       map((eventData) => {
-        let events: EventEntity[] = [];
-        events = eventData
+        return eventData
           .map((entry: EventDto) => EventMapper.mapEventDtoToEntity(entry))
           .filter((event: EventEntity | null): event is EventEntity => event !== null);
-        return events;
       })
     );
   }

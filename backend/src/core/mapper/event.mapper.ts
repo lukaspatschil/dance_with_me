@@ -111,8 +111,6 @@ export class EventMapper {
         event.location.latitude,
       ];
     } else {
-      //newEvent.location.type = undefined;
-      //newEvent.location.coordinates = undefined;
       newEvent.location = undefined;
     }
     if (event.address) {

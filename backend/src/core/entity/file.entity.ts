@@ -3,7 +3,6 @@ export class FileEntity {
     public buffer: Buffer,
     public originalFileName: string,
     public mimetype: string,
-    public encoding: string,
   ) {}
 
   fileName?: string;

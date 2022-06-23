@@ -82,7 +82,7 @@ export const largeSize = '800';
 
 export const validOriginalFileName = 'MyMonstera.jpg';
 export const validMimeType = 'image/jpeg';
-export const validEncoding = '7bit';
+export const validEncoding = 'gzip';
 export const validWidth = 150;
 export const validHeight = 263;
 export const validCreated = 26312321;
@@ -98,7 +98,6 @@ export function validFileConfigThumbnail() {
   return {
     Key: ImageSizeEnum.THUMBNAIL.toLowerCase() + '/' + validFileName,
     Bucket: bucketName + bucketStage,
-    ContentEncoding: validEncoding,
     ContentType: validMimeType,
   };
 }
@@ -107,7 +106,6 @@ export function validFileConfigSmall() {
   return {
     Key: ImageSizeEnum.SMALL.toLowerCase() + '/' + validFileName,
     Bucket: bucketName + bucketStage,
-    ContentEncoding: validEncoding,
     ContentType: validMimeType,
   };
 }
@@ -116,7 +114,6 @@ export function validFileConfigMedium() {
   return {
     Key: ImageSizeEnum.MEDIUM.toLowerCase() + '/' + validFileName,
     Bucket: bucketName + bucketStage,
-    ContentEncoding: validEncoding,
     ContentType: validMimeType,
   };
 }
@@ -125,7 +122,6 @@ export function validFileConfigLarge() {
   return {
     Key: ImageSizeEnum.LARGE.toLowerCase() + '/' + validFileName,
     Bucket: bucketName + bucketStage,
-    ContentEncoding: validEncoding,
     ContentType: validMimeType,
   };
 }
@@ -134,7 +130,6 @@ export function validFileConfigOriginal() {
   return {
     Key: ImageSizeEnum.ORIGINAL.toLowerCase() + '/' + validFileName,
     Bucket: bucketName + bucketStage,
-    ContentEncoding: validEncoding,
     ContentType: validMimeType,
   };
 }
@@ -166,21 +161,11 @@ export function validFileMulter() {
 }
 
 export function validFileEntity() {
-  return new FileEntity(
-    imageBuffer(),
-    validOriginalFileName,
-    validMimeType,
-    validEncoding,
-  );
+  return new FileEntity(imageBuffer(), validOriginalFileName, validMimeType);
 }
 
 export function invalidFileEntity() {
-  return new FileEntity(
-    bufferMock(),
-    validOriginalFileName,
-    validMimeType,
-    validEncoding,
-  );
+  return new FileEntity(bufferMock(), validOriginalFileName, validMimeType);
 }
 
 export function validFileEntityResponse() {
@@ -188,7 +173,6 @@ export function validFileEntityResponse() {
     imageBuffer(),
     validOriginalFileName,
     validMimeType,
-    validEncoding,
   );
   file.width = validWidth;
   file.height = validHeight;

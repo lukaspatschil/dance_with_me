@@ -116,7 +116,6 @@ export class ImageService implements OnApplicationBootstrap {
           Bucket: bucketName,
           Key: `${sizeLowerCase}/${file.fileName}`,
           Body: buffer,
-          ContentEncoding: file.encoding,
           ContentType: file.mimetype,
         };
         await this.s3.putObject(config).promise();

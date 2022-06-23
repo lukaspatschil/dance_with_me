@@ -2,7 +2,7 @@
 <div class="ml-5 flex flex-col space-y-5 h-screen font-poppins">
 
   <div class="w-full flex items-center mt-4 space-x-4 ">
-    <img *ngIf="user?.pictureUrl; else noPicture" class="w-10 h-10 rounded-full" src="{{user?.pictureUrl}}" referrerpolicy="no-referrer">
+    <img *ngIf="user?.pictureUrl; else noPicture" class="w-10 h-10 rounded-full" src="{{user?.pictureUrl}}" referrerpolicy="no-referrer" alt="Profile picture">
     <ng-template #noPicture>
       <span  class="material-icons text-gray-800 text-5xl icon-big">account_circle</span>
     </ng-template>

@@ -64,7 +64,7 @@ export class ValidationModelMock {
         }
       }
       if ('id' in filter) {
-        if (filter.id === validationId1 || filter.id === validationId1) {
+        if (filter.id === validationId1) {
           return execWrap(Promise.resolve(true));
         } else {
           return execWrap(Promise.resolve(false));

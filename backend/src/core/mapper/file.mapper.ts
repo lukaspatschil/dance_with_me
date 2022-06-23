@@ -20,11 +20,6 @@ export class FileMapper {
   }
 
   static mapFileToEntity(file: Express.Multer.File): FileEntity {
-    return new FileEntity(
-      file.buffer,
-      file.originalname,
-      file.mimetype,
-      file.encoding,
-    );
+    return new FileEntity(file.buffer, file.originalname, file.mimetype);
   }
 }

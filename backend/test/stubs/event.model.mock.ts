@@ -12,7 +12,6 @@ import {
   validLatitude,
   validLongitude,
 } from '../test_data/openStreetMapApi.testData';
-import { CategoryEnum } from '../../src/core/schema/enum/category.enum';
 import { EventDocument } from '../../src/core/schema/event.schema';
 
 /* eslint @typescript-eslint/no-magic-numbers: 0 */
@@ -111,62 +110,14 @@ export class EventModelMock {
         return Promise.resolve(event);
       }
       if (id === validObjectId1.toString()) {
-        const event = validEventDocument;
-
-        if (dict['id']) {
-          event._id = dict['id'];
-        } else {
-          event._id = validObjectId1.toString();
-        }
-        if (dict['name']) {
-          event.name = dict['name'];
-        }
-        if (dict['description']) {
-          event.description = dict['description'];
-        }
-        if (dict['startDateTime']) {
-          event.startDateTime = dict['startDateTime'];
-        }
-        if (dict['endDateTime']) {
-          event.endDateTime = dict['endDateTime'];
-        }
-        if (dict['location']) {
-          event.location.type = GeolocationEnum.POINT;
-          event.location.coordinates = [
-            dict['location'].longitude,
-            dict['location'].latitude,
-          ];
-        }
-        if (dict['address']) {
-          event.address.country = dict['address'].country as string;
-          event.address.city = dict['address'].city as string;
-          event.address.postalcode = dict['address'].postalcode as string;
-          event.address.street = dict['address'].street as string;
-          if (dict['address'].housenumber) {
-            event.address.housenumber = dict['address'].housenumber as string;
-          }
-          if (dict['address'].addition) {
-            event.address.addition = dict['address'].addition as string;
-          }
-        }
-        if (dict['price']) {
-          event.price = dict['price'] as number;
-        }
-        if (dict['public']) {
-          event.public = dict['public'] as boolean;
-        }
-        if (dict['imageId']) {
-          event.imageId = dict['imageId'] as string;
-        }
-        if (dict['organizerId']) {
-          event.organizerId = dict['organizerId'] as string;
-        }
-        if (dict['category']) {
-          event.category = dict['category'] as CategoryEnum[];
-        }
-        if (dict['participants']) {
-          event.participants = dict['participants'] as string[];
-        }
+        const nonNullFields = Object.fromEntries(
+          Object.entries(dict).filter(([, value]) => value),
+        );
+        const event = {
+          ...validEventDocument,
+          ...nonNullFields,
+          _id: dict['id'] ?? validObjectId1.toString(),
+        };
         return execWrap(event);
       } else {
         return execWrap(createEventDocument());

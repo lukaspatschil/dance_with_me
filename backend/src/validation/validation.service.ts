@@ -64,7 +64,6 @@ export class ValidationService {
         Bucket: bucketName,
         Key: `${this.validationFolder}/${response._id}`,
         Body: file.buffer,
-        ContentEncoding: file.encoding,
         ContentType: file.mimetype,
       };
       await this.s3.putObject(config).promise();

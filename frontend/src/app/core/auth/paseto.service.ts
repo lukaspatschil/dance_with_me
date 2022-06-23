@@ -56,8 +56,7 @@ export class PasetoService {
     };
 
     if (purpose !== 'local') {
-      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-      const sigLength = version === 'v1' ? 256 : version === 'v3' ? 96 : 64;
+      const sigLength = { v1: 256, v2: 64, v3: 96, v4: 64 }[version];
 
       let raw;
       if (payload) {
