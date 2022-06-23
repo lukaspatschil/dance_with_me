@@ -47,7 +47,7 @@ export class CreateEventPageComponent implements OnInit {
         postalcode: ['', [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],
         addition: []
       }),
-      price: ['', [Validators.required, Validators.min(0), Validators.pattern(/^-?(0|[1-9]|[1-9][.]\d*)?$/)]],
+      price: ['', [Validators.required, Validators.min(0), Validators.pattern(/^-?(0|[1-9]\d*|[1-9][.]\d{1,2}|[1-9]\d{1,2}[.]\d{1,2})?$/)]],
       date: ['', Validators.required],
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],

@@ -90,6 +90,5 @@ export class EventOverviewComponent implements OnInit{
     } else {
       this.getEvents();
     }
-
   }
 }
