@@ -20,7 +20,7 @@ export class LoginGuard implements CanActivate {
 
     if (accessToken && refreshToken) {
       void this.authService.setTokens(accessToken, refreshToken);
-      loginFailure = this.router.parseUrl('/');
+      loginFailure = this.router.parseUrl('/events');
     }
 
     return loginFailure;

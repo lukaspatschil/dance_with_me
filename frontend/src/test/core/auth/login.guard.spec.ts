@@ -53,7 +53,7 @@ describe('LoginGuard', () => {
       expect(authService.setTokens).toHaveBeenCalledWith(accessToken, refreshToken);
     });
 
-    it('should redirect to / if the access token and refresh token are set', () => {
+    it('should redirect to /events if the access token and refresh token are set', () => {
       // Given
       const route = { fragment: 'access_token=123&refresh_token=456' } as unknown as ActivatedRouteSnapshot;
 
@@ -61,7 +61,7 @@ describe('LoginGuard', () => {
       const result = sut.canActivate(route);
 
       // Then
-      const expectedResult = router.parseUrl('/');
+      const expectedResult = router.parseUrl('/events');
       expect(result).toEqual(expectedResult);
     });
   });
