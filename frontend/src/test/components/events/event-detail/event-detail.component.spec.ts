@@ -5,8 +5,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventService } from '../../../../app/services/event.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { EventServiceMock } from '../../../mock/event.service.mock';
-import { ImageService } from '../../../../app/services/image.service';
-import { ImageServiceMock } from '../../../mock/image.service.mock';
 import { Category } from '../../../../app/enums/category.enum';
 import { EventEntity } from '../../../../app/entities/event.entity';
 
@@ -20,22 +18,18 @@ describe('EventDetailComponent', () => {
   let eventService: EventService;
   let copyService: Clipboard;
 
-  let imageService: ImageService;
-
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ EventDetailComponent ],
       imports: [ HttpClientTestingModule, RouterTestingModule],
       providers: [{ provide: EventService, useClass: EventServiceMock },
-        { provide: Clipboard, useClass: ClipboardMock },
-        { provide: ImageService, useClass: ImageServiceMock }]
+        { provide: Clipboard, useClass: ClipboardMock }]
     })
       .compileComponents();
 
     eventService = TestBed.inject(EventService);
     copyService = TestBed.inject(Clipboard);
-    imageService = TestBed.inject(ImageService);
 
   });
 
@@ -62,30 +56,6 @@ describe('EventDetailComponent', () => {
   });
 
   describe('onAttendClicked', () => {
-    it('should delete a participation', async () => {
-      // When
-      await fixture.whenStable();
-      comp.userParticipates = true;
-      comp.onAttendClicked(eventEntity);
-
-      // Then
-      expect(eventService.deleteParticipateOnEvent).toHaveBeenCalledWith(eventEntity.id);
-    });
-  });
-
-  describe('getImage', () => {
-    it('should get the Image for a event', async () => {
-      // Given
-      await fixture.whenStable();
-      comp.event = eventEntity;
-
-      // When
-      comp.getImage();
-
-      // Then
-      expect(imageService.getImage).toHaveBeenCalled();
-    });
-
     it('should post an participation', async () => {
       // When
       await fixture.whenStable();
@@ -94,6 +64,16 @@ describe('EventDetailComponent', () => {
 
       // Then
       expect(eventService.participateOnEvent).toHaveBeenCalledWith(eventEntity.id);
+    });
+
+    it('should delete a participation', async () => {
+      // When
+      await fixture.whenStable();
+      comp.userParticipates = true;
+      comp.onAttendClicked(eventEntity);
+
+      // Then
+      expect(eventService.deleteParticipateOnEvent).toHaveBeenCalledWith(eventEntity.id);
     });
   });
 

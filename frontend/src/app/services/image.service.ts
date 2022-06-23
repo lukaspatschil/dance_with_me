@@ -19,10 +19,6 @@ export class ImageService {
     return this.http.post<ImageDto>(`${environment.baseUrl}/image`, formData);
   }
 
-  getImage(imageId: string): Observable<Blob> {
-    return this.http.get(`${environment.baseUrl}/image/${imageId}`, { responseType: 'blob' });
-  }
-
   getValidationImage(id: string): Promise<Blob> {
     return firstValueFrom(this.http.get(`${environment.baseUrl}/validationrequest/${id}/image`, { responseType: 'blob' }));
   }

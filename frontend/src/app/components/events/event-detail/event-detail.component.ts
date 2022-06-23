@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SecurityContext } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, take } from 'rxjs';
 import { EventEntity } from '../../../entities/event.entity';
 import { EventService } from '../../../services/event.service';
 import { HttpStatusCode } from '@angular/common/http';
-import { ImageService } from '../../../services/image.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { moveIn } from '../../../core/animations/moveIn.animation';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-event-detail',
@@ -21,11 +21,6 @@ export class EventDetailComponent implements OnInit {
 
   event: EventEntity | null = null;
 
-  hasPicture = false;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  picture: any;
-
   userParticipates = false;
 
   private id!: string;
@@ -36,8 +31,7 @@ export class EventDetailComponent implements OnInit {
   constructor(private readonly route: ActivatedRoute,
     private readonly eventService: EventService,
     private readonly clipboard: Clipboard,
-    private readonly sanitizer: DomSanitizer,
-    private readonly imageService: ImageService) {}
+    private readonly sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')!;
@@ -46,7 +40,6 @@ export class EventDetailComponent implements OnInit {
 
     this.eventService.getEvent(this.id).subscribe(event => {
       this.event = event;
-      this.getImage();
     });
 
     this.event$.pipe(take(1)).subscribe(event => {
@@ -56,21 +49,8 @@ export class EventDetailComponent implements OnInit {
     });
   }
 
-
-  getImage(): void {
-    if (this.event?.imageId){
-      this.imageService.getImage(this.event.imageId).subscribe(image => {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (image !== null){
-          this.picture = this.transform(URL.createObjectURL(image));
-          this.hasPicture = true;
-        }
-      });
-    }
-  }
-
-  transform(url: string): SafeUrl {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  imageUrl(): SafeUrl {
+    return this.sanitizer.sanitize(SecurityContext.URL, `${environment.baseUrl}/image/${this.event?.imageId}`) ?? '';
   }
 
   onAttendClicked(event: EventEntity): void{

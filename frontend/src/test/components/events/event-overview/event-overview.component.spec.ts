@@ -5,8 +5,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { GeolocationService } from '@ng-web-apis/geolocation';
 import { of } from 'rxjs';
-import { ImageService } from '../../../../app/services/image.service';
-import { ImageServiceMock } from '../../../mock/image.service.mock';
 import { EventEntity } from '../../../../app/entities/event.entity';
 import { Category } from '../../../../app/enums/category.enum';
 import { EventService } from '../../../../app/services/event.service';
@@ -19,7 +17,6 @@ describe('EventOverviewComponent', () => {
 
   let eventService: EventService;
   let geoService: GeolocationService;
-  let imageService: ImageService;
 
   let radiusSlider: HTMLInputElement;
 
@@ -28,14 +25,12 @@ describe('EventOverviewComponent', () => {
       declarations: [ EventOverviewComponent ],
       imports: [ HttpClientTestingModule, RouterTestingModule],
       providers: [{ provide: EventService, useClass: EventServiceMock },
-        { provide: ImageService, useClass: ImageServiceMock },
         { provide: GeolocationService, useValue: of({ coords: { latitude: 1, longitude: 1 } }) }]
     })
       .compileComponents();
 
     eventService = TestBed.inject(EventService);
     geoService = TestBed.inject(GeolocationService);
-    imageService = TestBed.inject(ImageService);
   });
 
   beforeEach(() => {
@@ -84,17 +79,6 @@ describe('EventOverviewComponent', () => {
     });
   });
 
-  describe('getImage', () => {
-    it('should get the Image for a event', async () => {
-      await fixture.whenStable();
-      // When
-      comp.getImage(eventEntity);
-
-      // Then
-      expect(imageService.getImage).toHaveBeenCalled();
-    });
-  });
-
   describe('getRecommendation', () => {
     it('should fetch events from API ', async () => {
       // When
@@ -111,19 +95,6 @@ describe('EventOverviewComponent', () => {
 
       // Then
       expect(geoService.subscribe).toHaveBeenCalled();
-    });
-  });
-
-  describe('ngOnInit', () => {
-    it('should fetch events from API ', async () => {
-      // When
-      await fixture.whenStable();
-
-      // When
-      comp.getImage(eventEntity);
-
-      // Then
-      expect(imageService.getImage).toHaveBeenCalled();
     });
   });
 

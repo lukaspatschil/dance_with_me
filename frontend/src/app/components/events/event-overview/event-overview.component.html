@@ -21,7 +21,7 @@
     <li class="py-0.5 border-b border-gray-200" *ngFor="let event of events">
       <div [routerLink]="['/event', event.id]" class="flex items-center space-x-4 grid grid-cols-6 gap-1">
 
-        <img *ngIf="event.imageId !== undefined; else noPicture" class="col-span-2 mt-0.25 object-fill h-full w-full" [src]="event.image" referrerpolicy="no-referrer" alt="image of the event">
+        <img *ngIf="event.imageId; else noPicture" class="col-span-2 mt-0.25 object-fill h-full w-full" [src]="imageUrl(event)" referrerpolicy="no-referrer" alt="image of the event">
         <ng-template #noPicture>
           <img class="col-span-2 mt-0.25 object-fill h-full w-full " src="assets/img/dance.jpg" alt="dancing woman - default image">
         </ng-template>
