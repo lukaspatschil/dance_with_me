@@ -3,7 +3,6 @@ import { EventService } from '../../../services/event.service';
 import { EventEntity } from '../../../entities/event.entity';
 import { GeolocationService } from '@ng-web-apis/geolocation';
 import { first } from 'rxjs';
-import { HttpStatusCode } from '@angular/common/http';
 
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { environment } from '../../../../environments/environment';
@@ -60,25 +59,6 @@ export class EventOverviewComponent implements OnInit{
     });
   }
 
-  onAttendClicked(event: EventEntity): void {
-    if (!event.userParticipates) {
-      this.eventService.participateOnEvent(event.id).subscribe({
-        next: resp => {
-          if (resp.status == HttpStatusCode.NoContent) {
-            this.userParticipates = true;
-          }
-        }
-      });
-    } else {
-      this.eventService.deleteParticipateOnEvent(event.id).subscribe({
-        next: resp => {
-          if (resp.status == HttpStatusCode.NoContent) {
-            this.userParticipates = false;
-          }
-        }
-      });
-    }
-  }
 
   radiusChanged(event: Event): void {
     const element = event.target as HTMLInputElement;

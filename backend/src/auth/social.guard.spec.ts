@@ -60,7 +60,7 @@ describe('IdentityProviderGuard', () => {
     expect(providerGuard.canActivate).toHaveBeenCalledWith(context);
   });
 
-  it("should return true if provider guard's canActivate returns true", () => {
+  it("should return true if provider guard's canActivate returns true", async () => {
     // Given
     const context = createMock<ExecutionContext>();
     passport.use('google', new MockStrategy(true));
@@ -74,9 +74,9 @@ describe('IdentityProviderGuard', () => {
     });
 
     // When
-    const res = guard.canActivate(context);
+    const res = await guard.canActivate(context);
 
     // Then
-    expect(res).toEqual(providerGuard.canActivate(context));
+    expect(res).toEqual(await providerGuard.canActivate(context));
   });
 });

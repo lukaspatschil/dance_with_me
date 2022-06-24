@@ -66,7 +66,7 @@ export class EventService {
 
 
   participateOnEvent(eventId: string): Observable<HttpResponse<EventDto>> {
-    return this.http.post<HttpResponse<EventDto>>(`${environment.baseUrl}/event/${eventId}/participation`, {
+    return this.http.post<EventDto>(`${environment.baseUrl}/event/${eventId}/participation`, {}, {
       observe: 'response'
     });
   }
