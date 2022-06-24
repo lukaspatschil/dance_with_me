@@ -139,6 +139,17 @@ describe('EventOverviewComponent', () => {
       expect(eventService.getRecommendation).toHaveBeenCalled();
     });
   });
+
+  describe('safeUrl', () => {
+    it('should return a safe url', async () => {
+      // When
+      await fixture.whenStable();
+      const url = comp.imageUrl(eventEntity);
+
+      // Then
+      expect(url).toBeDefined();
+    });
+  });
 });
 
 const eventEntity: EventEntity = {

@@ -44,8 +44,8 @@ export class EventOverviewComponent implements OnInit{
     });
   }
 
-  imageUrl(event: EventEntity): SafeUrl {
-    return this.sanitizer.sanitize(SecurityContext.URL, `${environment.baseUrl}/image/${event.imageId}`) ?? '';
+  imageUrl(event: EventEntity): SafeUrl | null {
+    return this.sanitizer.sanitize(SecurityContext.URL, `${environment.baseUrl}/image/${event.imageId}`);
   }
 
   getRecommendation(): void {

@@ -19,7 +19,7 @@ export class EventDetailComponent implements OnInit {
 
   event$!: Observable<EventEntity | null>;
 
-  event: EventEntity | null = null;
+  event?: EventEntity;
 
   userParticipates = false;
 
@@ -39,18 +39,20 @@ export class EventDetailComponent implements OnInit {
     this.event$ = this.eventService.getEvent(this.id);
 
     this.eventService.getEvent(this.id).subscribe(event => {
-      this.event = event;
+      if (event) {
+        this.event = event;
+      }
     });
 
     this.event$.pipe(take(1)).subscribe(event => {
-      if (event !== null) {
+      if (event) {
         this.userParticipates = event.userParticipates;
       }
     });
   }
 
-  imageUrl(): SafeUrl {
-    return this.sanitizer.sanitize(SecurityContext.URL, `${environment.baseUrl}/image/${this.event?.imageId}`) ?? '';
+  imageUrl(event?: EventEntity): SafeUrl | null {
+    return this.sanitizer.sanitize(SecurityContext.URL, `${environment.baseUrl}/image/${event?.imageId}`);
   }
 
   onAttendClicked(event: EventEntity): void{

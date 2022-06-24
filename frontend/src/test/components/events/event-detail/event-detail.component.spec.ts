@@ -77,6 +77,17 @@ describe('EventDetailComponent', () => {
     });
   });
 
+  describe('safeUrl', () => {
+    it('should return a safe url', async () => {
+      // When
+      await fixture.whenStable();
+      const url = comp.imageUrl(eventEntity);
+
+      // Then
+      expect(url).toBeDefined();
+    });
+  });
+
   describe('copyMessage', () => {
     global.URL.createObjectURL = jest.fn();
 
