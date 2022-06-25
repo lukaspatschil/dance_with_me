@@ -5,6 +5,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ImageAccessorDirective } from './directives/image.directive';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Language selection
@@ -43,11 +45,12 @@ import { AdminComponent } from './components/admin/admin.component';
     UserDetailComponent,
     PaymentComponent,
     EventSearchComponent,
-    AdminComponent
+    AdminComponent,
+    PaymentComponent
   ],
   imports: [
     AppRoutingModule,
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    BrowserModule,
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {
@@ -61,8 +64,11 @@ import { AdminComponent } from './components/admin/admin.component';
     FormsModule,
     ReactiveFormsModule,
     CoreModule,
-    BrowserAnimationsModule
-
+    BrowserAnimationsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
@@ -70,5 +76,5 @@ import { AdminComponent } from './components/admin/admin.component';
 export class AppModule {}
 
 export function httpTranslateLoader(http: HttpClient): TranslateHttpLoader {
-  return new TranslateHttpLoader(http);
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }

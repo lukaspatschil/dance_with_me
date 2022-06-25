@@ -23,7 +23,7 @@ import { EventSearchComponent } from './components/events/event-search/event-sea
 
 const routes: Routes = [
   { path: '', canActivate: [RefreshGuard], children: [
-    { path: '', component: LandingComponent },
+    { path: '', component: LandingComponent, canActivate: [LoginGuard] },
     { path: '', canActivate: [AuthGuard], children: [
       { path: 'create', canActivate: [OrganiserGuard], component: CreateEventPageComponent },
       { path: 'events', component: EventOverviewComponent },

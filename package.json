@@ -18,6 +18,7 @@
     "coverage": "npm run test:cov -w frontend && npm run test:cov -w backend && npm run test:mutation -w backend",
     "start:server": "npm run start:dev -w backend",
     "start:client": "npm run start -w frontend",
+    "start:pwa": "npm run start-pwa -w frontend",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "docker:start": "docker-compose up --build",

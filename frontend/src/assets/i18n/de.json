@@ -8,7 +8,10 @@
     "comment": "Kommentar:",
     "name": "Name: ",
     "reject": "Ablehnen",
-    "status": "Status: "
+    "status": "Status: ",
+    "title-notification": "Benachrichtigung senden",
+    "title-request": "Validierungsanfragen",
+    "info-text-notification": "Allen Nutzern eine Benachrichtigung senden, dass ein Event in der Nähe ist"
   },
   "create": {
     "addition": "Zusätzliche Information",

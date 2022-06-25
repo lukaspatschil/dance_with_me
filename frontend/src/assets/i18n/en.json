@@ -8,7 +8,11 @@
     "comment": "Comment:",
     "name": "Name: ",
     "reject": "Reject",
-    "status": "Status: "
+    "status": "Status: ",
+    "title-notification": "Send a notification",
+    "title-request": "Validation requests",
+    "info-text-notification": "Send all user a notification that an event is nearby"
+
   },
   "create": {
     "addition": "Addition",

@@ -16,9 +16,11 @@ function bootstrap(): void {
 }
 
 
+
 if (document.readyState === 'complete') {
   bootstrap();
 } else {
   document.addEventListener('DOMContentLoaded', bootstrap);
 }
+
 

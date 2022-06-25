@@ -15,6 +15,7 @@ import { UserModule } from './user/user.module';
 import { EmailModule } from './email/email.module';
 import { ValidationModule } from './validation/validation.module';
 import { RecommendationModule } from './recommendation/recommendation.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { RecommendationModule } from './recommendation/recommendation.module';
     EmailModule,
     ValidationModule,
     RecommendationModule,
+    NotificationModule,
   ],
   controllers: [AppController, AuthController],
   providers: [

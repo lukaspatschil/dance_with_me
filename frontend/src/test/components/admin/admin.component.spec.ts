@@ -7,20 +7,26 @@ import { ValidationEnum } from '../../../app/enums/validation.enum';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ImageService } from '../../../app/services/image.service';
 import { ImageServiceMock } from '../../mock/image.service.mock';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { NotificationService } from '../../../app/services/notification.service';
+import { NotificationServiceMock } from '../../mock/notification.service.mock';
 
-describe('OverviewComponent', () => {
+describe('AdminComponent', () => {
   let sut: AdminComponent;
   let fixture: ComponentFixture<AdminComponent>;
   let adminService: AdminService;
+  let notificationService: NotificationService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ AdminComponent ],
-      providers: [{ provide: AdminService, useClass: AdminServiceMock }, DomSanitizer, { provide: ImageService, useClass: ImageServiceMock }]
+      imports: [ HttpClientTestingModule ],
+      providers: [{ provide: AdminService, useClass: AdminServiceMock }, DomSanitizer, { provide: ImageService, useClass: ImageServiceMock }, { provide: NotificationService, useClass: NotificationServiceMock }]
     })
       .compileComponents();
 
     adminService = TestBed.inject(AdminService);
+    notificationService = TestBed.inject(NotificationService);
   });
 
   beforeEach(() => {
@@ -73,6 +79,16 @@ describe('OverviewComponent', () => {
 
       // Then
       expect(adminService.updateRequest).toHaveBeenCalledWith('id', ValidationEnum.REJECTED, '');
+    });
+  });
+
+  describe('sendNotification', () => {
+    it('should call the notification service', () => {
+      // When
+      sut.sendNotification();
+
+      // Then
+      expect(notificationService.send).toHaveBeenCalled();
     });
   });
 });

@@ -3,6 +3,8 @@ import { AppComponent } from '../app/app.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { MockBuilder, MockRender } from 'ng-mocks';
 import { AuthService } from '../app/core/auth/auth.service';
+import { SwPush } from '@angular/service-worker';
+import { NotificationService } from '../app/services/notification.service';
 
 describe('AppComponent', () => {
 
@@ -10,7 +12,9 @@ describe('AppComponent', () => {
     return MockBuilder(AppComponent)
       .mock(RouterTestingModule)
       .mock(AuthService)
-      .mock(TranslateModule.forRoot());
+      .mock(TranslateModule.forRoot())
+      .mock(SwPush)
+      .mock(NotificationService);
   });
 
   it('should create the app', () => {
@@ -102,5 +106,4 @@ describe('AppComponent', () => {
       expect(comp.language).toBe('de');
     });
   });
-
 });

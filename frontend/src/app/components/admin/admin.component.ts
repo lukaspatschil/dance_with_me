@@ -4,6 +4,7 @@ import { AdminService } from '../../services/admin.service';
 import { ValidationEnum } from '../../enums/validation.enum';
 import { ImageService } from '../../services/image.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-overview',
@@ -17,6 +18,7 @@ export class AdminComponent implements OnInit {
   constructor(
     private readonly adminService: AdminService,
     private readonly imageService: ImageService,
+    private readonly notificationService: NotificationService,
     private readonly sanitizer: DomSanitizer
   ) { }
 
@@ -50,5 +52,9 @@ export class AdminComponent implements OnInit {
 
   transform(url: string): SafeUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  sendNotification(): void {
+    this.notificationService.send().subscribe();
   }
 }
