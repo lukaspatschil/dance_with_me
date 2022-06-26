@@ -9,16 +9,27 @@ import { GeolocationService } from '@ng-web-apis/geolocation';
 import { of } from 'rxjs';
 import { ImageService } from '../../../../app/services/image.service';
 import { ImageServiceMock } from '../../../mock/image.service.mock';
+import { Vector } from 'ol/source';
+import { Projection } from 'ol/proj';
 
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 
 jest.mock('ol', () => {
   return {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     __esModule: true,
-    Map: jest.fn(),
+    Map: jest.fn(() => ({
+      on: jest.fn(),
+      addLayer: jest.fn(),
+      addOverlay: jest.fn(),
+      getView: jest.fn(() => ({
+        getProjection: jest.fn()
+      }))
+    })),
     View: jest.fn(),
     Feature: jest.fn(),
-    Overlay: jest.fn()
+    Overlay: jest.fn(),
+    MapEvent: jest.fn()
   };
 });
 
@@ -27,15 +38,8 @@ jest.mock('ol/layer', () => {
   return {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     __esModule: true,
-    layer: jest.fn(),
     Tile: jest.fn(),
     Vector: jest.fn()
-  };
-});
-
-jest.mock('ol/Map', () => {
-  return {
-    addOverlay: jest.fn()
   };
 });
 
@@ -43,27 +47,8 @@ jest.mock('ol/source', () => {
   return {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     __esModule: true,
-    source: jest.fn(),
     OSM: jest.fn(),
     Vector: jest.fn()
-  };
-});
-
-jest.mock('ol/geom', () => {
-  return {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    __esModule: true,
-    geom: jest.fn(),
-    Point: jest.fn()
-  };
-});
-
-jest.mock('ol/proj', () => {
-  return {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    __esModule: true,
-    proj: jest.fn(),
-    fromLonLat: jest.fn()
   };
 });
 
@@ -71,35 +56,19 @@ jest.mock('ol/style', () => {
   return {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     __esModule: true,
-    style: jest.fn(),
     Icon: jest.fn(),
     Style: jest.fn()
   };
 });
 
 jest.mock('ol/Geolocation', () => {
-  return {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    __esModule: true,
-    Geolocation: jest.fn()
-  };
+  return jest.fn(() => ({
+    on: jest.fn()
+  }));
 });
 
 jest.mock('ol/geom/Point', () => {
-  return {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    __esModule: true,
-    Point: jest.fn()
-  };
-});
-
-jest.mock('ol/Overlay', () => {
-  return {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    __esModule: true,
-    Overlay: jest.fn(),
-    addOverlay: jest.fn()
-  };
+  return jest.fn();
 });
 
 describe('EventOverviewMapComponent', () => {
@@ -144,22 +113,68 @@ describe('EventOverviewMapComponent', () => {
     expect(comp).toBeTruthy();
   });
 
+  it('should subscribe to user position', () => {
+    //When
+    jest.spyOn(geoService, 'subscribe');
+    comp.ngOnInit();
 
-  describe('getEvents', () => {
+    // Then
+    expect(geoService.subscribe).toHaveBeenCalled();
+  });
+
+  describe('renderEvents', () => {
     it('should fetch events from API ', () => {
+      // Given
+      comp.eventsLayer = <never>{
+        setSource: jest.fn(),
+        getSource: jest.fn(() => ({
+          getFeatures: jest.fn()
+        }))
+      };
       // When
-      comp.getEvents();
+      comp.renderEvents(0, 0, 0);
 
       // Then
       expect(eventService.getEvents).toHaveBeenCalled();
     });
-    it('should subscribe to user position', () => {
-      //When
-      jest.spyOn(geoService, 'subscribe');
-      comp.getEvents();
+
+    it('should add events to layer', () => {
+      // Given
+      comp.eventsLayer = <never>{
+        setSource: jest.fn(),
+        getSource: jest.fn(() => ({
+          getFeatures: jest.fn(() => [])
+        }))
+      };
+
+      // When
+      comp.renderEvents(0, 0, 0);
 
       // Then
-      expect(geoService.subscribe).toHaveBeenCalled();
+      expect(comp.eventsLayer.setSource).toHaveBeenCalledWith(expect.any(Vector));
+    });
+  });
+
+  describe('moveHandler', () => {
+    it('should call renderEvents with correct parameters', () => {
+      // Given
+      const spy = jest.spyOn(comp, 'renderEvents');
+      const mapEvent = <never>{
+        map: {
+          getSize: jest.fn(() => [133, 1137]),
+          getView: jest.fn(() => ({
+            getCenter: jest.fn(() => [1819503, 6144280]),
+            getProjection: jest.fn(() => new Projection({ code: 'EPSG:3857' })),
+            calculateExtent: jest.fn(() => [1815979, 6140987, 1823159, 6147183])
+          }))
+        }
+      };
+
+      // When
+      comp.moveHandler(mapEvent);
+
+      // Then
+      expect(spy).toHaveBeenCalledWith(16.344873544013215, 48.22446868127861, 3210.2528471114133);
     });
   });
 
