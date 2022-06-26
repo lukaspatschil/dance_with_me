@@ -15,6 +15,17 @@ export class UserServiceMock  {
     })
   );
 
+  user = {
+    id: 'google:12345',
+    displayName: 'Max1',
+    firstName: 'Max',
+    lastName: 'Hermannus',
+    email: undefined,
+    emailVerified: true,
+    role: RoleEnum.USER
+  };
+
+
   user$ =
     of(  {
       id: 'google:12345',

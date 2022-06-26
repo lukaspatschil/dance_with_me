@@ -101,7 +101,8 @@ export class EventServiceMock  {
       startDateTime: new Date('2022-04-24T10:00'),
       endDateTime: new Date('2022-04-24T10:00'),
       category: [Category.SALSA],
-      userParticipates: true
+      userParticipates: true,
+      organizerId: 'google:12345'
     })
   );
 
@@ -129,6 +130,8 @@ export class EventServiceMock  {
       category: [Category.SALSA]
     })
   );
+
+  deleteEvent = jest.fn().mockReturnValue(of({ status: 204 }));
 
   participateOnEvent = jest.fn().mockReturnValue(
     of({ status: 204 }));

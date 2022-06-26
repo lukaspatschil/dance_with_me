@@ -1,4 +1,7 @@
 {
+  "general": {
+    "responseError": "Something went wrong. Please try it again or contact an administrator!"
+  },
   "about": {
     "about_link": "About",
     "about_text": "We at \"Dance with me\" have the goal to unite people in dancing. Our app is designed to help dance enthusiasts find their events quickly and easily and thus live out their passion."
@@ -66,7 +69,8 @@
   },
   "eventDetail": {
     "share": "Share event",
-    "copied": "Copied to clipboard"
+    "copied": "Copied to clipboard",
+    "delete": "Delete event"
   },
   "events": {
     "events": "Events",

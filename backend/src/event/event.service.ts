@@ -221,7 +221,9 @@ export class EventService {
       const filter: FilterQuery<EventDocument> = { _id: id };
       if (organizerId) filter.organizerId = organizerId;
       result = await this.eventModel.findOneAndDelete(filter).exec();
-      await this.neo4jService.write(`MATCH (e:Event {id: '${id}'}) DELETE e;`);
+      await this.neo4jService.write(
+        `MATCH (e:Event {id: '${id}'}) DETACH DELETE e;`,
+      );
     } catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException(error);

@@ -77,4 +77,10 @@ export class EventService {
       observe: 'response'
     });
   }
+
+  deleteEvent(eventId: string): Observable<HttpResponse<EventDto>> {
+    return this.http.delete(`${environment.baseUrl}/event/${eventId}`, {
+      observe: 'response'
+    });
+  }
 }

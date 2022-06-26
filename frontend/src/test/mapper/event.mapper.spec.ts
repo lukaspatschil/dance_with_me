@@ -33,7 +33,8 @@ describe('EventMapper', () => {
         endDateTime: new Date('2022-04-24T12:00').toISOString(),
         category: [Category.SALSA],
         userParticipates: false,
-        organizerName: 'organizerName'
+        organizerName: 'organizerName',
+        organizerId: '1'
       };
 
       // When
@@ -113,7 +114,7 @@ describe('EventMapper', () => {
     const longitude = 31.000;
     const latitude = 40.000;
     const locationEntity = new LocationEntity(longitude, latitude);
-    return new EventEntity(
+    const event = new EventEntity(
       '1',
       'name',
       'description',
@@ -126,5 +127,7 @@ describe('EventMapper', () => {
       [Category.SALSA],
       'organizerName'
     );
+    event.organizerId = '1';
+    return event;
   }
 });

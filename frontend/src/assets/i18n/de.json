@@ -1,4 +1,7 @@
 {
+  "general": {
+    "responseError": "Leider ist hier etwas schief gelaufen. Probieren Sie es bitte erneut oder kontaktieren Sie einen Administrator!"
+  },
   "about": {
     "about_link": "Über uns",
     "about_text": "Wir von \"Dance with me\" haben das Ziel, Menschen beim Tanzen zu vereinen. Unsere App soll Tanzbegeisterten helfen, ihre Veranstaltungen schnell und einfach zu finden und so ihre Leidenschaft auszuleben."
@@ -65,7 +68,8 @@
   },
   "eventDetail": {
     "share": "Event teilen",
-    "copied": "In Zwischenablage kopiert"
+    "copied": "In Zwischenablage kopiert",
+    "delete": "Event löschen"
   },
   "events": {
     "events": "Veranstaltungen",

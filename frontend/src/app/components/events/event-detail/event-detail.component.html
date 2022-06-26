@@ -72,4 +72,19 @@
     eventDetail.share
   </button>
 
+
+  <button
+    *ngIf="showDeleteOption"
+    (click)="deleteAndRefresh(event)"
+    translate
+    class="bg-red-900 border-white hover:bg-red-900 text-white font-semibold hover:text-white py-2 px-4 border hover:border-transparent rounded">
+    eventDetail.delete
+  </button>
+
+  <label translate
+         *ngIf="showError"
+         class="block uppercase text-red-600 text-xs font-bold mb-2">
+    general.responseError
+  </label>
+
 </div>

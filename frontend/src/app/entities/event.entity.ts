@@ -28,6 +28,8 @@ export class EventEntity {
 
   image?: SafeUrl;
 
+  organizerId?: string;
+
   userParticipates = false;
 
   organizerName: string;

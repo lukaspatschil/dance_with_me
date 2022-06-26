@@ -14,6 +14,7 @@ export class EventMapper {
       entry.endDateTime &&
       entry.public &&
       entry.category &&
+      entry.organizerId &&
       entry.address?.street &&
       entry.address.housenumber &&
       entry.address.city &&
@@ -48,6 +49,7 @@ export class EventMapper {
         entry.organizerName
       );
 
+      event.organizerId = entry.organizerId;
       event.imageId = entry.imageId;
       event.userParticipates = entry.userParticipates ?? false;
 

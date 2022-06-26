@@ -1,11 +1,12 @@
-import { Component, OnInit, SecurityContext } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, NgZone, OnInit, SecurityContext } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, take } from 'rxjs';
 import { EventEntity } from '../../../entities/event.entity';
 import { EventService } from '../../../services/event.service';
 import { HttpStatusCode } from '@angular/common/http';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { moveIn } from '../../../core/animations/moveIn.animation';
+import { UserService } from '../../../services/user.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { environment } from '../../../../environments/environment';
 
@@ -27,16 +28,24 @@ export class EventDetailComponent implements OnInit {
 
   showAlert = false;
 
+  showDeleteOption = false;
+
+  showError = false;
 
   constructor(private readonly route: ActivatedRoute,
     private readonly eventService: EventService,
     private readonly clipboard: Clipboard,
-    private readonly sanitizer: DomSanitizer) {}
+    private readonly sanitizer: DomSanitizer,
+    private readonly userService: UserService,
+    private readonly _router: Router,
+    private readonly zone: NgZone) {}
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')!;
 
     this.event$ = this.eventService.getEvent(this.id);
+
+    const user = this.userService.user;
 
     this.eventService.getEvent(this.id).subscribe(event => {
       if (event) {
@@ -44,9 +53,31 @@ export class EventDetailComponent implements OnInit {
       }
     });
 
+    this.showError = false;
+
     this.event$.pipe(take(1)).subscribe(event => {
-      if (event) {
+      if (event && user) {
         this.userParticipates = event.userParticipates;
+        this.showDeleteOption = event.organizerId === user.id;
+      }
+    });
+  }
+
+  deleteAndRefresh(event: EventEntity): void{
+    this.eventService.deleteEvent(event.id).subscribe({
+      next: async (resp) => {
+        await this.zone.run(async () => {
+          if (resp.status === HttpStatusCode.NoContent) {
+            await this._router.navigateByUrl('events');
+          } else {
+            this.showError = true;
+          }
+        });
+      },
+      error: () => {
+        this.zone.run(() => {
+          this.showError = true;
+        });
       }
     });
   }

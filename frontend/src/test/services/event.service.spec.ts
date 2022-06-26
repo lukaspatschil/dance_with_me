@@ -203,6 +203,23 @@ describe('EventService', () => {
       post.flush(eventNoParticipation);
     });
   });
+
+  describe('deleteEvent', () => {
+    it('should return 204 when request was successfully', () => {
+      // When
+      const id = 'google:12345';
+      const status = 204;
+
+      eventService.deleteEvent(id).subscribe(
+        resp => {
+          expect(resp.status).toEqual(status);
+        }
+      );
+
+      const req = httpTestingController.expectOne(`${environment.baseUrl}/event/${id}`);
+      req.flush(eventDto);
+    });
+  });
 });
 
 const event: EventEntity = {
@@ -255,7 +272,7 @@ const eventNoParticipation: EventEntity = {
   organizerName: 'organizerName'
 };
 
-const expectedEvents: EventDto[] = [{
+const eventDto: EventDto = {
   id: '1',
   name: 'name',
   description: 'description',
@@ -277,4 +294,6 @@ const expectedEvents: EventDto[] = [{
   endDateTime: new Date('2022-04-24T12:00').toISOString(),
   category: [Category.SALSA],
   organizerName: 'organizerName'
-}];
+};
+
+const expectedEvents: EventDto[] = [eventDto];
