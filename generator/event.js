@@ -51,7 +51,6 @@ const createEvent = () => {
     },
     price: Number(faker.finance.amount(0)),
     public: true,
-    imageId: `${faker.database.mongodbObjectId()}.png`,
     organizerId: organiser[Math.floor(Math.random() * organiser.length)],
     organizerName: faker.name.findName(),
     category: categoryArray,

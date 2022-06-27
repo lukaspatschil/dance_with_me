@@ -246,7 +246,7 @@ describe('EventService', () => {
 
       // When
       eventService.patchEvent(newEvent, id).subscribe((res) => {
-        expect(res.ok);
+        expect(res.ok).toBeTruthy();
       }
       );
 
