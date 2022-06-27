@@ -62,7 +62,14 @@ $ npm run sonar-scanner
 
 The result of the scan can be seen on our sonarserver.
 
+### End to end tests
 
+Start the server and the client. The client needs to run on port 4200. Then you can execute cypress with:
 
+```bash
+# with UI
+$ npm run cypress:open
 
-
+# without UI
+$ npm run cypress:run
+```

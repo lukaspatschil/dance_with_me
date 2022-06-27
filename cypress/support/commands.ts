@@ -41,3 +41,7 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+import './login.command';
+import './stripe.command';
+import 'cypress-file-upload';

@@ -29,7 +29,7 @@ export class CreateEventPageComponent implements OnInit {
 
   categories = Object.values(Category);
 
-  loadedEventCategories = this.categories;
+  loadedEventCategories: Category[] = [];
 
   createEventForm!: FormGroup;
 

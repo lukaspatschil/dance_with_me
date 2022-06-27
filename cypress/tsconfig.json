@@ -2,7 +2,11 @@
   "extends": "../packages/tsconfig/base.json",
   "include": ["**/*.ts"],
   "compilerOptions": {
+    "module": "commonjs",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es2017",
     "sourceMap": false,
-    "types": ["cypress"]
+    "types": ["cypress","cypress-file-upload"]
   }
 }
