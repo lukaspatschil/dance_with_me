@@ -15,10 +15,12 @@ import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-event-edit',
-  templateUrl: './edit-event-page.component.html',
-  styleUrls: ['./edit-event-page.component.scss']
+  templateUrl: '../create-event-page/create-event-page.component.html',
+  styleUrls: ['../create-event-page/create-event-page.component.scss']
 })
 export class EditEventPageComponent implements OnInit {
+
+  isCreatePage = false;
 
   event$!: Observable<EventEntity | null>;
 

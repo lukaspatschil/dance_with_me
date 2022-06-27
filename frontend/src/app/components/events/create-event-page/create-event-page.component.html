@@ -1,6 +1,6 @@
-<div class="p-5 space-y-4 font-poppins justify-center items-center">
+<div *ngIf="event$ | async as event" class="p-5 space-y-4 font-poppins justify-center items-center">
   <form [formGroup]="createEventForm" (ngSubmit)="onSubmit()" class="form font-poppins justify-center items-center" id="createForm">
-    <h1 translate class="font-medium leading-tight text-2xl mt-0 mb-4">create.create_event</h1>
+    <h1 class="font-medium leading-tight text-2xl mt-0 mb-4">{{ (isCreatePage ? 'create.create_event' : 'edit.edit_event') | translate }}</h1>
     <div class="flex flex-wrap -mx-3 mb-3">
       <div class="form-group w-full md:w-1/2 px-3 mb-3 md:mb-0">
         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="event-name">
@@ -282,7 +282,7 @@
         </label>
         <div class="form-check form-check form-check-inline" *ngFor="let category of categories; let i = index" [id]="i">
           <input class="form-check-input mr-2 w-5 h-5 accent-red-900 border-0 rounded-md focus:ring-0"
-                 formGroupName="category" [value]="category" type="checkbox"
+                 formGroupName="category" [value]="category" type="checkbox" [checked]="loadedEventCategories.includes(category)"
                  (change)="onCheckChange($event)" [id]="'category' + this.i" required>
           <label translate [for]="'category' + this.i" class="form-check-label inline-block text-gray-800 text-s font-poppins " [id]="'category'+this.i">
             eventCategory.{{category}}
@@ -345,7 +345,7 @@
       <button translate [disabled]="createEventForm?.invalid"
               class="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 border border-emerald-500 rounded"
               id="create_button">
-        create.create_button
+        {{ (isCreatePage ? 'create.create_button' : 'edit.edit_button') | translate }}
       </button>
       <div *ngIf="loading">
         <svg role="status" class="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -354,10 +354,10 @@
         </svg>
       </div>
 
-      <button translate
+      <button
               [routerLink]="''"
               class="bg-transparent border-white hover:bg-red-900 text-red-900 font-semibold hover:text-white py-2 px-4 border hover:border-transparent rounded">
-        create.cancel
+        {{ (isCreatePage ? 'create.cancel' : 'edit.cancel') | translate }}
       </button>
     </div>
   </form>

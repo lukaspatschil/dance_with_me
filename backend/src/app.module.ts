@@ -1,6 +1,4 @@
 import { Logger, Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { EventModule } from './event/event.module';
 import { PaymentModule } from './payment/payment.module';
 import { ConfigModule } from '@nestjs/config';
@@ -32,9 +30,8 @@ import { NotificationModule } from './notification/notification.module';
     RecommendationModule,
     NotificationModule,
   ],
-  controllers: [AppController, AuthController],
+  controllers: [AuthController],
   providers: [
-    AppService,
     Logger,
     ConfigModule,
     {

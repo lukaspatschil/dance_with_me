@@ -9,6 +9,8 @@ import { AddressDto } from '../../../dto/address.dto';
 import { requiredImageType } from '../../../validators/requiredImageType';
 import { ImageService } from '../../../services/image.service';
 import { HttpStatusCode } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { EventEntity } from '../../../entities/event.entity';
 
 @Component({
   selector: 'app-create-event-page',
@@ -16,9 +18,18 @@ import { HttpStatusCode } from '@angular/common/http';
   styleUrls: ['./create-event-page.component.scss']
 })
 export class CreateEventPageComponent implements OnInit {
+
+  isCreatePage = true;
+
+  event$: Observable<EventEntity | null> = new Observable<EventEntity | null>((subscriber) => {
+    subscriber.next({} as EventEntity); subscriber.complete();
+  });
+
   title = 'create';
 
   categories = Object.values(Category);
+
+  loadedEventCategories = this.categories;
 
   createEventForm!: FormGroup;
 
