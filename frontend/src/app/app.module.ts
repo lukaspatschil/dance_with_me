@@ -29,6 +29,7 @@ import { EventSearchComponent } from './components/events/event-search/event-sea
 import { EventOverviewComponent } from './components/events/event-overview/event-overview.component';
 import { EventOverviewMapComponent } from './components/events/event-overview-map/event-overview-map.component';
 import { AdminComponent } from './components/admin/admin.component';
+import { EditEventPageComponent } from './components/events/event-edit/edit-event-page.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { AdminComponent } from './components/admin/admin.component';
     LegalPageComponent,
     PrivacyPageComponent,
     CreateEventPageComponent,
+    EditEventPageComponent,
     LandingComponent,
     EventOverviewComponent,
     EventOverviewMapComponent,

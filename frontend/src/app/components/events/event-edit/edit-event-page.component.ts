@@ -3,22 +3,28 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
 import { EventService } from '../../../services/event.service';
 import { requiredTimeValidator } from '../../../validators/requiredTime';
 import { Category } from '../../../enums/category.enum';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CreateEventDto } from '../../../dto/createEvent.dto';
 import { AddressDto } from '../../../dto/address.dto';
 import { requiredImageType } from '../../../validators/requiredImageType';
 import { ImageService } from '../../../services/image.service';
 import { HttpStatusCode } from '@angular/common/http';
+import { Observable, take } from 'rxjs';
+import { EventEntity } from '../../../entities/event.entity';
+import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-create-event-page',
-  templateUrl: './create-event-page.component.html',
-  styleUrls: ['./create-event-page.component.scss']
+  selector: 'app-event-edit',
+  templateUrl: './edit-event-page.component.html',
+  styleUrls: ['./edit-event-page.component.scss']
 })
-export class CreateEventPageComponent implements OnInit {
-  title = 'create';
+export class EditEventPageComponent implements OnInit {
+
+  event$!: Observable<EventEntity | null>;
 
   categories = Object.values(Category);
+
+  loadedEventCategories: string[] = [];
 
   createEventForm!: FormGroup;
 
@@ -28,15 +34,22 @@ export class CreateEventPageComponent implements OnInit {
 
   public error = false;
 
+  private id!: string;
+
+  event?: EventEntity = undefined;
+
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly eventService: EventService,
     private readonly router: Router,
-    private readonly imageService: ImageService
+    private readonly imageService: ImageService,
+    private readonly route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.id = this.route.snapshot.paramMap.get('id')!;
+
     this.createEventForm = this.fb.group({
       name: ['', Validators.required],
       address: this.fb.group({
@@ -57,6 +70,38 @@ export class CreateEventPageComponent implements OnInit {
       image: [null, requiredImageType()]
     }, { validators: requiredTimeValidator }
     );
+
+    this.event$ = this.eventService.getEvent(this.id);
+    let dp = new DatePipe('en');
+    this.event$.pipe(take(1)).subscribe(event => {
+      if (event !== null) {
+        this.createEventForm.patchValue({
+          name: event.name,
+          price: event.price,
+          date: dp.transform(event.startDateTime, 'yyyy-MM-dd'),
+          // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+          startTime: `${event.startDateTime.getHours().toString().padStart(2, '0')}:${event.startDateTime.getMinutes().toString().padStart(2, '0')}`,
+          // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+          endTime: `${event.endDateTime.getHours().toString().padStart(2, '0')}:${event.endDateTime.getMinutes().toString().padStart(2, '0')}`,
+          description: event.description,
+          address:{
+            country: event.address.country,
+            street: event.address.street,
+            city: event.address.city,
+            housenumber: event.address.housenumber,
+            postalcode: event.address.postalcode,
+            addition: event.address.addition ?? ''
+          },
+          public: event.public
+        });
+        event.category.forEach(cat => {
+          this.loadedEventCategories.push(cat);
+          const formArray: FormArray = this.createEventForm.get('category') as FormArray;
+          formArray.push(new FormControl(cat));
+        });
+        this.event = event;
+      }
+    });
   }
 
 
@@ -120,11 +165,15 @@ export class CreateEventPageComponent implements OnInit {
     return this.createEventForm.get(['image'])!;
   }
 
+  get address(): AbstractControl {
+    return this.createEventForm.get(['address'])!;
+  }
+
   clearImage(): void {
     this.image.patchValue(null);
   }
 
-  createEvent(): CreateEventDto {
+  createEvent(): Partial<CreateEventDto> {
     const address = new AddressDto(
       this.createEventForm.value.address.country,
       this.createEventForm.value.address.city,
@@ -134,16 +183,16 @@ export class CreateEventPageComponent implements OnInit {
       this.addition.value
     );
 
-    return new CreateEventDto(
-      this.createEventForm.value.name,
-      this.createEventForm.value.description,
-      address,
-      Number(this.createEventForm.value.price),
-      this.public.value,
-      new Date(`${this.date.value}T${this.startTime.value}`).toISOString(),
-      new Date(`${this.date.value}T${this.endTime.value}`).toISOString(),
-      this.createEventForm.value.category
-    );
+    return {
+      name: this.name?.touched ? this.createEventForm.value.name: undefined,
+      description: this.description?.touched ? this.createEventForm.value.description : undefined,
+      address: this.address.touched ? address : undefined,
+      price: this.price?.touched ? Number(this.createEventForm.value.price) : undefined,
+      public: this.price?.touched ? this.public.value: undefined,
+      startDateTime: this.startTime.touched || this.date.touched ? new Date(`${this.date.value}T${this.startTime.value}`).toISOString() : undefined,
+      endDateTime: this.endTime.touched || this.date.touched ? new Date(`${this.date.value}T${this.endTime.value}`).toISOString() : undefined,
+      category: this.category?.touched ? this.createEventForm.value.category : undefined
+    };
   }
 
   onSubmit(): void {
@@ -155,7 +204,7 @@ export class CreateEventPageComponent implements OnInit {
         this.imageService.uploadImage(this.image.value).subscribe({
           next: response => {
             newEvent.imageId = response.id;
-            this.uploadEvent(newEvent);
+            this.patchEvent(newEvent);
           },
           error: () => {
             this.loading = false;
@@ -163,17 +212,17 @@ export class CreateEventPageComponent implements OnInit {
           }
         });
       } else {
-        this.uploadEvent(newEvent);
+        this.patchEvent(newEvent);
       }
     }
   }
 
-  private uploadEvent(event: CreateEventDto): void {
-    this.eventService.createEvent(event).subscribe({
+  private patchEvent(event: Partial<CreateEventDto>): void {
+    this.eventService.patchEvent(event, this.id).subscribe({
       next: resp => {
-        if (resp.status === HttpStatusCode.Created) {
+        if (resp.status === HttpStatusCode.Ok) {
           this.loading = false;
-          void this.router.navigate([`/payment/${resp.body?.id}`]);
+          void this.router.navigate([`/event/${resp.body?.id}`]);
         }
       }, error: () => {
         this.loading = false;

@@ -220,6 +220,44 @@ describe('EventService', () => {
       req.flush(eventDto);
     });
   });
+
+
+  describe('patchEvent', () => {
+    it('should patch an event and return ok', () => {
+      // Given
+      const id = 'google:12345';
+      const newEvent: Partial<CreateEventDto> =  {
+        name: 'name',
+        description: 'description',
+        address: {
+          country: 'country',
+          street: 'street',
+          city: 'city',
+          housenumber: '10',
+          postalcode: '1020',
+          addition: 'addition'
+        },
+        price: 1,
+        public: true,
+        startDateTime: new Date('2022-04-24T10:00').toISOString(),
+        endDateTime: new Date('2022-04-24T12:00').toISOString(),
+        category: [Category.SALSA]
+      };
+
+      // When
+      eventService.patchEvent(newEvent, id).subscribe((res) => {
+        expect(res.ok);
+      }
+      );
+
+      // Then
+      httpTestingController.expectOne({
+        method: 'PATCH',
+        url: eventService.URL_EVENT_BASE + '/' + id
+      });
+    });
+  });
+
 });
 
 const event: EventEntity = {

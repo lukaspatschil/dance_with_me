@@ -17,6 +17,11 @@
     "info-text-notification": "Send all user a notification that an event is nearby"
 
   },
+  "edit": {
+    "edit_event": "Edit event",
+    "edit_button": "Edit",
+    "cancel": "Cancel"
+  },
   "create": {
     "addition": "Addition",
     "cancel": "Cancel",
@@ -70,7 +75,8 @@
   "eventDetail": {
     "share": "Share event",
     "copied": "Copied to clipboard",
-    "delete": "Delete event"
+    "delete": "Delete event",
+    "edit": "Edit event"
   },
   "events": {
     "events": "Events",

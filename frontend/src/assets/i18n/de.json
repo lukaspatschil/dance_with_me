@@ -16,6 +16,11 @@
     "title-request": "Validierungsanfragen",
     "info-text-notification": "Allen Nutzern eine Benachrichtigung senden, dass ein Event in der Nähe ist"
   },
+  "edit": {
+    "edit_event": "Veranstaltung bearbeiten",
+    "edit_button": "Bearbeiten",
+    "cancel": "Abbrechen"
+  },
   "create": {
     "addition": "Zusätzliche Information",
     "cancel": "Abbrechen",
@@ -69,7 +74,8 @@
   "eventDetail": {
     "share": "Event teilen",
     "copied": "In Zwischenablage kopiert",
-    "delete": "Event löschen"
+    "delete": "Event löschen",
+    "edit": "Event bearbeiten"
   },
   "events": {
     "events": "Veranstaltungen",

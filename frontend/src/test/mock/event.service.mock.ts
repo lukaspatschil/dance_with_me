@@ -52,6 +52,10 @@ export class EventServiceMock  {
     of(this.response)
   );
 
+  patchEvent = jest.fn().mockReturnValue(
+    of({ status: 200 })
+  );
+
   getEvents = jest.fn().mockReturnValue(
     of([{
       id: '1',

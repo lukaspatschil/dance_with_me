@@ -25,6 +25,13 @@ export class EventService {
     });
   }
 
+  patchEvent(event: Partial<CreateEventDto>, id: string): Observable<HttpResponse<EventDto>> {
+    return this.http.patch<EventDto>(this.URL_EVENT_BASE + '/' + id, event, {
+      observe: 'response',
+      responseType: 'json'
+    });
+  }
+
   getEvent(id: string): Observable<EventEntity | null>{
     return this.http.get<EventDto>(this.URL_EVENT_BASE + '/' + id).pipe(
       map(event => {

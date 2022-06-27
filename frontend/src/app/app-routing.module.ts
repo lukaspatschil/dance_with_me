@@ -11,6 +11,7 @@ import { AuthGuard } from './core/auth/guards/auth.guard';
 import { LandingComponent } from './components/landing/landing.component';
 import { EventOverviewComponent } from './components/events/event-overview/event-overview.component';
 import { CreateEventPageComponent } from './components/events/create-event-page/create-event-page.component';
+import { EditEventPageComponent } from './components/events/event-edit/edit-event-page.component';
 import { EventOverviewMapComponent } from './components/events/event-overview-map/event-overview-map.component';
 import { EventDetailComponent } from './components/events/event-detail/event-detail.component';
 import { UserDetailComponent } from './components/user/user-detail/user-detail.component';
@@ -28,6 +29,7 @@ const routes: Routes = [
       { path: 'create', canActivate: [OrganiserGuard], component: CreateEventPageComponent },
       { path: 'events', component: EventOverviewComponent },
       { path: 'event/:id', component: EventDetailComponent },
+      { path: 'event/edit/:id', component: EditEventPageComponent },
       { path: 'map', component: EventOverviewMapComponent },
       { path: 'search', component: EventSearchComponent },
       { path: 'user', component: UserDetailComponent },
