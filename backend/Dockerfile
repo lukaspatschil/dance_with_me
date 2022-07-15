@@ -45,6 +45,7 @@ ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait
 RUN chmod +x /wait
 
 COPY --from=build /usr/src/app/backend/package.json .
+COPY ./packages/config .
 RUN npm install --only=production
 
 COPY --from=build /usr/src/app/backend/dist/ ./dist/
